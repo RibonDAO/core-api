@@ -10,7 +10,7 @@ module Currency
         next if currency.eql?(currency_from)
 
         define_method :"convert_from_#{currency_from}_to_#{currency}" do |value|
-          new(from: currency_from, value: value, to: currency).convert
+          new(from: currency_from, value:, to: currency).convert
         end
       end
     end

@@ -6,7 +6,7 @@ module RedisStore
 
     def set(key:, value:, field: nil, **options)
       field_attr = field || key
-      entry = Entry.new(value: value, expires_in: options[:expires_in])
+      entry = Entry.new(value:, expires_in: options[:expires_in])
       redis.hset(key, field_attr, serialize(value: entry))
 
       entry.value
@@ -18,7 +18,7 @@ module RedisStore
       return if entry.blank?
 
       if entry.expired?
-        del(key: key, field: field_attr)
+        del(key:, field: field_attr)
         return nil
       end
 

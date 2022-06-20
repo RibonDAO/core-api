@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe Donations::Donate do
   describe '.call' do
-    subject(:command) { described_class.call(integration: integration, non_profit: non_profit, user: user) }
+    subject(:command) { described_class.call(integration:, non_profit:, user:) }
 
     context 'when no error occurs' do
       let(:integration) { build(:integration) }
@@ -29,8 +29,8 @@ describe Donations::Donate do
       it 'creates a donation in database' do
         command
 
-        expect(Donation).to have_received(:create!).with(integration: integration, non_profit: non_profit,
-                                                         user: user, value: 100)
+        expect(Donation).to have_received(:create!).with(integration:, non_profit:,
+                                                         user:, value: 100)
       end
 
       it 'calls the donation in contract' do
@@ -47,7 +47,7 @@ describe Donations::Donate do
         command
 
         expect(Donations::SetUserLastDonationAt)
-          .to have_received(:call).with(user: user, date_to_set: donation.created_at)
+          .to have_received(:call).with(user:, date_to_set: donation.created_at)
       end
 
       it 'returns the donation hash in blockchain' do

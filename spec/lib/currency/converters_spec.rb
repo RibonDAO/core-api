@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Currency::Converters do
-  subject(:service) { described_class.new(value: value, from: from, to: to) }
+  subject(:service) { described_class.new(value:, from:, to:) }
 
   let(:value) { 10 }
   let(:from) { 'USD' }
@@ -9,7 +9,7 @@ RSpec.describe Currency::Converters do
   let(:add_rate) { Money.add_rate(from, to, 5) }
 
   before do
-    mock_instance(klass: Currency::Rates, methods: { add_rate: add_rate })
+    mock_instance(klass: Currency::Rates, methods: { add_rate: })
   end
 
   describe '#convert' do

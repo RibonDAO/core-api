@@ -10,7 +10,7 @@ module Currency
     end
 
     def self.convert(value:, from:, to:)
-      new(value: value, from: from, to: to).convert
+      new(value:, from:, to:).convert
     end
 
     def convert
@@ -22,7 +22,7 @@ module Currency
     def add_rate
       return if from.eql?(to)
 
-      Currency::Rates.new(from: from, to: to).add_rate
+      Currency::Rates.new(from:, to:).add_rate
     end
   end
 end

@@ -12,7 +12,7 @@ class ApplicationController < ActionController::API
   end
 
   def render_errors(errors, status = :unprocessable_entity)
-    render json: ErrorBlueprint.render(OpenStruct.new(errors)), status: status
+    render json: ErrorBlueprint.render(OpenStruct.new(errors)), status:
   end
 
   private

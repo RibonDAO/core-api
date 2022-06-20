@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Currency::Rates do
-  subject(:service) { described_class.new(from: from, to: to) }
+  subject(:service) { described_class.new(from:, to:) }
 
   let(:from) { 'USD' }
   let(:to) { 'BRL' }

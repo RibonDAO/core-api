@@ -46,11 +46,11 @@ module Givings
       end
 
       def stripe_fee_calculator
-        StripeCardFeeCalculatorService.new(value: value, currency: currency)
+        StripeCardFeeCalculatorService.new(value:, currency:)
       end
 
       def crypto_fee_calculator
-        PolygonFeeCalculatorService.new(value: value, currency: currency)
+        PolygonFeeCalculatorService.new(value:, currency:)
       end
 
       def money_value

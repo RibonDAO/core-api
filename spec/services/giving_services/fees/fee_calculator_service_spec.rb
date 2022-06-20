@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GivingServices::Fees::FeeCalculatorService, type: :service do
-  subject(:service) { described_class.new(value: value, kind: kind, currency: currency) }
+  subject(:service) { described_class.new(value:, kind:, currency:) }
 
   let(:stripe_card_service_class) { GivingServices::Fees::Card::StripeCardFeeCalculatorService }
 
@@ -19,7 +19,7 @@ RSpec.describe GivingServices::Fees::FeeCalculatorService, type: :service do
       it 'calls the CardFeeCalculatorService with correct params' do
         service.calculate_fee
 
-        expect(stripe_card_service_class).to have_received(:new).with(value: value, currency: currency)
+        expect(stripe_card_service_class).to have_received(:new).with(value:, currency:)
         expect(card_service_instance).to have_received(:calculate_fee)
       end
     end

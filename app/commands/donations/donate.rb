@@ -30,9 +30,9 @@ module Donations
 
     def create_donation
       @donation = Donation.create!(
-        integration: integration,
-        non_profit: non_profit,
-        user: user,
+        integration:,
+        non_profit:,
+        user:,
         value: ticket_value
       )
     end
@@ -42,7 +42,7 @@ module Donations
 
       response = Web3::RibonContract.donate_through_integration(
         non_profit_address: non_profit.wallet_address,
-        amount: amount,
+        amount:,
         user_email: user.email
       )
 
@@ -56,7 +56,7 @@ module Donations
     end
 
     def set_user_last_donation_at
-      SetUserLastDonationAt.call(user: user, date_to_set: donation.created_at)
+      SetUserLastDonationAt.call(user:, date_to_set: donation.created_at)
     end
 
     def ticket_value

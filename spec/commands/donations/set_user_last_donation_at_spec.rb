@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe Donations::SetUserLastDonationAt do
   describe '.call' do
-    subject(:command) { described_class.call(user: user, date_to_set: date_to_set) }
+    subject(:command) { described_class.call(user:, date_to_set:) }
 
     let(:user) { create(:user) }
     let(:date_to_set) { Date.parse('2021-01-12 10:00:00') }

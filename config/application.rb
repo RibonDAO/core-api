@@ -31,7 +31,7 @@ module RibonCoreApi
 
   def load_yaml(config)
     config_file = ERB.new(File.read("#{Rails.root}/config/#{config}.yml")).result
-    YAML.safe_load(config_file, [], [], true)
+    YAML.safe_load(config_file, permitted_classes: [], permitted_symbols: [], aliases: true)
   end
 
   def config
@@ -47,7 +47,6 @@ module RibonCoreApi
     config.middleware.use ActionDispatch::Session::CookieStore, {:key=>"_ribon_core_api_session"}
     config.action_dispatch.rescue_responses.merge!('CanCan::AccessDenied' => :unauthorized)
     config.autoload_paths += Dir[Rails.root.join('app', 'models', '**/')]
-
 
     config.api_only = true
   end

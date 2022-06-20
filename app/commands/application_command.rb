@@ -1,6 +1,4 @@
 class ApplicationCommand
-  def initialize; end
-
   protected
 
   def with_exception_handle

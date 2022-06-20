@@ -10,7 +10,7 @@ RSpec.describe 'Api::V1::Users::Impacts', type: :request do
     before do
       allow(User).to receive(:find).and_return(user)
       allow(user).to receive(:impact).and_return([{
-                                                   non_profit: non_profit,
+                                                   non_profit:,
                                                    impact: 5
                                                  }])
     end

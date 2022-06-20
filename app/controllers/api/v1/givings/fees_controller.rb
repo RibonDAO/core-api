@@ -3,8 +3,8 @@ module Api
     module Givings
       class FeesController < ApplicationController
         def card_fees
-          command = ::Givings::Card::CalculateStripeGiving.call(value: value,
-                                                                currency: currency)
+          command = ::Givings::Card::CalculateStripeGiving.call(value:,
+                                                                currency:)
 
           if command.success?
             render json: GivingFeeBlueprint.render(command.result), status: :ok

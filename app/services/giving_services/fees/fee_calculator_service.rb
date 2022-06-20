@@ -14,7 +14,7 @@ module GivingServices
       private
 
       def calculator_class_factory
-        calculator_services[kind].new(value: value, currency: currency)
+        calculator_services[kind].new(value:, currency:)
       end
 
       def calculator_services

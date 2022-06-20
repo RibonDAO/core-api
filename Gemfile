@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.3'
+ruby '3.1.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.1'
@@ -38,7 +38,7 @@ gem 'image_processing', '~> 1.2'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
-gem 'rails_admin', ['>= 3.0.0.beta2', '< 4']
+gem 'rails_admin', '~> 3.0.0'
 
 gem 'blueprinter'
 
@@ -46,7 +46,7 @@ gem 'devise'
 
 gem 'nio4r'
 
-gem 'io-wait', '0.2.0'
+gem 'io-wait', '0.2.1'
 
 # Storage
 gem 'aws-sdk-s3', require: false
@@ -68,6 +68,8 @@ gem 'ffi', submodules: true
 
 # Currency Conversion
 gem 'money'
+
+gem 'sidekiq'
 
 # Payment Gateways
 gem 'stripe'

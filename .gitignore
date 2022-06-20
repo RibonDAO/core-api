@@ -40,3 +40,5 @@ node_modules
 !.elasticbeanstalk/*.global.yml
 
 coverage/
+
+docker-compose.yml

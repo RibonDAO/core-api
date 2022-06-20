@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Donations', type: :request do
   describe 'POST /create' do
-    subject(:request) { post '/api/v1/donations', params: params }
+    subject(:request) { post '/api/v1/donations', params: }
 
     let(:integration) { create(:integration) }
     let(:non_profit) { create(:non_profit) }
@@ -26,9 +26,9 @@ RSpec.describe 'Api::V1::Donations', type: :request do
       request
 
       expect(Donations::Donate).to have_received(:call).with(
-        integration: integration,
-        non_profit: non_profit,
-        user: user
+        integration:,
+        non_profit:,
+        user:
       )
     end
 

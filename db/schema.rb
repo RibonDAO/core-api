@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_13_132923) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_15_143343) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -52,6 +54,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_13_132923) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name", null: false
+    t.string "email", null: false
+    t.jsonb "customer_keys", default: {}
+    t.string "tax_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_customers_on_user_id", unique: true
   end
 
   create_table "donations", force: :cascade do |t|

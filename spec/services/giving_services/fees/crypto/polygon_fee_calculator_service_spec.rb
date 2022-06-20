@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GivingServices::Fees::Crypto::PolygonFeeCalculatorService, type: :service do
-  subject(:service) { described_class.new(currency: currency) }
+  subject(:service) { described_class.new(currency:) }
 
   describe '#calculate_fee' do
     include_context('when mocking a request') { let(:cassette_name) { 'polygon_gas_fee_request' } }

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Givings::Fees', type: :request do
   describe 'GET /card_fees' do
-    subject(:request) { post '/api/v1/givings/card_fees', params: params }
+    subject(:request) { post '/api/v1/givings/card_fees', params: }
 
     let(:params) do
       { value: 50, currency: 'brl' }
@@ -16,7 +16,7 @@ RSpec.describe 'Api::V1::Givings::Fees', type: :request do
     end
 
     before do
-      mock_command(klass: Givings::Card::CalculateStripeGiving, result: result)
+      mock_command(klass: Givings::Card::CalculateStripeGiving, result:)
       request
     end
 

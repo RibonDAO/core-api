@@ -4,9 +4,9 @@ module Api
       def create
         authorize!(:create, Donation, message: I18n.t('donations.blocked_message'))
 
-        command = Donations::Donate.call(integration: integration,
-                                         non_profit: non_profit,
-                                         user: user)
+        command = Donations::Donate.call(integration:,
+                                         non_profit:,
+                                         user:)
 
         if command.success?
           render json: { transaction_hash: command.result }, status: :ok

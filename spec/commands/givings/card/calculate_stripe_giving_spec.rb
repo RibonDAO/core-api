@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe Givings::Card::CalculateStripeGiving do
-  subject(:command) { described_class.call(value: value, currency: currency) }
+  subject(:command) { described_class.call(value:, currency:) }
 
   let(:value) { 40 }
   let(:currency) { :brl }
@@ -17,7 +17,7 @@ describe Givings::Card::CalculateStripeGiving do
                     methods: { calculate_fee: calculate_card_fee })
       mock_instance(klass: GivingServices::Fees::Crypto::PolygonFeeCalculatorService,
                     methods: { calculate_fee: calculate_crypto_fee })
-      mock_instance(klass: Currency::Rates, methods: { add_rate: add_rate })
+      mock_instance(klass: Currency::Rates, methods: { add_rate: })
     end
 
     it 'returns a hash with correct params' do

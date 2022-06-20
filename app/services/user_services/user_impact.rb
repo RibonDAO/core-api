@@ -20,7 +20,7 @@ module UserServices
     end
 
     def format_result(non_profit, user_donations)
-      { non_profit: non_profit, impact: impact_sum_by_non_profit(user_donations, non_profit) }
+      { non_profit:, impact: impact_sum_by_non_profit(user_donations, non_profit) }
     end
 
     def impact_sum_by_non_profit(user_donations, non_profit)

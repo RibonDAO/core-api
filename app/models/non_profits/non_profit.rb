@@ -15,6 +15,6 @@ class NonProfit < ApplicationRecord
   end
 
   def impact_by_ticket(date: Time.zone.now)
-    impact_for(date: date)&.impact_by_ticket
+    impact_for(date:)&.impact_by_ticket
   end
 end

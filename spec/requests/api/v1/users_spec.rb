@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Users', type: :request do
   describe 'POST /create' do
-    subject(:request) { post '/api/v1/users', params: params }
+    subject(:request) { post '/api/v1/users', params: }
 
     context 'with right params' do
       let(:params) do
