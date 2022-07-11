@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_30_163818) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_11_172308) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -80,12 +80,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_163818) do
 
   create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "user_id"
-    t.string "name", null: false
-    t.string "email", null: false
+    t.string "name"
+    t.string "unique_address", null: false
     t.jsonb "customer_keys", default: {}
     t.string "tax_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "people_id"
+    t.index ["people_id"], name: "index_customers_on_people_id"
     t.index ["user_id"], name: "index_customers_on_user_id", unique: true
   end
 
@@ -107,6 +109,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_163818) do
     t.integer "currency", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "guests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "wallet_address", null: false
+    t.uuid "people_id"
+    t.index ["people_id"], name: "index_guests_on_people_id"
   end
 
   create_table "integrations", force: :cascade do |t|
@@ -182,6 +190,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_163818) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  end
+
   create_table "ribon_configs", force: :cascade do |t|
     t.integer "default_ticket_value"
     t.datetime "created_at", null: false
@@ -207,9 +218,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_30_163818) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "customer_payment_blockchains", "customer_payments"
   add_foreign_key "customer_payments", "offers"
+  add_foreign_key "customers", "people", column: "people_id"
   add_foreign_key "donations", "integrations"
   add_foreign_key "donations", "non_profits"
   add_foreign_key "donations", "users"
+  add_foreign_key "guests", "people", column: "people_id"
   add_foreign_key "non_profit_impacts", "non_profits"
   add_foreign_key "offer_gateways", "offers"
   add_foreign_key "user_donation_stats", "users"
