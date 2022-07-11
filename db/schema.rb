@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_11_175505) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_11_181212) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -173,11 +173,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_11_175505) do
 
   create_table "people_blockchain_transactions", force: :cascade do |t|
     t.integer "treasure_entry_status", default: 0
-    t.bigint "customer_payment_id", null: false
     t.string "transaction_hash"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["customer_payment_id"], name: "index_people_blockchain_transactions_on_customer_payment_id"
+    t.bigint "people_payment_id"
+    t.index ["people_payment_id"], name: "index_people_blockchain_transactions_on_people_payment_id"
   end
 
   create_table "people_payments", force: :cascade do |t|
@@ -223,7 +223,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_11_175505) do
   add_foreign_key "guests", "people", column: "people_id"
   add_foreign_key "non_profit_impacts", "non_profits"
   add_foreign_key "offer_gateways", "offers"
-  add_foreign_key "people_blockchain_transactions", "people_payments", column: "customer_payment_id"
+  add_foreign_key "people_blockchain_transactions", "people_payments"
   add_foreign_key "people_payments", "offers"
   add_foreign_key "people_payments", "people", column: "people_id"
   add_foreign_key "user_donation_stats", "users"
