@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_11_173744) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_11_175104) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -63,19 +63,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_11_173744) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_payment_id"], name: "index_customer_payment_blockchains_on_customer_payment_id"
-  end
-
-  create_table "customer_payments", force: :cascade do |t|
-    t.datetime "paid_date"
-    t.string "payment_method"
-    t.string "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "offer_id"
-    t.integer "amount_cents"
-    t.uuid "people_id"
-    t.index ["offer_id"], name: "index_customer_payments_on_offer_id"
-    t.index ["people_id"], name: "index_customer_payments_on_people_id"
   end
 
   create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -193,6 +180,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_11_173744) do
   create_table "people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
   end
 
+  create_table "people_payments", force: :cascade do |t|
+    t.datetime "paid_date"
+    t.string "payment_method"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "offer_id"
+    t.integer "amount_cents"
+    t.uuid "people_id"
+    t.index ["offer_id"], name: "index_people_payments_on_offer_id"
+    t.index ["people_id"], name: "index_people_payments_on_people_id"
+  end
+
   create_table "ribon_configs", force: :cascade do |t|
     t.integer "default_ticket_value"
     t.datetime "created_at", null: false
@@ -216,9 +216,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_11_173744) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "customer_payment_blockchains", "customer_payments"
-  add_foreign_key "customer_payments", "offers"
-  add_foreign_key "customer_payments", "people", column: "people_id"
+  add_foreign_key "customer_payment_blockchains", "people_payments", column: "customer_payment_id"
   add_foreign_key "customers", "people", column: "people_id"
   add_foreign_key "donations", "integrations"
   add_foreign_key "donations", "non_profits"
@@ -226,5 +224,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_11_173744) do
   add_foreign_key "guests", "people", column: "people_id"
   add_foreign_key "non_profit_impacts", "non_profits"
   add_foreign_key "offer_gateways", "offers"
+  add_foreign_key "people_payments", "offers"
+  add_foreign_key "people_payments", "people", column: "people_id"
   add_foreign_key "user_donation_stats", "users"
 end
