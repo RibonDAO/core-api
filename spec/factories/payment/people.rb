@@ -1,3 +1,3 @@
 FactoryBot.define do
-  factory :customer
+  factory :people
 end
