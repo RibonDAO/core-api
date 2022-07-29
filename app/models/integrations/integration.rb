@@ -1,10 +1,11 @@
 class Integration < ApplicationRecord
-  has_one_attached :logo
+  has_one :integration_wallet
+
   enum status: { active: 0, inactive: 1 }
 
-  validates :url, :wallet_address, :name, :logo, presence: true
+  validates :name, :status, :unique_address, presence: true
 
   def integration_address
-    "https://dapp.ribon.io/integration/#{id}"
+    "https://dapp.ribon.io/integration/#{unique_address}"
   end
 end

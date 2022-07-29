@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_22_131149) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_28_172947) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -97,13 +97,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_22_131149) do
     t.index ["person_id"], name: "index_guests_on_person_id"
   end
 
+  create_table "integration_wallets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "public_key"
+    t.string "encrypted_private_key"
+    t.string "private_key_iv"
+    t.bigint "integration_id"
+    t.index ["integration_id"], name: "index_integration_wallets_on_integration_id"
+  end
+
   create_table "integrations", force: :cascade do |t|
     t.string "name"
-    t.string "wallet_address"
-    t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
+    t.uuid "unique_address", default: -> { "gen_random_uuid()" }, null: false
   end
 
   create_table "mobility_string_translations", force: :cascade do |t|

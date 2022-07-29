@@ -5,8 +5,7 @@ RSpec.describe Integration, type: :model do
     subject { build(:integration) }
 
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to validate_presence_of(:wallet_address) }
-    it { is_expected.to validate_presence_of(:url) }
-    it { is_expected.to validate_presence_of(:logo) }
+    it { is_expected.to validate_presence_of(:unique_address) }
+    it { is_expected.to validate_presence_of(:status) }
   end
 end
