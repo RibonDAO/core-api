@@ -2,10 +2,10 @@ module Api
   module V1
     module Payments
       class CryptocurrencyController < ApplicationController
-        include ::Givings::Payment::OrderTypes
+        include ::Givings::Payment
 
         def create
-          command = ::Givings::Payment::CreateOrder.call(Cryptocurrency, order_params)
+          command = ::Givings::Payment::CreateOrder.call(OrderTypes::Cryptocurrency, order_params)
 
           if command.success?
             head :created
@@ -27,8 +27,17 @@ module Api
         private
 
         def order_params
-          Adapter::Controllers::Payment::Cryptocurrencies
-            .new(payment_params:, user: current_user).order_params
+          {
+            amount: payment_params[:amount],
+            email: payment_params[:email],
+            payment_method: :crypto,
+            user: find_or_create_user,
+            transaction_hash: payment_params[:transaction_hash]
+          }
+        end
+
+        def find_or_create_user
+          current_user || User.find_or_create_by(email: payment_params[:email])
         end
 
         def payment_params
