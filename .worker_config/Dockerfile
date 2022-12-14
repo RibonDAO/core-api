@@ -10,4 +10,5 @@ COPY . /app
 EXPOSE 8080
 
 ENTRYPOINT ["bin/entry.sh"]
+
 CMD ["bundle","exec","sidekiq","-C","./config/sidekiq.yml"]
