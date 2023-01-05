@@ -1,4 +1,4 @@
-FROM ruby:3.1.2
+FROM ruby:3.2.0
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs postgresql-client libvips42
 RUN gem install bundler -v 2.3.7
 RUN mkdir /app
