@@ -23,6 +23,10 @@ class User < ApplicationRecord
   delegate :can_donate?, to: :user_donation_stats
   delegate :last_donated_cause, to: :user_donation_stats
 
+  scope :created_between, lambda { |start_date, end_date|
+                            where('created_at >= ? AND created_at <= ?', start_date, end_date)
+                          }
+
   def impact
     UserServices::UserImpact.new(user: self).impact
   end

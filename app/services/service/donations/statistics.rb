@@ -15,6 +15,17 @@ module Service
         @total_donors ||= donations.distinct.count(:user_id)
       end
 
+      def total_new_donors
+        start_date = donations.minimum(:created_at)
+        end_date = donations.maximum(:created_at)
+        users_ids = donations.pluck(:user_id).uniq
+        users.where(id: users_ids).created_between(start_date, end_date).count
+      end
+
+      def total_donors_recurrent
+        total_donors - total_new_donors
+      end
+
       def impact_per_non_profit
         non_profits.map { |non_profit| format_impacts(non_profit) }
                    .select { |result| (result[:impact]).positive? }
@@ -56,6 +67,10 @@ module Service
 
       def non_profits
         NonProfit.all
+      end
+
+      def users
+        User.all
       end
     end
   end

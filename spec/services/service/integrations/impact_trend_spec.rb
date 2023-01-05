@@ -13,6 +13,8 @@ RSpec.describe Service::Integrations::ImpactTrend, type: :service do
     instance_double(Service::Integrations::Impact, {
                       total_donations: 10,
                       total_donors: 6,
+                      total_new_donors: 2,
+                      total_donors_recurrent: 4,
                       impact_per_non_profit: [],
                       donations_per_non_profit: [],
                       donors_per_non_profit: []
@@ -22,6 +24,8 @@ RSpec.describe Service::Integrations::ImpactTrend, type: :service do
     instance_double(Service::Integrations::Impact, {
                       total_donations: 5,
                       total_donors: 3,
+                      total_new_donors: 2,
+                      total_donors_recurrent: 4,
                       impact_per_non_profit: [],
                       donations_per_non_profit: [],
                       donors_per_non_profit: []
@@ -39,7 +43,8 @@ RSpec.describe Service::Integrations::ImpactTrend, type: :service do
                  impact_per_non_profit: [], donations_per_non_profit: [], donors_per_non_profit: [],
                  total_donations_balance: 5, total_donors_balance: 3,
                  total_donations_trend: 100.0, total_donors_trend: 100.0, previous_impact_per_non_profit: [],
-                 previous_donations_per_non_profit: [], previous_donors_per_non_profit: []
+                 previous_donations_per_non_profit: [], previous_donors_per_non_profit: [],
+                 total_new_donors: 2, total_donors_recurrent: 4
                })
     end
   end

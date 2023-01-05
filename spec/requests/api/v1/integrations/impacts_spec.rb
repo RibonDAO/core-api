@@ -16,7 +16,8 @@ RSpec.describe 'Api::V1::Integrations::Impacts', type: :request do
         previous_donations_per_non_profit: [],
         previous_donors_per_non_profit: [],
         total_donations_balance: 5,
-        total_donors_balance: 2, total_donations_trend: 100.0, total_donors_trend: 100.0 }
+        total_donors_balance: 2, total_donations_trend: 100.0, total_donors_trend: 100.0,
+        total_new_donors: 2, total_donors_recurrent: 4 }
     end
     let(:impact_service_instance) { instance_double(Service::Integrations::ImpactTrend, formatted_impact: impact) }
     let(:non_profit) { build(:non_profit) }
@@ -33,7 +34,7 @@ RSpec.describe 'Api::V1::Integrations::Impacts', type: :request do
                                       previous_total_donors total_donations_balance total_donations_trend
                                       total_donors_balance total_donors_trend donations_per_non_profit
                                       donors_per_non_profit previous_donations_per_non_profit
-                                      previous_donors_per_non_profit])
+                                      previous_donors_per_non_profit total_new_donors total_donors_recurrent])
     end
   end
 end
