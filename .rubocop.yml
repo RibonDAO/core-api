@@ -87,6 +87,7 @@ Rails/FilePath:
 Metrics/AbcSize:
   Exclude:
     - app/controllers/api/v1/manager/**/*
+    - app/services/service/integrations/impact_trend.rb
 
 Rails/DynamicFindBy:
   Enabled: false
