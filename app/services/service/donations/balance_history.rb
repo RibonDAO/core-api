@@ -41,7 +41,7 @@ module Service
 
       def amount_paid_donations
         PersonPayment.where(status: :paid).sum do |person_payment|
-          person_payment.pool.id == pool.id ? person_payment.crypto_amount : 0
+          person_payment.pool&.id == pool.id ? person_payment.crypto_amount : 0
         end
       end
 
