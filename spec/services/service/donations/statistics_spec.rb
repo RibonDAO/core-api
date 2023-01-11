@@ -22,6 +22,10 @@ RSpec.describe Service::Donations::Statistics, type: :service do
     create(:donation, value: 10, user: user2, non_profit: non_profit2)
   end
 
+  after do
+    travel_back
+  end
+
   describe '#total_donations' do
     it 'returns the total donations count' do
       expect(service.total_donations).to eq 6
