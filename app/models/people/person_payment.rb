@@ -96,11 +96,11 @@ class PersonPayment < ApplicationRecord
     person_blockchain_transactions.create(treasure_entry_status:, transaction_hash:)
   end
 
-  private
-
   def service_fees
     person_payment_fee&.service_fee || 0
   end
+
+  private
 
   def set_currency
     self.currency = offer&.currency || :usd
