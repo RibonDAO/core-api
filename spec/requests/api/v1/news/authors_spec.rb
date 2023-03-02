@@ -36,7 +36,7 @@ RSpec.describe 'Api::V1::News::Authors', type: :request do
   describe 'POST /create' do
     subject(:request) { post '/api/v1/news/authors', params: }
 
-    let(:params) { { author: { name: 'Author Name' } } }
+    let(:params) { name: 'Author Name' }
 
     it 'returns the created author' do
       request
@@ -49,7 +49,7 @@ RSpec.describe 'Api::V1::News::Authors', type: :request do
     subject(:request) { put "/api/v1/news/authors/#{author.id}", params: }
 
     let(:author) { create(:author) }
-    let(:params) { { author: { name: 'Author Name' } } }
+    let(:params) { name: 'Author Name' }
 
     it 'returns the updated author' do
       request
