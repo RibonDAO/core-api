@@ -1,5 +1,7 @@
 class CreateUserCompletedTasks < ActiveRecord::Migration[7.0]
   def change
+    drop_table :user_completed_tasks, if_exists: true
+
     create_table :user_completed_tasks, id: :uuid do |t|
       t.references :user, null: false, foreign_key: true
       t.string :task_identifier, null: false
