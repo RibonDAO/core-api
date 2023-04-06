@@ -14,7 +14,7 @@ class DonationQueries
       LEFT JOIN causes ON causes.id = non_profits.cause_id
       WHERE causes.id = #{cause.id})
 
-    Donation.find_by_sql(sql)
+    ActiveRecord::Base.connection.execute(sql).first['sum'] || 0
   end
 
   def amount_free_donations_without_batch
@@ -23,9 +23,11 @@ class DonationQueries
       LEFT JOIN non_profits ON non_profits.id = donations.non_profit_id
       LEFT JOIN causes ON causes.id = non_profits.cause_id
       LEFT JOIN donation_batches ON donation_batches.donation_id = donations.id
+      LEFT JOIN donation_blockchain_transactions on donation_blockchain_transactions.donation_id = donations.id
       WHERE causes.id = #{cause.id}
-      AND donation_batches.id is null)
+      AND donation_batches.id is null
+    AND donation_blockchain_transactions.id is null)
 
-    Donation.find_by_sql(sql)
+    ActiveRecord::Base.connection.execute(sql).first['sum'] || 0
   end
 end

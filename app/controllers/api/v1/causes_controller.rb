@@ -2,7 +2,7 @@ module Api
   module V1
     class CausesController < ApplicationController
       def index
-        @causes = Cause.all
+        @causes = CauseQueries.new.active_with_pool_balance
 
         render json: CauseBlueprint.render(@causes)
       end
