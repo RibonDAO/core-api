@@ -37,11 +37,11 @@ module Service
       end
 
       def amount_free_donations
-        DonationQueries.new(cause:).amount_free_donations.first['sum'].to_f / 100
+        DonationQueries.new(cause:).amount_free_donations.to_f / 100
       end
 
       def amount_free_donations_without_batch
-        DonationQueries.new(cause:).amount_free_donations_without_batch.first['sum'].to_f / 100
+        DonationQueries.new(cause:).amount_free_donations_without_batch.to_f / 100
       end
 
       def amount_donated
