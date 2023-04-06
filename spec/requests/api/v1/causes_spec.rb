@@ -5,6 +5,8 @@ RSpec.describe 'Api::V1::Causes', type: :request do
     subject(:request) { get '/api/v1/causes' }
 
     before do
+      create(:chain)
+      create(:ribon_config)
       create_list(:cause, 1)
     end
 
