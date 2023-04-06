@@ -11,6 +11,7 @@ RSpec.describe Donations::UpdatePoolBalanceWorker, type: :worker do
     let(:job) { Donations::UpdatePoolBalanceJob }
 
     before do
+      allow(Rails.env).to receive(:production?).and_return(true)
       allow(job).to receive(:perform_later).with(pool:)
     end
 
