@@ -53,7 +53,7 @@ module Donations
     end
 
     def allowed?
-      return true if user.can_donate?(integration) || skip_allowance
+      return true if (user.can_donate?(integration) || skip_allowance) && pool_balance?
 
       errors.add(:message, I18n.t('donations.blocked_message'))
 
@@ -78,6 +78,16 @@ module Donations
 
     def ticket_value
       @ticket_value ||= RibonConfig.default_ticket_value
+    end
+
+    def pool
+      non_profit.cause.default_pool
+    end
+
+    def pool_balance?
+      return true if pool&.pool_balance.blank?
+
+      pool.pool_balance.balance_for_donation?
     end
   end
 end

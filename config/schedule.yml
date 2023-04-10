@@ -25,7 +25,7 @@ retry_person_transactions:
   
 send_bimonthly_email_report_worker:
   cron: "0 18 1 * *" # At 18:00 on day-of-month 1.
-  class: "Mailers::RetryDonationBatchWorker"
+  class: "Mailers::SendBimonthlyEmailReportWorker"
   queue: mailers
 
 inactive_donors_one_week_worker:

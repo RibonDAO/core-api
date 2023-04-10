@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       delete 'stories/:id' => 'stories#destroy'
       
       get 'non_profits' => 'non_profits#index'
+      get 'free_donation_non_profits' => 'non_profits#free_donation_non_profits'
       get 'non_profits/:id/stories' => 'non_profits#stories'
       post 'non_profits' => 'non_profits#create'
       get 'non_profits/:id' => 'non_profits#show'
@@ -49,6 +50,7 @@ Rails.application.routes.draw do
       post 'sources' => 'sources#create'
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       get 'causes' => 'causes#index'
+      get 'free_donation_causes' => 'causes#free_donation_causes'
       post 'causes' => 'causes#create'
       get 'causes/:id' => 'causes#show'
       put 'causes/:id' => 'causes#update'
