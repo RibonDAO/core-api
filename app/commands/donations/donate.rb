@@ -87,7 +87,7 @@ module Donations
     def pool_balance?
       return true if pool&.pool_balance.blank?
 
-      pool.pool_balance.balance > RibonConfig.default_ticket_value / 100
+      pool.pool_balance.balance_for_donation?
     end
   end
 end

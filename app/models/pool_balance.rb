@@ -12,4 +12,8 @@ class PoolBalance < ApplicationRecord
   belongs_to :pool
 
   validates :balance, presence: true
+
+  def balance_for_donation?
+    balance > RibonConfig.default_ticket_value / 100
+  end
 end
