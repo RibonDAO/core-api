@@ -11,7 +11,6 @@ module Service
       def spread_fee_to_payers
         ordered_feeable_contribution_balances.reduce(initial_fee_generated_by_new_contribution.ceil) do
         |accumulated_fees_result, contribution_balance|
-
           if last_payer?(accumulated_fees_result:, contribution_balance:)
             charge_remaining_fee_from_last_contribution_balance(accumulated_fees_result:, contribution_balance:)
             break 0
@@ -75,7 +74,7 @@ module Service
       end
 
       def charge_remaining_fee_from_last_contribution_balance(accumulated_fees_result:, contribution_balance:)
-        fee_cents = accumulated_fees_result
+        fee_cents = [accumulated_fees_result, contribution_balance.fees_balance_cents].min
         ContributionFee.create!(contribution:, fee_cents:, payer_contribution: contribution_balance.contribution)
 
         update_contribution_balance(contribution_balance:, fee_cents:, total_fees_increased_cents: fee_cents)
