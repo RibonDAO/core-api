@@ -19,6 +19,8 @@ class Contribution < ApplicationRecord
 
   delegate :liquid_value_cents, to: :person_payment
   delegate :crypto_value_cents, to: :person_payment
+  delegate :from_big_donor?, to: :person_payment
+  delegate :from_customer?, to: :person_payment
 
   scope :with_tickets_balance_higher_than, lambda { |amount = 0|
                                              joins(:contribution_balance)
@@ -37,6 +39,12 @@ class Contribution < ApplicationRecord
             GROUP BY contribution_id
           ) AS last_donations ON contributions.id = last_donations.contribution_id"
     ).order('last_donations.last_donation_created_at DESC NULLS LAST')
+  }
+
+  scope :with_tickets_balance_less_than_10_percent, lambda {
+    joins(:contribution_balance)
+      .joins(:person_payment)
+      .where('contribution_balances.tickets_balance_cents <= 0.1 * person_payments.crypto_value_cents')
   }
 
   def usd_value_cents

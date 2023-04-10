@@ -29,6 +29,8 @@ class Donation < ApplicationRecord
                             where('created_at >= ? AND created_at <= ?', start_date, end_date)
                           }
 
+  scope :for_cause, ->(cause_id) { joins(non_profit: :cause).where(causes: { id: cause_id }) }
+
   delegate :cause, to: :non_profit
 
   def donation_blockchain_transaction
