@@ -25,6 +25,7 @@ module Donations
       create_donation
       set_user_last_donation_at
       set_last_donated_cause
+      label_donation
 
       donation
     end
@@ -69,6 +70,10 @@ module Donations
 
     def set_last_donated_cause
       SetLastDonatedCause.call(user:, cause: non_profit.cause)
+    end
+
+    def label_donation
+      Service::Contributions::TicketLabelingService.new(donation:).label_donation
     end
 
     def ticket_value
