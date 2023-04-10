@@ -20,6 +20,7 @@ RSpec.describe 'Api::V1::Vouchers::Donations', type: :request do
     end
 
     before do
+      create(:chain)
       create(:ribon_config)
     end
 
