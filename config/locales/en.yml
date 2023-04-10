@@ -40,3 +40,5 @@ en:
     and: "and"
     of: "of"
     donate: "Donate"
+  vouchers:
+    invalid_voucher: "Invalid voucher."
