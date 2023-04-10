@@ -12,6 +12,7 @@ describe Donations::Donate do
       let(:integration) { create(:integration) }
       let(:non_profit) { create(:non_profit, :with_impact) }
       let(:user) { create(:user) }
+      let(:ticket_labeling_instance) { instance_double(Service::Contributions::TicketLabelingService) }
 
       before do
         create(:chain)
@@ -19,6 +20,9 @@ describe Donations::Donate do
           .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(Donations::SetLastDonatedCause).to receive(:call)
           .and_return(command_double(klass: Donations::SetLastDonatedCause))
+        allow(Service::Contributions::TicketLabelingService).to receive(:new)
+          .and_return(ticket_labeling_instance)
+        allow(ticket_labeling_instance).to receive(:label_donation)
         create(:ribon_config, default_ticket_value: 100)
       end
 
@@ -38,6 +42,12 @@ describe Donations::Donate do
 
         expect(Donations::SetLastDonatedCause)
           .to have_received(:call).with(user:, cause: non_profit.cause)
+      end
+
+      it 'calls the ticket_labeling_instance label donation function' do
+        command
+
+        expect(ticket_labeling_instance).to have_received(:label_donation)
       end
 
       it 'returns the donation created' do
