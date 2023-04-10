@@ -15,7 +15,9 @@ FactoryBot.define do
     receiver { build(:non_profit) }
 
     trait(:with_contribution_balance) do
-      after(:create, &:set_contribution_balance)
+      after(:create) do |contribution|
+        create(:contribution_balance, contribution:)
+      end
     end
   end
 end

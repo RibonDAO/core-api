@@ -62,6 +62,14 @@ class PersonPayment < ApplicationRecord
     usd: 1
   }
 
+  def from_big_donor?
+    payer_type == 'BigDonor'
+  end
+
+  def from_customer?
+    payer_type == 'Customer'
+  end
+
   def crypto_amount
     amount_without_fees = amount - service_fees
     return amount_without_fees if currency&.to_sym == :usd
