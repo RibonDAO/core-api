@@ -15,7 +15,11 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.active_job.queue_adapter = :sidekiq
 
-if ENV["RAILS_LOG_TO_STDOUT"].present?
+  Rails.application.reloader.to_prepare do
+    Dir["#{Rails.root}/app/models/rule_groups/*.rb"].each { |file| require_dependency file }
+  end
+
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
