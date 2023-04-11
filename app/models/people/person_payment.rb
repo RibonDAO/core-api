@@ -130,6 +130,10 @@ class PersonPayment < ApplicationRecord
     person_payment_fee&.service_fee || 0
   end
 
+  def payer_identification
+    payer&.identification
+  end
+
   private
 
   def set_currency

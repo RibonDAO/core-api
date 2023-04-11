@@ -2,7 +2,7 @@ module Api
   module V1
     class PersonPaymentsController < ApplicationController
       def index
-        @person_payments = PersonPayment.order(sortable).page(page).per(per)
+        @person_payments = PersonPayment.where.not(payer_type: 'BigDonor').order(sortable).page(page).per(per)
 
         render json: PersonPaymentBlueprint.render(@person_payments, total_items:, page:, total_pages:)
       end
@@ -17,6 +17,12 @@ module Api
         else
           head :unprocessable_entity
         end
+      end
+
+      def big_donors
+        @person_payments = PersonPayment.where(payer_type: 'BigDonor').order(sortable).page(page).per(per)
+
+        render json: PersonPaymentBlueprint.render(@person_payments, total_items:, page:, total_pages:)
       end
 
       private

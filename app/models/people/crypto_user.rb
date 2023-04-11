@@ -15,4 +15,12 @@ class CryptoUser < ApplicationRecord
   belongs_to :person, optional: true
 
   has_many :person_payments, as: :payer
+
+  def blueprint
+    CryptoUserBlueprint
+  end
+
+  def identification
+    wallet_address
+  end
 end

@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       get 'integrations/:id' => 'integrations#show'
       put 'integrations/:id' => 'integrations#update'
       get 'person_payments' => 'person_payments#index'
+      get 'person_payments/big_donors' => 'person_payments#big_donors'
       get 'person_payments/:receiver_type' => 'person_payments#payments_for_receiver_by_person'
       post 'donations' => 'donations#create'
       post 'users' => 'users#create'

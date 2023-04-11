@@ -15,4 +15,12 @@ class BigDonor < ApplicationRecord
   before_validation { email.downcase! }
 
   has_many :person_payments, as: :payer
+
+  def blueprint
+    BigDonorBlueprint
+  end
+
+  def identification
+    email
+  end
 end
