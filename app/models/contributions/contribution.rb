@@ -59,7 +59,7 @@ class Contribution < ApplicationRecord
     fees_balance_cents = usd_value_cents * (fee_percentage / 100)
 
     create_contribution_balance!(
-      total_fees_increased_cents: 0,
+      contribution_increased_amount_cents: 0,
       tickets_balance_cents:,
       fees_balance_cents:
     )

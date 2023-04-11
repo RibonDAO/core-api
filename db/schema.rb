@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_11_135017) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_11_183002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -146,7 +146,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_11_135017) do
     t.bigint "contribution_id", null: false
     t.integer "tickets_balance_cents"
     t.integer "fees_balance_cents"
-    t.integer "total_fees_increased_cents"
+    t.integer "contribution_increased_amount_cents"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contribution_id"], name: "index_contribution_balances_on_contribution_id"
@@ -158,6 +158,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_11_135017) do
     t.integer "fee_cents"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "payer_contribution_increased_amount_cents"
     t.index ["contribution_id"], name: "index_contribution_fees_on_contribution_id"
     t.index ["payer_contribution_id"], name: "index_contribution_fees_on_payer_contribution_id"
   end

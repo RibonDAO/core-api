@@ -33,7 +33,7 @@ Metrics/BlockLength:
     - lib/tasks/auto_annotate_models.rake
 
 Metrics/MethodLength:
-  Max: 12
+  Max: 15
   Exclude:
     - app/mailers/sendgrid_web_mailer.rb
     - app/queries/**/*
