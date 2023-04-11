@@ -47,8 +47,6 @@ class Contribution < ApplicationRecord
       .where('contribution_balances.tickets_balance_cents <= 0.1 * person_payments.usd_value_cents')
   }
 
-  delegate :usd_value_cents, to: :person_payment
-
   def set_contribution_balance
     return unless contribution_balance.nil?
 
