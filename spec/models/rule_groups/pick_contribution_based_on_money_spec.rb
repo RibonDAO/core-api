@@ -8,8 +8,8 @@ RSpec.describe PickContributionBasedOnMoney, type: :model do
   let(:donation) { create(:donation) }
   let(:big_donor) { create(:big_donor) }
   let(:customer) { create(:customer) }
-  let(:big_donor_person_payment) { create(:person_payment, payer: big_donor, crypto_value_cents: 500) }
-  let(:customer_person_payment) { create(:person_payment, payer: customer, crypto_value_cents: 500) }
+  let(:big_donor_person_payment) { create(:person_payment, payer: big_donor, usd_value_cents: 500) }
+  let(:customer_person_payment) { create(:person_payment, payer: customer, usd_value_cents: 500) }
   let(:contributions_from_big_donors) do
     create_list(:contribution, 2, :with_contribution_balance, person_payment: big_donor_person_payment)
   end

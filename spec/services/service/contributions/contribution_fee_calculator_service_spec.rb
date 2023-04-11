@@ -33,7 +33,7 @@ describe Service::Contributions::ContributionFeeCalculatorService do
   end
 
   describe '#calculate_increased_value_for' do
-    let(:contribution) { create(:contribution, person_payment: create(:person_payment, crypto_value_cents: 1000)) }
+    let(:contribution) { create(:contribution, person_payment: create(:person_payment, usd_value_cents: 1000)) }
 
     it 'returns the percentage of fee paid relative to the contribution value' do
       expect(service.calculate_increased_value_for(contribution:)).to eq(500)
