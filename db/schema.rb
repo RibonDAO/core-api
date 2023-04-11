@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_04_213446) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_11_124309) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -385,7 +385,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_04_213446) do
     t.bigint "receiver_id"
     t.string "error_code"
     t.integer "currency"
-    t.integer "crypto_value_cents"
+    t.integer "usd_value_cents"
     t.integer "liquid_value_cents"
     t.string "payer_type"
     t.uuid "payer_id"
@@ -442,14 +442,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_04_213446) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["non_profit_id"], name: "index_stories_on_non_profit_id"
-  end
-
-  create_table "tasks", force: :cascade do |t|
-    t.string "title"
-    t.text "actions"
-    t.text "rules"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "tokens", force: :cascade do |t|
@@ -510,7 +502,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_04_213446) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "language"
+    t.integer "language", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

@@ -6,7 +6,7 @@ RSpec.describe Service::Contributions::ContributionFeeService, type: :service do
   end
 
   describe '#spread_fee_to_payers' do
-    let(:person_payment) { create(:person_payment, crypto_value_cents: 500) }
+    let(:person_payment) { create(:person_payment, usd_value_cents: 1000) }
     let(:contribution) { create(:contribution, person_payment:) }
     let!(:contribution_balance1) { create(:contribution_balance, fees_balance_cents: 50) }
     let!(:contribution_balance2) { create(:contribution_balance, fees_balance_cents: 30) }
@@ -38,7 +38,7 @@ RSpec.describe Service::Contributions::ContributionFeeService, type: :service do
   end
 
   context 'when there is a minimum fee' do
-    let(:person_payment) { create(:person_payment, crypto_value_cents: 500) }
+    let(:person_payment) { create(:person_payment, usd_value_cents: 1000) }
     let(:contribution) { create(:contribution, person_payment:) }
 
     let!(:contribution_balance1) { create(:contribution_balance, fees_balance_cents: 5) } # 4.5454

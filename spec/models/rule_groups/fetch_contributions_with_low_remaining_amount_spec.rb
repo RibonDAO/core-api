@@ -8,12 +8,12 @@ RSpec.describe FetchContributionsWithLowRemainingAmount, type: :model do
   let(:contributions_with_less_than_10_percent_balance) do
     create_list(:contribution, 2,
                 contribution_balance: create(:contribution_balance, tickets_balance_cents: 10),
-                person_payment: create(:person_payment, crypto_value_cents: 100))
+                person_payment: create(:person_payment, usd_value_cents: 100))
   end
   let(:contributions_with_more_than_10_percent_balance) do
     create_list(:contribution, 2,
                 contribution_balance: create(:contribution_balance, tickets_balance_cents: 50),
-                person_payment: create(:person_payment, crypto_value_cents: 100))
+                person_payment: create(:person_payment, usd_value_cents: 100))
   end
 
   describe '#call' do

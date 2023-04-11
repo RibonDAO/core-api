@@ -18,7 +18,7 @@ class Contribution < ApplicationRecord
   has_many :contribution_fees
 
   delegate :liquid_value_cents, to: :person_payment
-  delegate :crypto_value_cents, to: :person_payment
+  delegate :usd_value_cents, to: :person_payment
   delegate :from_big_donor?, to: :person_payment
   delegate :from_customer?, to: :person_payment
 
@@ -44,12 +44,10 @@ class Contribution < ApplicationRecord
   scope :with_tickets_balance_less_than_10_percent, lambda {
     joins(:contribution_balance)
       .joins(:person_payment)
-      .where('contribution_balances.tickets_balance_cents <= 0.1 * person_payments.crypto_value_cents')
+      .where('contribution_balances.tickets_balance_cents <= 0.1 * person_payments.usd_value_cents')
   }
 
-  def usd_value_cents
-    person_payment.crypto_value_cents
-  end
+  delegate :usd_value_cents, to: :person_payment
 
   def set_contribution_balance
     return unless contribution_balance.nil?

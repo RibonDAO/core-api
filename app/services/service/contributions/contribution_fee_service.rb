@@ -3,6 +3,8 @@ module Service
     class ContributionFeeService
       attr_reader :contribution, :initial_contributions_balance
 
+      CONTRACT_FEE_PERCENTAGE = 0.1
+
       def initialize(contribution:)
         @contribution = contribution
         @initial_contributions_balance = ContributionBalance.sum(:fees_balance_cents)
@@ -35,12 +37,8 @@ module Service
         RibonConfig.minimum_contribution_chargeable_fee_cents
       end
 
-      def contribution_fee_percentage
-        RibonConfig.contribution_fee_percentage.to_f / 100
-      end
-
       def initial_fee_generated_by_new_contribution
-        contribution.usd_value_cents * contribution_fee_percentage # contract_fee_percentage
+        contribution.usd_value_cents * CONTRACT_FEE_PERCENTAGE
       end
 
       def ordered_feeable_contribution_balances

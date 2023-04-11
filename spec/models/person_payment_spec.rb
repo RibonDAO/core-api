@@ -4,7 +4,6 @@
 #
 #  id                 :bigint           not null, primary key
 #  amount_cents       :integer
-#  crypto_value_cents :integer
 #  currency           :integer
 #  error_code         :string
 #  liquid_value_cents :integer
@@ -14,6 +13,7 @@
 #  receiver_type      :string
 #  refund_date        :datetime
 #  status             :integer          default("processing")
+#  usd_value_cents    :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  external_id        :string
