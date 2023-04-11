@@ -51,7 +51,6 @@ module Donations
       OpenStruct.new(result.parsed_response).value['cid']
     end
 
-    # rubocop:disable Metrics/MethodLength
     def temporary_json
       donations_json = []
 
@@ -70,7 +69,6 @@ module Donations
       end
       donations_json
     end
-    # rubocop:enable Metrics/MethodLength
 
     def create_batch
       Batch.create(cid: store_batch, amount: total_amount)
