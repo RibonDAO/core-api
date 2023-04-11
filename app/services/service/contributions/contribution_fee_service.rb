@@ -38,7 +38,7 @@ module Service
       end
 
       def initial_fee_generated_by_new_contribution
-        contribution.usd_value_cents * CONTRACT_FEE_PERCENTAGE
+        contribution.generated_fee_cents
       end
 
       def ordered_feeable_contribution_balances
