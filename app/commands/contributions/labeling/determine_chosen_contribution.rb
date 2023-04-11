@@ -21,6 +21,7 @@ module Contributions
 
       def base_contributions
         Contribution
+          .with_paid_status
           .with_tickets_balance_higher_than(donation.value)
       end
 

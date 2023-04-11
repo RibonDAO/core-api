@@ -22,4 +22,27 @@ RSpec.describe ContributionBalance, type: :model do
     it { is_expected.to validate_presence_of(:fees_balance_cents) }
     it { is_expected.to validate_presence_of(:total_fees_increased_cents) }
   end
+
+  describe '.with_paid_status' do
+    let(:contributions_refunded) do
+      create_list(:contribution_balance, 2,
+                  contribution: create(:contribution,
+                                       person_payment: create(:person_payment, status: :refunded)))
+    end
+    let(:contributions_paid) do
+      create_list(:contribution_balance, 2,
+                  contribution: create(:contribution,
+                                       person_payment: create(:person_payment, status: :paid)))
+    end
+
+    before do
+      contributions_paid
+      contributions_refunded
+    end
+
+    it 'returns all the contributions that have person_payment status paid' do
+      expect(described_class.with_paid_status.pluck(:id))
+        .to match_array(contributions_paid.pluck(:id))
+    end
+  end
 end

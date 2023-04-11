@@ -87,4 +87,25 @@ RSpec.describe Contribution, type: :model do
       expect(described_class.ordered_by_donation_contribution.pluck(:id)).to eq [4, 2, 1, 3]
     end
   end
+
+  describe '.with_paid_status' do
+    let(:contributions_refunded) do
+      create_list(:contribution, 2,
+                  person_payment: create(:person_payment, status: :refunded))
+    end
+    let(:contributions_paid) do
+      create_list(:contribution, 2,
+                  person_payment: create(:person_payment, status: :paid))
+    end
+
+    before do
+      contributions_paid
+      contributions_refunded
+    end
+
+    it 'returns all the contributions that have person_payment status paid' do
+      expect(described_class.with_paid_status.pluck(:id))
+        .to match_array(contributions_paid.pluck(:id))
+    end
+  end
 end

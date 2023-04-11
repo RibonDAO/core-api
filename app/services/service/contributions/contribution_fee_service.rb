@@ -43,6 +43,7 @@ module Service
 
       def ordered_feeable_contribution_balances
         @ordered_feeable_contribution_balances ||= ContributionBalance.all
+                                                                      .with_paid_status
                                                                       .where.not(contribution_id: contribution.id)
                                                                       .order(:fees_balance_cents)
       end

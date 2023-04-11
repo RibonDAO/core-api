@@ -21,5 +21,11 @@ FactoryBot.define do
         create(:contribution_balance, contribution:)
       end
     end
+
+    trait :with_paid_status do
+      before(:create) do |contribution|
+        contribution.person_payment = create(:person_payment, status: :paid)
+      end
+    end
   end
 end
