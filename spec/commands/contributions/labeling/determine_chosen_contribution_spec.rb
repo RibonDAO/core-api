@@ -12,7 +12,13 @@ describe Contributions::Labeling::DetermineChosenContribution do
     let(:donation) { create(:donation) }
     let(:rules_set) { instance_double }
 
-    context 'when there are no base contributions' do
+    context 'when there are no valid base contributions' do
+      before do
+        person_payment = create(:person_payment, status: :refunded)
+        contribution = create(:contribution, person_payment:)
+        create(:contribution_balance, contribution:, tickets_balance_cents: 10_000)
+      end
+
       it 'does not apply any rules and return nil' do
         expect(command.call.result).to be_nil
       end

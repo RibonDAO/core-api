@@ -16,5 +16,11 @@ FactoryBot.define do
     tickets_balance_cents { 100 }
     fees_balance_cents { 100 }
     total_fees_increased_cents { 100 }
+
+    trait :with_paid_status do
+      before(:create) do |contribution_balance|
+        contribution_balance.contribution = create(:contribution, :with_paid_status)
+      end
+    end
   end
 end

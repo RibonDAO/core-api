@@ -6,11 +6,11 @@ RSpec.describe Service::Contributions::ContributionFeeService, type: :service do
   end
 
   describe '#spread_fee_to_payers' do
-    let(:person_payment) { create(:person_payment, usd_value_cents: 1000) }
+    let(:person_payment) { create(:person_payment, usd_value_cents: 1000, status: :paid) }
     let(:contribution) { create(:contribution, person_payment:) }
-    let!(:contribution_balance1) { create(:contribution_balance, fees_balance_cents: 50) }
-    let!(:contribution_balance2) { create(:contribution_balance, fees_balance_cents: 30) }
-    let!(:contribution_balance3) { create(:contribution_balance, fees_balance_cents: 20) }
+    let!(:contribution_balance1) { create(:contribution_balance, :with_paid_status, fees_balance_cents: 50) }
+    let!(:contribution_balance2) { create(:contribution_balance, :with_paid_status, fees_balance_cents: 30) }
+    let!(:contribution_balance3) { create(:contribution_balance, :with_paid_status, fees_balance_cents: 20) }
 
     it 'creates a fee for each feeable contribution balance' do
       fee_service = described_class.new(contribution:)
@@ -38,13 +38,25 @@ RSpec.describe Service::Contributions::ContributionFeeService, type: :service do
   end
 
   context 'when there is a minimum fee' do
-    let(:person_payment) { create(:person_payment, usd_value_cents: 1000) }
+    let(:person_payment) { create(:person_payment, usd_value_cents: 1000, status: :paid) }
     let(:contribution) { create(:contribution, person_payment:) }
 
-    let!(:contribution_balance1) { create(:contribution_balance, fees_balance_cents: 5) } # 4.5454
-    let!(:contribution_balance2) { create(:contribution_balance, fees_balance_cents: 15) } # 13.6363
-    let!(:contribution_balance3) { create(:contribution_balance, fees_balance_cents: 30) } # 27.2727
-    let!(:contribution_balance4) { create(:contribution_balance, fees_balance_cents: 60) } # 54.5454
+    # 4.5454
+    let!(:contribution_balance1) do
+      create(:contribution_balance, :with_paid_status, fees_balance_cents: 5)
+    end
+    # 13.6363
+    let!(:contribution_balance2) do
+      create(:contribution_balance, :with_paid_status, fees_balance_cents: 15)
+    end
+    # 27.2727
+    let!(:contribution_balance3) do
+      create(:contribution_balance, :with_paid_status, fees_balance_cents: 30)
+    end
+    # 54.5454
+    let!(:contribution_balance4) do
+      create(:contribution_balance, :with_paid_status, fees_balance_cents: 60)
+    end
 
     it 'stops spreading the fee when a contribution balance reaches the minimum fee' do
       fee_service = described_class.new(contribution:)

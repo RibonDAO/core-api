@@ -26,4 +26,9 @@ class ContributionBalance < ApplicationRecord
                                                        .where(person_payments: { payer_type: 'Customer' })
                                                        .sum(:tickets_balance_cents)
                                                    }
+
+  scope :with_paid_status, lambda {
+    joins(contribution: :person_payment)
+      .where(person_payments: { status: :paid })
+  }
 end
