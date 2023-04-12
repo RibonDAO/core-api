@@ -45,4 +45,23 @@ RSpec.describe ContributionBalance, type: :model do
         .to match_array(contributions_paid.pluck(:id))
     end
   end
+
+  describe '.with_fees_balance' do
+    let(:with_balance) do
+      create_list(:contribution_balance, 2, fees_balance_cents: 100)
+    end
+    let(:without_balance) do
+      create_list(:contribution_balance, 2, fees_balance_cents: 0)
+    end
+
+    before do
+      with_balance
+      without_balance
+    end
+
+    it 'returns all the contributions that have person_payment status paid' do
+      expect(described_class.with_fees_balance.pluck(:id))
+        .to match_array(with_balance.pluck(:id))
+    end
+  end
 end

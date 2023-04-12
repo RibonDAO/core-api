@@ -31,4 +31,6 @@ class ContributionBalance < ApplicationRecord
     joins(contribution: :person_payment)
       .where(person_payments: { status: :paid })
   }
+
+  scope :with_fees_balance, -> { where('fees_balance_cents > 0') }
 end
