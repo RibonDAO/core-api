@@ -11,15 +11,15 @@ module Service
         @initial_contributions_balance = initial_contributions_balance
       end
 
-      def calculate_proportional_fee
+      def proportional_fee
         return payer_fees_balance_cents if payer_fees_balance_cents <= minimum_fee
         return payer_fees_balance_cents if payer_fees_balance_cents <= proportional_contribution
 
         [proportional_contribution, minimum_fee].max&.ceil
       end
 
-      def calculate_increased_value_for(contribution:)
-        payer_relative_percentage_of_total * contribution.usd_value_cents
+      def increased_value_for(contribution:)
+        contribution.usd_value_cents * paid_proportional_fee(contribution:)
       end
 
       private
@@ -38,6 +38,10 @@ module Service
 
       def payer_fees_balance_cents
         @payer_fees_balance_cents ||= payer_contribution_balance.fees_balance_cents
+      end
+
+      def paid_proportional_fee(contribution:)
+        proportional_fee / contribution.generated_fee_cents.to_f
       end
     end
   end
