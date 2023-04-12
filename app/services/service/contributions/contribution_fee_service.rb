@@ -54,7 +54,7 @@ module Service
         ContributionFeeCalculatorService
           .new(payer_contribution_balance: contribution_balance,
                fee_to_be_paid: initial_fee_generated_by_new_contribution,
-               initial_contributions_balance:).calculate_proportional_fee
+               initial_contributions_balance:).proportional_fee
       end
 
       def calculate_increased_value_for(contribution_balance:)
@@ -62,7 +62,7 @@ module Service
           .new(payer_contribution_balance: contribution_balance,
                fee_to_be_paid: initial_fee_generated_by_new_contribution,
                initial_contributions_balance:)
-          .calculate_increased_value_for(contribution:)
+          .increased_value_for(contribution:)
       end
 
       def update_contribution_balance(contribution_balance:, fee_cents:, contribution_increased_amount_cents:)
