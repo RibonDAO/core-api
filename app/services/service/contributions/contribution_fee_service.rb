@@ -77,7 +77,10 @@ module Service
 
       def charge_remaining_fee_from_last_contribution_balance(accumulated_fees_result:, contribution_balance:)
         fee_cents = [accumulated_fees_result, contribution_balance.fees_balance_cents].min
-        ContributionFee.create!(contribution:, fee_cents:, payer_contribution: contribution_balance.contribution)
+        payer_contribution_increased_amount_cents =
+          contribution.usd_value_cents * fee_cents / contribution.generated_fee_cents.to_f
+
+        create_contribution_fee(contribution_balance:, fee_cents:, payer_contribution_increased_amount_cents:)
 
         update_contribution_balance(contribution_balance:, fee_cents:,
                                     contribution_increased_amount_cents: fee_cents)
