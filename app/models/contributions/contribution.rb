@@ -53,12 +53,7 @@ class Contribution < ApplicationRecord
 
   def set_contribution_balance
     return unless contribution_balance.nil?
-
-    if receiver_type == 'NonProfit'
-      create_contribution_balance!(contribution_increased_amount_cents: 0, tickets_balance_cents: 0,
-                                   fees_balance_cents: 0)
-      return
-    end
+    return if receiver_type == 'NonProfit'
 
     fee_percentage = RibonConfig.contribution_fee_percentage
     tickets_balance_cents = usd_value_cents * (100 - fee_percentage) / 100
