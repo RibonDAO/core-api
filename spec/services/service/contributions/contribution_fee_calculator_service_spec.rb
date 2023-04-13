@@ -4,11 +4,11 @@ require 'rails_helper'
 
 describe Service::Contributions::ContributionFeeCalculatorService do
   subject(:service) do
-    described_class.new(payer_contribution_balance:, fee_to_be_paid:,
+    described_class.new(payer_balance:, fee_to_be_paid:,
                         initial_contributions_balance:)
   end
 
-  let(:payer_contribution_balance) { create(:contribution_balance, fees_balance_cents: 5000) }
+  let(:payer_balance) { create(:contribution_balance, fees_balance_cents: 5000).fees_balance_cents }
   let(:initial_contributions_balance) { 10_000 }
   let(:fee_to_be_paid) { 100 }
 

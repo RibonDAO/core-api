@@ -11,18 +11,21 @@ module Contributions
       def call
         rules = RuleGroup.rules_set
 
-        apply_rules({
-                      chosen: base_contributions,
-                      found: false
-                    }, rules)
+        apply_rules({ chosen: base_contributions, found: false }, rules)
       end
 
       private
 
       def base_contributions
-        Contribution
-          .with_paid_status
-          .with_tickets_balance_higher_than(donation.value)
+        return Contribution.with_paid_status if contributions_with_tickets_balance.empty?
+
+        contributions_with_tickets_balance
+      end
+
+      def contributions_with_tickets_balance
+        @contributions_with_tickets_balance ||= Contribution
+                                                .with_paid_status
+                                                .with_tickets_balance_higher_than(donation.value)
       end
 
       def apply_rules(input, rules)
