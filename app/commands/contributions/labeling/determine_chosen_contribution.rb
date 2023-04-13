@@ -17,7 +17,7 @@ module Contributions
       private
 
       def base_contributions
-        return Contribution.with_paid_status if contributions_with_tickets_balance.empty?
+        return contributions_with_fees_balance if contributions_with_tickets_balance.empty?
 
         contributions_with_tickets_balance
       end
@@ -26,6 +26,12 @@ module Contributions
         @contributions_with_tickets_balance ||= Contribution
                                                 .with_paid_status
                                                 .with_tickets_balance_higher_than(donation.value)
+      end
+
+      def contributions_with_fees_balance
+        @contributions_with_fees_balance ||= Contribution
+                                             .with_paid_status
+                                             .with_fees_balance_higher_than(donation.value)
       end
 
       def apply_rules(input, rules)

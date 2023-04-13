@@ -63,8 +63,9 @@ module Service
       end
 
       def update_contribution_balance(contribution_balance:, fee_cents:, contribution_increased_amount_cents:)
-        ::Contributions::UpdateContributionBalance.call(contribution_balance:, fee_cents:,
-                                                        contribution_increased_amount_cents:)
+        contribution_balance.contribution_increased_amount_cents += contribution_increased_amount_cents
+        contribution_balance.tickets_balance_cents -= fee_cents
+        contribution_balance.save
       end
 
       def create_contribution_fee(contribution_balance:, fee_cents:, payer_contribution_increased_amount_cents:)

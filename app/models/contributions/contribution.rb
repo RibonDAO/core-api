@@ -27,6 +27,10 @@ class Contribution < ApplicationRecord
                                              joins(:contribution_balance)
                                                .where('contribution_balances.tickets_balance_cents >= ?', amount)
                                            }
+  scope :with_fees_balance_higher_than, lambda { |amount = 0|
+    joins(:contribution_balance)
+      .where('contribution_balances.fees_balance_cents >= ?', amount)
+  }
   scope :from_unique_donors, lambda {
                                joins(:person_payment)
                                  .where('person_payments.payer_type IN (?, ?)', 'Customer', 'CryptoUser')

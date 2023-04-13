@@ -11,6 +11,8 @@ module Service
       end
 
       def spread_fee_to_payers
+        deal_with_fees_balances_empty
+
         ordered_feeable_contribution_balances.reduce(initial_fee_generated_by_new_contribution.ceil) do
         |accumulated_fees_result, contribution_balance|
           if last_payer?(accumulated_fees_result:, contribution_balance:)
@@ -92,6 +94,13 @@ module Service
 
         remaining_fee = accumulated_fees_result - contribution_balance.fees_balance_cents
         HandleRemainingContributionFee.new(contribution:, remaining_fee:).spread_remaining_fee
+      end
+
+      def deal_with_fees_balances_empty
+        return unless ordered_feeable_contribution_balances.empty?
+
+        HandleRemainingContributionFee
+          .new(contribution:, remaining_fee: initial_fee_generated_by_new_contribution).spread_remaining_fee
       end
     end
   end
