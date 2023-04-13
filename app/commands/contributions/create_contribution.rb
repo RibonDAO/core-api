@@ -26,7 +26,7 @@ module Contributions
     private
 
     def handle_contribution_fees(contribution)
-      Service::Contributions::ContributionFeeService.new(contribution:).spread_fee_to_payers
+      Service::Contributions::FeesLabelingService.new(contribution:).spread_fee_to_payers
     end
   end
 end

@@ -11,6 +11,10 @@ module Service
         @initial_contributions_balance = initial_contributions_balance
       end
 
+      def fee_and_increased_value_for(contribution:)
+        [proportional_fee, increased_value_for(contribution:)]
+      end
+
       def proportional_fee
         return payer_balance if payer_balance <= minimum_fee
         return payer_balance if payer_balance <= proportional_contribution
