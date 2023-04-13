@@ -37,7 +37,7 @@ class PersonPaymentBlueprint < Blueprinter::Base
     end
 
     field :cause do |payment|
-      payment.receiver_type == 'Cause' ? payment.receiver.name : "Donated to non-profit #{payment.receiver.name}"
+      payment.receiver_type == 'Cause' ? payment.receiver.name : nil
     end
   end
 end
