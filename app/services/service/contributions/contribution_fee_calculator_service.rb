@@ -16,8 +16,7 @@ module Service
       end
 
       def proportional_fee
-        return payer_balance if payer_balance <= minimum_fee
-        return payer_balance if payer_balance <= proportional_contribution
+        return payer_balance if payer_balance <= minimum_fee || payer_balance <= proportional_contribution
 
         [proportional_contribution, minimum_fee].max&.ceil
       end

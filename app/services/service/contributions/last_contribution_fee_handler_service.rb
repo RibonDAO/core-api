@@ -25,7 +25,7 @@ module Service
         return if accumulated_fees_result <= contribution_balance.fees_balance_cents
 
         remaining_fee = accumulated_fees_result - contribution_balance.fees_balance_cents
-        HandleRemainingContributionFee.new(contribution:, remaining_fee:).spread_remaining_fee
+        RemainingContributionFeeHandlerService.new(contribution:, remaining_fee:).spread_remaining_fee
       end
 
       private
