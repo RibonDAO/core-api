@@ -3,17 +3,17 @@
 module Service
   module Contributions
     class ContributionFeeCalculatorService
-      attr_reader :payer_contribution_balance, :initial_contributions_balance, :fee_to_be_paid
+      attr_reader :payer_balance, :initial_contributions_balance, :fee_to_be_paid
 
-      def initialize(payer_contribution_balance:, fee_to_be_paid:, initial_contributions_balance:)
-        @payer_contribution_balance = payer_contribution_balance
+      def initialize(payer_balance:, fee_to_be_paid:, initial_contributions_balance:)
+        @payer_balance = payer_balance
         @fee_to_be_paid = fee_to_be_paid
         @initial_contributions_balance = initial_contributions_balance
       end
 
       def proportional_fee
-        return payer_fees_balance_cents if payer_fees_balance_cents <= minimum_fee
-        return payer_fees_balance_cents if payer_fees_balance_cents <= proportional_contribution
+        return payer_balance if payer_balance <= minimum_fee
+        return payer_balance if payer_balance <= proportional_contribution
 
         [proportional_contribution, minimum_fee].max&.ceil
       end
@@ -33,11 +33,7 @@ module Service
       end
 
       def payer_relative_percentage_of_total
-        @payer_relative_percentage_of_total ||= payer_fees_balance_cents / initial_contributions_balance.to_f
-      end
-
-      def payer_fees_balance_cents
-        @payer_fees_balance_cents ||= payer_contribution_balance.fees_balance_cents
+        @payer_relative_percentage_of_total ||= payer_balance / initial_contributions_balance.to_f
       end
 
       def paid_proportional_fee(contribution:)

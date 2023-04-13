@@ -25,7 +25,12 @@ module Service
       end
 
       def update_contribution_balance(contribution_balance:)
-        contribution_balance.tickets_balance_cents -= donation.value
+        if contribution_balance.enough_tickets_balance?(donation.value)
+          contribution_balance.tickets_balance_cents -= donation.value
+        else
+          contribution_balance.fees_balance_cents -= donation.value
+        end
+
         contribution_balance.save!
       end
 
