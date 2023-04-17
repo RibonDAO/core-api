@@ -13,6 +13,8 @@ module Service
       def spread_fee_to_payers
         deal_with_fees_balances_empty
         create_fees_for_feeable_contributions
+      rescue StandardError => e
+        Reporter.log(error: e)
       end
 
       private

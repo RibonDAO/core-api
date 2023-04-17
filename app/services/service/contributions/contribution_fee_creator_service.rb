@@ -16,6 +16,8 @@ module Service
       def handle_fee_creation
         create_contribution_fee
         update_contribution_balance
+      rescue StandardError => e
+        Reporter.log(error: e)
       end
 
       private
