@@ -5,7 +5,7 @@ module Service
 
       CONTRACT_FEE_PERCENTAGE = 0.1
 
-      def initialize(contribution:)
+      def initialize(contribution:, remaining_fee:)
         @contribution = contribution
         @remaining_fee = remaining_fee
         @initial_contributions_balance = ContributionBalance.sum(:tickets_balance_cents)
