@@ -37,7 +37,7 @@ class PersonPaymentBlueprint < Blueprinter::Base
     end
 
     field :cause do |payment|
-      payment.receiver&.name
+      payment.receiver
     end
   end
 end
