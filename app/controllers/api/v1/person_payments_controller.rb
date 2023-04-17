@@ -26,6 +26,12 @@ module Api
                                                                      total_pages:, view: :big_donations)
       end
 
+      def big_donor_donation
+        @person_payment = PersonPayment.find(params[:id])
+
+        render json: PersonPaymentBlueprint.render(@person_payment, view: :big_donations)
+      end
+
       private
 
       def person_payments_for(receiver_type)

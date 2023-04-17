@@ -35,5 +35,9 @@ class PersonPaymentBlueprint < Blueprinter::Base
     field :blockchain_status do |payment|
       payment.person_blockchain_transaction&.treasure_entry_status
     end
+
+    field :cause do |payment|
+      payment.receiver_type == 'Cause' ? payment.receiver.name : nil
+    end
   end
 end
