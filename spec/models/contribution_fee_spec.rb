@@ -13,5 +13,9 @@
 require 'rails_helper'
 
 RSpec.describe ContributionFee, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '.validations' do
+    subject { build(:contribution_fee) }
+
+    it { is_expected.to validate_numericality_of(:fee_cents).is_greater_than_or_equal_to(0) }
+  end
 end
