@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_11_183002) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_125247) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -269,6 +269,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_11_183002) do
     t.uuid "unique_address", default: -> { "gen_random_uuid()" }, null: false
     t.integer "ticket_availability_in_minutes"
     t.integer "status", default: 0
+  end
+
+  create_table "legacy_non_profits", force: :cascade do |t|
+    t.string "name"
+    t.string "logo_url"
+    t.integer "cost_of_one_impact"
+    t.string "impact_description"
+    t.integer "legacy_id"
+    t.integer "current_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "mobility_string_translations", force: :cascade do |t|
