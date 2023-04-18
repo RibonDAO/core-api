@@ -18,6 +18,8 @@ RSpec.describe LegacyNonProfit, type: :model do
   describe '.validations' do
     subject { build(:legacy_non_profit) }
 
+    it { is_expected.to have_many(:legacy_user_impacts) }
+
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:logo_url) }
     it { is_expected.to validate_presence_of(:cost_of_one_impact) }
