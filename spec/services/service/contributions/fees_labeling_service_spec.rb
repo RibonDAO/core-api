@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Service::Contributions::ContributionFeeService, type: :service do
+RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
   before do
     create(:ribon_config, contribution_fee_percentage: 20, minimum_contribution_chargeable_fee_cents: 10)
   end

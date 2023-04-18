@@ -23,9 +23,10 @@ module Api
 
       def can_donate
         @integration = Integration.find_by_id_or_unique_address params[:integration_id]
+        @platform = params[:user_agent]
 
         if current_user
-          render json: { can_donate: current_user.can_donate?(@integration) }
+          render json: { can_donate: current_user.can_donate?(@integration, @platform) }
         else
           render json: { can_donate: true }
         end
@@ -51,7 +52,7 @@ module Api
       private
 
       def user_params
-        params.permit(:email, :language)
+        params.permit(:email, :language, :user_agent)
       end
     end
   end

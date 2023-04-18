@@ -47,6 +47,7 @@ RSpec.describe UserDonationStats, type: :model do
 
   describe '#can_donate?' do
     let(:integration) { build(:integration, ticket_availability_in_minutes: nil) }
+    let(:platform) { 'app' }
 
     context 'when the next_donation_at is nil' do
       let(:user_donation_stats) do
@@ -54,7 +55,7 @@ RSpec.describe UserDonationStats, type: :model do
       end
 
       it 'returns true' do
-        expect(user_donation_stats.can_donate?(integration)).to be_truthy
+        expect(user_donation_stats.can_donate?(integration, platform)).to be_truthy
       end
     end
 
@@ -68,7 +69,7 @@ RSpec.describe UserDonationStats, type: :model do
       end
 
       it 'returns true' do
-        expect(user_donation_stats.can_donate?(integration)).to be_truthy
+        expect(user_donation_stats.can_donate?(integration, platform)).to be_truthy
       end
     end
 
@@ -86,7 +87,7 @@ RSpec.describe UserDonationStats, type: :model do
       end
 
       it 'returns true' do
-        expect(user_donation_stats.can_donate?(integration)).to be_truthy
+        expect(user_donation_stats.can_donate?(integration, platform)).to be_truthy
       end
     end
 
@@ -103,7 +104,7 @@ RSpec.describe UserDonationStats, type: :model do
       end
 
       it 'returns false' do
-        expect(user_donation_stats.can_donate?(integration)).to be_falsey
+        expect(user_donation_stats.can_donate?(integration, platform)).to be_falsey
       end
     end
 
@@ -121,7 +122,26 @@ RSpec.describe UserDonationStats, type: :model do
       end
 
       it 'returns false' do
-        expect(user_donation_stats.can_donate?(integration)).to be_falsey
+        expect(user_donation_stats.can_donate?(integration, platform)).to be_falsey
+      end
+    end
+
+    context 'when the next_donation_at is lower than now due to ticket availability
+     but it is first donation on native' do
+      let(:integration) { build(:integration, ticket_availability_in_minutes: 50) }
+      let(:user) { build(:user) }
+
+      let(:user_donation_stats) do
+        build(:user_donation_stats, user:)
+      end
+
+      before do
+        mock_now('13-01-2021 10:40:00')
+        create(:donation, created_at: parsed_date('13-01-2021 10:00:00'), platform: 'web', integration:, user:)
+      end
+
+      it 'returns true' do
+        expect(user_donation_stats.can_donate?(integration, 'app')).to be_truthy
       end
     end
   end

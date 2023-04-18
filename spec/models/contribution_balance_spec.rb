@@ -64,4 +64,20 @@ RSpec.describe ContributionBalance, type: :model do
         .to match_array(with_balance.pluck(:id))
     end
   end
+
+  describe '#enough_tickets_balance?' do
+    let(:contribution_balance) { build(:contribution_balance, tickets_balance_cents: 100) }
+
+    context 'when the tickets balance is higher than the amount' do
+      it 'returns true' do
+        expect(contribution_balance.enough_tickets_balance?(50)).to be_truthy
+      end
+    end
+
+    context 'when the tickets balance is lower than the amount' do
+      it 'returns false' do
+        expect(contribution_balance.enough_tickets_balance?(150)).to be_falsey
+      end
+    end
+  end
 end

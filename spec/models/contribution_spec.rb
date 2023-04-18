@@ -34,6 +34,18 @@ RSpec.describe Contribution, type: :model do
     end
   end
 
+  describe '.with_fees_balance_higher_than' do
+    before do
+      create(:contribution, contribution_balance: create(:contribution_balance, fees_balance_cents: 10), id: 1)
+      create(:contribution, contribution_balance: create(:contribution_balance, fees_balance_cents: 10), id: 2)
+      create(:contribution, contribution_balance: create(:contribution_balance, fees_balance_cents: 0), id: 3)
+    end
+
+    it 'returns all the contributions which have tickets balance' do
+      expect(described_class.with_fees_balance_higher_than(5).pluck(:id)).to match_array [1, 2]
+    end
+  end
+
   describe '.from_unique_donors' do
     before do
       create(:contribution, person_payment: create(:person_payment, payer: create(:customer)), id: 1)
