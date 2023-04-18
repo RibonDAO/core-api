@@ -21,4 +21,12 @@ class Customer < ApplicationRecord
   belongs_to :person, optional: true
 
   has_many :person_payments, as: :payer
+
+  def blueprint
+    CustomerBlueprint
+  end
+
+  def identification
+    email
+  end
 end

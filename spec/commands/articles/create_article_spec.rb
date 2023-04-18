@@ -12,7 +12,8 @@ describe Articles::CreateArticle do
           title: 'New article',
           published_at: Time.zone.now,
           visible: true,
-          author_id: create(:author).id
+          author_id: create(:author).id,
+          language: 'en-US'
         }
       end
 

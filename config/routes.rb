@@ -2,21 +2,20 @@ require 'sidekiq/web'
 require "sidekiq/cron/web"
 
 Rails.application.routes.draw do
-  get 'big_donors/index'
   root to: 'rails_admin/main#dashboard'
   get '/health', to: 'main#health'
-
+  
   scope '(:locale)', locale: /en|pt-BR/ do
     mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
+  
   Rails.application.routes.draw do
     post '/graphql', to: 'graphql#execute'
   end
-
+  
   mount Sidekiq::Web => '/sidekiq'
-
+  
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       get 'stories' => 'stories#index'
@@ -25,19 +24,22 @@ Rails.application.routes.draw do
       get 'stories/:id' => 'stories#show'
       put 'stories/:id' => 'stories#update'
       delete 'stories/:id' => 'stories#destroy'
-
+      
       get 'non_profits' => 'non_profits#index'
+      get 'free_donation_non_profits' => 'non_profits#free_donation_non_profits'
       get 'non_profits/:id/stories' => 'non_profits#stories'
       post 'non_profits' => 'non_profits#create'
       get 'non_profits/:id' => 'non_profits#show'
       put 'non_profits/:id' => 'non_profits#update'
-
+      
       get 'integrations' => 'integrations#index'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       post 'integrations' => 'integrations#create'
       get 'integrations/:id' => 'integrations#show'
       put 'integrations/:id' => 'integrations#update'
       get 'person_payments' => 'person_payments#index'
+      get 'person_payments/big_donors' => 'person_payments#big_donors'
+      get 'person_payments/big_donor_donation/:id' => 'person_payments#big_donor_donation'
       get 'person_payments/:receiver_type' => 'person_payments#payments_for_receiver_by_person'
       post 'donations' => 'donations#create'
       post 'users' => 'users#create'
@@ -50,12 +52,15 @@ Rails.application.routes.draw do
       post 'sources' => 'sources#create'
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       get 'causes' => 'causes#index'
+      get 'free_donation_causes' => 'causes#free_donation_causes'
       post 'causes' => 'causes#create'
       get 'causes/:id' => 'causes#show'
       put 'causes/:id' => 'causes#update'
       get 'big_donors' => 'big_donors#index'
       post 'big_donors' => 'big_donors#create'
-
+      get 'big_donors/:id' => 'big_donors#show'
+      put 'big_donors/:id' => 'big_donors#update'
+      
       namespace :news do
         get 'articles' => 'articles#index'
         get 'articles/:id' => 'articles#show'

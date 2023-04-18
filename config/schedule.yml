@@ -13,14 +13,19 @@ generate_balance_history:
   class: "Donations::GenerateBalanceHistoryWorker"
   queue: donations
 
+update_pool_balance:
+  cron: "0 3 * * *" # At 03:00 everyday.
+  class: "Donations::UpdatePoolBalanceWorker"
+  queue: donations
+
 retry_person_transactions:
   cron: "0 2 1 * *" # At 02:00 on day-of-month 1.
   class: "PersonPayments::RetryBlockchainTransactionsWorker"
   queue: person_payments
-
+  
 send_bimonthly_email_report_worker:
   cron: "0 18 1 * *" # At 18:00 on day-of-month 1.
-  class: "Mailers::RetryDonationBatchWorker"
+  class: "Mailers::SendBimonthlyEmailReportWorker"
   queue: mailers
 
 inactive_donors_one_week_worker:

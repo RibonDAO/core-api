@@ -7,7 +7,7 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
     include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
 
     before do
-      create_list(:person_payment, 2)
+      create_list(:person_payment, 2, status: :paid)
       allow(Currency::Converters).to receive(:convert_to_usd).and_return(1)
     end
 
@@ -16,7 +16,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
 
       expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                  offer page paid_date payment_method
-                                                 person service_fees status total_items total_pages])
+                                                 payer payer_identification service_fees
+                                                 status total_items total_pages])
     end
   end
 
@@ -38,14 +39,15 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
         let!(:customer) { create(:customer, email:) }
 
         it 'returns a list of person_payments' do
-          create_list(:person_payment, 4, payer: customer, receiver:)
+          create_list(:person_payment, 4, status: :paid, payer: customer, receiver:)
           request
 
           expect(response_json.count).to eq(4)
 
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
-                                                     person receiver service_fees status total_items total_pages])
+                                                     payer payer_identification receiver
+                                                     service_fees status total_items total_pages])
         end
       end
 
@@ -57,14 +59,15 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
         let!(:crypto_user) { create(:crypto_user, wallet_address:) }
 
         it 'returns a list of person_payments' do
-          create_list(:person_payment, 4, payer: crypto_user, receiver:)
+          create_list(:person_payment, 4, status: :paid, payer: crypto_user, receiver:)
           request
 
           expect(response_json.count).to eq(4)
 
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
-                                                     person receiver service_fees status total_items total_pages])
+                                                     payer payer_identification receiver
+                                                     service_fees status total_items total_pages])
         end
       end
 
@@ -83,8 +86,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
         let!(:customer) { create(:customer, email:) }
 
         it 'returns a list of person_payments' do
-          create_list(:person_payment, 4, payer: crypto_user, receiver:)
-          create_list(:person_payment, 4, payer: customer, receiver:)
+          create_list(:person_payment, 4, status: :paid, payer: crypto_user, receiver:)
+          create_list(:person_payment, 4, status: :paid, payer: customer, receiver:)
 
           request
 
@@ -92,7 +95,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
 
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
-                                                     person receiver service_fees status total_items total_pages])
+                                                     payer payer_identification receiver
+                                                     service_fees status total_items total_pages])
         end
       end
     end
@@ -108,14 +112,15 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
         let!(:customer) { create(:customer, email:) }
 
         it 'returns a list of person_payments' do
-          create_list(:person_payment, 4, payer: customer, receiver:)
+          create_list(:person_payment, 4, status: :paid, payer: customer, receiver:)
           request
 
           expect(response_json.count).to eq(4)
 
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
-                                                     person receiver service_fees status total_items total_pages])
+                                                     payer payer_identification receiver
+                                                     service_fees status total_items total_pages])
         end
       end
 
@@ -127,14 +132,15 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
         let!(:crypto_user) { create(:crypto_user, wallet_address:) }
 
         it 'returns a list of person_payments' do
-          create_list(:person_payment, 4, payer: crypto_user, receiver:)
+          create_list(:person_payment, 4, status: :paid, payer: crypto_user, receiver:)
           request
 
           expect(response_json.count).to eq(4)
 
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
-                                                     person receiver service_fees status total_items total_pages])
+                                                     payer payer_identification receiver
+                                                     service_fees status total_items total_pages])
         end
       end
 
@@ -152,17 +158,18 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
         let!(:crypto_user) { create(:crypto_user, wallet_address:) }
         let!(:customer) { create(:customer, email:) }
 
-        it 'returns a list of person_payments' do
-          create_list(:person_payment, 4, payer: crypto_user, receiver:)
+        it 'returns a list of the paid person_payments' do
+          create_list(:person_payment, 4, status: :paid, payer: crypto_user, receiver:)
           create_list(:person_payment, 4, payer: customer, receiver:)
 
           request
 
-          expect(response_json.count).to eq(8)
+          expect(response_json.count).to eq(4)
 
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
-                                                     person receiver service_fees status total_items total_pages])
+                                                     payer payer_identification receiver
+                                                     service_fees status total_items total_pages])
         end
       end
     end
@@ -176,14 +183,15 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
       let(:receiver) { create(:non_profit) }
 
       it 'returns a list of person_payments' do
-        create_list(:person_payment, 9, payer: customer, receiver:)
+        create_list(:person_payment, 9, status: :paid, payer: customer, receiver:)
         request
 
         expect(response_json.count).to eq(3)
 
         expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                    offer page paid_date payment_method
-                                                   person receiver service_fees status total_items total_pages])
+                                                   payer payer_identification receiver
+                                                   service_fees status total_items total_pages])
       end
     end
   end

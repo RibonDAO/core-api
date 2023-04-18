@@ -12,7 +12,7 @@ RSpec.describe 'Api::V1::News::Articles', type: :request do
       request
 
       expect_response_collection_to_have_keys(%w[author image_url created_at id published_at title updated_at
-                                                 visible link published_at_in_words])
+                                                 visible language link published_at_in_words])
     end
 
     it 'returns 2 articles' do
@@ -89,7 +89,7 @@ RSpec.describe 'Api::V1::News::Articles', type: :request do
       request
 
       expect_response_to_have_keys(%w[author image_url created_at id published_at title updated_at
-                                      visible link published_at_in_words])
+                                      visible language link published_at_in_words])
     end
   end
 
@@ -102,7 +102,8 @@ RSpec.describe 'Api::V1::News::Articles', type: :request do
         published_at: Time.zone.now,
         visible: true,
         author_id: create(:author).id,
-        link: 'https://ribon.io'
+        link: 'https://ribon.io',
+        language: 'en-US'
       }
     end
 
@@ -123,7 +124,8 @@ RSpec.describe 'Api::V1::News::Articles', type: :request do
         published_at: Time.zone.now,
         visible: true,
         author_id: create(:author).id,
-        link: 'https://ribon.io'
+        link: 'https://ribon.io',
+        language: 'pt-BR'
       }
     end
 
@@ -132,6 +134,7 @@ RSpec.describe 'Api::V1::News::Articles', type: :request do
 
       expect(Article.count).to eq(1)
       expect(Article.first.title).to eq('New Article')
+      expect(Article.first.language).to eq('pt-BR')
     end
   end
 end

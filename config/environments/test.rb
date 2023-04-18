@@ -58,4 +58,7 @@ Rails.application.configure do
   Rails.application.routes.default_url_options[:host] = 'http://localhost:3000'
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  Rails.application.reloader.to_prepare do
+    Dir["#{Rails.root}/app/models/rule_groups/*.rb"].each { |file| require_dependency file }
+  end
 end

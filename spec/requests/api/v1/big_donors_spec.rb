@@ -16,6 +16,18 @@ RSpec.describe 'BigDonors', type: :request do
     end
   end
 
+  describe 'GET /show' do
+    subject(:request) { get "/api/v1/big_donors/#{big_donor.id}" }
+
+    let(:big_donor) { create(:big_donor) }
+
+    it 'returns a single big_donor' do
+      request
+
+      expect_response_to_have_keys(%w[id name email])
+    end
+  end
+
   describe 'POST /create' do
     subject(:request) { post '/api/v1/big_donors', params: }
 
@@ -46,6 +58,39 @@ RSpec.describe 'BigDonors', type: :request do
       it 'renders a error message' do
         request
         expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+  end
+
+  describe 'PUT /update' do
+    context 'with the right params' do
+      subject(:request) { put "/api/v1/big_donors/#{big_donor.id}", params: }
+
+      let(:big_donor) { create(:big_donor) }
+      let(:params) { { id: big_donor.id.to_s, name: 'New big donor' } }
+
+      it 'calls the update command with right params' do
+        allow(BigDonors::UpdateBigDonor).to receive(:call).and_return(
+          command_double(
+            klass: BigDonors::UpdateBigDonor,
+            result: big_donor
+          )
+        )
+        request
+
+        expect(BigDonors::UpdateBigDonor).to have_received(:call).with(strong_params(params))
+      end
+
+      it 'returns a single donor' do
+        request
+
+        expect_response_to_have_keys(%w[id name email])
+      end
+
+      it 'changes the name' do
+        request
+
+        expect(big_donor.reload.name).to eq('New big donor')
       end
     end
   end

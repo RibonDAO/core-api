@@ -3,6 +3,7 @@
 # Table name: articles
 #
 #  id           :bigint           not null, primary key
+#  language     :integer          default("en-US")
 #  link         :string
 #  published_at :datetime
 #  title        :string

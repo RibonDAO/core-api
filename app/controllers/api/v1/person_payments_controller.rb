@@ -2,7 +2,7 @@ module Api
   module V1
     class PersonPaymentsController < ApplicationController
       def index
-        @person_payments = PersonPayment.order(sortable).page(page).per(per)
+        @person_payments = PersonPayment.where.not(payer_type: 'BigDonor').order(sortable).page(page).per(per)
 
         render json: PersonPaymentBlueprint.render(@person_payments, total_items:, page:, total_pages:)
       end
@@ -19,20 +19,31 @@ module Api
         end
       end
 
+      def big_donors
+        @person_payments = PersonPayment.where(payer_type: 'BigDonor').order(sortable).page(page).per(per)
+
+        render json: PersonPaymentBlueprint.render(@person_payments, total_items:, page:,
+                                                                     total_pages:, view: :big_donations)
+      end
+
+      def big_donor_donation
+        @person_payment = PersonPayment.find(params[:id])
+
+        render json: PersonPaymentBlueprint.render(@person_payment, view: :big_donations)
+      end
+
       private
 
       def person_payments_for(receiver_type)
         customer = Customer.find_by(email:)
         crypto_user = CryptoUser.find_by(wallet_address:)
 
-        # TODO: remove or condition when we migrate all person_payments to have payer
         if customer.present? || crypto_user.present?
           PersonPayment.where(
+            status: :paid,
             payer: [customer, crypto_user].compact,
             receiver_type:
-          ).or(PersonPayment.where(
-                 person: [customer&.person, crypto_user&.person].compact, receiver_type:
-               )).order(sortable).page(page).per(per)
+          ).order(sortable).page(page).per(per)
         else
           PersonPayment.none
         end

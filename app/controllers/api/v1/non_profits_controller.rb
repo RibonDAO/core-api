@@ -7,6 +7,12 @@ module Api
         render json: NonProfitBlueprint.render(@non_profits)
       end
 
+      def free_donation_non_profits
+        @non_profits = NonProfitQueries.new.active_with_pool_balance
+
+        render json: NonProfitBlueprint.render(@non_profits)
+      end
+
       def stories
         @non_profit = NonProfit.find(params[:id])
         @stories = @non_profit.stories.where(active: true).order(position: :asc)

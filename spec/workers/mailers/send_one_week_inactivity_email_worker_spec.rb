@@ -8,7 +8,7 @@ RSpec.describe Mailers::SendOneWeekInactivityEmailWorker, type: :worker do
     let(:user) { create(:user) }
 
     before do
-      allow(Rails.env).to receive(:production?).and_return(true)
+      allow(RibonCoreApi).to receive(:config).and_return({ api_env: 'production' })
       allow(Mailers::SendOneWeekInactivityEmailJob).to receive(:perform_later)
     end
 

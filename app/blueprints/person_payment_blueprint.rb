@@ -1,7 +1,8 @@
 class PersonPaymentBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :paid_date, :crypto_amount, :amount_cents, :payment_method, :status, :external_id, :service_fees
+  fields :paid_date, :crypto_amount, :amount_cents, :payment_method, :status,
+         :external_id, :service_fees, :payer_identification
 
   field :total_items do |_, options|
     options[:total_items]
@@ -16,7 +17,7 @@ class PersonPaymentBlueprint < Blueprinter::Base
   end
 
   association :offer, blueprint: OfferBlueprint, view: :minimal
-  association :person, blueprint: PersonBlueprint
+  association :payer, blueprint: ->(payer) { payer.blueprint }, default: {}
 
   view :non_profit do
     association :receiver, blueprint: NonProfitBlueprint
@@ -24,5 +25,24 @@ class PersonPaymentBlueprint < Blueprinter::Base
 
   view :cause do
     association :receiver, blueprint: CauseBlueprint
+  end
+
+  view :big_donations do |_|
+    field :transaction_hash do |payment|
+      payment.person_blockchain_transaction&.transaction_hash
+    end
+
+    field :blockchain_status do |payment|
+      payment.person_blockchain_transaction&.treasure_entry_status
+    end
+
+    field :cause do |payment|
+      if payment.receiver_type == 'Cause'
+        {
+          id: payment.receiver.id,
+          name: payment.receiver&.name
+        }
+      end
+    end
   end
 end

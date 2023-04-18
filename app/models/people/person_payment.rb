@@ -4,7 +4,6 @@
 #
 #  id                 :bigint           not null, primary key
 #  amount_cents       :integer
-#  crypto_value_cents :integer
 #  currency           :integer
 #  error_code         :string
 #  liquid_value_cents :integer
@@ -14,6 +13,7 @@
 #  receiver_type      :string
 #  refund_date        :datetime
 #  status             :integer          default("processing")
+#  usd_value_cents    :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  external_id        :string
@@ -29,7 +29,7 @@ class PersonPayment < ApplicationRecord
   before_create :set_currency
   after_create :set_fees
   after_create :set_liquid_value_cents
-  after_create :set_crypto_value_cents
+  after_create :set_usd_value_cents
 
   belongs_to :person, optional: true
   belongs_to :integration
@@ -61,6 +61,14 @@ class PersonPayment < ApplicationRecord
     brl: 0,
     usd: 1
   }
+
+  def from_big_donor?
+    payer_type == 'BigDonor'
+  end
+
+  def from_customer?
+    payer_type == 'Customer'
+  end
 
   def crypto_amount
     amount_without_fees = amount - service_fees
@@ -94,8 +102,8 @@ class PersonPayment < ApplicationRecord
     Reporter.log(error: e)
   end
 
-  def set_crypto_value_cents
-    self.crypto_value_cents = crypto_amount * 100
+  def set_usd_value_cents
+    self.usd_value_cents = crypto_amount * 100
     save!
   rescue StandardError => e
     Reporter.log(error: e)
@@ -120,6 +128,10 @@ class PersonPayment < ApplicationRecord
 
   def service_fees
     person_payment_fee&.service_fee || 0
+  end
+
+  def payer_identification
+    payer&.identification
   end
 
   private

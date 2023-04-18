@@ -2,12 +2,13 @@
 #
 # Table name: contributions
 #
-#  id                :bigint           not null, primary key
-#  receiver_type     :string           not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  person_payment_id :bigint           not null
-#  receiver_id       :bigint           not null
+#  id                  :bigint           not null, primary key
+#  generated_fee_cents :integer
+#  receiver_type       :string           not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  person_payment_id   :bigint           not null
+#  receiver_id         :bigint           not null
 #
 require 'rails_helper'
 
@@ -84,6 +85,27 @@ RSpec.describe Contribution, type: :model do
 
     it 'returns all the contributions ordered by the most recent labeled contribution' do
       expect(described_class.ordered_by_donation_contribution.pluck(:id)).to eq [4, 2, 1, 3]
+    end
+  end
+
+  describe '.with_paid_status' do
+    let(:contributions_refunded) do
+      create_list(:contribution, 2,
+                  person_payment: create(:person_payment, status: :refunded))
+    end
+    let(:contributions_paid) do
+      create_list(:contribution, 2,
+                  person_payment: create(:person_payment, status: :paid))
+    end
+
+    before do
+      contributions_paid
+      contributions_refunded
+    end
+
+    it 'returns all the contributions that have person_payment status paid' do
+      expect(described_class.with_paid_status.pluck(:id))
+        .to match_array(contributions_paid.pluck(:id))
     end
   end
 end

@@ -23,6 +23,7 @@ class Pool < ApplicationRecord
   has_many :non_profit_pools
   has_many :non_profits, through: :non_profit_pools
   has_many :balance_histories
+  has_one :pool_balance
 
   delegate :chain, to: :token
 end

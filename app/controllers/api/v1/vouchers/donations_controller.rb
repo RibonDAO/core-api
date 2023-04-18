@@ -35,7 +35,7 @@ module Api
         end
 
         def donation_command
-          ::Donations::Donate.new(integration:, non_profit:, user:, platform:)
+          ::Donations::Donate.new(integration:, non_profit:, user:, platform:, skip_allowance: true)
         end
 
         def donation_params

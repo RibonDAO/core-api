@@ -13,5 +13,8 @@
   },
   "scripts": {
     "prepare": "husky install"
+  },
+  "dependencies": {
+    "@githubnext/github-copilot-cli": "^0.1.30"
   }
 }

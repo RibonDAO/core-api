@@ -6,7 +6,7 @@ describe Contributions::CreateContribution do
   include ActiveStorage::Blob::Analyzable
   include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd_and_gas_fee' } }
 
-  let(:receiver) { create(:non_profit) }
+  let(:receiver) { create(:cause) }
   let(:payment) { create(:person_payment, receiver:, liquid_value_cents: 1000) }
   let(:command) { described_class.call(payment:) }
   let(:contribution_fee_service_instance) { instance_double(Service::Contributions::ContributionFeeService) }
@@ -26,6 +26,17 @@ describe Contributions::CreateContribution do
         contribution = Contribution.last
         expect(contribution.person_payment).to eq(payment)
         expect(contribution.receiver).to eq(receiver)
+      end
+
+      context 'when the receiver is a non profit' do
+        let(:receiver) { create(:non_profit) }
+
+        it 'does not set the contribution balance' do
+          command
+          contribution = Contribution.last
+
+          expect(contribution.contribution_balance).to be_nil
+        end
       end
 
       it 'sets the contribution balance' do

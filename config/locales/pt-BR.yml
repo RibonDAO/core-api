@@ -260,3 +260,5 @@ pt-BR:
     and: "e"
     of: "de"
     donate: "Doe"
+  vouchers:
+    invalid_voucher: "Voucher inválido."
