@@ -15,5 +15,5 @@ class LegacyUserImpact < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :legacy_non_profit, optional: true
 
-  validates :donations_count, :total_impact, :donations_count, presence: true
+  validates :donations_count, :total_impact, presence: true
 end
