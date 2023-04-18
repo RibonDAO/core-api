@@ -7,6 +7,7 @@
 #  language   :integer          default("en")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  legacy_id  :integer
 #
 class User < ApplicationRecord
   validates :email, uniqueness: { case_sensitive: true }, format: { with: URI::MailTo::EMAIL_REGEXP }

@@ -7,6 +7,7 @@
 #  language   :integer          default("en")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  legacy_id  :integer
 #
 FactoryBot.define do
   factory :user do
