@@ -13,5 +13,7 @@
 #  legacy_id          :integer
 #
 class LegacyNonProfit < ApplicationRecord
+  has_many :legacy_user_impacts, dependent: :destroy
+
   validates :name, :logo_url, :cost_of_one_impact, :impact_description, :legacy_id, :current_id, presence: true
 end

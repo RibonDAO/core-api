@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_125247) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_141559) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -280,6 +280,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_125247) do
     t.integer "current_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "legacy_user_impacts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "legacy_non_profit_id", null: false
+    t.string "total_impact"
+    t.integer "total_donated_usd"
+    t.integer "donations_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["legacy_non_profit_id"], name: "index_legacy_user_impacts_on_legacy_non_profit_id"
+    t.index ["user_id"], name: "index_legacy_user_impacts_on_user_id"
   end
 
   create_table "mobility_string_translations", force: :cascade do |t|
@@ -575,6 +587,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_125247) do
   add_foreign_key "donations", "users"
   add_foreign_key "integration_tasks", "integrations"
   add_foreign_key "integration_webhooks", "integrations"
+  add_foreign_key "legacy_user_impacts", "legacy_non_profits"
+  add_foreign_key "legacy_user_impacts", "users"
   add_foreign_key "non_profit_impacts", "non_profits"
   add_foreign_key "non_profit_pools", "non_profits"
   add_foreign_key "non_profit_pools", "pools"
