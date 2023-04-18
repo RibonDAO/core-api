@@ -37,7 +37,12 @@ class PersonPaymentBlueprint < Blueprinter::Base
     end
 
     field :cause do |payment|
-      payment.receiver&.name
+      if payment.receiver_type == 'Cause'
+        {
+          id: payment.receiver.id,
+          name: payment.receiver&.name
+        }
+      end
     end
   end
 end
