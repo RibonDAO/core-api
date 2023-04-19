@@ -27,6 +27,12 @@ RSpec.describe PersonPaymentServices::BlockchainTransaction, type: :service do
 
         expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'success'
       end
+
+      it 'updates the person_payment status to paid' do
+        service.update_status
+
+        expect(person_blockchain_transaction.reload.person_payment.status).to eq 'paid'
+      end
     end
 
     context 'when the status is fail (0x0)' do
@@ -36,6 +42,12 @@ RSpec.describe PersonPaymentServices::BlockchainTransaction, type: :service do
         service.update_status
 
         expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'failed'
+      end
+
+      it 'updates the person_payment status to failed' do
+        service.update_status
+
+        expect(person_blockchain_transaction.reload.person_payment.status).to eq 'failed'
       end
     end
   end

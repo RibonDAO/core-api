@@ -18,4 +18,8 @@ class CauseBlueprint < Blueprinter::Base
   view :minimal do
     excludes :created_at, :updated_at
   end
+
+  field(:default_pool) do |object|
+    object.default_pool&.address
+  end
 end
