@@ -4,7 +4,7 @@ describe Legacy::CreateLegacyUserImpact do
   describe '.call' do
     subject(:command) { described_class.call(email:, impacts:, legacy_id:) }
 
-    context 'when all the data is valid and non existent' do
+    context 'when all the data is valid' do
       let(:email) { 'test@mail' }
       let(:impacts) do
         [{
@@ -22,16 +22,36 @@ describe Legacy::CreateLegacyUserImpact do
       end
       let(:legacy_id) { 11 }
 
-      it 'creates legacy non profit' do
-        expect { command }.to change(LegacyNonProfit, :count).by(1)
+      context 'when it has not been created' do
+        it 'creates legacy non profit' do
+          expect { command }.to change(LegacyNonProfit, :count).by(1)
+        end
+
+        it 'creates new legacy user impact' do
+          expect { command }.to change(LegacyUserImpact, :count).by(1)
+        end
+
+        it 'creates a new user' do
+          expect { command }.to change(User, :count).by(1)
+        end
       end
 
-      it 'creates new legacy user impact' do
-        expect { command }.to change(LegacyUserImpact, :count).by(1)
-      end
+      context 'when it has already been created' do
+        before do
+          command
+        end
 
-      it 'creates a new user' do
-        expect { command }.to change(User, :count).by(1)
+        it 'does not legacy non profit' do
+          expect { command }.not_to change(LegacyNonProfit, :count)
+        end
+
+        it 'does not new legacy user impact' do
+          expect { command }.not_to change(LegacyUserImpact, :count)
+        end
+
+        it 'does not a new user' do
+          expect { command }.not_to change(User, :count)
+        end
       end
     end
   end
