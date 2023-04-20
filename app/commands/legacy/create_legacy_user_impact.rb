@@ -14,10 +14,9 @@ module Legacy
     def call
       with_exception_handle do
         impacts.each do |impact|
-          legacy_user_impact = LegacyUserImpact.where(user:,
-                                                      legacy_non_profit: legacy_non_profit(impact[:non_profit]))
-                                               .first_or_create(legacy_user_impact_params(impact))
-          legacy_user_impact.save!
+          LegacyUserImpact.where(user:,
+                                 legacy_non_profit: legacy_non_profit(impact[:non_profit]))
+                          .first_or_create(legacy_user_impact_params(impact))
         end
       end
     end

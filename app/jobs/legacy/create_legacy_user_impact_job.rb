@@ -4,7 +4,7 @@ module Legacy
     sidekiq_options retry: 3
 
     def perform(user:, impacts:)
-      CreateLegacyUserImpact.new(legacy_user: user, impacts:).call
+      CreateLegacyUserImpact.call(legacy_user: user, impacts:)
     end
   end
 end
