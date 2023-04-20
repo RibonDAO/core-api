@@ -3,8 +3,13 @@ module Api
     module Legacy
       class LegacyUserImpactController < ApplicationController
         def create_legacy_impact
-          ::Legacy::CreateLegacyUserImpactJob.perform_later(user: params[:user],
-                                                            impacts: params[:impacts])
+          ::Legacy::CreateLegacyUserImpactJob.perform_later(legacy_params)
+        end
+
+        private
+
+        def legacy_params
+          params.permit(:user, :impacts)
         end
       end
     end
