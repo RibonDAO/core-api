@@ -2,10 +2,16 @@ require 'rails_helper'
 
 describe Legacy::CreateLegacyUserImpact do
   describe '.call' do
-    subject(:command) { described_class.call(email:, impacts:, legacy_id:) }
+    subject(:command) { described_class.call(legacy_user:, impacts:) }
 
     context 'when all the data is valid' do
-      let(:email) { 'test@mail' }
+      let(:legacy_user) do
+        {
+          email: 'test@mail',
+          legacy_id: 1,
+          created_at: 2.years.ago
+        }
+      end
       let(:impacts) do
         [{
           non_profit: {
@@ -20,7 +26,6 @@ describe Legacy::CreateLegacyUserImpact do
           donations_count: 1
         }]
       end
-      let(:legacy_id) { 11 }
 
       context 'when it has not been created' do
         it 'creates legacy non profit' do

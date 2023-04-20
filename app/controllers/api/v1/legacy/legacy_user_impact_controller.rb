@@ -3,9 +3,8 @@ module Api
     module Legacy
       class LegacyUserImpactController < ApplicationController
         def create_legacy_impact
-          ::Legacy::CreateLegacyUserImpactJob.perform_now(email: params[:email],
-                                                          impacts: params[:impacts],
-                                                          legacy_id: params[:legacy_id])
+          ::Legacy::CreateLegacyUserImpactJob.perform_now(user: params[:user],
+                                                          impacts: params[:impacts])
         end
       end
     end
