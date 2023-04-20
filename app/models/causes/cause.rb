@@ -22,7 +22,7 @@ class Cause < ApplicationRecord
   validates :name, presence: true
 
   def default_pool
-    pools.joins(:token).where(tokens: { chain_id: Chain.default.id }).first
+    pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
   end
 
   def active

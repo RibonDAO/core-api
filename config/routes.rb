@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'UserManager', at: 'auth', skip: [:omniauth_callbacks]
       namespace :manager do
         post 'auth/request', to: 'authorization#google_authorization'
+        post 'payments/cryptocurrency/big_donation' => 'payments/cryptocurrency#create_big_donation'
       end
 
       namespace :site do 
