@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Legacy::CreateLegacyUserImpact do
   describe '.call' do
-    subject(:command) { described_class.call(legacy_user:, impacts:) }
+    subject(:command) { described_class.call(legacy_user:, legacy_impacts:) }
 
     context 'when all the data is valid' do
       let(:legacy_user) do
@@ -12,7 +12,7 @@ describe Legacy::CreateLegacyUserImpact do
           created_at: 2.years.ago
         }
       end
-      let(:impacts) do
+      let(:legacy_impacts) do
         [{
           non_profit: {
             name: 'Charity E',
