@@ -12,6 +12,10 @@
 #  user_id              :bigint           not null
 #
 class LegacyUserImpact < ApplicationRecord
+  extend Mobility
+
+  translates :total_impact, type: :string, locale_accessors: %i[en pt-BR]
+
   belongs_to :user, optional: true
   belongs_to :legacy_non_profit, optional: true
 
