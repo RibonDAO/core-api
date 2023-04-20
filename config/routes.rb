@@ -61,6 +61,10 @@ Rails.application.routes.draw do
       get 'big_donors/:id' => 'big_donors#show'
       put 'big_donors/:id' => 'big_donors#update'
       
+      namespace :legacy do
+        post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
+      end
+      
       namespace :news do
         get 'articles' => 'articles#index'
         get 'articles/:id' => 'articles#show'
