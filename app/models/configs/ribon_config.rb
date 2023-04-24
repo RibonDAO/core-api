@@ -31,7 +31,7 @@ class RibonConfig < ApplicationRecord
   end
 
   def self.default_chain_id
-    first.default_chain_id
+    first&.default_chain_id
   end
 
   private

@@ -4,4 +4,6 @@ class PoolBlueprint < Blueprinter::Base
   fields :name, :address
 
   association :token, blueprint: TokenBlueprint
+
+  association :pool_balance, blueprint: PoolBalanceBlueprint
 end
