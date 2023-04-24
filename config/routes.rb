@@ -115,7 +115,7 @@ Rails.application.routes.draw do
       namespace :manager do
         post 'auth/request', to: 'authorization#google_authorization'
         post 'payments/cryptocurrency/big_donation' => 'payments/cryptocurrency#create_big_donation'
-        get 'pools_manager' => 'pools#index_manager'
+        get 'pools_manager' => 'pools#index'
       end
 
       namespace :site do 
