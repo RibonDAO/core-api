@@ -53,7 +53,7 @@ module Donations
     end
 
     def allowed?
-      return true if (user.can_donate?(integration) || skip_allowance) && pool_balance?
+      return true if (user.can_donate?(integration, platform) || skip_allowance) && pool_balance?
 
       errors.add(:message, I18n.t('donations.blocked_message'))
 
