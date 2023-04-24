@@ -41,7 +41,6 @@ Rails.application.routes.draw do
       get 'person_payments/big_donors' => 'person_payments#big_donors'
       get 'person_payments/big_donor_donation/:id' => 'person_payments#big_donor_donation'
       get 'person_payments/:receiver_type' => 'person_payments#payments_for_receiver_by_person'
-      get 'pools_manager' => 'pools#index_manager'
       post 'donations' => 'donations#create'
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
@@ -116,6 +115,7 @@ Rails.application.routes.draw do
       namespace :manager do
         post 'auth/request', to: 'authorization#google_authorization'
         post 'payments/cryptocurrency/big_donation' => 'payments/cryptocurrency#create_big_donation'
+        get 'pools_manager' => 'pools#index_manager'
       end
 
       namespace :site do 
