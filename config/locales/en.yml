@@ -15,7 +15,7 @@ en:
     not_published_yet: "Not published yet"
   donations:
     blocked_message: "Unable to donate now. Wait for your next donation."
-    invalid_voucher: "Invalid voucher."
+    invalid_voucher: "Invalid ticket."
     user_not_found: "User not found. Please logout and try again."
     integration_not_found: "Integration not found. Please reload the page and try again."
     non_profit_not_found: "NGO not found. Please reload the page and try again."
@@ -23,7 +23,7 @@ en:
     has_source_message: "Source already created."
   manager:
     login_success: "Signed in successfully with Google"
-  pools: 
+  pools:
     create_failed: "Could not create pool"
     fetch_failed: "Could not fetch pool"
   causes:
@@ -41,4 +41,4 @@ en:
     of: "of"
     donate: "Donate"
   vouchers:
-    invalid_voucher: "Invalid voucher."
+    invalid_voucher: "Invalid ticket."
