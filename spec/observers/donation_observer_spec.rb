@@ -8,7 +8,7 @@ RSpec.describe DonationObserver, type: :observer do
       allow(Donations::HandlePostDonationJob).to receive(:perform_later).with(donation:)
     end
 
-    it 'calls the mailer job' do
+    it 'calls the handle post donation job' do
       donation.save
       expect(Donations::HandlePostDonationJob).to have_received(:perform_later).with(donation:)
     end

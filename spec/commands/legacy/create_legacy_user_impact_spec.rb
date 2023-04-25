@@ -9,7 +9,7 @@ describe Legacy::CreateLegacyUserImpact do
         {
           email: 'test@mail',
           legacy_id: 1,
-          created_at: 2.years.ago
+          created_at: '2019-01-01T00:00:00.000Z'
         }
       end
       let(:legacy_impacts) do
@@ -36,8 +36,17 @@ describe Legacy::CreateLegacyUserImpact do
           expect { command }.to change(LegacyUserImpact, :count).by(1)
         end
 
-        it 'creates a new user' do
-          expect { command }.to change(User, :count).by(1)
+        it 'add user info if user does not exists' do
+          command
+          expect(LegacyUserImpact.first.user_email).to eq(legacy_user[:email])
+          expect(LegacyUserImpact.first.user_legacy_id).to eq(legacy_user[:legacy_id])
+          expect(LegacyUserImpact.first.user_created_at).to eq(legacy_user[:created_at])
+        end
+
+        it 'add user reference if user exists' do
+          create(:user, email: legacy_user[:email])
+          command
+          expect(LegacyUserImpact.first.user.email).to eq(legacy_user[:email])
         end
       end
 
@@ -52,10 +61,6 @@ describe Legacy::CreateLegacyUserImpact do
 
         it 'does not new legacy user impact' do
           expect { command }.not_to change(LegacyUserImpact, :count)
-        end
-
-        it 'does not a new user' do
-          expect { command }.not_to change(User, :count)
         end
       end
     end
