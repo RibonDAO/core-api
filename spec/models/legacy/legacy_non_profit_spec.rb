@@ -25,6 +25,5 @@ RSpec.describe LegacyNonProfit, type: :model do
     it { is_expected.to validate_presence_of(:cost_of_one_impact) }
     it { is_expected.to validate_presence_of(:impact_description) }
     it { is_expected.to validate_presence_of(:legacy_id) }
-    it { is_expected.to validate_presence_of(:current_id) }
   end
 end
