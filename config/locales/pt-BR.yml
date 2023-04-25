@@ -233,7 +233,7 @@ pt-BR:
     pm: ""
   donations:
     blocked_message: "Não foi possível doar. Espere sua próxima doação."
-    invalid_voucher: "Voucher inválido."
+    invalid_voucher: "Ticket inválido."
     user_not_found: "Usuário não encontrado. Realize o logout e tente novamente."
     integration_not_found: "A Integração de origem não foi encontrada. Recarregue a página e tente novamente."
     non_profit_not_found: "A ONG para qual você tentou doar não existe. Recarregue a página e tente novamente."
@@ -243,7 +243,7 @@ pt-BR:
     has_source_message: "Source já criada."
   manager:
     login_success: "Logado com sucesso no Google"
-  pools: 
+  pools:
     create_failed: "Não foi possível criar a pool"
     fetch_failed: "Não foi possível obter o endereço da pool"
   causes:
@@ -261,4 +261,4 @@ pt-BR:
     of: "de"
     donate: "Doe"
   vouchers:
-    invalid_voucher: "Voucher inválido."
+    invalid_voucher: "Ticket inválido."
