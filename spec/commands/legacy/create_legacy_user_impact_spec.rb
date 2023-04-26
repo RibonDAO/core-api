@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Legacy::CreateLegacyUserImpact do
+  include ActiveStorage::Blob::Analyzable
   describe '.call' do
     subject(:command) { described_class.call(legacy_user:, legacy_impacts:) }
 
@@ -16,8 +17,9 @@ describe Legacy::CreateLegacyUserImpact do
         [{
           non_profit: {
             name: 'Charity E',
-            logo_url: 'https://example.com/charity-e.png',
-            cost_of_one_impact: 5.99,
+            logo_url: 'https://charitye.com/logo.png',
+            impact_cost_ribons: 1000,
+            impact_cost_usd: 5.99,
             impact_description: 'Provide shelter for a family',
             legacy_id: 456
           },
@@ -25,6 +27,10 @@ describe Legacy::CreateLegacyUserImpact do
           total_donated_usd: 15,
           donations_count: 1
         }]
+      end
+
+      before do
+        allow(URI).to receive(:open).and_return(File.open('vendor/assets/ribon_logo.png'))
       end
 
       context 'when it has not been created' do
