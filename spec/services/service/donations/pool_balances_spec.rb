@@ -90,5 +90,27 @@ RSpec.describe Service::Donations::PoolBalances, type: :service do
         end
       end
     end
+
+    describe 'increase balance' do
+      let!(:person_payment) { create(:person_payment) }
+      let!(:value) { person_payment.crypto_amount }
+
+      describe 'with pool balance' do
+        let!(:pool_balance) { create(:pool_balance, pool:, balance: 100) }
+        let!(:balance) { pool_balance.balance }
+
+        it 'returns the pool balance plus the person payment amount' do
+          service.increase_balance(value)
+          expect(pool_balance.balance).to eq(balance + value)
+        end
+      end
+
+      describe 'without pool balance' do
+        it 'does nothing' do
+          service.increase_balance(value)
+          expect(PoolBalance.count).to eq 0
+        end
+      end
+    end
   end
 end

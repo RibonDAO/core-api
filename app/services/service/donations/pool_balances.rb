@@ -24,6 +24,13 @@ module Service
         pool_balance.update!(balance:)
       end
 
+      def increase_balance(value)
+        return if pool.pool_balance.nil?
+
+        balance = pool_balance.balance + value
+        pool_balance.update!(balance:)
+      end
+
       private
 
       def cause
