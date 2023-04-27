@@ -98,6 +98,20 @@ RailsAdmin.config do |config|
     include_all_fields
   end
 
+  config.model User do
+    field :email do
+      label{ "Email" }
+      help "(to delete, change this to: 'deleted+user_id+@ribon.io')"
+    end
+    
+    include_all_fields
+    
+    field :deleted_at do
+      label{ "Deleted at" }
+      help '(change here if deleting)'
+    end
+  end
+
   MOBILITY_MODELS =  ApplicationRecord.descendants.select{ |model| model.included_modules.include?(Mobility::Plugins::Backend::InstanceMethods) }
   MOBILITY_MODELS.each do |model|
     config.model model do

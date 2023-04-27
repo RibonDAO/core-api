@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id         :bigint           not null, primary key
+#  deleted_at :datetime
 #  email      :string
 #  language   :integer          default("en")
 #  created_at :datetime         not null
