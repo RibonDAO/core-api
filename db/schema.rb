@@ -541,6 +541,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_27_184140) do
     t.datetime "updated_at", null: false
     t.integer "language"
     t.integer "legacy_id"
+    t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
