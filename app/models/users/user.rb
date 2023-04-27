@@ -56,6 +56,12 @@ class User < ApplicationRecord
     !last_contribution.nil?
   end
 
+  def donate_app
+    return true if donations.where(platform: 'app').count.positive?
+
+    false
+  end
+
   private
 
   def set_user_donation_stats

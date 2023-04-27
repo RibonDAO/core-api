@@ -28,7 +28,8 @@ module Api
         if voucher&.valid? || !current_user
           render json: { can_donate: true }
         else
-          render json: { can_donate: current_user.can_donate?(@integration, @platform) }
+          render json: { can_donate: current_user.can_donate?(@integration, @platform),
+                         donate_app: current_user.donate_app }
         end
       end
 

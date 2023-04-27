@@ -97,7 +97,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
     it 'returns the can_donate attribute' do
       request
 
-      expect_response_to_have_keys %w[can_donate]
+      expect_response_to_have_keys %w[can_donate donate_app]
     end
   end
 
