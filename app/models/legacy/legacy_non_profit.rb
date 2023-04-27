@@ -3,7 +3,8 @@
 # Table name: legacy_non_profits
 #
 #  id                 :bigint           not null, primary key
-#  cost_of_one_impact :integer
+#  impact_cost_ribons :integer
+#  impact_cost_usd    :decimal(, )
 #  impact_description :string
 #  logo_url           :string
 #  name               :string
@@ -15,5 +16,7 @@
 class LegacyNonProfit < ApplicationRecord
   has_many :legacy_user_impacts, dependent: :destroy
 
-  validates :name, :logo_url, :cost_of_one_impact, :impact_description, :legacy_id, presence: true
+  has_one_attached :logo
+  validates :name, :logo_url, :impact_cost_ribons, :impact_cost_usd, :impact_description, :legacy_id,
+            presence: true
 end

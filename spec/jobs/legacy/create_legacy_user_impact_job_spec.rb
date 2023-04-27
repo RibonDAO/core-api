@@ -13,7 +13,8 @@ RSpec.describe Legacy::CreateLegacyUserImpactJob, type: :job do
     end
     let(:impacts) do
       [{
-        non_profit: { name: 'test', logo_url: 'test', cost_of_one_impact: 1, impact_description: 'test',
+        non_profit: { name: 'test', logo_url: 'test', impact_cost_ribons: 1000,
+                      impact_cost_usd: 10, impact_description: 'test',
                       legacy_id: 1 }, total_impact: 1, total_donated_usd: 1, donations_count: 1
       }]
     end

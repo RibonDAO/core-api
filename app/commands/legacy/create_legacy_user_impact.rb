@@ -1,6 +1,7 @@
 module Legacy
   class CreateLegacyUserImpact < ApplicationCommand
     prepend SimpleCommand
+    require 'open-uri'
 
     attr_reader :impacts, :email, :legacy_id, :created_at
 
@@ -44,18 +45,36 @@ module Legacy
 
     def legacy_non_profit(non_profit)
       non_profit_params = legacy_non_profit_params(non_profit)
-      LegacyNonProfit.where(name: non_profit_params[:name])
-                     .first_or_create(non_profit_params)
+      legacy_non_profit = LegacyNonProfit.where(name: non_profit_params[:name])
+                                         .first_or_create(non_profit_params)
+      non_profit_logo(legacy_non_profit) unless legacy_non_profit.logo.attached?
+      update_current_id(legacy_non_profit) if legacy_non_profit.current_id.nil?
+      legacy_non_profit
     end
 
     def legacy_non_profit_params(non_profit)
       {
         name: non_profit[:name],
         logo_url: non_profit[:logo_url],
-        cost_of_one_impact: non_profit[:cost_of_one_impact],
+        impact_cost_ribons: non_profit[:impact_cost_ribons],
+        impact_cost_usd: non_profit[:impact_cost_usd],
         impact_description: non_profit[:impact_description],
         legacy_id: non_profit[:legacy_id]
       }
+    end
+
+    def non_profit_logo(non_profit)
+      url = URI.parse(non_profit.logo_url)
+      filename = File.basename(url.path)
+      # rubocop:disable Security/Open
+      file = URI.open(url)
+      # rubocop:enable Security/Open
+      non_profit.logo.attach(io: file, filename:)
+    end
+
+    def update_current_id(non_profit)
+      non_profit = NonProfit.where(name: non_profit.name).first
+      non_profit.update!(current_id: non_profit.id) if non_profit.present?
     end
   end
 end

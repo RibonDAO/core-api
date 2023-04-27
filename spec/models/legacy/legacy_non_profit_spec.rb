@@ -3,7 +3,8 @@
 # Table name: legacy_non_profits
 #
 #  id                 :bigint           not null, primary key
-#  cost_of_one_impact :integer
+#  impact_cost_ribons :integer
+#  impact_cost_usd    :decimal(, )
 #  impact_description :string
 #  logo_url           :string
 #  name               :string
@@ -22,7 +23,8 @@ RSpec.describe LegacyNonProfit, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:logo_url) }
-    it { is_expected.to validate_presence_of(:cost_of_one_impact) }
+    it { is_expected.to validate_presence_of(:impact_cost_ribons) }
+    it { is_expected.to validate_presence_of(:impact_cost_usd) }
     it { is_expected.to validate_presence_of(:impact_description) }
     it { is_expected.to validate_presence_of(:legacy_id) }
   end
