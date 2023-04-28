@@ -72,9 +72,9 @@ module Legacy
       non_profit.logo.attach(io: file, filename:)
     end
 
-    def update_current_id(non_profit)
-      non_profit = NonProfit.where(name: non_profit.name).first
-      non_profit.update!(current_id: non_profit.id) if non_profit.present?
+    def update_current_id(legacy_non_profit)
+      non_profit = NonProfit.where(name: legacy_non_profit.name).first
+      legacy_non_profit.update!(current_id: non_profit.id) if non_profit.present?
     end
   end
 end
