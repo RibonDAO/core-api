@@ -224,4 +224,44 @@ describe Givings::Payment::CreateOrder do
       end
     end
   end
+
+  describe '.call returns pending' do
+    subject(:command) { described_class.call(order_type_class, args) }
+
+    include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_pending' } }
+
+    let(:integration) { create(:integration) }
+
+    context 'when the payment returns requires_action' do
+      let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:card) { build(:credit_card) }
+      let(:offer) { create(:offer) }
+      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
+      let(:args) do
+        { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
+          payment_method: :credit_card, user: customer.user, operation: :purchase }
+      end
+
+      it 'calls the success callback' do
+        allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
+        command
+
+        expect(Givings::Payment::AddGivingCauseToBlockchainJob).to have_received(:perform_later)
+          .with(amount: person_payment.crypto_amount, payment: an_object_containing(
+            id: person_payment.id, amount_cents: person_payment.amount_cents,
+            offer_id: person_payment.offer.id,
+            status: person_payment.status, payment_method: person_payment.payment_method
+          ), pool: nil)
+      end
+
+      it 'update the status and external_id of payment_person' do
+        order = command
+        person_payment = PersonPayment.where(offer:).last
+        expect(person_payment.external_id).to eq(order.result[:external_id])
+        expect(person_payment.status).to eq('requires_action')
+      end
+    end
+  end
 end
