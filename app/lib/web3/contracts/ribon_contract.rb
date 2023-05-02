@@ -65,7 +65,7 @@ module Web3
       end
 
       def gas_limit_for_create_pool
-        client.gas_limit * 26
+        500_000
       end
     end
   end
