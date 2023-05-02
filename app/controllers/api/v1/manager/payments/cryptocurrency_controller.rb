@@ -23,7 +23,8 @@ module Api
               payer: big_donor,
               receiver: cause,
               transaction_hash: payment_params[:transaction_hash],
-              integration_id: payment_params[:integration_id]
+              integration_id: payment_params[:integration_id],
+              feeable: payment_params[:feeable]
             }
           end
 
@@ -37,7 +38,7 @@ module Api
 
           def payment_params
             params.permit(:amount, :transaction_hash, :status, :cause_id, :big_donor_id,
-                          :integration_id)
+                          :integration_id, :feeable)
           end
         end
       end
