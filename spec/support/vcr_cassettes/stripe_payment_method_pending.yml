@@ -1,0 +1,1058 @@
+---
+http_interactions:
+  - request:
+      method: get
+      uri: http://economia.awesomeapi.com.br/json/last/brl-brl
+      body:
+        encoding: US-ASCII
+        string: ""
+      headers:
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+    response:
+      status:
+        code: 308
+        message: Permanent Redirect
+      headers:
+        Date:
+          - Wed, 13 Jul 2022 13:37:54 GMT
+        Content-Type:
+          - text/html
+        Content-Length:
+          - "164"
+        Connection:
+          - keep-alive
+        Location:
+          - https://economia.awesomeapi.com.br/json/last/brl-brl
+      body:
+        encoding: UTF-8
+        string:
+          "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
+          Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
+    recorded_at: Wed, 13 Jul 2022 13:37:54 GMT
+  - request:
+      method: get
+      uri: https://economia.awesomeapi.com.br/json/last/brl-brl
+      body:
+        encoding: US-ASCII
+        string: ""
+      headers:
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+    response:
+      status:
+        code: 404
+        message: Not Found
+      headers:
+        Date:
+          - Wed, 13 Jul 2022 13:37:55 GMT
+        Content-Type:
+          - application/json; charset=utf-8
+        Content-Length:
+          - "78"
+        Connection:
+          - keep-alive
+        Vary:
+          - Accept-Encoding
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Allow-Methods:
+          - HEAD,OPTIONS,GET,POST
+        Access-Control-Allow-Headers:
+          - Authorization,Content-Type,X-Worker-Token
+        Content-Security-Policy:
+          - "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self'
+            https: data:;form-action 'self';frame-ancestors 'self';img-src 'self'
+            data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src
+            'self' https: 'unsafe-inline';upgrade-insecure-requests"
+        Cross-Origin-Embedder-Policy:
+          - require-corp
+        Cross-Origin-Opener-Policy:
+          - same-origin
+        Cross-Origin-Resource-Policy:
+          - same-origin
+        X-Dns-Prefetch-Control:
+          - "off"
+        Expect-Ct:
+          - max-age=0
+        X-Frame-Options:
+          - SAMEORIGIN
+        Strict-Transport-Security:
+          - max-age=15724800; includeSubDomains
+        X-Download-Options:
+          - noopen
+        X-Content-Type-Options:
+          - nosniff
+        Origin-Agent-Cluster:
+          - "?1"
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        Referrer-Policy:
+          - no-referrer
+        X-Xss-Protection:
+          - "0"
+        Cache-Control:
+          - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
+        Pragma:
+          - cache
+        Etag:
+          - W/"4e-2kj4yeKff5LI9ROnOfH2rHUIxJU"
+      body:
+        encoding: UTF-8
+        string:
+          '{"status":404,"code":"CoinNotExists","message":"moeda nao encontrada
+          BRL-BRL"}'
+    recorded_at: Wed, 13 Jul 2022 13:37:55 GMT
+  - request:
+      method: post
+      uri: https://api.stripe.com/v1/payment_methods
+      body:
+        encoding: UTF-8
+        string: type=card&card[number]=4111111111111111&card[exp_month]=08&card[exp_year]=22&card[cvc]=411
+      headers:
+        User-Agent:
+          - Stripe/v1 RubyBindings/6.3.0
+        Authorization:
+          - Bearer STRIPE_SECRET_KEY
+        Content-Type:
+          - application/x-www-form-urlencoded
+        X-Stripe-Client-User-Agent:
+          - '{"bindings_version":"6.3.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"x86_64-linux","engine":"ruby","publisher":"stripe","uname":"Linux
+            version 5.13.0-52-generic (buildd@lcy02-amd64-067) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+            9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #59~20.04.1-Ubuntu SMP Thu Jun
+            16 21:21:28 UTC 2022","hostname":"nicknish-machine"}'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Server:
+          - nginx
+        Date:
+          - Wed, 13 Jul 2022 13:37:57 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "934"
+        Connection:
+          - keep-alive
+        Access-Control-Allow-Credentials:
+          - "true"
+        Access-Control-Allow-Methods:
+          - GET, POST, HEAD, OPTIONS, DELETE
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Expose-Headers:
+          - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+        Access-Control-Max-Age:
+          - "300"
+        Cache-Control:
+          - no-cache, no-store
+        Idempotency-Key:
+          - 36ba1db3-7991-46a2-8a52-0909965cdbaa
+        Original-Request:
+          - req_1gVOxIEbZOPAD9
+        Request-Id:
+          - req_1gVOxIEbZOPAD9
+        Stripe-Should-Retry:
+          - "false"
+        Stripe-Version:
+          - "2020-08-27"
+        Strict-Transport-Security:
+          - max-age=31556926; includeSubDomains; preload
+      body:
+        encoding: UTF-8
+        string: |
+          {
+            "id": "pm_1LL5lJJuOnwQq9Qx3pLuiXrU",
+            "object": "payment_method",
+            "billing_details": {
+              "address": {
+                "city": null,
+                "country": null,
+                "line1": null,
+                "line2": null,
+                "postal_code": null,
+                "state": null
+              },
+              "email": null,
+              "name": null,
+              "phone": null
+            },
+            "card": {
+              "brand": "visa",
+              "checks": {
+                "address_line1_check": null,
+                "address_postal_code_check": null,
+                "cvc_check": "unchecked"
+              },
+              "country": "US",
+              "exp_month": 8,
+              "exp_year": 2022,
+              "fingerprint": "90iExg3JXBkdPgam",
+              "funding": "credit",
+              "generated_from": null,
+              "last4": "1111",
+              "networks": {
+                "available": [
+                  "visa"
+                ],
+                "preferred": null
+              },
+              "three_d_secure_usage": {
+                "supported": true
+              },
+              "wallet": null
+            },
+            "created": 1657719477,
+            "customer": null,
+            "livemode": false,
+            "metadata": {
+            },
+            "type": "card"
+          }
+    recorded_at: Wed, 13 Jul 2022 13:37:57 GMT
+  - request:
+      method: post
+      uri: https://api.stripe.com/v1/customers
+      body:
+        encoding: UTF-8
+        string: email=user%40test.com&name=User+Test&payment_method=pm_1LL5lJJuOnwQq9Qx3pLuiXrU&invoice_settings[default_payment_method]=pm_1LL5lJJuOnwQq9Qx3pLuiXrU
+      headers:
+        User-Agent:
+          - Stripe/v1 RubyBindings/6.3.0
+        Authorization:
+          - Bearer STRIPE_SECRET_KEY
+        Content-Type:
+          - application/x-www-form-urlencoded
+        X-Stripe-Client-Telemetry:
+          - '{"last_request_metrics":{"request_id":"req_1gVOxIEbZOPAD9","request_duration_ms":2203}}'
+        X-Stripe-Client-User-Agent:
+          - '{"bindings_version":"6.3.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"x86_64-linux","engine":"ruby","publisher":"stripe","uname":"Linux
+            version 5.13.0-52-generic (buildd@lcy02-amd64-067) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+            9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #59~20.04.1-Ubuntu SMP Thu Jun
+            16 21:21:28 UTC 2022","hostname":"nicknish-machine"}'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Server:
+          - nginx
+        Date:
+          - Wed, 13 Jul 2022 13:37:59 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "665"
+        Connection:
+          - keep-alive
+        Access-Control-Allow-Credentials:
+          - "true"
+        Access-Control-Allow-Methods:
+          - GET, POST, HEAD, OPTIONS, DELETE
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Expose-Headers:
+          - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+        Access-Control-Max-Age:
+          - "300"
+        Cache-Control:
+          - no-cache, no-store
+        Idempotency-Key:
+          - 84b9e886-c911-4a1a-befc-e302ac6f9560
+        Original-Request:
+          - req_eK7mfQY55Yx5q3
+        Request-Id:
+          - req_eK7mfQY55Yx5q3
+        Stripe-Should-Retry:
+          - "false"
+        Stripe-Version:
+          - "2020-08-27"
+        Strict-Transport-Security:
+          - max-age=31556926; includeSubDomains; preload
+      body:
+        encoding: UTF-8
+        string: |
+          {
+            "id": "cus_M3C9p6XNMXtIzN",
+            "object": "customer",
+            "address": null,
+            "balance": 0,
+            "created": 1657719479,
+            "currency": null,
+            "default_source": null,
+            "delinquent": false,
+            "description": null,
+            "discount": null,
+            "email": "user@test.com",
+            "invoice_prefix": "E7299126",
+            "invoice_settings": {
+              "custom_fields": null,
+              "default_payment_method": "pm_1LL5lJJuOnwQq9Qx3pLuiXrU",
+              "footer": null,
+              "rendering_options": null
+            },
+            "livemode": false,
+            "metadata": {
+            },
+            "name": "User Test",
+            "next_invoice_sequence": 1,
+            "phone": null,
+            "preferred_locales": [
+
+            ],
+            "shipping": null,
+            "tax_exempt": "none",
+            "test_clock": null
+          }
+    recorded_at: Wed, 13 Jul 2022 13:37:59 GMT
+  - request:
+      method: post
+      uri: https://api.stripe.com/v1/customers/cus_M3C9p6XNMXtIzN/tax_ids
+      body:
+        encoding: UTF-8
+        string: type=br_cpf&value=111.111.111-11
+      headers:
+        User-Agent:
+          - Stripe/v1 RubyBindings/6.3.0
+        Authorization:
+          - Bearer STRIPE_SECRET_KEY
+        Content-Type:
+          - application/x-www-form-urlencoded
+        X-Stripe-Client-Telemetry:
+          - '{"last_request_metrics":{"request_id":"req_eK7mfQY55Yx5q3","request_duration_ms":2163}}'
+        X-Stripe-Client-User-Agent:
+          - '{"bindings_version":"6.3.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"x86_64-linux","engine":"ruby","publisher":"stripe","uname":"Linux
+            version 5.13.0-52-generic (buildd@lcy02-amd64-067) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+            9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #59~20.04.1-Ubuntu SMP Thu Jun
+            16 21:21:28 UTC 2022","hostname":"nicknish-machine"}'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Server:
+          - nginx
+        Date:
+          - Wed, 13 Jul 2022 13:38:01 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "325"
+        Connection:
+          - keep-alive
+        Access-Control-Allow-Credentials:
+          - "true"
+        Access-Control-Allow-Methods:
+          - GET, POST, HEAD, OPTIONS, DELETE
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Expose-Headers:
+          - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+        Access-Control-Max-Age:
+          - "300"
+        Cache-Control:
+          - no-cache, no-store
+        Idempotency-Key:
+          - 7414662e-f1b7-4140-ba09-98bf6f901298
+        Original-Request:
+          - req_1pzHCRtpTpKltr
+        Request-Id:
+          - req_1pzHCRtpTpKltr
+        Stripe-Should-Retry:
+          - "false"
+        Stripe-Version:
+          - "2020-08-27"
+        Strict-Transport-Security:
+          - max-age=31556926; includeSubDomains; preload
+      body:
+        encoding: UTF-8
+        string: |
+          {
+            "id": "txi_1LL5lMJuOnwQq9QxTWq7gDVb",
+            "object": "tax_id",
+            "country": "BR",
+            "created": 1657719480,
+            "customer": "cus_M3C9p6XNMXtIzN",
+            "livemode": false,
+            "type": "br_cpf",
+            "value": "111.111.111-11",
+            "verification": {
+              "status": "unavailable",
+              "verified_address": null,
+              "verified_name": null
+            }
+          }
+    recorded_at: Wed, 13 Jul 2022 13:38:01 GMT
+  - request:
+      method: post
+      uri: https://api.stripe.com/v1/subscriptions
+      body:
+        encoding: UTF-8
+        string: customer=cus_M3C9p6XNMXtIzN&items[0][price]=price_1JYGkdJuOnwQq9Qx68T4Re34
+      headers:
+        User-Agent:
+          - Stripe/v1 RubyBindings/6.3.0
+        Authorization:
+          - Bearer STRIPE_SECRET_KEY
+        Content-Type:
+          - application/x-www-form-urlencoded
+        X-Stripe-Client-Telemetry:
+          - '{"last_request_metrics":{"request_id":"req_1pzHCRtpTpKltr","request_duration_ms":1243}}'
+        X-Stripe-Client-User-Agent:
+          - '{"bindings_version":"6.3.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"x86_64-linux","engine":"ruby","publisher":"stripe","uname":"Linux
+            version 5.13.0-52-generic (buildd@lcy02-amd64-067) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+            9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #59~20.04.1-Ubuntu SMP Thu Jun
+            16 21:21:28 UTC 2022","hostname":"nicknish-machine"}'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Server:
+          - nginx
+        Date:
+          - Wed, 13 Jul 2022 13:38:04 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "3830"
+        Connection:
+          - keep-alive
+        Access-Control-Allow-Credentials:
+          - "true"
+        Access-Control-Allow-Methods:
+          - GET, POST, HEAD, OPTIONS, DELETE
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Expose-Headers:
+          - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+        Access-Control-Max-Age:
+          - "300"
+        Cache-Control:
+          - no-cache, no-store
+        Idempotency-Key:
+          - 7dcd884b-2bc1-44d1-894c-d348d93f8088
+        Original-Request:
+          - req_zrgSE1slE2EGm1
+        Request-Id:
+          - req_zrgSE1slE2EGm1
+        Stripe-Should-Retry:
+          - "false"
+        Stripe-Version:
+          - "2020-08-27"
+        Strict-Transport-Security:
+          - max-age=31556926; includeSubDomains; preload
+      body:
+        encoding: UTF-8
+        string: |
+          {
+            "id": "sub_1LL5lOJuOnwQq9Qx4R7A11nz",
+            "object": "subscription",
+            "application": null,
+            "application_fee_percent": null,
+            "automatic_tax": {
+              "enabled": false
+            },
+            "billing_cycle_anchor": 1657719482,
+            "billing_thresholds": null,
+            "cancel_at": null,
+            "cancel_at_period_end": false,
+            "canceled_at": null,
+            "collection_method": "charge_automatically",
+            "created": 1657719482,
+            "current_period_end": 1660397882,
+            "current_period_start": 1657719482,
+            "customer": "cus_M3C9p6XNMXtIzN",
+            "days_until_due": null,
+            "default_payment_method": null,
+            "default_source": null,
+            "default_tax_rates": [
+
+            ],
+            "description": null,
+            "discount": null,
+            "ended_at": null,
+            "items": {
+              "object": "list",
+              "data": [
+                {
+                  "id": "si_M3C9MUvSSG7jK6",
+                  "object": "subscription_item",
+                  "billing_thresholds": null,
+                  "created": 1657719482,
+                  "metadata": {
+                  },
+                  "plan": {
+                    "id": "price_1JYGkdJuOnwQq9Qx68T4Re34",
+                    "object": "plan",
+                    "active": true,
+                    "aggregate_usage": null,
+                    "amount": 1000,
+                    "amount_decimal": "1000",
+                    "billing_scheme": "per_unit",
+                    "created": 1631307311,
+                    "currency": "usd",
+                    "interval": "month",
+                    "interval_count": 1,
+                    "livemode": false,
+                    "metadata": {
+                    },
+                    "nickname": null,
+                    "product": "prod_KCg6mDCdtMiLug",
+                    "tiers_mode": null,
+                    "transform_usage": null,
+                    "trial_period_days": null,
+                    "usage_type": "licensed"
+                  },
+                  "price": {
+                    "id": "price_1JYGkdJuOnwQq9Qx68T4Re34",
+                    "object": "price",
+                    "active": true,
+                    "billing_scheme": "per_unit",
+                    "created": 1631307311,
+                    "currency": "usd",
+                    "custom_unit_amount": null,
+                    "livemode": false,
+                    "lookup_key": null,
+                    "metadata": {
+                    },
+                    "nickname": null,
+                    "product": "prod_KCg6mDCdtMiLug",
+                    "recurring": {
+                      "aggregate_usage": null,
+                      "interval": "month",
+                      "interval_count": 1,
+                      "trial_period_days": null,
+                      "usage_type": "licensed"
+                    },
+                    "tax_behavior": "unspecified",
+                    "tiers_mode": null,
+                    "transform_quantity": null,
+                    "type": "recurring",
+                    "unit_amount": 1000,
+                    "unit_amount_decimal": "1000"
+                  },
+                  "quantity": 1,
+                  "subscription": "sub_1LL5lOJuOnwQq9Qx4R7A11nz",
+                  "tax_rates": [
+
+                  ]
+                }
+              ],
+              "has_more": false,
+              "total_count": 1,
+              "url": "/v1/subscription_items?subscription=sub_1LL5lOJuOnwQq9Qx4R7A11nz"
+            },
+            "latest_invoice": "in_1LL5lOJuOnwQq9QxgwtucIBS",
+            "livemode": false,
+            "metadata": {
+            },
+            "next_pending_invoice_item_invoice": null,
+            "pause_collection": null,
+            "payment_settings": {
+              "payment_method_options": null,
+              "payment_method_types": null,
+              "save_default_payment_method": "off"
+            },
+            "pending_invoice_item_interval": null,
+            "pending_setup_intent": null,
+            "pending_update": null,
+            "plan": {
+              "id": "price_1JYGkdJuOnwQq9Qx68T4Re34",
+              "object": "plan",
+              "active": true,
+              "aggregate_usage": null,
+              "amount": 1000,
+              "amount_decimal": "1000",
+              "billing_scheme": "per_unit",
+              "created": 1631307311,
+              "currency": "usd",
+              "interval": "month",
+              "interval_count": 1,
+              "livemode": false,
+              "metadata": {
+              },
+              "nickname": null,
+              "product": "prod_KCg6mDCdtMiLug",
+              "tiers_mode": null,
+              "transform_usage": null,
+              "trial_period_days": null,
+              "usage_type": "licensed"
+            },
+            "quantity": 1,
+            "schedule": null,
+            "start_date": 1657719482,
+            "status": "active",
+            "test_clock": null,
+            "transfer_data": null,
+            "trial_end": null,
+            "trial_start": null
+          }
+    recorded_at: Wed, 13 Jul 2022 13:38:04 GMT
+  - request:
+      method: post
+      uri: https://api.stripe.com/v1/payment_intents
+      body:
+        encoding: UTF-8
+        string: customer=cus_M3C9p6XNMXtIzN&items[0][price]=price_1JYGkdJuOnwQq9Qx68T4Re34
+      headers:
+        User-Agent:
+          - Stripe/v1 RubyBindings/6.3.0
+        Authorization:
+          - Bearer STRIPE_SECRET_KEY
+        Content-Type:
+          - application/x-www-form-urlencoded
+        X-Stripe-Client-Telemetry:
+          - '{"last_request_metrics":{"request_id":"req_1pzHCRtpTpKltr","request_duration_ms":1243}}'
+        X-Stripe-Client-User-Agent:
+          - '{"bindings_version":"6.3.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"x86_64-linux","engine":"ruby","publisher":"stripe","uname":"Linux
+            version 5.13.0-52-generic (buildd@lcy02-amd64-067) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+            9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #59~20.04.1-Ubuntu SMP Thu Jun
+            16 21:21:28 UTC 2022","hostname":"nicknish-machine"}'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Server:
+          - nginx
+        Date:
+          - Wed, 13 Jul 2022 13:38:04 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "3830"
+        Connection:
+          - keep-alive
+        Access-Control-Allow-Credentials:
+          - "true"
+        Access-Control-Allow-Methods:
+          - GET, POST, HEAD, OPTIONS, DELETE
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Expose-Headers:
+          - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+        Access-Control-Max-Age:
+          - "300"
+        Cache-Control:
+          - no-cache, no-store
+        Idempotency-Key:
+          - 7dcd884b-2bc1-44d1-894c-d348d93f8088
+        Original-Request:
+          - req_zrgSE1slE2EGm1
+        Request-Id:
+          - req_zrgSE1slE2EGm1
+        Stripe-Should-Retry:
+          - "false"
+        Stripe-Version:
+          - "2020-08-27"
+        Strict-Transport-Security:
+          - max-age=31556926; includeSubDomains; preload
+      body:
+        encoding: UTF-8
+        string: |
+          {
+            "id": "pi_1DseH42eZvKYlo2C5UQDyYph",
+            "object": "payment_intent",
+            "amount": 2000,
+            "amount_capturable": 0,
+            "amount_details": {
+              "tip": {}
+            },
+            "amount_received": 0,
+            "application": null,
+            "application_fee_amount": null,
+            "automatic_payment_methods": null,
+            "canceled_at": null,
+            "cancellation_reason": null,
+            "capture_method": "automatic",
+            "charges": {
+              "object": "list",
+              "data": [],
+              "has_more": false,
+              "url": "/v1/charges?payment_intent=pi_1DseH42eZvKYlo2C5UQDyYph"
+            },
+            "client_secret": "pi_1DseH42eZvKYlo2C5UQDyYph_secret_gowsU3j2SgDfFECrHNzE8UtGK",
+            "confirmation_method": "automatic",
+            "created": 1547506278,
+            "currency": "usd",
+            "customer": null,
+            "description": null,
+            "invoice": null,
+            "last_payment_error": null,
+            "livemode": false,
+            "metadata": {},
+            "next_action": null,
+            "on_behalf_of": null,
+            "payment_method": null,
+            "payment_method_options": {},
+            "payment_method_types": [
+              "card"
+            ],
+            "processing": null,
+            "receipt_email": null,
+            "redaction": null,
+            "review": null,
+            "setup_future_usage": null,
+            "shipping": null,
+            "statement_descriptor": null,
+            "statement_descriptor_suffix": null,
+            "status": "requires_action",
+            "transfer_data": null,
+            "transfer_group": null
+          }
+    recorded_at: Wed, 13 Jul 2022 13:38:04 GMT
+  - request:
+      method: post
+      uri: https://api.stripe.com/v1/refunds
+      body:
+        encoding: UTF-8
+        string: customer=cus_M3C9p6XNMXtIzN&items[0][price]=price_1JYGkdJuOnwQq9Qx68T4Re34
+      headers:
+        User-Agent:
+          - Stripe/v1 RubyBindings/6.3.0
+        Authorization:
+          - Bearer STRIPE_SECRET_KEY
+        Content-Type:
+          - application/x-www-form-urlencoded
+        X-Stripe-Client-Telemetry:
+          - '{"last_request_metrics":{"request_id":"req_1pzHCRtpTpKltr","request_duration_ms":1243}}'
+        X-Stripe-Client-User-Agent:
+          - '{"bindings_version":"6.3.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"x86_64-linux","engine":"ruby","publisher":"stripe","uname":"Linux
+            version 5.13.0-52-generic (buildd@lcy02-amd64-067) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+            9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #59~20.04.1-Ubuntu SMP Thu Jun
+            16 21:21:28 UTC 2022","hostname":"nicknish-machine"}'
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Server:
+          - nginx
+        Date:
+          - Wed, 13 Jul 2022 13:38:04 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "3830"
+        Connection:
+          - keep-alive
+        Access-Control-Allow-Credentials:
+          - "true"
+        Access-Control-Allow-Methods:
+          - GET, POST, HEAD, OPTIONS, DELETE
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Expose-Headers:
+          - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+        Access-Control-Max-Age:
+          - "300"
+        Cache-Control:
+          - no-cache, no-store
+        Idempotency-Key:
+          - 7dcd884b-2bc1-44d1-894c-d348d93f8088
+        Original-Request:
+          - req_zrgSE1slE2EGm1
+        Request-Id:
+          - req_zrgSE1slE2EGm1
+        Stripe-Should-Retry:
+          - "false"
+        Stripe-Version:
+          - "2020-08-27"
+        Strict-Transport-Security:
+          - max-age=31556926; includeSubDomains; preload
+      body:
+        encoding: UTF-8
+        string: |
+          {
+            "id": "re_3LwQHI2eZvKYlo2C1EQTr7vy",
+            "object": "refund",
+            "amount": 100,
+            "balance_transaction": null,
+            "charge": "ch_3LwQHI2eZvKYlo2C1bJ8QVZS",
+            "created": 1666700440,
+            "currency": "usd",
+            "metadata": {},
+            "payment_intent": null,
+            "reason": null,
+            "receipt_number": null,
+            "source_transfer_reversal": null,
+            "status": "succeeded",
+            "transfer_reversal": null
+          }
+    recorded_at: Wed, 13 Jul 2022 13:38:04 GMT
+  - request:
+      method: get
+      uri: http://economia.awesomeapi.com.br/json/last/brl-usd
+      body:
+        encoding: US-ASCII
+        string: ""
+      headers:
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+    response:
+      status:
+        code: 308
+        message: Permanent Redirect
+      headers:
+        Date:
+          - Wed, 13 Jul 2022 13:38:05 GMT
+        Content-Type:
+          - text/html
+        Content-Length:
+          - "164"
+        Connection:
+          - keep-alive
+        Location:
+          - https://economia.awesomeapi.com.br/json/last/brl-usd
+      body:
+        encoding: UTF-8
+        string:
+          "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
+          Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
+    recorded_at: Wed, 13 Jul 2022 13:38:05 GMT
+  - request:
+      method: get
+      uri: https://economia.awesomeapi.com.br/json/last/brl-usd
+      body:
+        encoding: US-ASCII
+        string: ""
+      headers:
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Wed, 13 Jul 2022 13:38:06 GMT
+        Content-Type:
+          - application/json; charset=utf-8
+        Content-Length:
+          - "240"
+        Connection:
+          - keep-alive
+        Vary:
+          - Accept-Encoding
+        Access-Control-Allow-Origin:
+          - "*"
+        Access-Control-Allow-Methods:
+          - HEAD,OPTIONS,GET,POST
+        Access-Control-Allow-Headers:
+          - Authorization,Content-Type,X-Worker-Token
+        Content-Security-Policy:
+          - "default-src 'self';base-uri 'self';block-all-mixed-content;font-src 'self'
+            https: data:;form-action 'self';frame-ancestors 'self';img-src 'self'
+            data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src
+            'self' https: 'unsafe-inline';upgrade-insecure-requests"
+        Cross-Origin-Embedder-Policy:
+          - require-corp
+        Cross-Origin-Opener-Policy:
+          - same-origin
+        Cross-Origin-Resource-Policy:
+          - same-origin
+        X-Dns-Prefetch-Control:
+          - "off"
+        Expect-Ct:
+          - max-age=0
+        X-Frame-Options:
+          - SAMEORIGIN
+        Strict-Transport-Security:
+          - max-age=15724800; includeSubDomains
+        X-Download-Options:
+          - noopen
+        X-Content-Type-Options:
+          - nosniff
+        Origin-Agent-Cluster:
+          - "?1"
+        X-Permitted-Cross-Domain-Policies:
+          - none
+        Referrer-Policy:
+          - no-referrer
+        X-Xss-Protection:
+          - "0"
+        Cache-Control:
+          - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
+        Pragma:
+          - cache
+        Etag:
+          - W/"f0-JBz4WUFJT3rpcrl0jlfzDf9hIjE"
+        X-Cache-Status:
+          - MISS
+      body:
+        encoding: UTF-8
+        string:
+          '{"BRLUSD":{"code":"BRL","codein":"USD","name":"Real Brasileiro/Dólar
+          Americano","high":"0.1849","low":"0.183","varBid":"0.0009","pctChange":"0.51","bid":"0.1848","ask":"0.1848","timestamp":"1657719480","create_date":"2022-07-13
+          10:38:00"}}'
+    recorded_at: Wed, 13 Jul 2022 13:38:06 GMT
+  - request:
+      method: post
+      uri: https://polygon-mumbai.g.alchemy.com/v2/iwJOj0NGGqgpYpyCJxt3dZzu9wOMACg_
+      body:
+        encoding: UTF-8
+        string: '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1}'
+      headers:
+        Content-Type:
+          - application/json
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+        Host:
+          - polygon-mumbai.g.alchemy.com
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Wed, 13 Jul 2022 13:38:06 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "43"
+        Connection:
+          - keep-alive
+        Cf-Cache-Status:
+          - DYNAMIC
+        Expect-Ct:
+          - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+        Server:
+          - cloudflare
+        Cf-Ray:
+          - 72a26ac8c9f7a4cb-GRU
+      body:
+        encoding: UTF-8
+        string: '{"jsonrpc":"2.0","result":"0x13881","id":1}'
+    recorded_at: Wed, 13 Jul 2022 13:38:07 GMT
+  - request:
+      method: post
+      uri: https://polygon-mumbai.g.alchemy.com/v2/iwJOj0NGGqgpYpyCJxt3dZzu9wOMACg_
+      body:
+        encoding: UTF-8
+        string: '{"jsonrpc":"2.0","method":"eth_getTransactionCount","params":["0x6E060041D62fDd76cF27c582f62983b864878E8F","pending"],"id":2}'
+      headers:
+        Content-Type:
+          - application/json
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+        Host:
+          - polygon-mumbai.g.alchemy.com
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Wed, 13 Jul 2022 13:38:07 GMT
+        Content-Type:
+          - application/json
+        Content-Length:
+          - "41"
+        Connection:
+          - keep-alive
+        Cf-Cache-Status:
+          - DYNAMIC
+        Expect-Ct:
+          - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+        Server:
+          - cloudflare
+        Cf-Ray:
+          - 72a26aca2c8ca685-GRU
+      body:
+        encoding: UTF-8
+        string: '{"jsonrpc":"2.0","id":2,"result":"0x4c2"}'
+    recorded_at: Wed, 13 Jul 2022 13:38:07 GMT
+  - request:
+      method: post
+      uri: https://polygon-mumbai.g.alchemy.com/v2/iwJOj0NGGqgpYpyCJxt3dZzu9wOMACg_
+      body:
+        encoding: UTF-8
+        string: '{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["0x02f895830138818204c285147d35700085147d35700082e52394d3850333819fbdd43784498f67010e5c87a2eab380a4deb634760000000000000000000000000000000000000000000000000000000000000000c001a06f1ad2fc365f461a1f35856e3cb7afff3f3857edeb4e9d95602843f186991727a0041990e3f7f94fcf349f4a7956aee1323a0a8553326ee0439f3771f06aa813b8"],"id":3}'
+      headers:
+        Content-Type:
+          - application/json
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+        Host:
+          - polygon-mumbai.g.alchemy.com
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Date:
+          - Wed, 13 Jul 2022 13:38:08 GMT
+        Content-Type:
+          - application/json
+        Transfer-Encoding:
+          - chunked
+        Connection:
+          - keep-alive
+        Cf-Cache-Status:
+          - DYNAMIC
+        Expect-Ct:
+          - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+        Server:
+          - cloudflare
+        Cf-Ray:
+          - 72a26acebdc2a5d7-GRU
+      body:
+        encoding: UTF-8
+        string: '{"jsonrpc":"2.0","result":"0xc5373baa8cfda9ec923e3bca79ca511dbf15aa17286725f30d90964374b369f3","id":3}'
+    recorded_at: Wed, 13 Jul 2022 13:38:08 GMT
+recorded_with: VCR 6.1.0

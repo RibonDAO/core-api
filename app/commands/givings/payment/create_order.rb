@@ -29,9 +29,10 @@ module Givings
 
       def success_callback(order, result)
         if result
-          order.payment.update(status: :paid)
+          status = ::Payment::Gateways::Stripe::Helpers.status(result[:status])
+          order.payment.update(status:)
           order.payment.update(external_id: result[:external_id]) if result[:external_id]
-          handle_contribution_creation(order.payment)
+          handle_contribution_creation(order.payment) if status == :paid
         end
 
         klass.success_callback(order, result)
