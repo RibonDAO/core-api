@@ -60,8 +60,8 @@ class Contribution < ApplicationRecord
     return if receiver_type == 'NonProfit'
 
     fee_percentage = RibonConfig.contribution_fee_percentage
-    tickets_balance_cents = usd_value_cents * (100 - fee_percentage) / 100
-    fees_balance_cents = usd_value_cents * (fee_percentage / 100)
+    fees_balance_cents = (usd_value_cents * (fee_percentage / 100.0)).round
+    tickets_balance_cents = usd_value_cents - fees_balance_cents
 
     create_contribution_balance!(contribution_increased_amount_cents: 0,
                                  tickets_balance_cents:, fees_balance_cents:)
