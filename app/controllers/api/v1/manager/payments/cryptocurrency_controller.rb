@@ -24,7 +24,7 @@ module Api
               receiver: cause,
               transaction_hash: payment_params[:transaction_hash],
               integration_id: payment_params[:integration_id],
-              feeable: payment_params[:feeable]
+              create_contribution_command:
             }
           end
 
@@ -34,6 +34,16 @@ module Api
 
           def big_donor
             BigDonor.find_by(id: payment_params[:big_donor_id]) if payment_params[:big_donor_id]
+          end
+
+          def create_contribution_command
+            return Contributions::CreateContribution if feeable
+
+            Contributions::CreateNonFeeableContribution
+          end
+
+          def feeable
+            @feeable ||= payment_params[:feeable].nil? ? true : payment_params[:feeable].to_bool
           end
 
           def payment_params
