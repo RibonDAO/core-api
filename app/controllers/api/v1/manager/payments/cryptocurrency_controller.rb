@@ -37,9 +37,9 @@ module Api
           end
 
           def create_contribution_command
-            return Contributions::CreateContribution if feeable
+            return Contributions::CreateNonFeeableContribution unless feeable
 
-            Contributions::CreateNonFeeableContribution
+            Contributions::CreateContribution
           end
 
           def feeable
