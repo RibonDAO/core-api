@@ -14,8 +14,10 @@ describe Manager::Payments::Cryptocurrency do
       let!(:big_donor) { create(:big_donor) }
 
       let(:args) do
-        { payer: big_donor, amount: '7.00', transaction_hash:, integration_id: integration.id, receiver: cause }
+        { payer: big_donor, amount: '7.00', transaction_hash:,
+          integration_id: integration.id, receiver: cause, create_contribution_command: }
       end
+      let(:create_contribution_command) { Contributions::CreateContribution }
 
       it 'creates a PersonPayment' do
         expect { command }.to change(PersonPayment, :count).by(1)
@@ -27,6 +29,13 @@ describe Manager::Payments::Cryptocurrency do
 
       it 'returns success' do
         expect(command).to be_success
+      end
+
+      it 'calls the create contribution command' do
+        allow(Contributions::CreateContribution).to receive(:call)
+        command
+
+        expect(Contributions::CreateContribution).to have_received(:call)
       end
     end
 

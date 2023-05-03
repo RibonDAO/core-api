@@ -14,6 +14,10 @@
 #  legacy_id          :integer
 #
 class LegacyNonProfit < ApplicationRecord
+  extend Mobility
+
+  translates :impact_description, type: :string, locale_accessors: %i[en pt-BR]
+
   has_many :legacy_user_impacts, dependent: :destroy
 
   has_one_attached :logo

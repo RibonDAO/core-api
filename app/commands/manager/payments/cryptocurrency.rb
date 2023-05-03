@@ -5,7 +5,8 @@ module Manager
     class Cryptocurrency < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :amount, :transaction_hash, :integration_id, :receiver, :payer
+      attr_reader :amount, :transaction_hash, :integration_id,
+                  :receiver, :payer, :create_contribution_command
 
       def initialize(args)
         @amount = args[:amount]
@@ -13,12 +14,14 @@ module Manager
         @receiver = args[:receiver]
         @payer = args[:payer]
         @integration_id = args[:integration_id]
+        @create_contribution_command = args[:create_contribution_command]
       end
 
       def call
         with_exception_handle do
           payment = create_payment
           create_blockchain_transaction(payment)
+          create_contribution(payment)
         end
       end
 
@@ -32,6 +35,10 @@ module Manager
       def create_blockchain_transaction(payment)
         PersonBlockchainTransaction.create!(person_payment: payment, treasure_entry_status: :processing,
                                             transaction_hash:)
+      end
+
+      def create_contribution(payment)
+        create_contribution_command.call(payment:)
       end
 
       def amount_cents
