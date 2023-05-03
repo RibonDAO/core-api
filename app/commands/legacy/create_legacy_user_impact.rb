@@ -70,6 +70,8 @@ module Legacy
       file = URI.open(url)
       # rubocop:enable Security/Open
       non_profit.logo.attach(io: file, filename:)
+    rescue StandardError => e
+      Rails.logger.error "Error attaching logo to non profit #{non_profit&.name}: #{e}"
     end
 
     def update_current_id(legacy_non_profit)
