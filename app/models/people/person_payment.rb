@@ -90,8 +90,9 @@ class PersonPayment < ApplicationRecord
 
   def set_fees
     fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym).result
-    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents,
-                               crypto_fee_cents: fees[:crypto_fee].cents)
+    crypto_fee_cents = crypto? ? 0 : fees[:crypto_fee].cents
+
+    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents:)
   rescue StandardError => e
     Reporter.log(error: e)
   end
