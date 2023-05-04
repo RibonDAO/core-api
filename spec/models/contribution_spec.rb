@@ -120,4 +120,41 @@ RSpec.describe Contribution, type: :model do
         .to match_array(contributions_paid.pluck(:id))
     end
   end
+
+  describe '#set_contribution_balance' do
+    let(:contribution) { create(:contribution, receiver:, person_payment:) }
+    let(:receiver) { create(:cause) }
+    let(:person_payment) { create(:person_payment, usd_value_cents: 1000) }
+
+    before do
+      create(:ribon_config, contribution_fee_percentage: 20)
+    end
+
+    context 'when there is a contribution balance already created' do
+      before do
+        create(:contribution_balance, contribution:)
+      end
+
+      it 'does not create another contribution balance' do
+        expect { contribution.set_contribution_balance }.not_to change(ContributionBalance, :count)
+      end
+    end
+
+    context 'when the receiver is a non profit' do
+      let(:receiver) { create(:non_profit) }
+
+      it 'does not create another contribution balance' do
+        expect { contribution.set_contribution_balance }.not_to change(ContributionBalance, :count)
+      end
+    end
+
+    context 'when the receiver is a cause' do
+      it 'sets the tickets and fee balances correctly' do
+        contribution.set_contribution_balance
+
+        expect(contribution.contribution_balance.tickets_balance_cents).to eq(800)
+        expect(contribution.contribution_balance.fees_balance_cents).to eq(200)
+      end
+    end
+  end
 end
