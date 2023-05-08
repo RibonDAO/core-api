@@ -20,6 +20,7 @@ class User < ApplicationRecord
 
   before_validation { email.downcase! }
   after_create :set_user_donation_stats
+  after_create :set_user_tasks_statistic
 
   has_many :donations
   has_many :customers
@@ -27,11 +28,14 @@ class User < ApplicationRecord
   has_many :legacy_user_impacts, dependent: :destroy
 
   has_one :user_donation_stats
+  has_one :user_tasks_statistic
   has_one :utm, as: :trackable
 
   delegate :last_donation_at, to: :user_donation_stats
   delegate :can_donate?, to: :user_donation_stats
   delegate :last_donated_cause, to: :user_donation_stats
+  delegate :first_completed_all_tasks_at, to: :user_tasks_statistic
+  delegate :streak, to: :user_tasks_statistic
 
   scope :created_between, lambda { |start_date, end_date|
                             where('created_at >= ? AND created_at <= ?', start_date, end_date)
@@ -67,5 +71,9 @@ class User < ApplicationRecord
 
   def set_user_donation_stats
     create_user_donation_stats unless user_donation_stats
+  end
+
+  def set_user_tasks_statistic
+    create_user_tasks_statistic unless user_tasks_statistic
   end
 end

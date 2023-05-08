@@ -43,8 +43,12 @@ module Api
 
       def complete_task
         if current_user
+
           task = ::Users::UpsertTask.call(user: current_user, task_identifier: params[:task_identifier]).result
+
+          ::Users::IncrementStreak.call(user: current_user)
           render json: UserCompletedTaskBlueprint.render(task)
+
         else
           head :unauthorized
         end
