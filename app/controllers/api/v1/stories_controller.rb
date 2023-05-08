@@ -40,7 +40,7 @@ module Api
       private
 
       def story_params
-        params.permit(:id, :title, :description, :position, :active, :image)
+        params.permit(:id, :title, :description, :position, :active, :image, :image_description)
       end
     end
   end

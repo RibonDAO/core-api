@@ -13,7 +13,10 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
 
       expect_response_collection_to_have_keys(%w[created_at id impact_description name updated_at
                                                  wallet_address background_image logo main_image
-                                                 impact_by_ticket stories cause status non_profit_impacts])
+                                                 logo_description main_image_description
+                                                 background_image_description confirmation_image_description
+                                                 impact_by_ticket stories cause status non_profit_impacts
+                                                 confirmation_image])
     end
 
     it 'returns 2 non profits' do
@@ -56,7 +59,10 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
 
         expect_response_collection_to_have_keys(%w[created_at id impact_description name updated_at
                                                    wallet_address background_image logo main_image
-                                                   impact_by_ticket stories cause status non_profit_impacts])
+                                                   logo_description main_image_description
+                                                   background_image_description confirmation_image_description
+                                                   impact_by_ticket stories cause status non_profit_impacts
+                                                   confirmation_image])
       end
 
       it 'returns 2 non profits' do
@@ -96,7 +102,7 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
     it 'returns a list of stories' do
       request
 
-      expect_response_collection_to_have_keys(%w[active description id image position title])
+      expect_response_collection_to_have_keys(%w[active description id image position title image_description])
     end
 
     it 'returns 2 stories' do
@@ -125,7 +131,10 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
 
     it 'returns a single non_profit' do
       expect_response_to_have_keys(%w[background_image cause created_at id impact_by_ticket impact_description logo
-                                      main_image name status stories updated_at wallet_address non_profit_impacts])
+                                      logo_description main_image_description
+                                      background_image_description confirmation_image_description
+                                      main_image name status stories updated_at wallet_address non_profit_impacts
+                                      confirmation_image])
     end
   end
 
@@ -138,7 +147,10 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
       request
 
       expect_response_to_have_keys(%w[background_image cause created_at id impact_by_ticket impact_description logo
-                                      main_image name status stories updated_at wallet_address non_profit_impacts])
+                                      logo_description main_image_description
+                                      background_image_description confirmation_image_description
+                                      main_image name status stories updated_at wallet_address non_profit_impacts
+                                      confirmation_image])
     end
   end
 
