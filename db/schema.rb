@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_05_134255) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_08_112348) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -124,6 +124,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_134255) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cover_image_description"
+    t.string "main_image_description"
   end
 
   create_table "chains", force: :cascade do |t|
@@ -352,6 +354,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_134255) do
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
     t.bigint "cause_id"
+    t.string "logo_description"
+    t.string "main_image_description"
+    t.string "background_image_description"
+    t.string "confirmation_image_description"
     t.index ["cause_id"], name: "index_non_profits_on_cause_id"
   end
 
@@ -470,7 +476,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_05_134255) do
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_description"
     t.index ["non_profit_id"], name: "index_stories_on_non_profit_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "title"
+    t.text "actions"
+    t.text "rules"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tokens", force: :cascade do |t|

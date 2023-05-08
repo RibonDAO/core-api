@@ -1,7 +1,7 @@
 class CauseBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :updated_at, :created_at, :name, :active
+  fields :updated_at, :created_at, :name, :active, :main_image_description, :cover_image_description
 
   association :pools, blueprint: PoolBlueprint
 
