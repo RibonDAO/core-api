@@ -18,6 +18,7 @@ class NonProfit < ApplicationRecord
   has_one_attached :logo
   has_one_attached :main_image
   has_one_attached :background_image
+  has_one_attached :confirmation_image
   has_many :non_profit_impacts
   has_many :non_profit_wallets, as: :owner
 
