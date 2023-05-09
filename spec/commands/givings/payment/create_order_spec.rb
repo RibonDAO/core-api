@@ -9,6 +9,11 @@ describe Givings::Payment::CreateOrder do
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
     let(:integration) { create(:integration) }
+    let(:orchestrator_double) do
+      instance_double(Service::Givings::Payment::Orchestrator, { call: {
+                        status: :paid
+                      } })
+    end
 
     context 'when using a CreditCard payment and subscribe' do
       let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
@@ -33,7 +38,6 @@ describe Givings::Payment::CreateOrder do
       end
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
-        orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
         allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         allow(PersonPayment).to receive(:create!).and_return(person_payment)
         command
@@ -46,7 +50,6 @@ describe Givings::Payment::CreateOrder do
       end
 
       it 'calls Service::Givings::Payment::Orchestrator process' do
-        orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
         allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         command
 
@@ -56,7 +59,6 @@ describe Givings::Payment::CreateOrder do
       context 'when the payment is sucessfull' do
         it 'calls the success callback' do
           allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
-          orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
           allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
           command
 
@@ -99,7 +101,6 @@ describe Givings::Payment::CreateOrder do
       end
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
-        orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
         allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         allow(PersonPayment).to receive(:create!).and_return(person_payment)
         command
@@ -111,7 +112,6 @@ describe Givings::Payment::CreateOrder do
       end
 
       it 'calls Service::Givings::Payment::Orchestrator process' do
-        orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
         allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         command
 
@@ -121,7 +121,6 @@ describe Givings::Payment::CreateOrder do
       context 'when the payment is sucessfull' do
         it 'calls the success callback' do
           allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
-          orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
           allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
           command
 
@@ -156,7 +155,6 @@ describe Givings::Payment::CreateOrder do
 
         it 'calls the success callback' do
           allow(Givings::Payment::AddGivingNonProfitToBlockchainJob).to receive(:perform_later)
-          orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
           allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
           command
 
@@ -244,16 +242,11 @@ describe Givings::Payment::CreateOrder do
           payment_method: :credit_card, user: customer.user, operation: :purchase }
       end
 
-      it 'calls the success callback' do
+      it 'does not call the success callback' do
         allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
         command
 
-        expect(Givings::Payment::AddGivingCauseToBlockchainJob).to have_received(:perform_later)
-          .with(amount: person_payment.crypto_amount, payment: an_object_containing(
-            id: person_payment.id, amount_cents: person_payment.amount_cents,
-            offer_id: person_payment.offer.id,
-            status: person_payment.status, payment_method: person_payment.payment_method
-          ), pool: nil)
+        expect(Givings::Payment::AddGivingCauseToBlockchainJob).not_to have_received(:perform_later)
       end
 
       it 'update the status and external_id of payment_person' do
