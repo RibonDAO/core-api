@@ -25,12 +25,10 @@ module Api
         @integration = Integration.find_by_id_or_unique_address params[:integration_id]
         @platform = params[:platform]
 
-        if voucher&.valid? || !current_user
-          render json: { can_donate: true }
-        else
-          render json: { can_donate: current_user.can_donate?(@integration, @platform),
-                         donate_app: current_user.donate_app }
-        end
+        render json: { can_donate: true } and return if (voucher? && voucher&.valid?) || !current_user
+
+        render json: { can_donate: current_user.can_donate?(@integration, @platform),
+                       donate_app: current_user.donate_app }
       end
 
       def completed_tasks
@@ -55,6 +53,10 @@ module Api
       end
 
       private
+
+      def voucher?
+        params[:voucher_id].present?
+      end
 
       def voucher
         @voucher ||= Voucher.new(external_id: params[:voucher_id],
