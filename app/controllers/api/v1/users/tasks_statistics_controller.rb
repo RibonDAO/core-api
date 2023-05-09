@@ -3,7 +3,9 @@ module Api
     module Users
       class TasksStatisticsController < ApplicationController
         def update_streak
-          service = UserStreakTasks.new(user)
+          return unless current_user
+
+          service = ::UserServices::UserStreakTasks.new(user: current_user)
 
           service.reset_streak if service.should_reset_streak?
         end

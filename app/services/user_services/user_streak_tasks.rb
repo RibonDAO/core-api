@@ -4,7 +4,7 @@ module UserServices
 
     def initialize(user:)
       @user = user
-      @statistics = UserTasksStatistic.find_by(user:)
+      @statistics = UserTasksStatistic.find_or_create_by(user:)
     end
 
     def should_reset_streak?
@@ -13,7 +13,7 @@ module UserServices
       last_completed_task_date = user.user_completed_tasks.order(last_completed_at: :desc).first&.last_completed_at
 
       return true if last_completed_task_date.nil?
-      return true if last_completed_task_date < yesterday
+      return true if last_completed_task_date.to_date < yesterday
 
       false
     end

@@ -12,5 +12,28 @@
 require 'rails_helper'
 
 RSpec.describe UserTasksStatistic, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user) { create(:user) }
+  let(:user_tasks_statistic) { build(:user_tasks_statistic, user:) }
+
+  describe 'validations and associations' do
+    it { is_expected.to belong_to(:user) }
+  end
+
+  describe '#contributor' do
+    context 'when user is a promoter' do
+      before { allow(user).to receive(:promoter?).and_return(true) }
+
+      it 'returns true' do
+        expect(user_tasks_statistic.contributor).to be(true)
+      end
+    end
+
+    context 'when user is not a promoter' do
+      before { allow(user).to receive(:promoter?).and_return(false) }
+
+      it 'returns false' do
+        expect(user_tasks_statistic.contributor).to be(false)
+      end
+    end
+  end
 end
