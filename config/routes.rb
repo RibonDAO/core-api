@@ -49,7 +49,7 @@ Rails.application.routes.draw do
       post 'users/complete_task' => 'users#complete_task'
       get 'users/tasks_statistics' => 'users/tasks_statistics#index'
       get 'users/tasks_statistics/streak' => 'users/tasks_statistics#streak'
-      post 'users/update_streak' => 'users#update_streak'
+      post 'users/update_streak' => 'users/tasks_statistics#update_streak'
       post 'users/completed_all_tasks' => 'users/tasks_statistics#first_completed_all_tasks_at'
       get 'users/impact' => 'users#impact'
       get 'users/statistics' => 'users/statistics#index'
