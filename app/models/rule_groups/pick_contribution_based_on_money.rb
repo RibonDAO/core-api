@@ -50,7 +50,7 @@ class PickContributionBasedOnMoney < RuleGroup
       return contribution_id if cumulative_probability > random_number
     end
 
-    # If no user has been selected, return nil
-    nil
+    # If no user has been selected, returns a random one
+    probabilities.keys&.sample
   end
 end
