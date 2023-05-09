@@ -1,5 +1,5 @@
 module UserServices
-  class UserStreakTasks
+  class UserTasksStreak
     attr_reader :user
 
     def initialize(user:)

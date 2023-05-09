@@ -14,7 +14,7 @@ module Users
       with_exception_handle do
         return unless user
 
-        UserServices::UserStreakTasks.new(user:).increment_streak
+        UserServices::UserTasksStreak.new(user:).increment_streak
       end
     end
   end

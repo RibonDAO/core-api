@@ -5,7 +5,7 @@ module Api
         def update_streak
           return unless current_user
 
-          service = ::UserServices::UserStreakTasks.new(user: current_user)
+          service = ::UserServices::UserTasksStreak.new(user: current_user)
 
           service.reset_streak if service.should_reset_streak?
         end
