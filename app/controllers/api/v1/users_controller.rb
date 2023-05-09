@@ -64,7 +64,7 @@ module Api
 
       def voucher
         @voucher ||= Voucher.new(external_id: params[:voucher_id],
-                                 integration_id: params[:integration_id])
+                                 integration_id: @integration&.id)
       end
 
       def user_params
