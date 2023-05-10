@@ -43,7 +43,7 @@ module Api
           end
 
           def feeable
-            @feeable ||= payment_params[:feeable].nil? ? true : payment_params[:feeable].to_bool
+            @feeable ||= payment_params[:feeable].nil? ? true : payment_params[:feeable].to_s.to_bool
           end
 
           def payment_params
