@@ -19,16 +19,15 @@ RSpec.describe Mailers::SendPersonPaymentEmailJob, type: :job do
     context 'when user has language pt-BR and offer is brl' do
       let(:user) { create(:user, language: 'pt-BR') }
       let(:customer) { create(:customer, user:) }
-      let(:person) { customer.person }
       let(:offer) { create(:offer, price_cents: 100, currency: :brl) }
+      let!(:person_payment) do
+        create(:person_payment, payer: customer, receiver: non_profit, offer:,
+                                status: :processing)
+      end
 
       context 'when it is a payment to a non_profit' do
-        before do
-          create(:person_payment, person:, receiver: non_profit, offer:, status: :processing)
-        end
-
         it 'calls the send email function with correct arguments' do
-          job.perform_now(person_payment: person.person_payments.last)
+          job.perform_now(person_payment:)
 
           expect(SendgridWebMailer).to have_received(:send_email)
             .with({ receiver: user.email,
@@ -43,12 +42,13 @@ RSpec.describe Mailers::SendPersonPaymentEmailJob, type: :job do
       end
 
       context 'when it is a payment to a cause' do
-        before do
-          create(:person_payment, person:, receiver: cause, offer:, status: :processing)
+        let!(:person_payment) do
+          create(:person_payment, payer: customer, receiver: cause, offer:,
+                                  status: :processing)
         end
 
         it 'calls the send email function with correct arguments' do
-          job.perform_now(person_payment: person.person_payments.last)
+          job.perform_now(person_payment:)
 
           expect(SendgridWebMailer).to have_received(:send_email)
             .with({ receiver: user.email,
@@ -66,16 +66,16 @@ RSpec.describe Mailers::SendPersonPaymentEmailJob, type: :job do
     context 'when user has language en and offer is usd' do
       let(:user) { create(:user, language: 'en') }
       let(:customer) { create(:customer, user:) }
-      let(:person) { customer.person }
       let(:offer) { create(:offer, price_cents: 100, currency: :usd) }
 
       context 'when it is a payment to a non_profit' do
-        before do
-          create(:person_payment, person:, receiver: non_profit, offer:, status: :processing)
+        let!(:person_payment) do
+          create(:person_payment, payer: customer, receiver: non_profit,
+                                  offer:, status: :processing)
         end
 
         it 'calls the send email function with correct arguments' do
-          job.perform_now(person_payment: person.person_payments.last)
+          job.perform_now(person_payment:)
 
           expect(SendgridWebMailer).to have_received(:send_email)
             .with({ receiver: user.email,
@@ -90,12 +90,13 @@ RSpec.describe Mailers::SendPersonPaymentEmailJob, type: :job do
       end
 
       context 'when it is a payment to a cause' do
-        before do
-          create(:person_payment, person:, receiver: cause, offer:, status: :processing)
+        let!(:person_payment) do
+          create(:person_payment, payer: customer, receiver: cause,
+                                  offer:, status: :processing)
         end
 
         it 'calls the send email function with correct arguments' do
-          job.perform_now(person_payment: person.person_payments.last)
+          job.perform_now(person_payment:)
 
           expect(SendgridWebMailer).to have_received(:send_email)
             .with({ receiver: user.email,
