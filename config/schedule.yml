@@ -10,7 +10,7 @@ retry_donation_batch:
 
 update_blockchain_transactions:
   cron: "0 3 * * *" # At 03:00 everyday.
-  class: "Donations::UpdateBlockchainTransactionWorker"
+  class: "Donations::UpdateBlockchainTransactionsWorker"
   queue: donations
 
 generate_balance_history:
