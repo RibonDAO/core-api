@@ -44,7 +44,7 @@ module Givings
       end
 
       def handle_contribution_creation(payment)
-        Contributions::CreateContribution.call(payment:)
+        PersonPayments::CreateContributionJob.perform_later(payment)
       end
     end
   end
