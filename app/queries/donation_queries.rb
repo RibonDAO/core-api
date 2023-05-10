@@ -23,10 +23,11 @@ class DonationQueries
       LEFT JOIN non_profits ON non_profits.id = donations.non_profit_id
       LEFT JOIN causes ON causes.id = non_profits.cause_id
       LEFT JOIN donation_batches ON donation_batches.donation_id = donations.id
+      LEFT JOIN blockchain_transactions ON blockchain_transactions.owner_id = donation_batches.batch_id AND blockchain_transactions.owner_type = 'Batch'
       LEFT JOIN donation_blockchain_transactions on donation_blockchain_transactions.donation_id = donations.id
       WHERE causes.id = #{cause.id}
-      AND donation_batches.id is null
-    AND donation_blockchain_transactions.id is null)
+      AND (donation_batches.id is null or blockchain_transactions.status = 0)
+      AND donation_blockchain_transactions.id is null)
 
     ActiveRecord::Base.connection.execute(sql).first['sum'] || 0
   end
