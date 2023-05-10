@@ -6,6 +6,10 @@ module Api
           render json: LegacyUserImpactBlueprint.render(user.legacy_user_impacts)
         end
 
+        def contributions
+          render json: LegacyContributionsBlueprint.render(user.legacy_contributions)
+        end
+
         private
 
         def user

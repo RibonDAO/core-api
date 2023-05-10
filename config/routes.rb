@@ -84,6 +84,7 @@ Rails.application.routes.draw do
       resources :users, only: [] do
         get 'impacts' => 'users/impacts#index'
         get 'legacy_impacts' => 'users/legacy_impacts#index'
+        get 'legacy_contributions' => 'users/legacy_impacts#contributions'
 
         get 'donations_count' => 'users/impacts#donations_count'
         put 'track', to: 'users/trackings#track_user'

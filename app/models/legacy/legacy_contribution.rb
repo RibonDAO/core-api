@@ -7,7 +7,7 @@
 #  from_subscription       :boolean
 #  legacy_payment_method   :integer
 #  legacy_payment_platform :integer
-#  value                   :integer
+#  value_cents             :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  legacy_payment_id       :integer
@@ -16,7 +16,7 @@
 class LegacyContribution < ApplicationRecord
   belongs_to :user
 
-  validates :day, :value, :legacy_payment_id, :legacy_payment_method,
+  validates :day, :value_cents, :legacy_payment_id, :legacy_payment_method,
             :legacy_payment_platform, presence: true
 
   enum legacy_payment_method: {
@@ -28,4 +28,8 @@ class LegacyContribution < ApplicationRecord
     pix: 0,
     credit_card: 1
   }
+
+  def currency
+    :brl
+  end
 end
