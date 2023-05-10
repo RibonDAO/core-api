@@ -14,7 +14,7 @@ module Mailers
         @cause = person_payment.receiver
       end
       @offer = person_payment.offer
-      @user = person_payment.person.customer.user
+      @user = person_payment.payer&.user
       send_email
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })
