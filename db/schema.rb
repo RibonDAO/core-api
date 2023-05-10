@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_08_112348) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_09_121312) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -273,6 +273,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_08_112348) do
     t.integer "status", default: 0
   end
 
+  create_table "legacy_contributions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "value"
+    t.datetime "day"
+    t.integer "legacy_payment_id"
+    t.integer "legacy_payment_platform"
+    t.integer "legacy_payment_method"
+    t.boolean "from_subscription"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_legacy_contributions_on_user_id"
+  end
+
   create_table "legacy_non_profits", force: :cascade do |t|
     t.string "name"
     t.string "logo_url"
@@ -480,14 +493,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_08_112348) do
     t.index ["non_profit_id"], name: "index_stories_on_non_profit_id"
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "title"
-    t.text "actions"
-    t.text "rules"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -617,6 +622,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_08_112348) do
   add_foreign_key "donations", "users"
   add_foreign_key "integration_tasks", "integrations"
   add_foreign_key "integration_webhooks", "integrations"
+  add_foreign_key "legacy_contributions", "users"
   add_foreign_key "legacy_user_impacts", "legacy_non_profits"
   add_foreign_key "legacy_user_impacts", "users"
   add_foreign_key "non_profit_impacts", "non_profits"
