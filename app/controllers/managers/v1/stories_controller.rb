@@ -1,8 +1,8 @@
-module Api
+module Managers
   module V1
-    class StoriesController < ApplicationController
+    class StoriesController < ManagersController
       def index
-        @stories = Story.all
+        @stories = Story.where(active: true).order(position: :asc)
 
         render json: StoryBlueprint.render(@stories, view: :minimal)
       end
@@ -40,7 +40,7 @@ module Api
       private
 
       def story_params
-        params.permit(:id, :title, :description, :position, :active, :image, :image_description)
+        params.permit(:id, :title, :description, :position, :active, :image)
       end
     end
   end
