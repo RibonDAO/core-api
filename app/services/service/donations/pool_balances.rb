@@ -13,7 +13,10 @@ module Service
       end
 
       def update_balance
-        balance = wallet_pool_balance - amount_free_donations_without_batch
+        balance = wallet_pool_balance -
+                  amount_free_donations_without_batch -
+                  amount_free_donations_with_batch_processing -
+                  amount_free_donations_with_batch_failed
         pool_balance.update!(balance:)
       end
 
@@ -59,6 +62,14 @@ module Service
 
       def amount_free_donations_without_batch
         DonationQueries.new(cause:).amount_free_donations_without_batch.to_f / 100
+      end
+
+      def amount_free_donations_with_batch_processing
+        DonationQueries.new(cause:).amount_free_donations_with_batch_processing.to_f / 100
+      end
+
+      def amount_free_donations_with_batch_failed
+        DonationQueries.new(cause:).amount_free_donations_with_batch_failed.to_f / 100
       end
 
       def amount_donated

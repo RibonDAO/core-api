@@ -42,10 +42,15 @@ RSpec.describe DonationQueries, type: :model do
         expect(described_class.new(cause:).amount_free_donations_without_batch).to eq(sum)
       end
     end
+  end
 
-    describe 'with blockchain transaction processing' do
-      let!(:sum) { donations.first.value * donations.count }
+  describe '#amount_free_donations_with_batches_processing' do
+    let!(:cause) { create(:cause) }
+    let!(:non_profit) { create(:non_profit, cause:) }
+    let!(:donations) { create_list(:donation, 10, non_profit:) }
+    let!(:sum) { donations.first.value * donations.count }
 
+    describe 'without blockchain transaction success' do
       before do
         donations.each do |donation|
           create(:donation_batch, donation:)
@@ -54,7 +59,7 @@ RSpec.describe DonationQueries, type: :model do
       end
 
       it 'returns the amount of donations' do
-        expect(described_class.new(cause:).amount_free_donations_without_batch).to eq(sum)
+        expect(described_class.new(cause:).amount_free_donations_with_batch_processing).to eq(sum)
       end
     end
 
@@ -67,7 +72,42 @@ RSpec.describe DonationQueries, type: :model do
       end
 
       it 'returns 0' do
-        expect(described_class.new(cause:).amount_free_donations_without_batch).to eq(0)
+        expect(described_class.new(cause:).amount_free_donations_with_batch_processing).to eq(0)
+      end
+    end
+  end
+
+  describe '#amount_free_donations_with_batches_failed' do
+    let!(:cause) { create(:cause) }
+    let!(:non_profit) { create(:non_profit, cause:) }
+    let!(:donations) { create_list(:donation, 10, non_profit:) }
+    let!(:batch) { create(:batch) }
+    let!(:sum) { batch.amount }
+
+    describe 'without blockchain transaction success' do
+      before do
+        donations.each do |donation|
+          create(:donation_batch, donation:, batch:)
+          create(:blockchain_transaction, owner: donation.donation_batch.batch, status: :failed)
+          create(:blockchain_transaction, owner: donation.donation_batch.batch, status: :failed)
+        end
+      end
+
+      it 'returns the amount of donations' do
+        expect(described_class.new(cause:).amount_free_donations_with_batch_failed).to eq(sum)
+      end
+    end
+
+    describe 'with blockchain transaction success' do
+      before do
+        donations.each do |donation|
+          create(:donation_batch, donation:, batch:)
+          create(:blockchain_transaction, owner: donation.donation_batch.batch, status: :success)
+        end
+      end
+
+      it 'returns 0' do
+        expect(described_class.new(cause:).amount_free_donations_with_batch_failed).to eq(0)
       end
     end
   end
