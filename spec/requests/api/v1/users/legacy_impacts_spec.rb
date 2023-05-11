@@ -33,7 +33,7 @@ RSpec.describe 'Api::V1::Users::LegacyImpacts', type: :request do
       request
 
       expect(response_json.first.keys)
-        .to match_array %w[created_at updated_at day from_subscription legacy_payment_id legacy_payment_method
+        .to match_array %w[id created_at updated_at day from_subscription legacy_payment_id legacy_payment_method
                            legacy_payment_platform user user_id value_cents value]
     end
   end
