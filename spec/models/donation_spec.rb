@@ -23,6 +23,22 @@ RSpec.describe Donation, type: :model do
     it { is_expected.to have_one(:donation_contribution) }
   end
 
+  describe '.without_label' do
+    let!(:donations_without_label) { create_list(:donation, 2) }
+    let(:donations_with_label) { create_list(:donation, 2) }
+
+    before do
+      donations_with_label.each do |donation|
+        create(:donation_contribution, donation:)
+      end
+    end
+
+    it 'returns all the donations that are not yet labeled' do
+      expect(described_class.without_label.pluck(:id))
+        .to match_array(donations_without_label.pluck(:id))
+    end
+  end
+
   describe '#impact_value' do
     let(:non_profit) { create(:non_profit, :with_impact) }
     let(:donation) { build(:donation, non_profit:, value: 100) }
