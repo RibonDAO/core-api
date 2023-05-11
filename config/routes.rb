@@ -147,4 +147,44 @@ Rails.application.routes.draw do
   namespace :webhooks do
     post 'stripe' => 'stripe#events'
   end
+
+  namespace :managers do
+    namespace :v1 do
+      namespace :configs do
+        get 'settings' => 'ribon_config#index'
+        put 'settings/:id' => 'ribon_config#update'
+      end
+
+      namespace :givings do
+        resources :offers, only: %i[index show create update]
+      end
+
+      namespace :news do
+        resources :authors, only: %i[index show create update]
+        resources :articles, only: %i[index show create update]
+      end
+
+      namespace :payments do
+        post 'credit_cards_refund' => 'credit_cards#refund'
+        post 'cryptocurrency/big_donation' => 'cryptocurrency#create_big_donation'
+      end
+      
+      resources :big_donors, only: %i[index show create update]
+      resources :causes, only: %i[index show create update]
+      resources :integrations, only: %i[index show create update]
+      resources :non_profits, only: %i[index show create update]
+      resources :pools, only: [:index]
+      resources :stories, only: %i[index show create update destroy]
+      
+      post 'auth/request', to: 'authorization#google_authorization'
+      get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
+      get 'non_profits/:id/stories' => 'non_profits#stories'
+      get 'person_payments' => 'person_payments#index'
+      get 'person_payments/big_donors' => 'person_payments#big_donors'
+      get 'person_payments/big_donor_donation/:id' => 'person_payments#big_donor_donation'
+      get 'stories/:id/stories' => 'stories#stories'
+      post 'users' => 'users#create'
+      post 'users/search' => 'users#search'
+    end
+  end
 end

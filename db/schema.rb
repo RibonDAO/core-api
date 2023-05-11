@@ -553,14 +553,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_170939) do
     t.index ["non_profit_id"], name: "index_stories_on_non_profit_id"
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "title"
-    t.text "actions"
-    t.text "rules"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "address"
