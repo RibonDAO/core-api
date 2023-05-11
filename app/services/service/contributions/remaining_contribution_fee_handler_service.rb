@@ -75,9 +75,13 @@ module Service
       end
 
       def handle_last_contribution_fee(accumulated_fees_result:, contribution_balance:)
-        LastContributionFeeHandlerService
-          .new(accumulated_fees_result:, contribution_balance:, contribution:)
-          .charge_remaining_fee
+        # TODO: refactor this logic to use in last_contribution_fee_handler_service
+
+        fee_cents = [accumulated_fees_result, contribution_balance.tickets_balance_cents].min
+        contribution_increased_amount_cents =
+          contribution.usd_value_cents * fee_cents / contribution.generated_fee_cents.to_f
+
+        handle_fee_creation_for(contribution_balance:, fee_cents:, contribution_increased_amount_cents:)
       end
     end
   end
