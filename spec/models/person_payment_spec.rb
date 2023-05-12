@@ -42,6 +42,19 @@ RSpec.describe PersonPayment, type: :model do
     it { is_expected.to validate_presence_of(:payment_method) }
   end
 
+  describe '.without_contribution' do
+    let!(:person_payment_without_contribution) { create(:person_payment) }
+    let(:person_payment_with_contribution) { create(:person_payment) }
+
+    before do
+      create(:contribution, person_payment: person_payment_with_contribution)
+    end
+
+    it 'returns only person_payments without contribution' do
+      expect(described_class.without_contribution).to eq([person_payment_without_contribution])
+    end
+  end
+
   describe '#amount' do
     context 'when there is an amount_cents' do
       let(:amount_cents) { 1500 }
