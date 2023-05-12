@@ -43,6 +43,8 @@ class PersonPayment < ApplicationRecord
 
   validates :paid_date, :status, :payment_method, presence: true
 
+  scope :without_contribution, -> { where.missing(:contribution) }
+
   enum status: {
     processing: 0,
     paid: 1,

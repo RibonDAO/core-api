@@ -52,3 +52,8 @@ label_missed_donations:
   cron: "0 3 * * 1" # At 03:00 on monday.
   class: "Contributions::LabelMissedDonationsWorker"
   queue: contributions
+
+create_contribution_for_missed_payments:
+  cron: "0 2 * * 1" # At 02:00 on monday.
+  class: "Contributions::CreateContributionForMissedPaymentsWorker"
+  queue: contributions
