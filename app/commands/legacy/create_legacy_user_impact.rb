@@ -31,7 +31,8 @@ module Legacy
         user_legacy_id: legacy_id,
         user_created_at: created_at,
         legacy_non_profit: legacy_non_profit(impact[:non_profit]),
-        total_impact: impact[:total_impact],
+        total_impact_en: impact[:total_impact_en],
+        total_impact_pt_br: impact[:total_impact_pt_br],
         total_donated_usd: impact[:total_donated_usd],
         donations_count: impact[:donations_count]
       }
@@ -58,7 +59,8 @@ module Legacy
         logo_url: non_profit[:logo_url],
         impact_cost_ribons: non_profit[:impact_cost_ribons],
         impact_cost_usd: non_profit[:impact_cost_usd],
-        impact_description: non_profit[:impact_description],
+        impact_description_en: non_profit[:impact_description_en],
+        impact_description_pt_br: non_profit[:impact_description_pt_br],
         legacy_id: non_profit[:legacy_id]
       }
     end

@@ -20,10 +20,12 @@ describe Legacy::CreateLegacyUserImpact do
             logo_url: 'https://charitye.com/logo.png',
             impact_cost_ribons: 1000,
             impact_cost_usd: 5.99,
-            impact_description: 'Provide shelter for a family',
+            impact_description_en: 'Provide shelter for a family',
+            impact_description_pt_br: 'Provide shelter for a family',
             legacy_id: 456
           },
-          total_impact: 3,
+          total_impact_en: 'Provide shelter for a family',
+          total_impact_pt_br: 'Provide shelter for a family',
           total_donated_usd: 15,
           donations_count: 1
         }]
