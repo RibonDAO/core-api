@@ -62,8 +62,6 @@ jobs:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           STRIPE_ENDPOINT_SECRET: ${{ secrets.STRIPE_ENDPOINT_SECRET }}
           SENTRY_DSN_URL: ${{ secrets.SENTRY_DSN_URL }}
-          MUMBAI_NODE_URL: ${{ secrets.MUMBAI_NODE_URL }}
-          MUMBAI_RPC_URL: ${{ secrets.MUMBAI_RPC_URL }}
           MUMBAI_BLOCK_EXPLORER_URL: ${{ secrets.MUMBAI_BLOCK_EXPLORER_URL }}
           RIBON_SECRET_OPENSSL_KEY: ${{ secrets.RIBON_SECRET_OPENSSL_KEY }}
           INTEGRATION_ADDRESS_BASE_URL: ${{ secrets.INTEGRATION_ADDRESS_BASE_URL }}
