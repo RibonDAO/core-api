@@ -52,4 +52,3 @@ call the Ribon developers team to have the access.
 - `RIBON_WALLET_PRIVATE_KEY`: use a private key from a test wallet of yours. You can create a free wallet at [metamask](https://metamask.io/) and export it's private key
 - `STRIPE_PUBLISHABLE_KEY`, `STRIPE_SECRET_KEY` and `STRIPE_ENDPOINT_SECRET`: You can get all those 3 variables registering on [stripe](https://stripe.com/). You can create a test account there. Those variables are not needed if you are not using any of the credit card payment features. All of those are test keys.
 - `SENTRY_DSN_URL`: not needed for development environment 
-- `MUMBAI_NODE_URL`: you can get a node_url at [alchemy](https://www.alchemy.com/). You can get a free registration an then create a project on any network (check those in which ribon has a contract deployed).
