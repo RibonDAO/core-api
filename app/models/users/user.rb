@@ -37,8 +37,13 @@ class User < ApplicationRecord
   delegate :first_completed_all_tasks_at, to: :user_tasks_statistic
   delegate :streak, to: :user_tasks_statistic
 
-  delegate :legacy_user_impacts, to: :legacy_user
-  delegate :legacy_contributions, to: :legacy_user
+  def legacy_user_impacts
+    legacy_user&.legacy_user_impacts
+  end
+
+  def legacy_contributions
+    legacy_user&.legacy_contributions
+  end
 
   scope :created_between, lambda { |start_date, end_date|
                             where('created_at >= ? AND created_at <= ?', start_date, end_date)
