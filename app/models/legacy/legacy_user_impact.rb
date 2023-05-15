@@ -6,21 +6,18 @@
 #  donations_count      :integer
 #  total_donated_usd    :decimal(, )
 #  total_impact         :string
-#  user_created_at      :datetime
-#  user_email           :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  legacy_non_profit_id :bigint           not null
-#  user_id              :bigint
-#  user_legacy_id       :integer
+#  legacy_user_id       :bigint
 #
 class LegacyUserImpact < ApplicationRecord
   extend Mobility
 
   translates :total_impact, type: :string, locale_accessors: %i[en pt-BR]
 
-  belongs_to :user, optional: true
+  belongs_to :legacy_user
   belongs_to :legacy_non_profit, optional: true
 
-  validates :user_email, :user_legacy_id, :user_created_at, :donations_count, :total_impact, presence: true
+  validates :donations_count, :total_impact, presence: true
 end

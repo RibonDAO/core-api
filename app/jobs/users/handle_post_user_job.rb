@@ -9,12 +9,8 @@ module Users
     end
 
     def update_legacy_id(user)
-      legacy_user_impacts = LegacyUserImpact.where(user_email: user.email)
-      return unless legacy_user_impacts
-
-      user.update(legacy_id: legacy_user_impacts.first.user_legacy_id,
-                  created_at: legacy_user_impacts.first.user_created_at)
-      legacy_user_impacts.update(user:)
+      legacy_user = LegacyUser.find_by(email: user.email)
+      legacy_user&.update!(user:)
     end
   end
 end
