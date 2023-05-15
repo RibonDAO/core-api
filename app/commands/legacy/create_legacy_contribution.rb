@@ -19,7 +19,8 @@ module Legacy
           value_cents: legacy_contribution[:value_cents],
           legacy_payment_id: legacy_contribution[:legacy_payment_id],
           legacy_payment_method: legacy_contribution[:legacy_payment_method],
-          legacy_payment_platform: legacy_contribution[:legacy_payment_platform]
+          legacy_payment_platform: legacy_contribution[:legacy_payment_platform],
+          from_subscription: legacy_contribution[:from_subscription]
         )
       end
     end

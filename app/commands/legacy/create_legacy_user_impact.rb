@@ -27,9 +27,6 @@ module Legacy
     def legacy_user_impact_params(impact)
       {
         legacy_user:,
-        user_email: email,
-        user_legacy_id: legacy_id,
-        user_created_at: created_at,
         legacy_non_profit: legacy_non_profit(impact[:non_profit]),
         total_impact_en: impact[:total_impact_en],
         total_impact_pt_br: impact[:total_impact_pt_br],

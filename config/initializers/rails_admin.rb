@@ -36,7 +36,8 @@ RailsAdmin.config do |config|
                             Cause, Story, NonProfitPool, IntegrationTask, CryptoUser, Contribution,
                             Voucher, IntegrationWebhook, Token, Pool, PoolBalance, History, BalanceHistory,
                             LegacyUserImpact, LegacyNonProfit, Article, Author, LegacyContribution,
-                            ContributionBalance, PersonBlockchainTransaction, DonationContribution, BigDonor]
+                            ContributionBalance, PersonBlockchainTransaction, DonationContribution, BigDonor,
+                            LegacyUser]
 
   config.model RibonConfig do
     field :default_ticket_value do

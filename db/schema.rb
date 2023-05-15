@@ -305,9 +305,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_15_151132) do
     t.integer "donations_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "user_email"
-    t.integer "user_legacy_id"
-    t.datetime "user_created_at"
     t.bigint "legacy_user_id"
     t.index ["legacy_non_profit_id"], name: "index_legacy_user_impacts_on_legacy_non_profit_id"
     t.index ["legacy_user_id"], name: "index_legacy_user_impacts_on_legacy_user_id"

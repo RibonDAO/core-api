@@ -46,9 +46,9 @@ describe Legacy::CreateLegacyUserImpact do
 
         it 'add user info if user does not exists' do
           command
-          expect(LegacyUserImpact.first.user_email).to eq(legacy_user[:email])
-          expect(LegacyUserImpact.first.user_legacy_id).to eq(legacy_user[:legacy_id])
-          expect(LegacyUserImpact.first.user_created_at).to eq(legacy_user[:created_at])
+          expect(LegacyUserImpact.first.legacy_user.email).to eq(legacy_user[:email])
+          expect(LegacyUserImpact.first.legacy_user.legacy_id).to eq(legacy_user[:legacy_id])
+          expect(LegacyUserImpact.first.legacy_user.created_at).to eq(legacy_user[:created_at])
         end
 
         it 'add user reference if user exists' do
