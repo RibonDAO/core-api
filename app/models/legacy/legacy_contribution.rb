@@ -11,22 +11,22 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  legacy_payment_id       :integer
-#  user_id                 :bigint           not null
+#  legacy_user_id          :bigint
 #
 class LegacyContribution < ApplicationRecord
-  belongs_to :user
+  belongs_to :legacy_user
 
   validates :day, :value_cents, :legacy_payment_id, :legacy_payment_method,
             :legacy_payment_platform, presence: true
 
   enum legacy_payment_method: {
-    stripe: 0,
-    iugu: 1
+    pix: 0,
+    credit_card: 1
   }
 
   enum legacy_payment_platform: {
-    pix: 0,
-    credit_card: 1
+    stripe: 0,
+    iugu: 1
   }
 
   def currency

@@ -19,7 +19,7 @@ RSpec.describe LegacyContribution, type: :model do
   describe '.validations' do
     subject { build(:legacy_contribution) }
 
-    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:legacy_user) }
     it { is_expected.to validate_presence_of(:value_cents) }
     it { is_expected.to validate_presence_of(:day) }
     it { is_expected.to validate_presence_of(:legacy_payment_id) }

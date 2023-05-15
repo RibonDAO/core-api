@@ -15,7 +15,6 @@
 #
 FactoryBot.define do
   factory :legacy_contribution do
-    user { build(:user) }
     value_cents { 1 }
     day { '2023-05-09 09:13:12' }
     legacy_payment_id { 1 }

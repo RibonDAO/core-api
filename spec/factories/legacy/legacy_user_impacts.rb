@@ -13,7 +13,6 @@
 #
 FactoryBot.define do
   factory :legacy_user_impact do
-    user { build(:user) }
     legacy_non_profit { build(:legacy_non_profit) }
     total_impact { '1 food donated' }
     total_donated_usd { 1 }

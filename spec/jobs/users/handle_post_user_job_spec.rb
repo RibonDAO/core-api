@@ -4,20 +4,16 @@ RSpec.describe Users::HandlePostUserJob, type: :job do
   describe '#perform' do
     subject(:perform_job) { described_class.perform_now(user:) }
 
-    context 'when user has legacy_user_impact' do
-      let!(:legacy_user_impact) { create(:legacy_user_impact, user_email: user.email) }
-      let!(:user) { create(:user) }
+    context 'when there is a legacy user associated with that email' do
+      let!(:legacy_user) { create(:legacy_user, email: 'nicholas@ribon.io') }
+      let!(:user) { create(:user, email: 'nicholas@ribon.io') }
 
       before do
         perform_job
       end
 
-      it 'update the legacy_id' do
-        expect(user.reload.legacy_id).to eq(legacy_user_impact.user_legacy_id)
-      end
-
-      it 'update the created_at' do
-        expect(user.reload.created_at).to eq(legacy_user_impact.user_created_at)
+      it 'update the legacy user reference' do
+        expect(user.reload.legacy_user).to eq(legacy_user)
       end
     end
 
@@ -28,8 +24,8 @@ RSpec.describe Users::HandlePostUserJob, type: :job do
         expect { perform_job }.not_to change(user, :legacy_id)
       end
 
-      it 'do not update the created_at' do
-        expect { perform_job }.not_to change(user, :created_at)
+      it 'do not update the legacy user' do
+        expect(user.legacy_user).to be_nil
       end
     end
   end
