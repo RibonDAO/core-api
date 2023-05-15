@@ -38,11 +38,11 @@ class User < ApplicationRecord
   delegate :streak, to: :user_tasks_statistic
 
   def legacy_user_impacts
-    legacy_user&.legacy_user_impacts
+    legacy_user&.legacy_user_impacts || []
   end
 
   def legacy_contributions
-    legacy_user&.legacy_contributions
+    legacy_user&.legacy_contributions || []
   end
 
   scope :created_between, lambda { |start_date, end_date|
