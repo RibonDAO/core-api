@@ -1,7 +1,6 @@
 module Legacy
   class CreateLegacyContribution < ApplicationCommand
     prepend SimpleCommand
-    require 'open-uri'
 
     attr_reader :impacts, :email, :legacy_id, :created_at, :legacy_contribution
 
