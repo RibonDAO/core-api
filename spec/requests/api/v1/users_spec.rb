@@ -122,7 +122,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'returns the user completed tasks' do
         request
 
-        expect_response_collection_to_have_keys %w[id task_identifier last_completed_at times_completed]
+        expect_response_collection_to_have_keys %w[id task_identifier last_completed_at times_completed done
+                                                   expires_at]
       end
     end
 
@@ -163,7 +164,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'returns the user completed task' do
         request
 
-        expect_response_to_have_keys %w[id task_identifier last_completed_at times_completed]
+        expect_response_to_have_keys %w[id task_identifier last_completed_at times_completed done expires_at]
       end
 
       it 'add a first time completed' do
@@ -188,7 +189,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'returns the user completed task' do
         request
 
-        expect_response_to_have_keys %w[id task_identifier last_completed_at times_completed]
+        expect_response_to_have_keys %w[id task_identifier last_completed_at times_completed done expires_at]
       end
 
       it 'add a first time completed' do
