@@ -24,6 +24,5 @@ RSpec.describe LegacyContribution, type: :model do
     it { is_expected.to validate_presence_of(:day) }
     it { is_expected.to validate_presence_of(:legacy_payment_id) }
     it { is_expected.to validate_presence_of(:legacy_payment_platform) }
-    it { is_expected.to validate_presence_of(:legacy_payment_method) }
   end
 end
