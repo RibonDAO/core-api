@@ -30,8 +30,6 @@ class UserCompletedTask < ApplicationRecord
       next_day_at_midnight
     elsif done? && monthly?
       next_month_at_midnight
-    else
-      nil
     end
   end
 

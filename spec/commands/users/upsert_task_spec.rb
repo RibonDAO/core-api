@@ -26,7 +26,7 @@ describe Users::UpsertTask do
         it 'returns the task' do
           expect(command.result).to be_a(UserCompletedTask)
         end
-  
+
         it 'updates the task' do
           expect { command }.to change { task.reload.times_completed }.by(1)
         end
@@ -34,13 +34,13 @@ describe Users::UpsertTask do
 
       context 'when task is done' do
         before do
-          task.update(last_completed_at: Time.zone.now - 1.day)
+          task.update(last_completed_at: 1.day.ago)
         end
 
         it 'returns the task' do
           expect(command.result).to be_a(UserCompletedTask)
         end
-  
+
         it 'updates the task' do
           expect { command }.to change { task.reload.times_completed }.by(1)
         end
