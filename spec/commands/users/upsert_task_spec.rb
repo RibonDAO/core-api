@@ -22,12 +22,28 @@ describe Users::UpsertTask do
       let(:task_identifier) { 'task_identifier' }
       let!(:task) { create(:user_completed_task, user:, task_identifier:) }
 
-      it 'returns the task' do
-        expect(command.result).to be_a(UserCompletedTask)
+      context 'when task is not done' do
+        it 'returns the task' do
+          expect(command.result).to be_a(UserCompletedTask)
+        end
+  
+        it 'updates the task' do
+          expect { command }.to change { task.reload.times_completed }.by(1)
+        end
       end
 
-      it 'updates the task' do
-        expect { command }.to change { task.reload.times_completed }.by(1)
+      context 'when task is done' do
+        before do
+          task.update(last_completed_at: Time.zone.now - 1.day)
+        end
+
+        it 'returns the task' do
+          expect(command.result).to be_a(UserCompletedTask)
+        end
+  
+        it 'updates the task' do
+          expect { command }.to change { task.reload.times_completed }.by(1)
+        end
       end
     end
   end
