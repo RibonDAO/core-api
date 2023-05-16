@@ -18,7 +18,7 @@ module Users
         task = user.user_completed_tasks.find_by(task_identifier:)
 
         if task
-          task.update(last_completed_at:, times_completed: task.times_completed + 1)
+          task.update(last_completed_at:, times_completed: task.times_completed + 1) unless task.done?
         else
           task = user.user_completed_tasks.create(task_identifier:, last_completed_at:, times_completed: 1)
         end
