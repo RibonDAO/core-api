@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_15_151132) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_17_112619) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -284,6 +284,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_15_151132) do
     t.datetime "updated_at", null: false
     t.bigint "legacy_user_id"
     t.index ["legacy_user_id"], name: "index_legacy_contributions_on_legacy_user_id"
+  end
+
+  create_table "legacy_integrations", force: :cascade do |t|
+    t.string "name"
+    t.bigint "integration_id"
+    t.integer "total_donors"
+    t.bigint "legacy_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["integration_id"], name: "index_legacy_integrations_on_integration_id"
   end
 
   create_table "legacy_non_profits", force: :cascade do |t|
@@ -629,6 +639,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_15_151132) do
   add_foreign_key "integration_tasks", "integrations"
   add_foreign_key "integration_webhooks", "integrations"
   add_foreign_key "legacy_contributions", "legacy_users"
+  add_foreign_key "legacy_integrations", "integrations"
   add_foreign_key "legacy_user_impacts", "legacy_non_profits"
   add_foreign_key "legacy_user_impacts", "legacy_users"
   add_foreign_key "legacy_users", "users"
