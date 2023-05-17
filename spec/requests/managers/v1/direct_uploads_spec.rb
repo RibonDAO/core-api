@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe 'Api::V1::DirectUploads', type: :request do
+RSpec.describe 'Managers::V1::DirectUploads', type: :request do
   describe 'POST /create' do
-    subject(:request) { post '/api/v1/rails/active_storage/direct_uploads', params: }
+    subject(:request) { post '/managers/v1/rails/active_storage/direct_uploads', params: }
 
     let(:params) do
       { blob: {
