@@ -54,7 +54,6 @@ Rails.application.routes.draw do
       get 'users/impact' => 'users#impact'
       get 'users/statistics' => 'users/statistics#index'
       post 'sources' => 'sources#create'
-      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       get 'causes' => 'causes#index'
       get 'free_donation_causes' => 'causes#free_donation_causes'
       post 'causes' => 'causes#create'
@@ -176,7 +175,8 @@ Rails.application.routes.draw do
       resources :non_profits, only: %i[index show create update]
       resources :pools, only: [:index]
       resources :stories, only: %i[index show create update destroy]
-      
+
+       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       get 'non_profits/:id/stories' => 'non_profits#stories'
