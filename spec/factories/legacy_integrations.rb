@@ -12,8 +12,8 @@
 #
 FactoryBot.define do
   factory :legacy_integration do
-    name { 'MyString' }
-    integration { nil }
+    name { 'Qulture Rocks' }
+    integration { build(:integration) }
     total_donors { 1 }
     legacy_id { 1 }
   end

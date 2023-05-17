@@ -11,5 +11,7 @@
 #  legacy_id      :bigint
 #
 class LegacyIntegration < ApplicationRecord
-  belongs_to :integration
+  belongs_to :integration, optional: true
+
+  validates :name, :legacy_id, presence: true
 end
