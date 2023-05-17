@@ -26,6 +26,10 @@ class Integration < ApplicationRecord
   has_many :vouchers
   has_many :person_payment
 
+  has_one :legacy_integration
+
+  delegate :legacy_integration_impacts, to: :legacy_integration, allow_nil: true
+
   enum status: {
     inactive: 0,
     active: 1
