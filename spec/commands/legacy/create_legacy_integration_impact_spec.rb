@@ -43,11 +43,11 @@ describe Legacy::CreateLegacyIntegrationImpact do
           expect { command }.to change(LegacyNonProfit, :count).by(1)
         end
 
-        it 'creates new legacy user impact' do
+        it 'creates new legacy integration impact' do
           expect { command }.to change(LegacyIntegrationImpact, :count).by(1)
         end
 
-        it 'add user info if user does not exists' do
+        it 'add integration info if integration does not exists' do
           command
           expect(LegacyIntegrationImpact.first.legacy_integration.name).to eq(legacy_integration[:name])
           expect(LegacyIntegrationImpact.first.legacy_integration.legacy_id).to eq(legacy_integration[:legacy_id])
@@ -55,7 +55,7 @@ describe Legacy::CreateLegacyIntegrationImpact do
             .to eq(legacy_integration[:created_at])
         end
 
-        it 'add user reference if user exists' do
+        it 'add integration reference if integration exists' do
           create(:integration, name: legacy_integration[:name])
           command
           expect(LegacyIntegrationImpact.first.legacy_integration.name).to eq(legacy_integration[:name])
@@ -71,7 +71,7 @@ describe Legacy::CreateLegacyIntegrationImpact do
           expect { command }.not_to change(LegacyNonProfit, :count)
         end
 
-        it 'does not new legacy user impact' do
+        it 'does not new legacy integration impact' do
           expect { command }.not_to change(LegacyIntegrationImpact, :count)
         end
       end
