@@ -16,5 +16,15 @@
 require 'rails_helper'
 
 RSpec.describe LegacyIntegrationImpact, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '.validations' do
+    subject { build(:legacy_integration_impact) }
+
+    it { is_expected.to belong_to(:legacy_integration) }
+    it { is_expected.to belong_to(:legacy_non_profit) }
+    it { is_expected.to validate_presence_of(:reference_date) }
+    it { is_expected.to validate_presence_of(:donations_count) }
+    it { is_expected.to validate_presence_of(:donors_count) }
+    it { is_expected.to validate_presence_of(:total_donated_usd_cents) }
+    it { is_expected.to validate_presence_of(:total_impact) }
+  end
 end
