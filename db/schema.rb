@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_17_112619) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_17_114146) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -284,6 +284,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_112619) do
     t.datetime "updated_at", null: false
     t.bigint "legacy_user_id"
     t.index ["legacy_user_id"], name: "index_legacy_contributions_on_legacy_user_id"
+  end
+
+  create_table "legacy_integration_impacts", force: :cascade do |t|
+    t.bigint "legacy_integration_id"
+    t.bigint "legacy_non_profit_id"
+    t.integer "total_donated_usd_cents"
+    t.string "total_impact"
+    t.integer "donations_count"
+    t.integer "donors_count"
+    t.date "reference_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["legacy_integration_id"], name: "index_legacy_integration_impacts_on_legacy_integration_id"
+    t.index ["legacy_non_profit_id"], name: "index_legacy_integration_impacts_on_legacy_non_profit_id"
   end
 
   create_table "legacy_integrations", force: :cascade do |t|
@@ -639,6 +653,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_112619) do
   add_foreign_key "integration_tasks", "integrations"
   add_foreign_key "integration_webhooks", "integrations"
   add_foreign_key "legacy_contributions", "legacy_users"
+  add_foreign_key "legacy_integration_impacts", "legacy_integrations"
+  add_foreign_key "legacy_integration_impacts", "legacy_non_profits"
   add_foreign_key "legacy_integrations", "integrations"
   add_foreign_key "legacy_user_impacts", "legacy_non_profits"
   add_foreign_key "legacy_user_impacts", "legacy_users"
