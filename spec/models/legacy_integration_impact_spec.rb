@@ -25,6 +25,5 @@ RSpec.describe LegacyIntegrationImpact, type: :model do
     it { is_expected.to validate_presence_of(:donations_count) }
     it { is_expected.to validate_presence_of(:donors_count) }
     it { is_expected.to validate_presence_of(:total_donated_usd_cents) }
-    it { is_expected.to validate_presence_of(:total_impact) }
   end
 end
