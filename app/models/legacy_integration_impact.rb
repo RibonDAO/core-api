@@ -14,6 +14,8 @@
 #  legacy_non_profit_id    :bigint
 #
 class LegacyIntegrationImpact < ApplicationRecord
+  extend Mobility
+
   belongs_to :legacy_integration
   belongs_to :legacy_non_profit
 
