@@ -17,6 +17,7 @@ class LegacyIntegrationImpact < ApplicationRecord
   belongs_to :legacy_integration
   belongs_to :legacy_non_profit
 
-  validates :reference_date, :donations_count, :donors_count, :total_donated_usd_cents,
-            :total_impact, presence: true
+  translates :total_impact, type: :string, locale_accessors: %i[en pt-BR]
+
+  validates :reference_date, :donations_count, :donors_count, :total_donated_usd_cents, presence: true
 end

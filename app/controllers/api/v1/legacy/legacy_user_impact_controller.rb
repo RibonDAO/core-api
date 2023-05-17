@@ -14,10 +14,21 @@ module Api
           ::Legacy::CreateLegacyContributionsJob.perform_later(user_params, contribution_params)
         end
 
+        def create_legacy_integration
+          return head :unauthorized unless bearer_token == RibonCoreApi.config[:legacy][:api_token]
+
+          ::Legacy::CreateLegacyIntegrationImpactJob.perform_later(integration_params, impact_params)
+        end
+
         private
 
         def user_params
           params.require(:legacy_params).require(:user).permit(:email, :legacy_id, :created_at)
+        end
+
+        def integration_params
+          params.require(:legacy_params).require(:integration).permit(:name, :total_donors,
+                                                                      :legacy_id, :created_at)
         end
 
         def impact_params
