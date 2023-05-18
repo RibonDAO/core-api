@@ -13,8 +13,7 @@ RSpec.describe Mailers::CheckForContributionReactivationWorker, type: :worker do
 
     context 'when there are users that donated lastly in 1 month' do
       before do
-        create(:person_payment,
-               person: create(:person, customer: create(:customer, user:)), paid_date: 1.month.ago)
+        create(:person_payment, payer: create(:customer, user:), paid_date: 1.month.ago)
       end
 
       it 'calls the SendContributionReactivationEmailJob command' do

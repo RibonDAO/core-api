@@ -8,8 +8,7 @@ RSpec.describe 'Api::V1::Users::Statistics', type: :request do
     let(:unique_identifier) { Base64.strict_encode64(wallet_address) }
     let(:crypto_user) { create(:crypto_user) }
     let(:user) { build(:user) }
-    let(:person) { create(:person) }
-    let(:customer) { create(:customer, user:, email: user.email, person:) }
+    let(:customer) { create(:customer, user:, email: user.email) }
     let(:donations) { Donation.where(user:) }
     let(:result) { { total_causes: 0, total_tickets: 0, total_donated: { brl: 0, usd: 0 }, total_non_profits: 0 } }
 

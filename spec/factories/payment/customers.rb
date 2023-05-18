@@ -7,6 +7,5 @@ FactoryBot.define do
     tax_id { '12345678901' }
     customer_keys { { stripe: "cus_#{SecureRandom.uuid}" } }
     association :user, factory: :user
-    association :person, factory: :person
   end
 end
