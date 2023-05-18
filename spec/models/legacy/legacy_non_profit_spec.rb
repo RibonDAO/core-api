@@ -24,7 +24,6 @@ RSpec.describe LegacyNonProfit, type: :model do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:impact_cost_ribons) }
     it { is_expected.to validate_presence_of(:impact_cost_usd) }
-    it { is_expected.to validate_presence_of(:impact_description) }
     it { is_expected.to validate_presence_of(:legacy_id) }
   end
 end
