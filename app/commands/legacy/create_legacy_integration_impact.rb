@@ -16,7 +16,9 @@ module Legacy
     def call
       with_exception_handle do
         impacts.each do |impact|
+          date_range = impact[:reference_date]&.to_date&.all_month
           LegacyIntegrationImpact.where(legacy_integration:)
+                                 .where(reference_date: date_range)
                                  .where(legacy_non_profit: legacy_non_profit(impact[:non_profit]))
                                  .first_or_create(legacy_integration_impact_params(impact))
         end
