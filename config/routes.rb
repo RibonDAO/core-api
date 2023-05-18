@@ -37,11 +37,14 @@ Rails.application.routes.draw do
       post 'integrations' => 'integrations#create'
       get 'integrations/:id' => 'integrations#show'
       put 'integrations/:id' => 'integrations#update'
+      
       get 'person_payments' => 'person_payments#index'
       get 'person_payments/big_donors' => 'person_payments#big_donors'
       get 'person_payments/big_donor_donation/:id' => 'person_payments#big_donor_donation'
       get 'person_payments/:receiver_type' => 'person_payments#payments_for_receiver_by_person'
+      
       post 'donations' => 'donations#create'
+      
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
       post 'users/can_donate' => 'users#can_donate'
@@ -53,16 +56,20 @@ Rails.application.routes.draw do
       post 'users/completed_all_tasks' => 'users/tasks_statistics#first_completed_all_tasks_at'
       get 'users/impact' => 'users#impact'
       get 'users/statistics' => 'users/statistics#index'
+      
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
       get 'free_donation_causes' => 'causes#free_donation_causes'
       post 'causes' => 'causes#create'
       get 'causes/:id' => 'causes#show'
       put 'causes/:id' => 'causes#update'
+      
       get 'big_donors' => 'big_donors#index'
       post 'big_donors' => 'big_donors#create'
       get 'big_donors/:id' => 'big_donors#show'
       put 'big_donors/:id' => 'big_donors#update'
+
+      get 'chains' => 'chains#index'
       
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
