@@ -16,8 +16,7 @@
 class LegacyContribution < ApplicationRecord
   belongs_to :legacy_user
 
-  validates :day, :value_cents, :legacy_payment_id, :legacy_payment_method,
-            :legacy_payment_platform, presence: true
+  validates :day, :value_cents, :legacy_payment_id, :legacy_payment_platform, presence: true
 
   enum legacy_payment_method: {
     pix: 0,

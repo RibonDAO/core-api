@@ -58,8 +58,6 @@ Rails.application.routes.draw do
       get 'users/statistics' => 'users/statistics#index'
       
       post 'sources' => 'sources#create'
-      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
-      
       get 'causes' => 'causes#index'
       get 'free_donation_causes' => 'causes#free_donation_causes'
       post 'causes' => 'causes#create'
@@ -76,6 +74,7 @@ Rails.application.routes.draw do
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
         post 'create_legacy_contribution' => 'legacy_user_impact#create_legacy_contribution'
+        post 'create_legacy_integration' => 'legacy_user_impact#create_legacy_integration'
       end
       
       namespace :news do
@@ -184,7 +183,8 @@ Rails.application.routes.draw do
       resources :non_profits, only: %i[index show create update]
       resources :pools, only: [:index]
       resources :stories, only: %i[index show create update destroy]
-      
+
+       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       get 'non_profits/:id/stories' => 'non_profits#stories'
