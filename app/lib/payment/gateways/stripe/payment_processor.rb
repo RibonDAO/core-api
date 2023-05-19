@@ -52,7 +52,7 @@ module Payment
         end
 
         def payment_method_by_order(order)
-          return OpenStruct.new({ id: order.payment_method_id }) if order&.payment_method_id
+          return Entities::PaymentMethod.find(id: order&.payment_method_id) if order&.payment_method_id
 
           Entities::PaymentMethod.create(card: order&.card)
         end
