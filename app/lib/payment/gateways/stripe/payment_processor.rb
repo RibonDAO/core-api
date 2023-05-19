@@ -41,7 +41,7 @@ module Payment
 
         def setup_customer(order)
           order_payer = order&.payer
-          @stripe_payment_method = Entities::PaymentMethod.create(card: order&.card)
+          @stripe_payment_method = payment_method_by_order(order)
           @stripe_customer       = Entities::Customer.create(customer: order_payer,
                                                              payment_method: @stripe_payment_method)
 
@@ -49,6 +49,12 @@ module Payment
 
           Entities::TaxId.add_to_customer(stripe_customer: @stripe_customer,
                                           tax_id: order_payer&.tax_id)
+        end
+
+        def payment_method_by_order(order)
+          return OpenStruct.new({ id: order.payment_method_id }) if order&.payment_method_id
+
+          Entities::PaymentMethod.create(card: order&.card)
         end
       end
     end
