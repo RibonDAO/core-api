@@ -25,11 +25,13 @@ class User < ApplicationRecord
   has_many :donations
   has_many :customers
   has_many :user_completed_tasks
+  has_many :person_payments, through: :customers
 
   has_one :user_donation_stats
   has_one :user_tasks_statistic
   has_one :utm, as: :trackable
   has_one :legacy_user
+  has_one :customer
 
   delegate :last_donation_at, to: :user_donation_stats
   delegate :can_donate?, to: :user_donation_stats
