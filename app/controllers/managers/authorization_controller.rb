@@ -20,10 +20,15 @@ module Managers
       set_header('expiry', tokens['expiry'])
       set_header('uid', tokens['uid'])
       set_header('token-type', tokens['token-type'])
+      set_header('jwt-token', jwt_token)
     end
 
     def set_header(name, value)
       headers[name] = value.to_s
+    end
+
+    def jwt_token
+      JWT.encode({ id_token:, exp: 24.hours.from_now }, RibonCoreApi.config[:jwt_secret_key])
     end
   end
 end
