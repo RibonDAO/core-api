@@ -5,7 +5,7 @@ module Givings
     module OrderTypes
       class GooglePay
         attr_reader :payment_method_id, :email, :tax_id, :offer, :user,
-                    :operation, :integration_id, :cause, :non_profit
+                    :operation, :integration_id, :cause, :non_profit, :name
 
         def initialize(args)
           @payment_method_id = args[:payment_method_id]
@@ -17,6 +17,7 @@ module Givings
           @integration_id = args[:integration_id]
           @cause          = args[:cause]
           @non_profit     = args[:non_profit]
+          @name           = args[:name]
         end
 
         def generate_order
@@ -63,10 +64,6 @@ module Givings
 
         def amount_cents
           offer.price_cents
-        end
-
-        def name
-          payment_method_id.name
         end
 
         def paid_date

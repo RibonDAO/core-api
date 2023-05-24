@@ -26,7 +26,8 @@ module Api
             user: find_or_create_user,
             integration_id: payment_params[:integration_id],
             cause:,
-            non_profit:
+            non_profit:,
+            name: payment_params[:name]
           }
         end
 
