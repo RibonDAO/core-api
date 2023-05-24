@@ -184,7 +184,7 @@ Rails.application.routes.draw do
       resources :pools, only: [:index]
       resources :stories, only: %i[index show create update destroy]
 
-       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
+      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       get 'non_profits/:id/stories' => 'non_profits#stories'
