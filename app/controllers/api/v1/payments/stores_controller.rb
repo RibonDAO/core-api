@@ -14,16 +14,6 @@ module Api
           end
         end
 
-        def refund
-          command = ::Givings::Payment::CreditCardRefund.call(external_id: params[:external_id])
-
-          if command.success?
-            head :created
-          else
-            render_errors(command.errors)
-          end
-        end
-
         private
 
         def order_params
