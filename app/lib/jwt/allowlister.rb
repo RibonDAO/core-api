@@ -2,8 +2,8 @@ module Jwt
   module Allowlister
     module_function
 
-    def allowlist!(jti:, exp:, user:)
-      user.allowlisted_tokens.create!(
+    def allowlist!(jti:, exp:, authenticatable:)
+      authenticatable.allowlisted_tokens.create!(
         jti:,
         exp: Time.zone.at(exp)
       )

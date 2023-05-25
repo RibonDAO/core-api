@@ -2,7 +2,7 @@ module Jwt
   module Revoker
     module_function
 
-    def revoke(decoded_token:, user:)
+    def revoke(decoded_token:, authenticatable:)
       jti = decoded_token.fetch(:jti)
       exp = decoded_token.fetch(:exp)
 
@@ -10,7 +10,7 @@ module Jwt
       Jwt::Blocklister.blocklist!(
         jti:,
         exp:,
-        user:
+        authenticatable:
       )
     rescue StandardError
       raise Errors::Jwt::InvalidToken

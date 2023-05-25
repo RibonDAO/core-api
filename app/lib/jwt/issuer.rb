@@ -2,13 +2,13 @@ module Jwt
   module Issuer
     module_function
 
-    def call(user)
-      access_token, jti, exp = Jwt::Encoder.call(user)
-      refresh_token = user.refresh_tokens.create!
+    def call(authenticatable)
+      access_token, jti, exp = Jwt::Encoder.call(authenticatable)
+      refresh_token = authenticatable.refresh_tokens.create!
       Jwt::Allowlister.allowlist!(
         jti:,
         exp:,
-        user:
+        authenticatable:
       )
 
       [access_token, refresh_token]

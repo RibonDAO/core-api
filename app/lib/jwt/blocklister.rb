@@ -2,8 +2,8 @@ module Jwt
   module Blocklister
     module_function
 
-    def blocklist!(jti:, exp:, user:)
-      user.blocklisted_tokens.create!(
+    def blocklist!(jti:, exp:, authenticatable:)
+      authenticatable.blocklisted_tokens.create!(
         jti:,
         exp: Time.zone.at(exp)
       )

@@ -9,17 +9,17 @@ module Jwt
       raise Errors::Jwt::MissingToken if token.blank?
 
       decoded_token = Jwt::Decoder.decode!(token)
-      user = Jwt::Authenticator.authenticate_user_from_token(decoded_token)
-      raise Errors::Unauthorized if user.blank?
+      authenticatable = Jwt::Authenticator.authenticate_from_token(decoded_token)
+      raise Errors::Unauthorized if authenticatable.blank?
 
-      [user, decoded_token]
+      [authenticatable, decoded_token]
     end
 
     def authenticate_header(headers)
       headers['Authorization']&.split('Bearer ')&.last
     end
 
-    def authenticate_user_from_token(decoded_token)
+    def authenticate_from_token(decoded_token)
       id = decoded_token.fetch(:authenticatable_id)
       type = decoded_token.fetch(:authenticatable_type)
 
@@ -64,10 +64,10 @@ module Jwt
     module Helpers
       extend ActiveSupport::Concern
 
-      def logout!(user:, decoded_token:)
+      def logout!(authenticatable:, decoded_token:)
         Jwt::Revoker.revoke(
           decoded_token:,
-          user:
+          authenticatable:
         )
       end
     end
