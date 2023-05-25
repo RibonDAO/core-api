@@ -1,17 +1,30 @@
 module Managers
   class ManagersController < ActionController::API
-    include JwtApiKeyAuthenticatable
-    prepend_before_action :authenticate_with_jwt_api_key!
+    before_action :authenticate
 
     rescue_from ActiveRecord::RecordNotFound do |_e|
       render json: { message: 'Not found.' }, status: :not_found
     end
 
-    rescue_from JwtApiKeyAuthenticatable::UnauthorizedError do |_e|
+    rescue_from Errors::Unauthorized do |_e|
       render json: { message: 'Not authorized.' }, status: :unauthorized
     end
 
+    rescue_from Errors::Jwt::MissingToken do |_e|
+      render json: { message: 'Missing token.' }, status: :unauthorized
+    end
+
     protected
+
+    def authenticate
+      current_user, decoded_token = Jwt::Authenticator.call(
+        headers: request.headers,
+        access_token: params[:access_token]
+      )
+
+      @current_user = current_user
+      @decoded_token = decoded_token
+    end
 
     def render_errors(errors, status = :unprocessable_entity)
       render json: ErrorBlueprint.render(OpenStruct.new(errors)), status:
