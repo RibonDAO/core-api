@@ -1,6 +1,6 @@
 module Jwt
   module Authenticator
-    module_function
+    extend self
 
     def call(headers:, access_token:)
       token = access_token || Jwt::Authenticator.authenticate_header(
@@ -50,11 +50,11 @@ module Jwt
     end
 
     def blocklisted?(jti)
-      Jwt::Blocklister.blacklisted?(jti:)
+      Jwt::Blocklister.blocklisted?(jti:)
     end
 
     def allowlisted?(jti)
-      Jwt::Allowlister.whitelisted?(jti:)
+      Jwt::Allowlister.allowlisted?(jti:)
     end
 
     def valid_issued_at?(authenticatable, decoded_token)
