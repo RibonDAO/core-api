@@ -31,7 +31,6 @@ class PersonPayment < ApplicationRecord
   after_create :set_liquid_value_cents
   after_create :set_usd_value_cents
 
-  belongs_to :person, optional: true
   belongs_to :integration
   belongs_to :offer, optional: true
   belongs_to :receiver, polymorphic: true, optional: true
