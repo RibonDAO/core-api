@@ -241,9 +241,9 @@ RSpec.describe 'Api::V1::Users', type: :request do
 
         expect(response).to have_http_status :ok
       end
-      
+
       it 'call the job' do
-        expect(Mailers::SendUserDeletionEmailJob).to receive(:perform_now)
+        expect(Mailers::SendUserDeletionEmailJob).to have_received(:perform_now)
 
         request
       end
@@ -267,7 +267,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
   end
 
   describe 'DELETE /users/destroy' do
-    subject(:request) { delete '/api/v1/users', params: { token: token } }
+    subject(:request) { delete '/api/v1/users', params: { token: } }
 
     let(:user) { create(:user, email: 'test@ribon.io') }
     let(:token) { ::Jwt::Encoder.encode({ email: user.email }) }
@@ -287,7 +287,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'changes the user email' do
         request
 
-        expect(user.reload.email).to eq 'deleted_user+dummy@ribon.io';
+        expect(user.reload.email).to eq 'deleted_user+dummy@ribon.io'
       end
     end
 

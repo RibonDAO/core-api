@@ -3,7 +3,7 @@
 module Jwt
   class Encoder < Jwt::Base
     def self.encode(
-      payload, 
+      payload,
       expiration = 30.minutes.from_now.to_i,
       key = HMAC_SECRET_KEY,
       algorithm = DEFAULT_ALGORITHM

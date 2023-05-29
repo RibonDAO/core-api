@@ -77,8 +77,7 @@ module Api
         else
           head :unprocessable_entity
         end
-
-      rescue
+      rescue StandardError
         head :unauthorized
       end
 
