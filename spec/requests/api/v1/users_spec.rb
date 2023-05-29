@@ -233,8 +233,12 @@ RSpec.describe 'Api::V1::Users', type: :request do
 
     context 'when the user exists' do
       let(:user) { create(:user) }
+      let(:jwt) { ::Jwt::Encoder.encode({ email: user.email }) }
 
-      before { user }
+      before do
+        user
+        allow(Mailers::SendUserDeletionEmailJob).to receive(:perform_now)
+      end
 
       it 'heads http status ok' do
         request
@@ -243,9 +247,9 @@ RSpec.describe 'Api::V1::Users', type: :request do
       end
 
       it 'call the job' do
-        expect(Mailers::SendUserDeletionEmailJob).to have_received(:perform_now)
-
         request
+
+        expect(Mailers::SendUserDeletionEmailJob).to have_received(:perform_now)
       end
 
       it 'returns the status' do
