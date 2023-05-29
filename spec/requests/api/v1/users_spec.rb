@@ -227,4 +227,101 @@ RSpec.describe 'Api::V1::Users', type: :request do
       end
     end
   end
+
+  describe 'POST /users/send_delete_account_email' do
+    subject(:request) { post '/api/v1/users/send_delete_account_email', headers: { Email: user.email } }
+
+    context 'when the user exists' do
+      let(:user) { create(:user) }
+
+      before { user }
+
+      it 'heads http status ok' do
+        request
+
+        expect(response).to have_http_status :ok
+      end
+      
+      it 'call the job' do
+        expect(Mailers::SendUserDeletionEmailJob).to receive(:perform_now)
+
+        request
+      end
+
+      it 'returns the status' do
+        request
+
+        expect_response_to_have_keys %w[sent]
+      end
+    end
+
+    context 'when the user does not exists' do
+      let(:user) { OpenStruct.new(email: 'dummyemail') }
+
+      it 'heads http status unauthorized' do
+        request
+
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+  end
+
+  describe 'DELETE /users/destroy' do
+    subject(:request) { delete '/api/v1/users', params: { token: token } }
+
+    let(:user) { create(:user, email: 'test@ribon.io') }
+    let(:token) { ::Jwt::Encoder.encode({ email: user.email }) }
+
+    context 'when the user exists' do
+      before do
+        user
+        allow(SecureRandom).to receive(:hex).and_return('dummy')
+      end
+
+      it 'heads http status ok' do
+        request
+
+        expect(response).to have_http_status :ok
+      end
+
+      it 'changes the user email' do
+        request
+
+        expect(user.reload.email).to eq 'deleted_user+dummy@ribon.io';
+      end
+    end
+
+    context 'when email does not exist in the payload' do
+      let(:user) { create(:user, email: 'test@ribon.io') }
+      let(:token) { ::Jwt::Encoder.encode({ name: 'John' }) }
+
+      it 'heads http status unauthorized' do
+        request
+
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'when the user does not exists' do
+      let(:user) { create(:user, email: 'test@ribon.io') }
+      let(:token) { ::Jwt::Encoder.encode({ email: 'dummy@email.com' }) }
+
+      it 'heads http status unprocessable_entity' do
+        request
+
+        expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+
+    context 'when jwt is expired' do
+      let(:user) { create(:user, email: 'test@ribon.io') }
+      let(:token) { ::Jwt::Encoder.encode({ email: user.email }, 1.second.ago.to_i) }
+
+      it 'heads http status unauthorized' do
+        request
+
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+  end
 end
