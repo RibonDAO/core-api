@@ -8,7 +8,8 @@ RSpec.describe ::Jwt::Decoder do
       let(:payload)   { { 'foo' => 'bar' } }
       let(:key)       { 'secret' }
       let(:algorithm) { 'HS256' }
-      let(:token)     { ::Jwt::Encoder.encode(payload, key, algorithm) }
+      let(:exp)       { 30.minutes.from_now.to_i }
+      let(:token)     { ::Jwt::Encoder.encode(payload, exp, key, algorithm) }
 
       it 'returns a hash' do
         expect(method_call).to be_a Array
