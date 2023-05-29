@@ -273,7 +273,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
   describe 'DELETE /users/destroy' do
     subject(:request) { delete '/api/v1/users', params: { token: } }
 
-    let(:user) { create(:user, email: 'test@ribon.io') }
+    let(:user) { create(:user, email: 'test@ribon.io', id: 2) }
     let(:token) { ::Jwt::Encoder.encode({ email: user.email }) }
 
     context 'when the user exists' do
@@ -291,7 +291,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'changes the user email' do
         request
 
-        expect(user.reload.email).to eq 'deleted_user+dummy@ribon.io'
+        expect(user.reload.email).to eq 'deleted_user+2@ribon.io'
       end
     end
 
