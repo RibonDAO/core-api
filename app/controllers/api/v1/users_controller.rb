@@ -78,7 +78,7 @@ module Api
           head :unprocessable_entity
         end
 
-      rescue ::Jwt::Errors::ExpiredSignature
+      rescue
         head :unauthorized
       end
 
