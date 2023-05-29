@@ -19,7 +19,7 @@ module Users
     private
 
     def dummy_email
-      "deleted_user+#{SecureRandom.hex(10)}@ribon.io"
+      "deleted_user+#{user.id}@ribon.io"
     end
   end
 end
