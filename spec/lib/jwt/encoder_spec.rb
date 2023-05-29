@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe JwtWrapper::Jwt::Encoder do
+RSpec.describe ::Jwt::Encoder do
   describe '.encode' do
     subject(:method_call) { described_class.encode(payload, key, algorithm) }
 
