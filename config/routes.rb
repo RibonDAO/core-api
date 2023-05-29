@@ -56,6 +56,8 @@ Rails.application.routes.draw do
       post 'users/completed_all_tasks' => 'users/tasks_statistics#first_completed_all_tasks_at'
       get 'users/impact' => 'users#impact'
       get 'users/statistics' => 'users/statistics#index'
+      post 'users/send_delete_account_email' => 'users#send_delete_account_email'
+      delete 'users' => 'users#destroy'
       
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
