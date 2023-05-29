@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Users::AnonymizeUser do
+describe Users::Anonymize do
   describe '.call' do
     subject(:command) { described_class.call(user) }
 

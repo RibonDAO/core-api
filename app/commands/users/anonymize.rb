@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-  class AnonymizeUser < ApplicationCommand
+  class Anonymize < ApplicationCommand
     prepend SimpleCommand
 
     attr_reader :user
