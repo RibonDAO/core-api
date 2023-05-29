@@ -2,8 +2,7 @@ module JwtWrapper
   module Jwt
     module Decoder
       def self.decode(token, key, algorithm)
-        JWT.decode(token, key, true, { algorithm: algorithm })
-
+        JWT.decode(token, key, true, { algorithm: })
       rescue JWT::ExpiredSignature
         raise 'JWT token expired'
       end
