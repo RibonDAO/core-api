@@ -12,10 +12,10 @@ describe Users::AnonymizeUser do
     before do
       allow(SecureRandom).to receive(:hex).and_return(random_string)
     end
-    
+
     it 'updates the user email' do
       command
-      expect(user.reload.email).to eq("deleted_user+random_string@ribon.io")
+      expect(user.reload.email).to eq('deleted_user+random_string@ribon.io')
     end
   end
 end
