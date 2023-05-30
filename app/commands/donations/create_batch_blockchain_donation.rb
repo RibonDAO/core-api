@@ -15,6 +15,7 @@ module Donations
     end
 
     def call
+      SleeperHelper.sleep(60)
       transaction_hash = create_blockchain_donation
       create_batch_blockchain_transaction(transaction_hash)
     end
