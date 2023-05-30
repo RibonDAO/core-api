@@ -15,6 +15,7 @@ class BigDonor < ApplicationRecord
   before_validation { email.downcase! }
 
   has_many :person_payments, as: :payer
+  has_many :contributions, through: :person_payments
 
   def blueprint
     BigDonorBlueprint
