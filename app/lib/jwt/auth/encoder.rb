@@ -6,16 +6,9 @@ module Jwt
       def call(authenticatable)
         jti = SecureRandom.hex
         exp = Encoder.token_expiry
-        access_token = JWT.encode(
-          {
-            authenticatable_id: authenticatable.id,
-            authenticatable_type: authenticatable.class.name,
-            jti:,
-            iat: Encoder.token_issued_at.to_i,
-            exp:
-          },
-          Secret.secret
-        )
+        payload = { authenticatable_id: authenticatable.id, authenticatable_type: authenticatable.class.name,
+                    jti:, iat: Encoder.token_issued_at.to_i, exp: }
+        access_token = Jwt::Encoder.encode(payload, Expiry.expiry)
 
         [access_token, jti, exp]
       end

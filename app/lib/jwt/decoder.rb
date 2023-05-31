@@ -11,7 +11,7 @@ module Jwt
     end
 
     def self.expired?(payload)
-      payload.last['exp'] < Time.now.to_i
+      payload.last['exp'] < Time.zone.now.to_i
     end
   end
 end

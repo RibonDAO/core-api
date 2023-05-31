@@ -3,15 +3,15 @@ module Jwt
     module Decoder
       module_function
 
-      def decode!(access_token, verify: true)
-        decoded = JWT.decode(access_token, Secret.secret, verify, verify_iat: true)[0]
+      def decode!(access_token)
+        decoded = Jwt::Decoder.decode(access_token).first
         raise Errors::InvalidToken if decoded.blank?
 
         decoded.symbolize_keys
       end
 
-      def decode(access_token, verify: true)
-        decode!(access_token, verify:)
+      def decode(access_token)
+        decode!(access_token)
       rescue StandardError
         nil
       end
