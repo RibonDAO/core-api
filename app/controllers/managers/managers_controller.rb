@@ -10,14 +10,14 @@ module Managers
       render json: { message: 'Not authorized.' }, status: :unauthorized
     end
 
-    rescue_from Errors::Jwt::MissingToken do |_e|
+    rescue_from Errors::MissingToken do |_e|
       render json: { message: 'Missing token.' }, status: :unauthorized
     end
 
     protected
 
     def authenticate
-      current_user, decoded_token = Jwt::Authenticator.call(
+      current_user, decoded_token = Jwt::Auth::Authenticator.call(
         headers: request.headers,
         access_token: params[:access_token]
       )

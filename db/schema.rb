@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_29_150345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -202,8 +202,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
     t.string "wallet_address", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "person_id"
-    t.index ["person_id"], name: "index_crypto_users_on_person_id"
   end
 
   create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -214,8 +212,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
     t.string "tax_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "person_id"
-    t.index ["person_id"], name: "index_customers_on_person_id"
     t.index ["user_id"], name: "index_customers_on_user_id", unique: true
   end
 
@@ -446,11 +442,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "people", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "person_blockchain_transactions", force: :cascade do |t|
     t.integer "treasure_entry_status", default: 0
     t.string "transaction_hash"
@@ -475,7 +466,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
     t.datetime "updated_at", null: false
     t.bigint "offer_id"
     t.integer "amount_cents"
-    t.uuid "person_id"
     t.integer "status", default: 0
     t.integer "payment_method"
     t.string "external_id"
@@ -492,7 +482,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
     t.index ["integration_id"], name: "index_person_payments_on_integration_id"
     t.index ["offer_id"], name: "index_person_payments_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_person_payments_on_payer"
-    t.index ["person_id"], name: "index_person_payments_on_person_id"
     t.index ["receiver_type", "receiver_id"], name: "index_person_payments_on_receiver"
   end
 
@@ -672,7 +661,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
   add_foreign_key "contribution_fees", "contributions"
   add_foreign_key "contribution_fees", "contributions", column: "payer_contribution_id"
   add_foreign_key "contributions", "person_payments"
-  add_foreign_key "customers", "people"
   add_foreign_key "donation_batches", "batches"
   add_foreign_key "donation_batches", "donations"
   add_foreign_key "donation_blockchain_transactions", "chains"
@@ -700,7 +688,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_24_174404) do
   add_foreign_key "person_payment_fees", "person_payments"
   add_foreign_key "person_payments", "integrations"
   add_foreign_key "person_payments", "offers"
-  add_foreign_key "person_payments", "people"
   add_foreign_key "pool_balances", "pools"
   add_foreign_key "pools", "causes"
   add_foreign_key "pools", "tokens"
