@@ -157,4 +157,13 @@ RSpec.describe Contribution, type: :model do
       end
     end
   end
+
+  describe '#label' do
+    let(:receiver) { create(:cause, name: 'Cause name') }
+    let(:contribution) { create(:contribution, receiver:, created_at: '2023-05-01') }
+
+    it 'returns the cause name and reference date of the contribution' do
+      expect(contribution.label).to eq('Cause name (05/2023)')
+    end
+  end
 end
