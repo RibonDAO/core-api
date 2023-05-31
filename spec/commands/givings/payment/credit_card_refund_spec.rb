@@ -8,12 +8,10 @@ describe Givings::Payment::CreditCardRefund do
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
-    let(:person) { create(:person) }
-
     context 'when using a CreditCard payment and refund' do
       let(:offer) { create(:offer) }
       let(:person_payment) do
-        build(:person_payment, offer:, person:, amount_cents: 1, external_id: 'pi_123',
+        build(:person_payment, offer:, amount_cents: 1, external_id: 'pi_123',
                                refund_date: '2022-10-25 12:20:41')
       end
       let(:args) { { external_id: 'pi_123' } }
