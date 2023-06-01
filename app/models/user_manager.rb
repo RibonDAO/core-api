@@ -45,4 +45,8 @@ class UserManager < ApplicationRecord
       user.save!
     end
   end
+
+  def token_issued_at
+    refresh_tokens.last&.created_at
+  end
 end
