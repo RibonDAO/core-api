@@ -6,12 +6,16 @@ module Managers
       render json: { message: 'Not found.' }, status: :not_found
     end
 
-    rescue_from Errors::Unauthorized do |_e|
+    rescue_from Jwt::Errors::Unauthorized do |_e|
       render json: { message: 'Not authorized.' }, status: :unauthorized
     end
 
-    rescue_from Errors::MissingToken do |_e|
+    rescue_from Jwt::Errors::MissingToken do |_e|
       render json: { message: 'Missing token.' }, status: :unauthorized
+    end
+
+    rescue_from Jwt::Errors::ExpiredSignature do |_e|
+      render json: { message: 'Expired token.' }, status: :unauthorized
     end
 
     protected

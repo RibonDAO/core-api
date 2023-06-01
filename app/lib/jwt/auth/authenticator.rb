@@ -23,7 +23,6 @@ module Jwt
       def authenticate_from_token(decoded_token)
         id = decoded_token.fetch(:authenticatable_id)
         type = decoded_token.fetch(:authenticatable_type)
-
         raise Errors::InvalidToken unless valid_token?(decoded_token)
 
         authenticatable = find_authenticatable(id, type)
