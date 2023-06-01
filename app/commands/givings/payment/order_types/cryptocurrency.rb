@@ -39,7 +39,7 @@ module Givings
         private
 
         def find_or_create_crypto_user
-          CryptoUser.find_by(wallet_address:) || CryptoUser.create!(wallet_address:, person: Person.create!)
+          CryptoUser.find_by(wallet_address:) || CryptoUser.create!(wallet_address:)
         end
 
         def create_payment(payer)
