@@ -19,6 +19,10 @@ RSpec.describe UserQueries, type: :model do
   describe '#months_active' do
     let(:user) { create(:user) }
 
+    before do
+      allow(Time.zone).to receive(:now).and_return(Time.zone.parse('2023-04-21'))
+    end
+
     it "calculates the correct number of months between the current time and the user's last donation" do
       user.user_donation_stats.update(last_donation_at: 3.months.ago)
 
