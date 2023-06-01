@@ -6,7 +6,6 @@
 #  wallet_address :string           not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  person_id      :uuid
 #
 require 'rails_helper'
 

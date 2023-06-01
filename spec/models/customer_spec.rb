@@ -8,7 +8,6 @@
 #  name          :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  person_id     :uuid
 #  tax_id        :string
 #  user_id       :bigint
 #
