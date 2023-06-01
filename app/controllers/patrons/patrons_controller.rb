@@ -1,8 +1,13 @@
 module Patrons
   class PatronsController < ActionController::API
     before_action :set_language
+    before_action :require_patron
 
     protected
+
+    def require_patron
+      render json: { message: I18n.t('patrons.not_found') }, status: :not_found unless current_patron
+    end
 
     def current_patron
       @current_patron ||= BigDonor.find_by(email: request.headers['Email'])
