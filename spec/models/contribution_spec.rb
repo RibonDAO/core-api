@@ -163,7 +163,7 @@ RSpec.describe Contribution, type: :model do
     let(:contribution) { create(:contribution, receiver:, created_at: '2023-05-01') }
 
     it 'returns the cause name and reference date of the contribution' do
-      expect(contribution.label).to eq('Cause name (05/2023)')
+      expect(contribution.label).to eq('Cause name (May/2023)')
     end
   end
 end

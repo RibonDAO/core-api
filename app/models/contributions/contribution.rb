@@ -70,6 +70,6 @@ class Contribution < ApplicationRecord
   end
 
   def label
-    "#{receiver&.name} (#{created_at.strftime('%m/%Y')})"
+    "#{receiver&.name} (#{created_at.strftime('%b/%Y')})"
   end
 end
