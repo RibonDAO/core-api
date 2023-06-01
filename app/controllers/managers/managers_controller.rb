@@ -21,6 +21,8 @@ module Managers
     protected
 
     def authenticate
+      return if ENV['NO_AUTH_MANAGER'] == 'true' && !Rails.env.production?
+
       current_user, decoded_token = Jwt::Auth::Authenticator.call(
         headers: request.headers,
         access_token: params[:access_token]
