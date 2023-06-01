@@ -8,7 +8,9 @@ module Jwt
       key = HMAC_SECRET_KEY,
       algorithm = DEFAULT_ALGORITHM
     )
-      JWT.encode(payload, key, algorithm, { exp: (Time.zone.now + expiration).to_i })
+      payload[:exp] = (Time.zone.now + expiration).to_i
+
+      JWT.encode(payload, key, algorithm)
     end
   end
 end
