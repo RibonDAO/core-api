@@ -20,7 +20,6 @@
 #  integration_id     :bigint
 #  offer_id           :bigint
 #  payer_id           :uuid
-#  person_id          :uuid
 #  receiver_id        :bigint
 #
 class PersonPayment < ApplicationRecord
