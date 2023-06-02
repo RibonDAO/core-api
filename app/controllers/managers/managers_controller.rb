@@ -15,7 +15,7 @@ module Managers
     end
 
     rescue_from Jwt::Errors::ExpiredSignature do |_e|
-      render json: { message: 'Expired token.' }, status: :unauthorized
+      render json: { message: 'Expired token.' }, status: :forbidden
     end
 
     protected

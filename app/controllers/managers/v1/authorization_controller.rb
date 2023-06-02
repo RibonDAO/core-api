@@ -17,7 +17,7 @@ module Managers
 
       def create_headers(tokens)
         set_header('access-token', tokens[:access_token])
-        set_header('refresh-token', tokens[:refresh_token])
+        set_header('refresh-token', tokens[:refresh_token]&.token)
       end
 
       def set_header(name, value)
