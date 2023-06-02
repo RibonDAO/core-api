@@ -56,6 +56,8 @@ Rails.application.routes.draw do
       post 'users/completed_all_tasks' => 'users/tasks_statistics#first_completed_all_tasks_at'
       get 'users/impact' => 'users#impact'
       get 'users/statistics' => 'users/statistics#index'
+      post 'users/send_delete_account_email' => 'users#send_delete_account_email'
+      delete 'users' => 'users#destroy'
       
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -185,7 +187,7 @@ Rails.application.routes.draw do
       resources :pools, only: [:index]
       resources :stories, only: %i[index show create update destroy]
 
-       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
+      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       get 'non_profits/:id/stories' => 'non_profits#stories'
@@ -195,6 +197,12 @@ Rails.application.routes.draw do
       get 'stories/:id/stories' => 'stories#stories'
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
+    end
+  end
+
+  namespace :patrons do
+    namespace :v1 do
+      get 'contributions' => 'contributions#index'
     end
   end
 end

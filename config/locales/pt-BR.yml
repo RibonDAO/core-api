@@ -262,3 +262,5 @@ pt-BR:
     donate: "Doe"
   vouchers:
     invalid_voucher: "Ticket inválido."
+  patrons:
+    not_found: "Patrono não encontrado."

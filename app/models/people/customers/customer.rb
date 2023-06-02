@@ -8,7 +8,6 @@
 #  name          :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  person_id     :uuid
 #  tax_id        :string
 #  user_id       :bigint
 #
@@ -18,7 +17,6 @@ class Customer < ApplicationRecord
   validates :name, presence: true
 
   belongs_to :user
-  belongs_to :person, optional: true
 
   has_many :person_payments, as: :payer
 
