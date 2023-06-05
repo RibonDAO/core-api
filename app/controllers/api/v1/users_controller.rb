@@ -42,7 +42,7 @@ module Api
 
           current_user.create_user_donation_stats! unless current_user.user_donation_stats
 
-          first_access_to = current_user.user_donation_stats.user_last_donation_to(@integration).nil?
+          first_access_to = current_user.user_last_donation_to(@integration).nil?
 
           render json: { first_access_to_integration: first_access_to }
 
