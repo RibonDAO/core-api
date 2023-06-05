@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
       post 'users/can_donate' => 'users#can_donate'
+      get 'users/first_access_to_integration' => 'users#first_access_to_integration'
       get 'users/completed_tasks' => 'users#completed_tasks'
       post 'users/complete_task' => 'users#complete_task'
       get 'users/tasks_statistics' => 'users/tasks_statistics#index'
