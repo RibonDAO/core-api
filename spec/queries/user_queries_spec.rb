@@ -24,9 +24,9 @@ RSpec.describe UserQueries, type: :model do
     end
 
     it "calculates the correct number of months between the current time and the user's last donation" do
-      user.user_donation_stats.update(last_donation_at: 4.months.ago)
+      user.user_donation_stats.update(last_donation_at: 3.months.ago)
 
-      expect(described_class.new(user:).months_active).to eq(4)
+      expect(described_class.new(user:).months_active).to eq(3)
     end
   end
 
