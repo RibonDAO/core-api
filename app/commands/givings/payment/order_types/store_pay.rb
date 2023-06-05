@@ -18,7 +18,7 @@ module Givings
           @cause          = args[:cause]
           @non_profit     = args[:non_profit]
           @name           = args[:name]
-          @payment_method = args[:payment_method]
+          @payment_method = args[:payment_method_type]
         end
 
         def generate_order

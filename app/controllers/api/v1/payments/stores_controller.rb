@@ -28,7 +28,7 @@ module Api
             cause:,
             non_profit:,
             name: payment_params[:name],
-            payment_method: payment_params[:payment_method_type]
+            payment_method_type: payment_params[:payment_method_type]
           }
         end
 
