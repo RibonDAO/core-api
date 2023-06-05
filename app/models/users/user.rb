@@ -35,6 +35,7 @@ class User < ApplicationRecord
 
   delegate :last_donation_at, to: :user_donation_stats
   delegate :can_donate?, to: :user_donation_stats
+  delegate :user_last_donation_to?, to: :user_donation_stats
   delegate :last_donated_cause, to: :user_donation_stats
   delegate :first_completed_all_tasks_at, to: :user_tasks_statistic
   delegate :streak, to: :user_tasks_statistic

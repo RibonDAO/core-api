@@ -29,11 +29,11 @@ class UserDonationStats < ApplicationRecord
     last_donation_at_to_integration&.next_day&.beginning_of_day
   end
 
-  private
-
   def user_last_donation_to(integration)
     user.donations.where(integration:).order(created_at: :desc).first
   end
+
+  private
 
   def user_first_donation_native(platform)
     user.donations.where(platform: 'app').count.zero? && platform == 'app'
