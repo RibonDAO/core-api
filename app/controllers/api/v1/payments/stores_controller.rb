@@ -4,8 +4,8 @@ module Api
       class StoresController < ApplicationController
         include ::Givings::Payment
 
-        def google_pay
-          command = ::Givings::Payment::CreateOrder.call(OrderTypes::GooglePay, order_params)
+        def create
+          command = ::Givings::Payment::CreateOrder.call(OrderTypes::StorePay, order_params)
 
           if command.success?
             head :created
@@ -27,7 +27,8 @@ module Api
             integration_id: payment_params[:integration_id],
             cause:,
             non_profit:,
-            name: payment_params[:name]
+            name: payment_params[:name],
+            payment_method: payment_params[:payment_method]
           }
         end
 
@@ -59,7 +60,7 @@ module Api
 
         def payment_params
           params.permit(:email, :tax_id, :offer_id, :country, :city, :state, :integration_id,
-                        :cause_id, :non_profit_id, :name, :payment_method_id)
+                        :cause_id, :non_profit_id, :name, :payment_method_id, :payment_method)
         end
       end
     end

@@ -118,7 +118,7 @@ Rails.application.routes.draw do
         post 'cryptocurrency' => 'cryptocurrency#create'
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
-        post 'google_pay'   => 'stores#google_pay'
+        post 'store_pay'   => 'stores#create'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
