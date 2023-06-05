@@ -3,8 +3,8 @@
 module Givings
   module Payment
     module OrderTypes
-      class GooglePay
-        attr_reader :payment_method_id, :email, :tax_id, :offer, :user,
+      class StorePay
+        attr_reader :payment_method_id, :email, :tax_id, :offer, :user, :payment_method,
                     :operation, :integration_id, :cause, :non_profit, :name
 
         def initialize(args)
@@ -18,6 +18,7 @@ module Givings
           @cause          = args[:cause]
           @non_profit     = args[:non_profit]
           @name           = args[:name]
+          @payment_method = args[:payment_method_type]
         end
 
         def generate_order
@@ -46,7 +47,7 @@ module Givings
         end
 
         def create_payment(payer)
-          PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method: :google_pay,
+          PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:,
                                   amount_cents:, status: :processing, receiver: })
         end
 
