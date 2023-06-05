@@ -35,6 +35,23 @@ module Api
         end
       end
 
+      def first_access_to_integration
+        @integration = Integration.find_by_id_or_unique_address params[:integration_id]
+
+        if current_user
+
+          current_user.create_user_donation_stats! unless current_user.user_donation_stats
+
+          first_access_to = current_user.user_last_donation_to(@integration).nil?
+
+          render json: { first_access_to_integration: first_access_to }
+
+        else
+
+          render json: { first_access_to_integration: true }
+        end
+      end
+
       def completed_tasks
         if current_user
           render json: UserCompletedTaskBlueprint.render(current_user.user_completed_tasks)
