@@ -68,4 +68,8 @@ class Contribution < ApplicationRecord
   rescue StandardError => e
     Reporter.log(error: e)
   end
+
+  def label
+    "#{receiver&.name} (#{created_at.strftime('%b/%Y')})"
+  end
 end

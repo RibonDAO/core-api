@@ -199,4 +199,10 @@ Rails.application.routes.draw do
       post 'users/search' => 'users#search'
     end
   end
+
+  namespace :patrons do
+    namespace :v1 do
+      get 'contributions' => 'contributions#index'
+    end
+  end
 end
