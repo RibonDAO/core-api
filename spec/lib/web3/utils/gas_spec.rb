@@ -4,6 +4,8 @@ RSpec.describe Web3::Utils::Gas do
   describe '#estimate_gas' do
     subject(:gas_lib) { described_class.new(chain:) }
 
+    let!(:default_max_fee_per_gas) { described_class::DEFAULT_MAX_FEE_PER_GAS }
+    let!(:default_max_priority_fee_per_gas) { described_class::DEFAULT_MAX_PRIORITY_FEE_PER_GAS }
     let(:chain) { build(:chain) }
     let(:mock_response) do
       OpenStruct.new(
@@ -24,8 +26,8 @@ RSpec.describe Web3::Utils::Gas do
             'maxPriorityFeePerGas' => max_priority_fee_per_gas, 'estimatedFee' => 0.01502401780788502 }] }
       )
     end
-    let(:max_fee_per_gas) { described_class::DEFAULT_MAX_FEE_PER_GAS - 5 }
-    let(:max_priority_fee_per_gas) { described_class::DEFAULT_MAX_FEE_PER_GAS - 5 }
+    let(:max_fee_per_gas) { default_max_fee_per_gas }
+    let(:max_priority_fee_per_gas) { default_max_priority_fee_per_gas }
 
     before do
       allow(Request::ApiRequest).to receive(:get).and_return(mock_response)
@@ -44,12 +46,12 @@ RSpec.describe Web3::Utils::Gas do
     end
 
     context 'when the fees from api are higher than the defined max fees' do
-      let(:max_fee_per_gas) { described_class::DEFAULT_MAX_FEE_PER_GAS + 5 }
-      let(:max_priority_fee_per_gas) { described_class::DEFAULT_MAX_FEE_PER_GAS + 5 }
+      let(:max_fee_per_gas) { default_max_fee_per_gas + 5 }
+      let(:max_priority_fee_per_gas) { default_max_priority_fee_per_gas + 5 }
 
       it 'returns the defined max fees' do
         expect(gas_lib.estimate_gas.max_fee_per_gas).to eq described_class::DEFAULT_MAX_FEE_PER_GAS
-        expect(gas_lib.estimate_gas.max_priority_fee_per_gas).to eq described_class::DEFAULT_MAX_FEE_PER_GAS
+        expect(gas_lib.estimate_gas.max_priority_fee_per_gas).to eq default_max_priority_fee_per_gas
       end
     end
 
@@ -60,7 +62,7 @@ RSpec.describe Web3::Utils::Gas do
 
       it 'returns the default defined values' do
         expect(gas_lib.estimate_gas.max_fee_per_gas).to eq described_class::DEFAULT_MAX_FEE_PER_GAS
-        expect(gas_lib.estimate_gas.max_priority_fee_per_gas).to eq described_class::DEFAULT_MAX_FEE_PER_GAS
+        expect(gas_lib.estimate_gas.max_priority_fee_per_gas).to eq default_max_priority_fee_per_gas
         expect(gas_lib.estimate_gas.default_gas_limit).to eq described_class::DEFAULT_GAS_LIMIT
       end
     end
