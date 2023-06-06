@@ -66,7 +66,7 @@ module Api
       end
 
       def destroy
-        email = ::Jwt::Decoder.decode(params[:token]).first['email']
+        email = ::Jwt::Decoder.decode(token: params[:token]).first['email']
         return head :unauthorized unless email
 
         user = User.find_by(email:)
