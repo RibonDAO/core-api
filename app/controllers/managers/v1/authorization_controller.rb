@@ -1,6 +1,7 @@
 module Managers
   module V1
-    class AuthorizationController < ApplicationController
+    class AuthorizationController < Managers::ManagersController
+      skip_before_action :authenticate, only: :google_authorization
       def google_authorization
         command = ::Manager::SetUserManagerTokens.call(id_token: params[:data]['id_token'])
 
@@ -11,6 +12,18 @@ module Managers
         else
           render_errors(command.errors)
         end
+      end
+
+      def refresh_token
+        access_token, refresh_token = Jwt::Auth::Refresher
+                                      .refresh!(refresh_token: params[:refresh_token],
+                                                decoded_token: @decoded_token,
+                                                authenticatable: @current_manager)
+
+        create_headers({ access_token:, refresh_token: })
+        render json: { message: I18n.t('manager.login_success') }, status: :ok
+      rescue StandardError
+        head :unauthorized
       end
 
       private
