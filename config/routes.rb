@@ -190,6 +190,7 @@ Rails.application.routes.draw do
 
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
+      post 'auth/refresh_token', to: 'authorization#refresh_token'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       get 'non_profits/:id/stories' => 'non_profits#stories'
       get 'person_payments' => 'person_payments#index'
