@@ -3,15 +3,11 @@
 module Jwt
   class Decoder < Jwt::Base
     def self.decode(token, key = HMAC_SECRET_KEY, algorithm = DEFAULT_ALGORITHM)
-      payload = JWT.decode(token, key, true, { algorithm: })
+      raise Errors::MissingToken if token.blank?
 
-      raise ::Jwt::Errors::ExpiredSignature if expired?(payload)
-
-      payload
-    end
-
-    def self.expired?(payload)
-      payload.last['exp'] < Time.now.to_i
+      JWT.decode(token, key, true, { algorithm: })
+    rescue JWT::ExpiredSignature
+      raise Errors::ExpiredSignature
     end
   end
 end

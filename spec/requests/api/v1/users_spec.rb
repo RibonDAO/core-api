@@ -319,7 +319,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
 
     context 'when jwt is expired' do
       let(:user) { create(:user, email: 'test@ribon.io') }
-      let(:token) { ::Jwt::Encoder.encode({ email: user.email }, 1.second.ago.to_i) }
+      let(:token) { ::Jwt::Encoder.encode({ email: user.email }, -1.second) }
 
       it 'heads http status unauthorized' do
         request
