@@ -11,6 +11,7 @@ module Service
         {
           initial_amount: format_money(initial_amount),
           used_amount: format_money(used_amount),
+          usage_percentage:,
           remaining_amount: format_money(remaining_amount),
           total_tickets:,
           avg_donations_per_person:,
@@ -29,6 +30,10 @@ module Service
 
       def used_amount
         initial_amount - remaining_amount
+      end
+
+      def usage_percentage
+        ((used_amount.to_f / initial_amount).round(2) * 100).to_i
       end
 
       def remaining_amount

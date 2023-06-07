@@ -20,7 +20,7 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
   describe '#formatted_statistics' do
     it 'returns the necessary keys' do
       expect(service.formatted_statistics.keys)
-        .to match_array(%i[initial_amount used_amount
+        .to match_array(%i[initial_amount used_amount usage_percentage
                            remaining_amount total_tickets avg_donations_per_person
                            boost_amount total_increase_percentage total_amount_to_cause ribon_fee])
     end
@@ -35,6 +35,12 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
   describe '#used_amount' do
     it 'returns the used amount' do
       expect(service.used_amount).to eq(4)
+    end
+  end
+
+  describe '#usage_percentage' do
+    it 'returns the usage percentage' do
+      expect(service.usage_percentage).to eq(40)
     end
   end
 
