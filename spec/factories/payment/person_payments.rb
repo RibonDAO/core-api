@@ -11,5 +11,6 @@ FactoryBot.define do
     external_id { nil }
     receiver { build(:non_profit) }
     liquid_value_cents { 2000 }
+    usd_value_cents { 2000 }
   end
 end
