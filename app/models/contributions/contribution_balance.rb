@@ -38,4 +38,8 @@ class ContributionBalance < ApplicationRecord
   def enough_tickets_balance?(amount)
     tickets_balance_cents >= amount
   end
+
+  def remaining_total_cents
+    tickets_balance_cents + fees_balance_cents
+  end
 end
