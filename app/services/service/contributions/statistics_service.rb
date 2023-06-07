@@ -1,6 +1,8 @@
 module Service
   module Contributions
     class StatisticsService
+      attr_reader :contribution
+
       def initialize(contribution:)
         @contribution = contribution
       end
@@ -27,10 +29,12 @@ module Service
       end
 
       def total_donors
-        contribution.users.distinct
+        contribution.users.distinct.count
       end
 
       def avg_donations_per_person
+        return 0 if total_donors.zero?
+
         total_tickets / total_donors
       end
 
