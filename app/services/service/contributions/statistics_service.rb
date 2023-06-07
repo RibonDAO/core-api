@@ -51,7 +51,7 @@ module Service
       end
 
       def ribon_fee
-        contribution.contribution_fees.sum(:fee_cents) / 100.0
+        paid_fees / 100.0
       end
 
       private
@@ -62,6 +62,10 @@ module Service
 
       def balance
         @balance ||= @contribution.contribution_balance
+      end
+
+      def paid_fees
+        @paid_fees ||= ContributionFee.where(payer_contribution: @contribution).sum(:fee_cents)
       end
     end
   end
