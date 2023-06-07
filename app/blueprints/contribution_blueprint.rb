@@ -8,7 +8,7 @@ class ContributionBlueprint < Blueprinter::Base
   association :contribution_balance, blueprint: ContributionBalanceBlueprint
 
   field(:stats) do |contribution|
-    ContributionStatsBlueprint.render(Service::Contributions::StatisticsService
+    ContributionStatsBlueprint.render_as_json(Service::Contributions::StatisticsService
                                         .new(contribution:).formatted_statistics)
   end
 
