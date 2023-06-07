@@ -8,11 +8,23 @@ module Service
       end
 
       def formatted_statistics
-        { initial_amount:, used_amount:, remaining_amount:, total_tickets:, avg_donations_per_person:,
-          boost_amount:, total_increase_percentage:, total_amount_to_cause:, ribon_fee: }
+        {
+          initial_amount: format_money(initial_amount),
+          used_amount: format_money(used_amount),
+          usage_percentage:,
+          remaining_amount: format_money(remaining_amount),
+          total_tickets:,
+          avg_donations_per_person:,
+          boost_amount: format_money(boost_amount),
+          total_increase_percentage:,
+          total_amount_to_cause: format_money(total_amount_to_cause),
+          ribon_fee: format_money(ribon_fee)
+        }
       end
 
       def initial_amount
+        return 0 if payment&.usd_value_cents.nil?
+
         payment.usd_value_cents / 100.0
       end
 
@@ -20,7 +32,13 @@ module Service
         initial_amount - remaining_amount
       end
 
+      def usage_percentage
+        ((used_amount.to_f / initial_amount).round(2) * 100).to_i
+      end
+
       def remaining_amount
+        return 0 if balance&.remaining_total_cents.nil?
+
         balance.remaining_total_cents / 100.0
       end
 
@@ -39,6 +57,8 @@ module Service
       end
 
       def boost_amount
+        return 0 if balance&.contribution_increased_amount_cents.nil?
+
         balance.contribution_increased_amount_cents / 100.0
       end
 
@@ -66,6 +86,10 @@ module Service
 
       def paid_fees
         @paid_fees ||= ContributionFee.where(payer_contribution: @contribution).sum(:fee_cents)
+      end
+
+      def format_money(amount)
+        Money.from_amount(amount, :usd).format
       end
     end
   end
