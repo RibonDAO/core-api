@@ -16,6 +16,8 @@ class Contribution < ApplicationRecord
   belongs_to :person_payment
   has_one :contribution_balance
   has_many :donation_contributions
+  has_many :donations, through: :donation_contributions
+  has_many :users, through: :donations
   has_many :contribution_fees
 
   delegate :liquid_value_cents, to: :person_payment
