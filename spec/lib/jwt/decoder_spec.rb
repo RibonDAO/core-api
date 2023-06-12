@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ::Jwt::Decoder do
   describe '.decode' do
-    subject(:method_call) { described_class.decode(token, key, algorithm) }
+    subject(:method_call) { described_class.decode(token:, key:, algorithm:) }
 
     context 'when token is newer than 30 minutes' do
       let(:payload)   { { 'foo' => 'bar' } }

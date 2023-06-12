@@ -4,7 +4,7 @@ module Jwt
       module_function
 
       def decode!(access_token)
-        decoded = Jwt::Decoder.decode(access_token).first
+        decoded = Jwt::Decoder.decode(token: access_token).first
         raise Errors::InvalidToken if decoded.blank?
 
         decoded.symbolize_keys
