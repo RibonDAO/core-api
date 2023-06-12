@@ -15,17 +15,17 @@ module Managers
       end
 
       def refresh_token
-        decoded_token = Jwt::Decoder.decode(token: headers['Authorization']&.split('Bearer ')&.last,
-                                            custom_options: { verify_expiration: false })
-        current_manager = UserManager.find decoded_token[:authenticatable_id]
-        access_token, refresh_token = Jwt::Auth::Refresher
-                                      .refresh!(refresh_token: params[:refresh_token],
-                                                decoded_token:, authenticatable: current_manager)
+        access_token = request.headers['Authorization']&.split('Bearer ')&.last
+        command = Auth::RenewRefreshToken.call(refresh_token: params[:refresh_token], access_token:)
 
-        create_headers({ access_token:, refresh_token: })
-        render json: { message: I18n.t('manager.login_success') }, status: :ok
-      rescue StandardError => e
-        render json: { message: e.message }, status: :unauthorized
+        if command.success?
+          access_token, refresh_token = command.result
+          create_headers({ access_token:, refresh_token: })
+
+          render json: { message: I18n.t('manager.login_success') }, status: :ok
+        else
+          render_errors(command.errors, :unauthorized)
+        end
       end
 
       private
