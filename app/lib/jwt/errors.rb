@@ -4,5 +4,6 @@ module Jwt
     class Unauthorized < StandardError; end
     class MissingToken < StandardError; end
     class InvalidToken < StandardError; end
+    class InvalidEmailDomain < StandardError; end
   end
 end
