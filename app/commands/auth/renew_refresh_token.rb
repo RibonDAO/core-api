@@ -12,7 +12,8 @@ module Auth
     def call
       with_exception_handle do
         decoded_token = Jwt::Decoder.decode(token: access_token, custom_options: { verify_expiration: false })
-        authenticatable = UserManager.find decoded_token[:authenticatable_id]
+                                    .first.symbolize_keys
+        authenticatable = UserManager.find_by(id: decoded_token[:authenticatable_id])
         new_access_token, new_refresh_token = Jwt::Auth::Refresher
                                               .refresh!(refresh_token:, decoded_token:, authenticatable:)
 
