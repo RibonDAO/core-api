@@ -1,7 +1,7 @@
 module Managers
   module V1
     class AuthorizationController < Managers::ManagersController
-      skip_before_action :authenticate, only: :google_authorization
+      skip_before_action :authenticate, only: %i[google_authorization refresh_token]
       def google_authorization
         command = ::Manager::SetUserManagerTokens.call(id_token: params[:data]['id_token'])
 
@@ -20,8 +20,7 @@ module Managers
         current_manager = UserManager.find_by(id: decoded_token[:authenticatable_id])
         access_token, refresh_token = Jwt::Auth::Refresher
                                       .refresh!(refresh_token: params[:refresh_token],
-                                                decoded_token:,
-                                                authenticatable: current_manager)
+                                                decoded_token:, authenticatable: current_manager)
 
         create_headers({ access_token:, refresh_token: })
         render json: { message: I18n.t('manager.login_success') }, status: :ok
