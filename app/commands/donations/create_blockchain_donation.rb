@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# replaced by the batch
+
 module Donations
   class CreateBlockchainDonation < ApplicationCommand
     prepend SimpleCommand
@@ -27,7 +29,7 @@ module Donations
       ribon_contract.donate_through_integration(donation_pool:,
                                                 non_profit_wallet_address:,
                                                 integration_wallet_address:,
-                                                donation_batch: user.email, amount:)
+                                                donation_batch: user_hash(user&.email), amount:)
     end
 
     def create_donation_blockchain_transaction(transaction_hash)
@@ -64,6 +66,10 @@ module Donations
 
     def donation_pool
       non_profit.cause&.default_pool || chain.default_donation_pool
+    end
+
+    def user_hash(email)
+      Web3::Utils::Converter.keccak(email) if email
     end
   end
 end

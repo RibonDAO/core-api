@@ -11,7 +11,8 @@ describe Givings::Impact::CalculateImpactToNonProfit do
     let(:currency) { :usd }
 
     it 'returns the impact and rounded impact' do
-      expect(command.result).to eq({ impact: 100, rounded_impact: 100 })
+      expect(command.result).to eq({ impact: 100, rounded_impact: 100,
+                                     measurement_unit: 'quantity_without_decimals' })
     end
   end
 end

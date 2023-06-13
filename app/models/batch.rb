@@ -22,4 +22,12 @@ class Batch < ApplicationRecord
   def create_batch_blockchain_transaction(transaction_hash:, chain:)
     blockchain_transactions.create(transaction_hash:, chain:)
   end
+
+  def non_profit
+    donations.last&.non_profit
+  end
+
+  def integration
+    donations.last&.integration
+  end
 end

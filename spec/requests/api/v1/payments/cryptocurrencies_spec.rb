@@ -45,9 +45,8 @@ RSpec.describe 'Api::V1::Payments::Cryptocurrency', type: :request do
   describe 'PUT /cryptocurrency' do
     subject(:request) { put '/api/v1/payments/cryptocurrency', params: }
 
-    let(:person) { build(:person) }
-    let(:customer) { build(:customer, person:) }
-    let(:person_payment) { build(:person_payment, person:) }
+    let(:customer) { build(:customer) }
+    let(:person_payment) { build(:person_payment, payer: customer) }
     let!(:blockchain_transaction) do
       build(:person_blockchain_transaction, person_payment:, transaction_hash: '0xFFFF')
     end

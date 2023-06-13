@@ -3,7 +3,10 @@
 # Table name: non_profit_impacts
 #
 #  id                           :bigint           not null, primary key
+#  donor_recipient              :string
 #  end_date                     :date
+#  impact_description           :text
+#  measurement_unit             :string
 #  start_date                   :date
 #  usd_cents_to_one_impact_unit :decimal(, )
 #  created_at                   :datetime         not null
@@ -19,6 +22,7 @@ RSpec.describe NonProfitImpact, type: :model do
     it { is_expected.to belong_to(:non_profit) }
     it { is_expected.to validate_presence_of(:usd_cents_to_one_impact_unit) }
     it { is_expected.to validate_presence_of(:start_date) }
+    it { is_expected.to validate_presence_of(:donor_recipient) }
   end
 
   describe '#impact_by_ticket' do

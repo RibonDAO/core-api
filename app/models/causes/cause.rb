@@ -2,15 +2,17 @@
 #
 # Table name: causes
 #
-#  id         :bigint           not null, primary key
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                      :bigint           not null, primary key
+#  cover_image_description :string
+#  main_image_description  :string
+#  name                    :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #
 class Cause < ApplicationRecord
   extend Mobility
 
-  translates :name, type: :string
+  translates :name, :cover_image_description, :main_image_description, type: :string
 
   has_many :non_profits
   has_many :pools
@@ -22,7 +24,7 @@ class Cause < ApplicationRecord
   validates :name, presence: true
 
   def default_pool
-    pools.joins(:token).where(tokens: { chain_id: Chain.default.id }).first
+    pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
   end
 
   def active

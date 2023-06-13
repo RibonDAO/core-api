@@ -5,6 +5,7 @@ module Graphql
         query {
           pools(orderBy: timestamp, orderDirection: asc) {
             id
+            balance
             timestamp
           }
         }

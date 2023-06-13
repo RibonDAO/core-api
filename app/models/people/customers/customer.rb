@@ -8,16 +8,23 @@
 #  name          :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  person_id     :uuid
 #  tax_id        :string
 #  user_id       :bigint
 #
 class Customer < ApplicationRecord
   include UuidHelper
-
-  belongs_to :user
-  belongs_to :person
-
   validates :email, presence: true
   validates :name, presence: true
+
+  belongs_to :user
+
+  has_many :person_payments, as: :payer
+
+  def blueprint
+    CustomerBlueprint
+  end
+
+  def identification
+    email
+  end
 end

@@ -2,4 +2,5 @@
 
 module Exceptions
   class VoucherWebhookError < StandardError; end
+  class ImpactNormalizationError < StandardError; end
 end

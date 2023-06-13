@@ -9,3 +9,7 @@ module TimeHelpers
     allow(Time.zone).to receive(:now).and_return(parsed_date(date_time_string))
   end
 end
+
+RSpec.configure do |config|
+  config.include ActiveSupport::Testing::TimeHelpers
+end

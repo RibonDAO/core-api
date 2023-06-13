@@ -28,11 +28,14 @@ module Givings
       private
 
       def success_callback(order, result)
-        if result
-          order.payment.update(status: :paid)
-          order.payment.update(external_id: result[:external_id]) if result[:external_id]
-        end
+        return unless result
 
+        status = ::Payment::Gateways::Stripe::Helpers.status(result[:status])
+        order.payment.update(status:)
+        order.payment.update(external_id: result[:external_id]) if result[:external_id]
+        return unless status == :paid
+
+        handle_contribution_creation(order.payment)
         klass.success_callback(order, result)
       end
 
@@ -40,8 +43,8 @@ module Givings
         order.payment.update(status: :failed, error_code: error.code)
       end
 
-      def call_add_giving_blockchain_job(order)
-        AddGivingToBlockchainJob.perform_later(amount: order.payment.crypto_amount, payment: order.payment)
+      def handle_contribution_creation(payment)
+        PersonPayments::CreateContributionJob.perform_later(payment)
       end
     end
   end

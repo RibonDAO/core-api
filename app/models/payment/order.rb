@@ -1,5 +1,5 @@
 class Order
-  attr_accessor :id, :person, :gateway, :payment, :payment_method, :offer, :card, :operation
+  attr_accessor :id, :payer, :gateway, :payment, :payment_method, :offer, :card, :operation
 
   def initialize(params = {})
     self.id        = params[:id]
@@ -15,7 +15,7 @@ class Order
     params = {
       id: payment.id,
       gateway: payment&.offer&.gateway&.to_sym,
-      person: payment&.person,
+      payer: payment&.payer,
       payment:,
       payment_method: payment&.payment_method,
       offer: payment&.offer,
@@ -29,7 +29,7 @@ class Order
   private
 
   def initialize_payment_related_attributes(params)
-    self.person         = params[:person]         || payment&.person
+    self.payer          = params[:payer]          || payment&.payer
     self.payment_method = params[:payment_method] || payment&.payment_method
     self.offer          = params[:offer]          || payment&.offer
   end

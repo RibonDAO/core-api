@@ -30,19 +30,30 @@ RailsAdmin.config do |config|
     show_in_app
   end
 
-  config.included_models = [Admin, UserManager, User, NonProfit, NonProfitImpact, Integration,
+  config.included_models = [Admin, Customer, UserManager, User, NonProfit, NonProfitImpact, Integration,
                             Batch, Donation, DonationBatch, RibonConfig, Offer, OfferGateway,
                             Customer, PersonPayment, BlockchainTransaction, DonationBlockchainTransaction, Chain,
-                            Cause, Story, NonProfitPool, IntegrationTask,
-                            Voucher, IntegrationWebhook, Token, Pool, History]
+                            Cause, Story, NonProfitPool, IntegrationTask, CryptoUser, Contribution,
+                            Voucher, IntegrationWebhook, Token, Pool, PoolBalance, History, BalanceHistory,
+                            LegacyUserImpact, LegacyNonProfit, Article, Author, LegacyContribution,
+                            ContributionBalance, PersonBlockchainTransaction, DonationContribution, BigDonor,
+                            LegacyUser, LegacyIntegrationImpact, LegacyIntegration]
 
   config.model RibonConfig do
     field :default_ticket_value do
-      label{ "ticket value in usdc cents (100 = one dollar)" }
+      label{ "default_ticket_value (ticket value in usdc cents (100 = one dollar))" }
     end
 
     field :default_chain_id do
-      label{ "Default chain id, like polygon or mumbai" }
+      label{ "default_chain_id (default chain id, like polygon or mumbai)" }
+    end
+
+    field :contribution_fee_percentage do
+      label{ "contribution_fee_percentage (percentage that goes to pay contribution fees (the rest is for tickets pay) (ex: 20% for fees, 80% for tickets pay on each contribution))" }
+    end
+
+    field :minimum_contribution_chargeable_fee_cents do
+      label{ "minimum_contribution_chargeable_fee_cents (minimum fee to charge from a contribution in usdc cents (100 = one dollar))" }
     end
   end
 
@@ -62,6 +73,9 @@ RailsAdmin.config do |config|
       label{ "Cause Card Image" }
     end
 
+    ## This is displayed as "support_image" on admin (as demanded by the team), 
+    ## but we call it background_image on the model
+    
     field :background_image do
       label{ "Support Image" }
     end
@@ -83,6 +97,20 @@ RailsAdmin.config do |config|
     end
 
     include_all_fields
+  end
+
+  config.model User do
+    field :email do
+      label{ "Email" }
+      help "(to delete, change this to: 'deleted+user_id+@ribon.io')"
+    end
+    
+    include_all_fields
+    
+    field :deleted_at do
+      label{ "Deleted at" }
+      help '(change here if deleting)'
+    end
   end
 
   MOBILITY_MODELS =  ApplicationRecord.descendants.select{ |model| model.included_modules.include?(Mobility::Plugins::Backend::InstanceMethods) }

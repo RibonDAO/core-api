@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   before_action :set_language
+  after_action :update_language
 
   protected
 
@@ -15,5 +16,9 @@ class ApplicationController < ActionController::API
 
   def set_language
     I18n.locale = request.headers['Language']&.to_sym || :en
+  end
+
+  def update_language
+    current_user&.update(language: I18n.locale)
   end
 end

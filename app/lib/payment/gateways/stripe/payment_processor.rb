@@ -8,10 +8,12 @@ module Payment
           setup_customer(order)
           payment = Billing::UniquePayment.create(stripe_customer:,
                                                   stripe_payment_method:, offer: order&.offer)
+
           {
             external_customer_id: stripe_customer.id,
             external_payment_method_id: stripe_payment_method.id,
-            external_id: payment&.id
+            external_id: payment&.id,
+            status: payment&.status
           }
         end
 
@@ -38,14 +40,15 @@ module Payment
         private
 
         def setup_customer(order)
+          order_payer = order&.payer
           @stripe_payment_method = Entities::PaymentMethod.create(card: order&.card)
-          @stripe_customer       = Entities::Customer.create(customer: order&.person&.customer,
+          @stripe_customer       = Entities::Customer.create(customer: order_payer,
                                                              payment_method: @stripe_payment_method)
 
-          order&.person&.customer&.update(customer_keys: { stripe: @stripe_customer.id })
+          order_payer&.update(customer_keys: { stripe: @stripe_customer.id })
 
           Entities::TaxId.add_to_customer(stripe_customer: @stripe_customer,
-                                          tax_id: order&.person&.customer&.tax_id)
+                                          tax_id: order_payer&.tax_id)
         end
       end
     end

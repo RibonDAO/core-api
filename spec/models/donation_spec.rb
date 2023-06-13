@@ -3,6 +3,7 @@
 # Table name: donations
 #
 #  id             :bigint           not null, primary key
+#  platform       :string
 #  value          :decimal(, )
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -19,6 +20,23 @@ RSpec.describe Donation, type: :model do
     it { is_expected.to belong_to(:non_profit) }
     it { is_expected.to belong_to(:integration) }
     it { is_expected.to belong_to(:user) }
+    it { is_expected.to have_one(:donation_contribution) }
+  end
+
+  describe '.without_label' do
+    let!(:donations_without_label) { create_list(:donation, 2) }
+    let(:donations_with_label) { create_list(:donation, 2) }
+
+    before do
+      donations_with_label.each do |donation|
+        create(:donation_contribution, donation:)
+      end
+    end
+
+    it 'returns all the donations that are not yet labeled' do
+      expect(described_class.without_label.pluck(:id))
+        .to match_array(donations_without_label.pluck(:id))
+    end
   end
 
   describe '#impact_value' do
@@ -58,6 +76,16 @@ RSpec.describe Donation, type: :model do
     it 'creates a new donation_blockchain_transaction' do
       expect { donation.create_donation_blockchain_transaction(transaction_hash: '0x001', chain:) }
         .to change { donation.donation_blockchain_transactions.count }.by(1)
+    end
+  end
+
+  describe '#cause' do
+    let(:cause) { create(:cause) }
+    let(:non_profit) { create(:non_profit, cause:) }
+    let(:donation) { create(:donation, non_profit:) }
+
+    it 'returns the non profit cause' do
+      expect(donation.cause).to eq cause
     end
   end
 end

@@ -32,10 +32,20 @@ module Api
             email: payment_params[:email],
             payment_method: :crypto,
             user: find_or_create_user,
+            cause:,
+            non_profit:,
             wallet_address: payment_params[:wallet_address],
             transaction_hash: payment_params[:transaction_hash],
             integration_id: payment_params[:integration_id]
           }
+        end
+
+        def cause
+          @cause ||= Cause.find payment_params[:cause_id].to_i if payment_params[:cause_id]
+        end
+
+        def non_profit
+          @non_profit ||= NonProfit.find payment_params[:non_profit_id].to_i if payment_params[:non_profit_id]
         end
 
         def find_or_create_user
@@ -43,7 +53,8 @@ module Api
         end
 
         def payment_params
-          params.permit(:email, :amount, :transaction_hash, :status, :wallet_address, :integration_id)
+          params.permit(:email, :amount, :transaction_hash, :status, :cause_id, :non_profit_id, :wallet_address,
+                        :integration_id)
         end
       end
     end

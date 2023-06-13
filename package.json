@@ -6,12 +6,15 @@
   "author": "Nicholas Marques <nnmarques97@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@commitlint/config-conventional": "^17.2.0",
     "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.0.3"
   },
   "scripts": {
     "prepare": "husky install"
+  },
+  "dependencies": {
+    "@githubnext/github-copilot-cli": "^0.1.30"
   }
 }

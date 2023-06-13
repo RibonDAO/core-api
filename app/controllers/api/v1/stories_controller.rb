@@ -2,7 +2,7 @@ module Api
   module V1
     class StoriesController < ApplicationController
       def index
-        @stories = Story.where(status: :active)
+        @stories = Story.all
 
         render json: StoryBlueprint.render(@stories, view: :minimal)
       end
@@ -40,7 +40,7 @@ module Api
       private
 
       def story_params
-        params.permit(:id, :title, :description, :position, :active, :image)
+        params.permit(:id, :title, :description, :position, :active, :image, :image_description)
       end
     end
   end

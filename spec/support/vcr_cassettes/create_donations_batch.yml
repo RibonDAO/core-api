@@ -8,7 +8,7 @@ http_interactions:
       string: '[{"value":null,"integration_id":134,"non_profit_id":134,"user_id":123,"donation_id":123,"user_hash":"d289d5d0d6240ab576ea2c51a9a2e9ac8d820255e5b2d4d3244314a0975588d4","integration_address":"https://dapp.ribon.io/?integration_id=f7be8d80-2406-4cb0-82eb-849346d327c9","non_profit_address":"0x6E060041D62fDd76cF27c582f62983b864878E8F","timestamp":"2022-12-13T14:13:23.414Z"}]'
     headers:
       Authorization:
-      - Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDdDZWJFNmY5NkJDMjhmQTU4YzM4MzNlMkE2RTZhNTVkQ2EwYUNkNDgiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MDQyMjAyNjAyMSwibmFtZSI6IlJpYm9uTkZUU3RvcmFnZUtleSJ9.aO4AsmQv4UkP0J7yeNLvZi7Lnf2UP6eZqBBkXsyRGeA
+      - Bearer nft_storage_key
       Content-Type:
       - application/json
       Accept-Encoding:

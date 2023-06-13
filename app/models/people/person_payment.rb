@@ -2,43 +2,54 @@
 #
 # Table name: person_payments
 #
-#  id             :bigint           not null, primary key
-#  amount_cents   :integer
-#  error_code     :string
-#  paid_date      :datetime
-#  payment_method :integer
-#  receiver_type  :string
-#  refund_date    :datetime
-#  status         :integer          default("processing")
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  external_id    :string
-#  integration_id :bigint
-#  offer_id       :bigint
-#  person_id      :uuid
-#  receiver_id    :bigint
+#  id                 :bigint           not null, primary key
+#  amount_cents       :integer
+#  currency           :integer
+#  error_code         :string
+#  liquid_value_cents :integer
+#  paid_date          :datetime
+#  payer_type         :string
+#  payment_method     :integer
+#  receiver_type      :string
+#  refund_date        :datetime
+#  status             :integer          default("processing")
+#  usd_value_cents    :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  external_id        :string
+#  integration_id     :bigint
+#  offer_id           :bigint
+#  payer_id           :uuid
+#  receiver_id        :bigint
 #
 class PersonPayment < ApplicationRecord
   include UuidHelper
 
+  before_create :set_currency
   after_create :set_fees
+  after_create :set_liquid_value_cents
+  after_create :set_usd_value_cents
 
-  belongs_to :person
   belongs_to :integration
   belongs_to :offer, optional: true
   belongs_to :receiver, polymorphic: true, optional: true
+  belongs_to :payer, polymorphic: true
 
-  has_one :person_blockchain_transaction
+  has_many :person_blockchain_transactions
   has_one :person_payment_fee
+  has_one :contribution
 
   validates :paid_date, :status, :payment_method, presence: true
+
+  scope :without_contribution, -> { where.missing(:contribution) }
 
   enum status: {
     processing: 0,
     paid: 1,
     failed: 2,
     refunded: 3,
-    refund_failed: 4
+    refund_failed: 4,
+    requires_action: 5
   }
 
   enum payment_method: {
@@ -47,11 +58,24 @@ class PersonPayment < ApplicationRecord
     crypto: 2
   }
 
-  def crypto_amount
-    amount_with_fees = amount - service_fees
-    return amount_with_fees if currency == :usd
+  enum currency: {
+    brl: 0,
+    usd: 1
+  }
 
-    Currency::Converters.convert_to_usd(value: amount_with_fees, from: currency).round.to_f
+  def from_big_donor?
+    payer_type == 'BigDonor'
+  end
+
+  def from_customer?
+    payer_type == 'Customer'
+  end
+
+  def crypto_amount
+    amount_without_fees = amount - service_fees
+    return amount_without_fees if currency&.to_sym == :usd
+
+    Currency::Converters.convert_to_usd(value: amount_without_fees, from: currency&.to_sym).round.to_f
   end
 
   def amount
@@ -65,20 +89,56 @@ class PersonPayment < ApplicationRecord
   end
 
   def set_fees
-    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency:).result
-    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents,
-                               crypto_fee_cents: fees[:crypto_fee].cents)
+    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym).result
+    crypto_fee_cents = crypto? ? 0 : fees[:crypto_fee].cents
+
+    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents:)
   rescue StandardError => e
     Reporter.log(error: e)
   end
 
-  private
+  def set_liquid_value_cents
+    self.liquid_value_cents = amount_cents - person_payment_fee&.service_fee_cents
+    save!
+  rescue StandardError => e
+    Reporter.log(error: e)
+  end
 
-  def currency
-    offer&.currency&.to_sym&.downcase || :usd
+  def set_usd_value_cents
+    self.usd_value_cents = crypto_amount * 100
+    save!
+  rescue StandardError => e
+    Reporter.log(error: e)
+  end
+
+  def pool
+    case receiver_type
+    when 'Cause'
+      receiver.default_pool
+    when 'NonProfit'
+      receiver.cause.default_pool
+    end
+  end
+
+  def person_blockchain_transaction
+    person_blockchain_transactions.last
+  end
+
+  def create_person_blockchain_transaction(treasure_entry_status:, transaction_hash:)
+    person_blockchain_transactions.create(treasure_entry_status:, transaction_hash:)
   end
 
   def service_fees
     person_payment_fee&.service_fee || 0
+  end
+
+  def payer_identification
+    payer&.identification
+  end
+
+  private
+
+  def set_currency
+    self.currency = offer&.currency || :usd
   end
 end

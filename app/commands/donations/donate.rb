@@ -3,12 +3,14 @@
 module Donations
   class Donate < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :non_profit, :integration, :donation, :user
+    attr_reader :non_profit, :integration, :donation, :user, :platform, :skip_allowance
 
-    def initialize(integration:, non_profit:, user:)
+    def initialize(integration:, non_profit:, user:, platform:, skip_allowance: false)
       @integration = integration
       @non_profit = non_profit
       @user = user
+      @platform = platform
+      @skip_allowance = skip_allowance
     end
 
     def call
@@ -23,6 +25,7 @@ module Donations
       create_donation
       set_user_last_donation_at
       set_last_donated_cause
+      label_donation
 
       donation
     end
@@ -50,7 +53,7 @@ module Donations
     end
 
     def allowed?
-      return true if user.can_donate?(integration)
+      return true if (user.can_donate?(integration, platform) || skip_allowance) && pool_balance?
 
       errors.add(:message, I18n.t('donations.blocked_message'))
 
@@ -58,7 +61,7 @@ module Donations
     end
 
     def create_donation
-      @donation = Donation.create!(integration:, non_profit:, user:, value: ticket_value)
+      @donation = Donation.create!(integration:, non_profit:, user:, value: ticket_value, platform:)
     end
 
     def set_user_last_donation_at
@@ -69,8 +72,22 @@ module Donations
       SetLastDonatedCause.call(user:, cause: non_profit.cause)
     end
 
+    def label_donation
+      Service::Contributions::TicketLabelingService.new(donation:).label_donation
+    end
+
     def ticket_value
       @ticket_value ||= RibonConfig.default_ticket_value
+    end
+
+    def pool
+      non_profit.cause.default_pool
+    end
+
+    def pool_balance?
+      return true if pool&.pool_balance.blank?
+
+      pool.pool_balance.balance_for_donation?
     end
   end
 end

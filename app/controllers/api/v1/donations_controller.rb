@@ -2,7 +2,7 @@ module Api
   module V1
     class DonationsController < ApplicationController
       def create
-        command = Donations::Donate.call(integration:, non_profit:, user:)
+        command = Donations::Donate.call(integration:, non_profit:, user:, platform:)
 
         if command.success?
           render json: { donation: command.result }, status: :ok
@@ -25,9 +25,13 @@ module Api
         @user ||= User.find_by(email: donation_params[:email])
       end
 
+      def platform
+        @platform ||= donation_params[:platform]
+      end
+
       def donation_params
         params.permit(:integration_id,
-                      :non_profit_id, :email)
+                      :non_profit_id, :email, :platform)
       end
     end
   end

@@ -1,0 +1,47 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.polygonscan.com/api?action=tokenbalance&address=0xa932851982118bd5fa99e16b144afe4622eb2a49&apikey=YourApiKey&contractaddress=0xF000000000000000000000000000000000000000&module=account&tag=latest
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 03 Jan 2023 17:42:03 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '157'
+      Connection:
+      - keep-alive
+      Cache-Control:
+      - private
+      Vary:
+      - Accept-Encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: UTF-8
+      string: '{"status":"1","message":"OK","result":"95150000"}'
+  recorded_at: Tue, 03 Jan 2023 17:42:03 GMT
+recorded_with: VCR 6.1.0

@@ -1,7 +1,7 @@
 class StoryBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :updated_at, :created_at, :title, :description, :active, :position
+  fields :updated_at, :created_at, :title, :description, :active, :position, :image_description
 
   field(:image) do |object|
     ImagesHelper.image_url_for(object.image, variant: { resize_to_fit: [800, 800],

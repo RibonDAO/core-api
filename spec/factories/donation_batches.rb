@@ -10,7 +10,7 @@
 #
 FactoryBot.define do
   factory :donation_batch do
-    donation { nil }
-    batch { nil }
+    donation { build(:donation) }
+    batch { build(:batch) }
   end
 end

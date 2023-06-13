@@ -10,16 +10,12 @@ module Service
       end
 
       delegate :total_donations, :total_donors, :impact_per_non_profit, :donations_per_non_profit,
-               :donors_per_non_profit, to: :impact_service
+               :total_new_donors, :total_donors_recurrent, :donors_per_non_profit,
+               :donations_splitted_into_intervals, :donors_splitted_into_intervals,
+               to: :impact_service
 
       def formatted_impact
-        {
-          total_donations:, total_donors:, impact_per_non_profit:, donations_per_non_profit:,
-          donors_per_non_profit:, previous_total_donations:, previous_total_donors:,
-          previous_impact_per_non_profit:, total_donations_balance:,
-          total_donors_balance:, total_donations_trend:, total_donors_trend:,
-          previous_donations_per_non_profit:, previous_donors_per_non_profit:
-        }
+        formatted_current_impact.merge(formatted_previous_impact).merge(formatted_impact_balance)
       end
 
       def total_donations_trend
@@ -54,6 +50,14 @@ module Service
         previous_impact_service.donors_per_non_profit
       end
 
+      def previous_donations_splitted_into_intervals
+        previous_impact_service.donations_splitted_into_intervals
+      end
+
+      def previous_donors_splitted_into_intervals
+        previous_impact_service.donors_splitted_into_intervals
+      end
+
       def total_donations_balance
         impact_service.total_donations - previous_total_donations
       end
@@ -63,6 +67,41 @@ module Service
       end
 
       private
+
+      def formatted_current_impact
+        {
+          impact_per_non_profit:,
+          donations_per_non_profit:,
+          donors_per_non_profit:,
+          donations_splitted_into_intervals:,
+          donors_splitted_into_intervals:
+        }
+      end
+
+      def formatted_previous_impact
+        {
+          previous_total_donations:,
+          previous_total_donors:,
+          previous_donations_per_non_profit:,
+          previous_donors_per_non_profit:,
+          previous_impact_per_non_profit:,
+          previous_donations_splitted_into_intervals:,
+          previous_donors_splitted_into_intervals:
+        }
+      end
+
+      def formatted_impact_balance
+        {
+          total_donations:,
+          total_donors:,
+          total_donations_balance:,
+          total_donors_balance:,
+          total_donations_trend:,
+          total_donors_trend:,
+          total_new_donors:,
+          total_donors_recurrent:
+        }
+      end
 
       def impact_service
         @impact_service ||= Impact.new(integration:, start_date:, end_date:)

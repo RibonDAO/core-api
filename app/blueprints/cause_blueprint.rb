@@ -1,7 +1,7 @@
 class CauseBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :updated_at, :created_at, :name, :active
+  fields :updated_at, :created_at, :name, :active, :main_image_description, :cover_image_description
 
   association :pools, blueprint: PoolBlueprint
 
@@ -17,5 +17,9 @@ class CauseBlueprint < Blueprinter::Base
 
   view :minimal do
     excludes :created_at, :updated_at
+  end
+
+  field(:default_pool) do |object|
+    object.default_pool&.address
   end
 end

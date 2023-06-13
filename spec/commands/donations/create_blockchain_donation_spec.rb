@@ -18,6 +18,7 @@ describe Donations::CreateBlockchainDonation do
       let!(:chain) { create(:chain) }
       let!(:token) { create(:token, chain:) }
       let!(:donation_pool) { create(:pool, token:) }
+      let(:user_hash) { Web3::Utils::Converter.keccak(donation.user.email) }
 
       before do
         allow(Web3::Contracts::RibonContract).to receive(:new).and_return(ribon_contract)
@@ -32,7 +33,7 @@ describe Donations::CreateBlockchainDonation do
           .with(donation_pool:, amount: 1.0,
                 non_profit_wallet_address: non_profit.wallet_address,
                 integration_wallet_address: integration.wallet_address,
-                donation_batch: donation.user.email)
+                donation_batch: user_hash)
       end
 
       it 'creates donation_blockchain_transaction for the donation' do
@@ -62,7 +63,7 @@ describe Donations::CreateBlockchainDonation do
             .with(donation_pool: new_pool, amount: 1.0,
                   non_profit_wallet_address: non_profit.wallet_address,
                   integration_wallet_address: integration.wallet_address,
-                  donation_batch: donation.user.email)
+                  donation_batch: user_hash)
         end
       end
     end

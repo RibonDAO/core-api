@@ -7,6 +7,12 @@ module Api
         render json: CauseBlueprint.render(@causes)
       end
 
+      def free_donation_causes
+        @causes = CauseQueries.new.active_with_pool_balance
+
+        render json: CauseBlueprint.render(@causes)
+      end
+
       def create
         command = Causes::UpsertCause.call(cause_params)
         if command.success?
@@ -34,7 +40,14 @@ module Api
       private
 
       def cause_params
-        params.permit(:id, :name)
+        params.permit(
+          :id,
+          :name,
+          :cover_image,
+          :main_image,
+          :cover_image_description,
+          :main_image_description
+        )
       end
     end
   end

@@ -1,3 +1,6 @@
 :queues:
   - default
   - donations
+  - person_payments
+  - mailers
+  - contributions

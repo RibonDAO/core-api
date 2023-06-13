@@ -10,11 +10,14 @@ module Service
       end
 
       delegate :total_donations, :total_donors, :impact_per_non_profit, :donations_per_non_profit,
-               :donors_per_non_profit, to: :statistics_service
+               :total_new_donors, :total_donors_recurrent, :donors_per_non_profit,
+               :donations_splitted_into_intervals, :donors_splitted_into_intervals,
+               to: :statistics_service
 
       def formatted_impact
         { total_donations:, total_donors:, impact_per_non_profit:, donations_per_non_profit:,
-          donors_per_non_profit: }
+          total_new_donors:, total_donors_recurrent:, donors_per_non_profit:,
+          donations_splitted_into_intervals:, donors_splitted_into_intervals: }
       end
 
       private
