@@ -26,7 +26,7 @@ module PersonPaymentServices
     def update_person_payment_status(status)
       person_payment = person_blockchain_transaction.person_payment
 
-      return if person_payment.payment_method != :crypto
+      return if person_payment.payment_method != 'crypto'
 
       if status == :success
         person_payment.update!(status: :paid)
