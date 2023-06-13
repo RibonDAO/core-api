@@ -20,6 +20,7 @@ Bundler.require(*Rails.groups)
 
 module RibonCoreApi
   extend self
+  API_ENVS = %w[development staging production local].freeze
 
   def redis
     @redis ||= Redis::Namespace.new('api', redis: Redis.new(url: redis_url))
@@ -27,6 +28,12 @@ module RibonCoreApi
 
   def redis_url
     @redis_url ||= config[:redis][:url]
+  end
+
+  API_ENVS.each do |env|
+    define_method("api_env_#{env}?") do
+      config[:api_env] == env
+    end
   end
 
   def load_yaml(config)
