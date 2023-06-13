@@ -10,7 +10,7 @@ RSpec.describe PersonPaymentServices::BlockchainTransaction, type: :service do
     end
     let(:status) { nil }
     let(:person_blockchain_transaction) do
-      create(:person_blockchain_transaction, treasure_entry_status: :processing)
+      create(:person_blockchain_transaction, treasure_entry_status: :processing, person_payment:)
     end
 
     before do
@@ -19,35 +19,75 @@ RSpec.describe PersonPaymentServices::BlockchainTransaction, type: :service do
       create(:ribon_config)
     end
 
-    context 'when the status is success (0x1)' do
-      let(:status) { '0x1' }
+    context 'when is a crypto payment' do
+      let(:person_payment) { create(:person_payment, payment_method: :crypto) }
 
-      it 'updates the person_blockchain_transaction treasure_entry_status to success' do
-        service.update_status
+      context 'when the status is success (0x1)' do
+        let(:status) { '0x1' }
 
-        expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'success'
+        it 'updates the person_blockchain_transaction treasure_entry_status to success' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'success'
+        end
+
+        it 'updates the person_payment status to paid' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.person_payment.status).to eq 'paid'
+        end
       end
 
-      it 'updates the person_payment status to paid' do
-        service.update_status
+      context 'when the status is fail (0x0)' do
+        let(:status) { '0x0' }
 
-        expect(person_blockchain_transaction.reload.person_payment.status).to eq 'paid'
+        it 'updates the person_blockchain_transaction treasure_entry_status to failed' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'failed'
+        end
+
+        it 'updates the person_payment status to failed' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.person_payment.status).to eq 'failed'
+        end
       end
     end
 
-    context 'when the status is fail (0x0)' do
-      let(:status) { '0x0' }
+    context 'when is a credit card payment' do
+      let(:person_payment) { create(:person_payment, payment_method: :credit_card, status: :paid) }
 
-      it 'updates the person_blockchain_transaction treasure_entry_status to failed' do
-        service.update_status
+      context 'when the status is success (0x1)' do
+        let(:status) { '0x1' }
 
-        expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'failed'
+        it 'updates the person_blockchain_transaction treasure_entry_status to success' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'success'
+        end
+
+        it 'do not update person payment' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.person_payment.status).to eq 'paid'
+        end
       end
 
-      it 'updates the person_payment status to failed' do
-        service.update_status
+      context 'when the status is fail (0x0)' do
+        let(:status) { '0x0' }
 
-        expect(person_blockchain_transaction.reload.person_payment.status).to eq 'failed'
+        it 'updates the person_blockchain_transaction treasure_entry_status to failed' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.treasure_entry_status).to eq 'failed'
+        end
+
+        it 'do not update person payment' do
+          service.update_status
+
+          expect(person_blockchain_transaction.reload.person_payment.status).to eq 'paid'
+        end
       end
     end
   end
