@@ -24,6 +24,9 @@
 #
 class UserManager < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
+  has_many :refresh_tokens, dependent: :delete_all, as: :authenticatable
+  has_many :allowlisted_tokens, dependent: :delete_all, as: :authenticatable
+  has_many :blocklisted_tokens, dependent: :delete_all, as: :authenticatable
 
   validates :email, uniqueness: { case_sensitive: true }, format: { with: URI::MailTo::EMAIL_REGEXP }
 
@@ -41,5 +44,9 @@ class UserManager < ApplicationRecord
       user.password_confirmation = user.password
       user.save!
     end
+  end
+
+  def token_issued_at
+    refresh_tokens.last&.created_at
   end
 end

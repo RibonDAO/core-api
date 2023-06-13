@@ -4,11 +4,13 @@ module Jwt
   class Encoder < Jwt::Base
     def self.encode(
       payload,
-      expiration = 30.minutes.from_now.to_i,
+      expiration = 30.minutes,
       key = HMAC_SECRET_KEY,
       algorithm = DEFAULT_ALGORITHM
     )
-      JWT.encode(payload, key, algorithm, { exp: expiration })
+      payload[:exp] = (Time.zone.now + expiration).to_i
+
+      JWT.encode(payload, key, algorithm)
     end
   end
 end

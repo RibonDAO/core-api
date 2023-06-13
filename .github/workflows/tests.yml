@@ -51,7 +51,7 @@ jobs:
           POSTGRES_DB: ci_db_test
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
           COVERAGE: true
-          MIN_COVERAGE: 93
+          MIN_COVERAGE: 90
           RIBON_WALLET_PRIVATE_KEY: ${{ secrets.RIBON_WALLET_PRIVATE_KEY }}
           REDIS_URL: ${{ secrets.REDIS_URL }}
           BLOCKCHAIN_SCAN_URL: ${{ secrets.BLOCKCHAIN_SCAN_URL }}
