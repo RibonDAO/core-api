@@ -522,6 +522,7 @@ DEPENDENCIES
   httparty
   image_processing (~> 1.2)
   io-wait (= 0.2.1)
+  jwt
   kaminari
   keccak (~> 1.3)
   mobility (~> 1.2.6)
