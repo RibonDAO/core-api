@@ -1,9 +1,21 @@
 module Managers
   module V1
     class AuthorizationController < Managers::ManagersController
-      skip_before_action :authenticate, only: %i[google_authorization refresh_token]
+      skip_before_action :authenticate, only: %i[google_authorization refresh_token password_authorization]
       def google_authorization
         command = ::Manager::SetUserManagerTokens.call(id_token: params[:data]['id_token'])
+
+        if command.success?
+          create_headers(command.result)
+
+          render json: { message: I18n.t('manager.login_success') }, status: :created
+        else
+          render_errors(command.errors)
+        end
+      end
+
+      def password_authorization
+        command = ::Manager::AuthenticateManagerByPassword.call(email: params[:email], password: params[:password])
 
         if command.success?
           create_headers(command.result)
