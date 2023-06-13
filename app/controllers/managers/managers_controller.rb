@@ -18,6 +18,10 @@ module Managers
       render json: { message: 'Expired token.' }, status: :forbidden
     end
 
+    rescue_from Jwt::Errors::DecodeError do |_e|
+      render json: { message: 'Decode error' }, status: :unauthorized
+    end
+
     protected
 
     def authenticate
