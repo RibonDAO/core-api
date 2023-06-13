@@ -8,6 +8,8 @@ module Jwt
       JWT.decode(token, key, true, custom_options.merge({ algorithm: }))
     rescue JWT::ExpiredSignature
       raise Errors::ExpiredSignature
+    rescue JWT::DecodeError
+      raise Errors::DecodeError
     end
   end
 end
