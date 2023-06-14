@@ -18,6 +18,10 @@ module Service
           @impact ||= (amount / usd_cents_to_one_impact).round(2)
         end
 
+        def formatted_impact
+          ::Impact::Normalizer.new(non_profit, rounded_impact).normalize
+        end
+
         private
 
         def usd_cents_to_one_impact
