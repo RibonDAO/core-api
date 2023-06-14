@@ -206,6 +206,9 @@ Rails.application.routes.draw do
   namespace :patrons do
     namespace :v1 do
       get 'contributions' => 'contributions#index'
+      resources :contributions, only: %i[] do
+        get 'impacts' => 'contributions/impacts#index'
+      end
     end
   end
 end
