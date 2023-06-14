@@ -8,24 +8,28 @@ module Service
       end
 
       def impact
-        contribution.non_profits.map do |non_profit|
-          {
-            non_profit:,
-            formatted_impact: formatted_impact_for(non_profit),
-            total_amount_donated: formatted_amount_for(non_profit)
-          }
-        end
+        contribution.non_profits.map { |non_profit| direct_impact_for(non_profit) }
+      end
+
+      def direct_impact_for(non_profit)
+        value = value_for(non_profit)
+
+        {
+          non_profit:,
+          formatted_impact: formatted_impact_for(non_profit, value),
+          total_amount_donated: formatted_amount_for(value)
+        }
       end
 
       private
 
-      def formatted_impact_for(non_profit)
+      def formatted_impact_for(non_profit, value)
         Service::Givings::Impact::NonProfitImpactCalculator
-          .new(non_profit:, value: value_for(non_profit), currency: :usd).formatted_impact
+          .new(non_profit:, value:, currency: :usd).formatted_impact
       end
 
-      def formatted_amount_for(non_profit)
-        Money.from_cents(value_for(non_profit), :usd).format
+      def formatted_amount_for(value)
+        Money.from_cents(value, :usd).format
       end
 
       def value_for(non_profit)
