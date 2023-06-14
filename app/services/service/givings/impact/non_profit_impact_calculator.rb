@@ -20,6 +20,8 @@ module Service
 
         def formatted_impact
           ::Impact::Normalizer.new(non_profit, rounded_impact).normalize
+        rescue Exceptions::ImpactNormalizationError
+          ['', '', '']
         end
 
         private
