@@ -10,6 +10,10 @@ RSpec.describe 'Patrons::V1::Contributions::Impacts', type: :request do
     let(:receiver) { create(:non_profit, :with_impact) }
     let(:contribution) { create(:contribution, person_payment:, receiver:) }
 
+    before do
+      create(:donation_contribution, contribution:, donation: create(:donation, non_profit: receiver))
+    end
+
     it 'returns the contribution direct impact' do
       request
 
