@@ -38,18 +38,6 @@ module Service
                             .where(non_profits: { id: non_profit.id })
                             .sum(:value)
       end
-
-      def payment
-        @payment ||= @contribution.person_payment
-      end
-
-      def balance
-        @balance ||= @contribution.contribution_balance
-      end
-
-      def paid_fees
-        @paid_fees ||= ContributionFee.where(payer_contribution: @contribution).sum(:fee_cents)
-      end
     end
   end
 end
