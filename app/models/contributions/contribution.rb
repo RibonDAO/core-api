@@ -74,4 +74,10 @@ class Contribution < ApplicationRecord
   def label
     "#{receiver&.name} (#{created_at.strftime('%b/%Y')})"
   end
+
+  def non_profits
+    return [receiver] if receiver_type == 'NonProfit'
+
+    receiver&.non_profits
+  end
 end
