@@ -8,11 +8,12 @@ module Service
       end
 
       def impact
-        contribution.non_profits.map { |non_profit| direct_impact_for(non_profit) }
+        contribution.non_profits.filter_map { |non_profit| direct_impact_for(non_profit) }
       end
 
       def direct_impact_for(non_profit)
         value = value_for(non_profit)
+        return unless value.positive?
 
         {
           non_profit:,
