@@ -262,10 +262,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@githubnext/github-copilot-cli@^0.1.30":
-  version "0.1.30"
-  resolved "https://registry.npmjs.org/@githubnext/github-copilot-cli/-/github-copilot-cli-0.1.30.tgz"
-  integrity sha512-R2MVmezDzrDTjOPfB4ZG4b+DkWUP4okqBELpwu1AwTM2F0ftWtQDNQeHh0U7ZP1AgIECx0OnycCjWOZ1eQeZ+A==
+"@githubnext/github-copilot-cli@^0.1.33":
+  version "0.1.33"
+  resolved "https://registry.yarnpkg.com/@githubnext/github-copilot-cli/-/github-copilot-cli-0.1.33.tgz#c0a18b7a8165ed33bb981ede79bb9be9d4302b8f"
+  integrity sha512-/UU2qQ/k9bPzf1aN3zJallDT6JwfQIgBX6O5z62SfyGpPZaDrgNoYF7M2G2MIKnYb+hlyosiWZ/nrmOG8XRwsg==
   dependencies:
     applicationinsights "^2.3.6"
     axios "^1.1.3"
