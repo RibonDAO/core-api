@@ -1,6 +1,6 @@
 module Legacy
   class CreateLegacyIntegrationImpactJob < ApplicationJob
-    queue_as :default
+    queue_as :legacy
     sidekiq_options retry: 1
 
     def perform(legacy_integration, legacy_impacts)

@@ -1,6 +1,6 @@
 module Legacy
   class CreateLegacyContributionsJob < ApplicationJob
-    queue_as :default
+    queue_as :legacy
     sidekiq_options retry: 1
 
     def perform(legacy_user, legacy_contribution)
