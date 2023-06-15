@@ -15,7 +15,10 @@ module Givings
 
       def call
         with_exception_handle do
-          { impact: impact_service.impact, rounded_impact: impact_service.rounded_impact, measurement_unit: }
+          { impact: impact_service.impact,
+            rounded_impact: impact_service.rounded_impact,
+            formatted_impact: impact_service.formatted_impact,
+            measurement_unit: }
         end
       end
 

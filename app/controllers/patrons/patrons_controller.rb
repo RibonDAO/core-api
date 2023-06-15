@@ -3,6 +3,10 @@ module Patrons
     before_action :set_language
     before_action :require_patron
 
+    rescue_from ActiveRecord::RecordNotFound do |_e|
+      render json: { message: 'Not found.' }, status: :not_found
+    end
+
     protected
 
     def require_patron
