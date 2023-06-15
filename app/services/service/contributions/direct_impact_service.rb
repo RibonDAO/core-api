@@ -12,7 +12,7 @@ module Service
       end
 
       def direct_impact_for(non_profit)
-        value = value_for(non_profit)
+        value = value_for(non_profit) / 100.0
         return unless value.positive?
 
         {
@@ -30,7 +30,7 @@ module Service
       end
 
       def formatted_amount_for(value)
-        Money.from_cents(value, :usd).format
+        Money.from_amount(value, :usd).format
       end
 
       def value_for(non_profit)
