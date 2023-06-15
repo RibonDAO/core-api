@@ -38,10 +38,10 @@ describe Legacy::CreateLegacyContribution do
 
       context 'when it has already been created' do
         before do
-          command
+          create(:legacy_contribution, legacy_payment_id: legacy_contribution[:legacy_payment_id])
         end
 
-        it 'does not legacy non profit' do
+        it 'does not create a legacy contribution' do
           expect { command }.not_to change(LegacyContribution, :count)
         end
       end
