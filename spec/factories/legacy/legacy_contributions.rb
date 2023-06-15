@@ -21,5 +21,6 @@ FactoryBot.define do
     legacy_payment_platform { 1 }
     legacy_payment_method { 1 }
     from_subscription { false }
+    legacy_user { build(:legacy_user) }
   end
 end
