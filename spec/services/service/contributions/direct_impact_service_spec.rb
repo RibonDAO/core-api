@@ -28,7 +28,7 @@ RSpec.describe Service::Contributions::DirectImpactService, type: :service do
 
     it 'returns the formatted impact for the non profit' do
       expect(service.direct_impact_for(non_profit)[:formatted_impact])
-        .to eq(['150', '1 day of water for', '2 donor'])
+        .to eq(['3', '1 day of water for', '1 donor'])
     end
 
     it 'returns the non profit' do
