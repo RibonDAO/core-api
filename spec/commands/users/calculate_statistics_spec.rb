@@ -23,7 +23,7 @@ describe Users::CalculateStatistics do
         create_list(:person_payment, 2, status: :paid, payer: customer, receiver_type: 'Cause',
                                         receiver_id: non_profit2.cause_id,
                                         offer: create(:offer, currency: :brl, price_cents: 1000))
-        create_list(:donation, 2, user:, non_profit: non_profit)
+        create_list(:donation, 2, user:, non_profit:)
         allow(Currency::Converters).to receive(:convert_to_usd).and_return(1)
 
         allow(Currency::Converters).to receive(:convert_to_brl).and_return(1)
@@ -32,7 +32,8 @@ describe Users::CalculateStatistics do
       it 'returns the statistics' do
         command
         expect(command.result).to eq({ total_causes: 2, total_non_profits: 1, total_tickets: 2,
-                                       total_donated: { usd: 21.0, brl: 21.0 }, last_donated_non_profit: non_profit.id})
+                                       total_donated: { usd: 21.0, brl: 21.0 },
+                                       last_donated_non_profit: non_profit.id })
       end
     end
 
