@@ -204,6 +204,7 @@ Rails.application.routes.draw do
 
   namespace :patrons do
     namespace :v1 do
+      post 'auth/refresh_token', to: 'authorization#refresh_token'
       get 'contributions' => 'contributions#index'
       resources :contributions, only: %i[] do
         get 'impacts' => 'contributions/impacts#index'

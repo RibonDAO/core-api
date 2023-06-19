@@ -7,7 +7,12 @@ module Auth
     end
 
     def find_or_create_auth_link
-      URI.join(RibonCoreApi.config[:patrons][:app][:url], "/auth?authToken=#{auth_token}").to_s
+      URI.join(RibonCoreApi.config[:patrons][:app][:url],
+               "/auth?authToken=#{auth_token}&id=#{authenticatable.id}").to_s
+    end
+
+    def valid_auth_token?(token)
+      find_token_on_redis == token
     end
 
     private
@@ -17,11 +22,11 @@ module Auth
     end
 
     def find_token_on_redis
-      RedisStore::HStore.get(key: "confirm_email_token_#{authenticatable.class.name}_#{authenticatable.id}")
+      RedisStore::HStore.get(key: "auth_token_#{authenticatable.class.name}_#{authenticatable.id}")
     end
 
     def generate_new_auth_token
-      RedisStore::HStore.set(key: "confirm_email_token_#{authenticatable.class.name}_#{authenticatable.id}",
+      RedisStore::HStore.set(key: "auth_token_#{authenticatable.class.name}_#{authenticatable.id}",
                              value: SecureRandom.uuid, expires_in: 1.month)
     end
   end

@@ -1,7 +1,33 @@
 module Patrons
   module V1
     class AuthorizationController < Patrons::PatronsController
-      skip_before_action :authenticate, only: %i[refresh_token]
+      skip_before_action :authenticate, only: %i[send_authentication_email authorize_from_email_link refresh_token]
+
+      def send_authentication_email
+        authenticatable = BigDonor.find_by(email: params[:email])
+        command = Auth::SendAuthenticationLink.call(authenticatable:)
+
+        if command.success?
+          render json: { message: I18n.t('patrons.email_sent') }, status: :ok
+        else
+          render_errors(command.errors, :unprocessable_entity)
+        end
+      end
+
+      def authorize_from_email_link
+        auth_token = params[:auth_token]
+        patron = BigDonor.find(params[:id])
+        command = Auth::AuthorizeAuthToken.call(auth_token:, authenticatable: patron)
+
+        if command.success?
+          access_token, refresh_token = command.result
+          create_headers({ access_token:, refresh_token: })
+
+          render json: { message: I18n.t('patrons.login_success') }, status: :ok
+        else
+          render_errors(command.errors, :unauthorized)
+        end
+      end
 
       def refresh_token
         access_token = request.headers['Authorization']&.split('Bearer ')&.last
