@@ -24,8 +24,8 @@ gem 'graphql'
 gem 'graphql-client'
 
 gem 'eth', '~> 0.5.6'
-gem "rbsecp256k1", "5.1.1"
 gem 'keccak', '~> 1.3'
+gem 'rbsecp256k1', '5.1.1'
 
 gem 'byebug'
 
