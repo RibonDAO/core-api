@@ -1,7 +1,6 @@
 module Patrons
   class PatronsController < ActionController::API
     include JwtAuthenticatable
-
     attr_reader :current_patron, :decoded_token
 
     before_action :set_language
