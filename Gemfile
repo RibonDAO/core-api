@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.2'
+ruby '3.2.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.1'
@@ -24,6 +24,7 @@ gem 'graphql'
 gem 'graphql-client'
 
 gem 'eth', '~> 0.5.6'
+gem "rbsecp256k1", "5.1.1"
 gem 'keccak', '~> 1.3'
 
 gem 'byebug'
