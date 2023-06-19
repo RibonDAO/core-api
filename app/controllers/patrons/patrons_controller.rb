@@ -2,9 +2,11 @@ module Patrons
   class PatronsController < ActionController::API
     include JwtAuthenticatable
 
+    attr_reader :current_patron, :decoded_token
+
     before_action :set_language
-    before_action :require_patron
     before_action :authenticate
+    before_action :require_patron
 
     rescue_from ActiveRecord::RecordNotFound do |_e|
       render json: { message: 'Not found.' }, status: :not_found
