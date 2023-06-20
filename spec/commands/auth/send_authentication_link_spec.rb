@@ -22,7 +22,7 @@ describe Auth::SendAuthenticationLink do
         receiver: authenticatable.email,
         template_name: 'authentication_email_template_id',
         language: 'en',
-        dynamic_template_data: { url: auth_link }
+        dynamic_template_data: { url: auth_link, first_name: authenticatable.name }
       )
     end
   end

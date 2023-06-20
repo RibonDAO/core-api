@@ -23,7 +23,8 @@ module Auth
 
     def dynamic_template_data
       {
-        url:
+        url:,
+        first_name: authenticatable.name
       }
     end
 
