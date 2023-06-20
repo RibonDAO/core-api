@@ -7,6 +7,7 @@ module Service
         @contribution = contribution
       end
 
+      # rubocop:disable Metrics/AbcSize
       def formatted_statistics
         {
           initial_amount: format_money(initial_amount),
@@ -18,9 +19,12 @@ module Service
           boost_amount: format_money(boost_amount),
           total_increase_percentage:,
           total_amount_to_cause: format_money(total_amount_to_cause),
-          ribon_fee: format_money(ribon_fee)
+          ribon_fee: format_money(ribon_fee),
+          boost_new_contributors:,
+          boost_new_patrons:
         }
       end
+      # rubocop:enable Metrics/AbcSize
 
       def initial_amount
         return 0 if payment&.usd_value_cents.nil?
@@ -72,6 +76,14 @@ module Service
 
       def ribon_fee
         paid_fees / 100.0
+      end
+
+      def boost_new_contributors
+        ContributionQueries.new(contribution:).boost_new_contributors
+      end
+
+      def boost_new_patrons
+        ContributionQueries.new(contribution:).boost_new_patrons
       end
 
       private

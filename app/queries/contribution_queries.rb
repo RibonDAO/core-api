@@ -23,4 +23,32 @@ class ContributionQueries
       .where.not(contribution_id: contribution.id)
       .order(tickets_balance_cents: :asc)
   end
+
+  def boost_new_contributors
+    sql = %(
+      SELECT count(distinct person_payments.payer_id) FROM contributions
+      LEFT JOIN person_payments on person_payments.id = contributions.person_payment_id
+      WHERE contributions.id = ANY(
+        select contribution_id from contribution_fees
+        where payer_contribution_id = #{contribution.id}
+      )
+      AND person_payments.payer_type = 'Customer'
+      AND person_payments.status = 1)
+
+    ActiveRecord::Base.connection.execute(sql).first['count'] || 0
+  end
+
+  def boost_new_patrons
+    sql = %(
+      SELECT count(distinct person_payments.payer_id) FROM contributions
+      LEFT JOIN person_payments on person_payments.id = contributions.person_payment_id
+      WHERE contributions.id = ANY(
+        select contribution_id from contribution_fees
+        where payer_contribution_id = #{contribution.id}
+      )
+      AND person_payments.payer_type = 'BigDonor'
+      AND person_payments.status = 1)
+
+    ActiveRecord::Base.connection.execute(sql).first['count'] || 0
+  end
 end
