@@ -49,7 +49,7 @@ module Api
         end
 
         def find_or_create_user
-          current_user || User.find_or_create_by(email: payment_params[:email])
+          current_user || User.find_or_create_by(email: payment_params[:email], language: I18n.locale)
         end
 
         def payment_params
