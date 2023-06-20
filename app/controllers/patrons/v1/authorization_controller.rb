@@ -23,7 +23,7 @@ module Patrons
         if command.success?
           create_headers(command.result)
 
-          render json: { message: I18n.t('patrons.login_success') }, status: :ok
+          render json: BigDonorBlueprint.render(authenticatable), status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end
