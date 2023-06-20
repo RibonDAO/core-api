@@ -36,4 +36,31 @@ RSpec.describe Auth::EmailLinkService, type: :service do
       end
     end
   end
+
+  describe '#valid_auth_token?' do
+    let(:auth_token) { 'auth_token' }
+
+    context 'when the token exists previously' do
+      before do
+        allow(SecureRandom).to receive(:uuid).and_return(auth_token)
+        service.send(:generate_new_auth_token)
+      end
+
+      it 'returns true' do
+        expect(service.valid_auth_token?(auth_token)).to be_truthy
+      end
+
+      context 'when the token is different from passed argument' do
+        it 'returns false' do
+          expect(service.valid_auth_token?('another_token')).to be_falsey
+        end
+      end
+    end
+
+    context 'when the token does not exist or is expired' do
+      it 'returns false' do
+        expect(service.valid_auth_token?(auth_token)).to be_falsey
+      end
+    end
+  end
 end
