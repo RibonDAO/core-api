@@ -2,9 +2,11 @@ module Patrons
   module V1
     class AuthorizationController < Patrons::PatronsController
       skip_before_action :authenticate, only: %i[send_authentication_email authorize_from_email_link refresh_token]
+      skip_before_action :require_patron,
+                         only: %i[send_authentication_email authorize_from_email_link refresh_token]
 
       def send_authentication_email
-        authenticatable = BigDonor.find_by(email: params[:email])
+        authenticatable = BigDonor.find_by!(email: params[:email])
         command = Auth::SendAuthenticationLink.call(authenticatable:)
 
         if command.success?
@@ -15,13 +17,11 @@ module Patrons
       end
 
       def authorize_from_email_link
-        auth_token = params[:auth_token]
-        patron = BigDonor.find(params[:id])
-        command = Auth::AuthorizeAuthToken.call(auth_token:, authenticatable: patron)
+        authenticatable = BigDonor.find(params[:id])
+        command = Auth::AuthorizeAuthToken.call(auth_token: params[:auth_token], authenticatable:)
 
         if command.success?
-          access_token, refresh_token = command.result
-          create_headers({ access_token:, refresh_token: })
+          create_headers(command.result)
 
           render json: { message: I18n.t('patrons.login_success') }, status: :ok
         else
