@@ -9,6 +9,7 @@
 #  updated_at :datetime         not null
 #
 class BigDonor < ApplicationRecord
+  include AuthenticatableModel
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
 
