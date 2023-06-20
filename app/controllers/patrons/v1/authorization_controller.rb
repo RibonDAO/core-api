@@ -1,9 +1,9 @@
 module Patrons
   module V1
     class AuthorizationController < Patrons::PatronsController
-      skip_before_action :authenticate, only: %i[send_authentication_email authorize_from_email_link refresh_token]
+      skip_before_action :authenticate, only: %i[send_authentication_email authorize_from_auth_token refresh_token]
       skip_before_action :require_patron,
-                         only: %i[send_authentication_email authorize_from_email_link refresh_token]
+                         only: %i[send_authentication_email authorize_from_auth_token refresh_token]
 
       def send_authentication_email
         authenticatable = BigDonor.find_by!(email: params[:email])
@@ -16,7 +16,7 @@ module Patrons
         end
       end
 
-      def authorize_from_email_link
+      def authorize_from_auth_token
         authenticatable = BigDonor.find(params[:id])
         command = Auth::AuthorizeAuthToken.call(auth_token: params[:auth_token], authenticatable:)
 

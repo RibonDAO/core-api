@@ -34,8 +34,8 @@ RSpec.describe 'Patrons::V1::Authorization', type: :request do
     end
   end
 
-  describe 'POST /authorize_from_email_link' do
-    subject(:request) { post '/patrons/v1/auth/authorize_from_email_link', params: }
+  describe 'POST /authorize_from_auth_token' do
+    subject(:request) { post '/patrons/v1/auth/authorize_from_auth_token', params: }
 
     let(:patron) { create(:big_donor) }
     let(:params) { { auth_token: 'auth_token', id: patron.id } }
