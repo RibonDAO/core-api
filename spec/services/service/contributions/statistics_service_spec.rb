@@ -22,7 +22,8 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
       expect(service.formatted_statistics.keys)
         .to match_array(%i[initial_amount used_amount usage_percentage
                            remaining_amount total_tickets avg_donations_per_person
-                           boost_amount total_increase_percentage total_amount_to_cause ribon_fee])
+                           boost_amount total_increase_percentage total_amount_to_cause ribon_fee
+                           boost_new_contributors boost_new_patrons])
     end
   end
 
@@ -89,6 +90,32 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
   describe '#ribon_fee' do
     it 'returns the ribon fee' do
       expect(service.ribon_fee).to eq(3)
+    end
+  end
+
+  describe '#boost_new_contributors' do
+    let!(:person_payment) { create(:person_payment, status: :paid, payer: create(:customer)) }
+    let!(:new_contribution) { create(:contribution, receiver: cause, person_payment:) }
+
+    before do
+      create(:contribution_fee, payer_contribution: contribution, contribution: new_contribution)
+    end
+
+    it 'returns the new contributors generated' do
+      expect(service.boost_new_contributors).to eq(1)
+    end
+  end
+
+  describe '#boost_new_patrons' do
+    let!(:person_payment) { create(:person_payment, status: :paid, payer: create(:big_donor)) }
+    let!(:new_contribution) { create(:contribution, receiver: cause, person_payment:) }
+
+    before do
+      create(:contribution_fee, payer_contribution: contribution, contribution: new_contribution)
+    end
+
+    it 'returns the new patrons generated' do
+      expect(service.boost_new_patrons).to eq(1)
     end
   end
 end
