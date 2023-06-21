@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'Patrons::V1::Contributions', type: :request do
   describe 'GET /index' do
-    subject(:request) { get '/patrons/v1/contributions', headers: }
+    include_context 'when making a patron request' do
+      let(:request) { get '/patrons/v1/contributions', headers: }
+    end
 
-    let(:headers) { { 'Email' => patron.email } }
-    let(:patron) { create(:big_donor) }
     let(:offer) { create(:offer, currency: :usd) }
 
     before do
