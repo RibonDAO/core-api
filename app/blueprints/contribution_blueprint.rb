@@ -7,9 +7,11 @@ class ContributionBlueprint < Blueprinter::Base
   association :person_payment, blueprint: PersonPaymentBlueprint
   association :contribution_balance, blueprint: ContributionBalanceBlueprint
 
-  field(:stats) do |contribution|
-    ContributionStatsBlueprint.render_as_json(Service::Contributions::StatisticsService
-                                        .new(contribution:).formatted_statistics)
+  view :with_stats do
+    field(:stats) do |contribution|
+      ContributionStatsBlueprint.render_as_json(Service::Contributions::StatisticsService
+                                          .new(contribution:).formatted_statistics)
+    end
   end
 
   view :non_profit do

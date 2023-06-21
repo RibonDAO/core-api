@@ -27,6 +27,8 @@ class User < ApplicationRecord
   has_many :user_completed_tasks
   has_many :person_payments, through: :customers
 
+  has_many :contributions, through: :person_payments
+
   has_one :user_donation_stats
   has_one :user_tasks_statistic
   has_one :utm, as: :trackable
