@@ -99,6 +99,9 @@ Rails.application.routes.draw do
 
         get 'donations_count' => 'users/impacts#donations_count'
         put 'track', to: 'users/trackings#track_user'
+
+        get 'contributions' => 'users/contributions#index'
+        get 'contributions/:id' => 'users/contributions#show'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
