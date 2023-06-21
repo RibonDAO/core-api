@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_29_150345) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -507,7 +507,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_29_150345) do
   create_table "refresh_tokens", force: :cascade do |t|
     t.string "crypted_token"
     t.string "authenticatable_type", null: false
-    t.bigint "authenticatable_id", null: false
+    t.string "authenticatable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["authenticatable_type", "authenticatable_id"], name: "index_refresh_tokens_on_authenticatable"

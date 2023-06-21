@@ -7,7 +7,7 @@
 #  crypted_token        :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  authenticatable_id   :bigint           not null
+#  authenticatable_id   :string           not null
 #
 class RefreshToken < ApplicationRecord
   belongs_to :authenticatable, polymorphic: true

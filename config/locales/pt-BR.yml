@@ -264,3 +264,5 @@ pt-BR:
     invalid_voucher: "Ticket inválido."
   patrons:
     not_found: "Patrono não encontrado."
+    email_sent: "Email enviado com sucesso."
+    login_success: "Autenticado com sucesso."
