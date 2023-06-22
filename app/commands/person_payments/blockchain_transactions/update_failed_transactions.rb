@@ -9,7 +9,7 @@ module PersonPayments
         failed_transactions = PersonPayment.where(receiver_type: 'Cause',
                                                   payment_method: :credit_card,
                                                   status: :paid).filter_map do |person_payment|
-          person_payment.person_blockchain_transaction if person_payment.person_blockchain_transaction&.failed?
+          person_payment.person_blockchain_transaction if person_payment.person_blockchain_transaction&.retry?
         end
         failed_transactions.each do |person_blockchain_transaction|
           update_transaction(amount: person_blockchain_transaction.person_payment.crypto_amount,

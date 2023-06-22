@@ -18,7 +18,9 @@ class PersonBlockchainTransaction < ApplicationRecord
   enum treasure_entry_status: {
     processing: 0,
     success: 1,
-    failed: 2
+    failed: 2,
+    dropped: 3,
+    replaced: 4
   }
 
   def update_status_from_eth_chain
@@ -33,5 +35,9 @@ class PersonBlockchainTransaction < ApplicationRecord
 
     pool = person_payment.receiver.default_pool
     Service::Donations::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
+  end
+
+  def retry?
+    %w[failed dropped replaced].include?(treasure_entry_status)
   end
 end
