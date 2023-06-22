@@ -6,7 +6,6 @@ RSpec.describe Web3::Contracts::RibonContract do
   let(:ecr_token_contract) { instance_double(Web3::Contracts::Ecr20TokenContract) }
   let(:contract) { OpenStruct.new({}) }
   let(:amount) { 0.5 }
-  let(:feeable) { true }
   let(:donation_batch) { build(:batch).cid }
   let(:donation_pool) { build(:pool) }
 
@@ -14,6 +13,10 @@ RSpec.describe Web3::Contracts::RibonContract do
     subject(:method_call) do
       described_class.new(chain:).add_pool_balance(donation_pool:, amount:, feeable:)
     end
+
+    let(:feeable) { true }
+
+    let(:address) { (::Eth::Address.new chain[:ribon_contract_address]).address }
 
     before do
       allow(Web3::Providers::Client).to receive(:create).and_return(client)
@@ -25,11 +28,12 @@ RSpec.describe Web3::Contracts::RibonContract do
       allow(ecr_token_contract).to receive(:approve)
     end
 
-    it 'calls the transact with correct args' do
+    it 'calls the approve and transact with correct args' do
       method_call
       wei_amount = Web3::Utils::Converter.to_decimals(amount, 6)
       sender_key = Web3::Providers::Keys::RIBON_KEY
 
+      expect(ecr_token_contract).to have_received(:approve).with(spender: address, amount: wei_amount)
       expect(client)
         .to have_received(:transact).with(
           contract, 'addPoolBalance', donation_pool.address, wei_amount, feeable, gas_limit: 0, sender_key:
@@ -108,6 +112,7 @@ RSpec.describe Web3::Contracts::RibonContract do
       )
     end
 
+    let(:address) { (::Eth::Address.new chain[:ribon_contract_address]).address }
     let(:non_profit_pool) { build(:pool) }
     let(:non_profit_wallet_address) { build(:non_profit_wallet).public_key }
 
@@ -116,13 +121,16 @@ RSpec.describe Web3::Contracts::RibonContract do
       allow(::Eth::Contract).to receive(:from_abi).and_return(contract)
       allow(client).to receive_messages(transact: {}, max_fee_per_gas: 0, max_priority_fee_per_gas: 0,
                                         gas_limit: 0)
+      allow(Web3::Contracts::Ecr20TokenContract).to receive(:new).and_return(ecr_token_contract)
+      allow(ecr_token_contract).to receive(:approve)
     end
 
-    it 'calls the transact with correct args' do
+    it 'calls the approve and transact with correct args' do
       method_call
       wei_amount = Web3::Utils::Converter.to_decimals(amount, 6)
       sender_key = Web3::Providers::Keys::RIBON_KEY
 
+      expect(ecr_token_contract).to have_received(:approve).with(spender: address, amount: wei_amount)
       expect(client)
         .to have_received(:transact).with(
           contract, 'contributeToNonProfit', non_profit_pool.address, non_profit_wallet_address,
