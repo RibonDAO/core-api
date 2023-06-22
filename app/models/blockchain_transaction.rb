@@ -20,7 +20,9 @@ class BlockchainTransaction < ApplicationRecord
   enum status: {
     processing: 0,
     success: 1,
-    failed: 2
+    failed: 2,
+    dropped: 3,
+    replaced: 4
   }
 
   after_create :update_status_from_chain
@@ -32,5 +34,9 @@ class BlockchainTransaction < ApplicationRecord
   def update_status_from_chain
     # TODO: add listener to contract events to call this method
     Donations::UpdateBlockchainTransactionStatusJob.set(wait_until: 5.minutes.from_now).perform_later(self)
+  end
+
+  def retry?
+    %w[failed dropped replaced].include?(status)
   end
 end
