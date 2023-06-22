@@ -15,8 +15,8 @@ RSpec.describe 'Api::V1::Causes', type: :request do
     it 'returns a list of causes' do
       request
 
-      expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image pools
-                                                 active non_profits default_pool cover_image_description
+      expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image
+                                                 active default_pool cover_image_description
                                                  main_image_description])
     end
 
@@ -44,8 +44,8 @@ RSpec.describe 'Api::V1::Causes', type: :request do
     it 'returns a list of available causes for free donations' do
       request
 
-      expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image pools
-                                                 active non_profits default_pool cover_image_description
+      expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image
+                                                 active default_pool cover_image_description
                                                  main_image_description])
     end
 
