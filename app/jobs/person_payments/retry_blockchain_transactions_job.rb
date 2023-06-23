@@ -3,9 +3,10 @@ module PersonPayments
     queue_as :default
 
     def perform
-      BlockchainTransactions::UpdateProcessingTransactions.call
-      BlockchainTransactions::UpdateFailedTransactions.call
-      BlockchainTransactions::UpdateApiOnlyTransactions.call
+      BlockchainTransactions::Cause::UpdateProcessingTransactions.call
+      BlockchainTransactions::Cause::UpdateFailedTransactions.call
+      BlockchainTransactions::Cause::UpdateApiOnlyTransactions.call
+      BlockchainTransactions::NonProfit::UpdateFailedTransactions.call
     end
   end
 end
