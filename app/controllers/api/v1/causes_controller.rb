@@ -4,13 +4,13 @@ module Api
       def index
         @causes = Cause.all
 
-        render json: CauseBlueprint.render(@causes)
+        render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
 
       def free_donation_causes
         @causes = CauseQueries.new.active_with_pool_balance
 
-        render json: CauseBlueprint.render(@causes)
+        render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
 
       def create

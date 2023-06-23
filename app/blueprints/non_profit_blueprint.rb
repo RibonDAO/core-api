@@ -5,7 +5,7 @@ class NonProfitBlueprint < Blueprinter::Base
          :logo_description, :main_image_description, :background_image_description,
          :confirmation_image_description
 
-  association :cause, blueprint: CauseBlueprint, view: :minimal
+  association :cause, blueprint: CauseBlueprint, view: :data_and_images
 
   association :stories, blueprint: StoryBlueprint, view: :minimal
 
