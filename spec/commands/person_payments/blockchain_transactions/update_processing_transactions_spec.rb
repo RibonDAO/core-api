@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe PersonPayments::BlockchainTransactions::Cause::UpdateProcessingTransactions do
+describe PersonPayments::BlockchainTransactions::UpdateProcessingTransactions do
   describe '.call' do
     subject(:command) { described_class.call }
 
