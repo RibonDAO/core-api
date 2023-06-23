@@ -4,8 +4,9 @@ module PersonPayments
 
     def perform
       BlockchainTransactions::UpdateProcessingTransactions.call
-      BlockchainTransactions::UpdateFailedTransactions.call
-      BlockchainTransactions::UpdateApiOnlyTransactions.call
+      BlockchainTransactions::Cause::UpdateFailedTransactions.call
+      BlockchainTransactions::Cause::UpdateApiOnlyTransactions.call
+      BlockchainTransactions::NonProfit::UpdateFailedTransactions.call
     end
   end
 end
