@@ -13,8 +13,16 @@ require 'rails_helper'
 
 RSpec.describe PersonBlockchainTransaction, type: :model do
   describe 'validations' do
+    subject(:person_blockchain_transaction) { build(:person_blockchain_transaction) }
+
     it { is_expected.to belong_to(:person_payment) }
-    it { is_expected.to define_enum_for(:treasure_entry_status).with_values(%i[processing success failed]) }
+
+    it {
+      expect(person_blockchain_transaction).to define_enum_for(
+        :treasure_entry_status
+      ).with_values(%i[processing success failed dropped
+                       replaced])
+    }
   end
 
   describe 'after update with status success and receiver type cause' do
@@ -57,6 +65,32 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
     it 'calls increase_pool_balance' do
       expect(service).not_to have_received(:new).with(pool:)
       expect(service_mock).not_to have_received(:increase_balance)
+    end
+  end
+
+  describe '#retry?' do
+    %w[failed dropped replaced].each do |treasure_entry_status|
+      context 'when treasure_entry_status is failed or dropped or replaced' do
+        subject(:person_blockchain_transaction) do
+          build(:person_blockchain_transaction, treasure_entry_status:)
+        end
+
+        it 'returns true' do
+          expect(person_blockchain_transaction.retry?).to be true
+        end
+      end
+    end
+
+    %w[processing success].each do |treasure_entry_status|
+      context 'when treasure_entry_status is failed or dropped or replaced' do
+        subject(:person_blockchain_transaction) do
+          build(:person_blockchain_transaction, treasure_entry_status:)
+        end
+
+        it 'returns false' do
+          expect(person_blockchain_transaction.retry?).to be false
+        end
+      end
     end
   end
 end

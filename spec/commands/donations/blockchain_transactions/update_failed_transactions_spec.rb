@@ -6,25 +6,33 @@ describe Donations::BlockchainTransactions::UpdateFailedTransactions do
   describe '.call' do
     subject(:command) { described_class.call }
 
-    let(:batch) { create(:batch) }
-
-    let(:failed_transactions_before) do
-      create_list(:blockchain_transaction, 2, status: :failed, owner: batch)
+    let(:retry_transactions_before) do
+      [create(:blockchain_transaction, status: :failed),
+       create(:blockchain_transaction, status: :dropped),
+       create(:blockchain_transaction, status: :replaced)]
     end
-    let(:failed_transactions) { create_list(:blockchain_transaction, 1, status: :failed, owner: batch) }
-    let(:success_transactions) { create_list(:blockchain_transaction, 2, status: :success) }
+
+    let(:retry_transactions) do
+      [create(:blockchain_transaction, status: :failed),
+       create(:blockchain_transaction, status: :dropped),
+       create(:blockchain_transaction, status: :replaced)]
+    end
+
+    let(:not_retry_transactions) do
+      [create(:blockchain_transaction, status: :success),
+       create(:blockchain_transaction, status: :processing)]
+    end
 
     before do
-      failed_transactions_before
-      failed_transactions
-      success_transactions
+      retry_transactions_before
+      retry_transactions
       allow(Donations::CreateBatchBlockchainDonation).to receive(:call)
     end
 
-    it 'calls the Donations::CreateBatchBlockchainDonation with failed transactions donations' do
+    it 'calls the Donations::CreateBatchBlockchainDonation with retry transactions donations' do
       command
 
-      failed_transactions.each do |transaction|
+      retry_transactions.each do |transaction|
         expect(Donations::CreateBatchBlockchainDonation).to have_received(:call).with(
           non_profit: transaction.owner.non_profit,
           integration: transaction.owner.integration,
@@ -33,10 +41,10 @@ describe Donations::BlockchainTransactions::UpdateFailedTransactions do
       end
     end
 
-    it 'doesnt call the Donations::CreateBatchBlockchainDonation with successfull transactions donations' do
+    it 'doesnt call the Donations::CreateBatchBlockchainDonation with no retry transactions donations' do
       command
-
-      success_transactions.each do |transaction|
+      not_retry_transactions
+      not_retry_transactions.each do |transaction|
         expect(Donations::CreateBatchBlockchainDonation)
           .not_to have_received(:call).with(
             non_profit: transaction.owner.non_profit,
