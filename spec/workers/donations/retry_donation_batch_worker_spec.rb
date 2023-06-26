@@ -25,10 +25,10 @@ RSpec.describe Donations::RetryDonationBatchWorker, type: :worker do
       end.to change(described_class.jobs, :size).from(0).to(1)
     end
 
-    it 'expects to add one job in the donations queue' do
+    it 'expects to add one job in the batches queue' do
       expect do
         described_class.perform_async
-      end.to change(Sidekiq::Queues['donations'], :size).by(1)
+      end.to change(Sidekiq::Queues['batches'], :size).by(1)
     end
   end
 end
