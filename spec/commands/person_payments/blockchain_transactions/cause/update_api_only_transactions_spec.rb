@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe PersonPayments::BlockchainTransactions::UpdateApiOnlyTransactions do
+describe PersonPayments::BlockchainTransactions::Cause::UpdateApiOnlyTransactions do
   include ActiveStorage::Blob::Analyzable
   describe '.call' do
     subject(:command) { described_class.call }

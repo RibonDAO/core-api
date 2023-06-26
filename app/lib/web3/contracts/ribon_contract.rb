@@ -36,7 +36,8 @@ module Web3
                                    amount:)
 
         parsed_amount = Utils::Converter.to_decimals(amount, non_profit_pool.token.decimals)
-
+        token = non_profit_pool.token.address
+        Web3::Contracts::Ecr20TokenContract.new(chain:, token:).approve(spender: address, amount: parsed_amount)
         transact('contributeToNonProfit',
                  non_profit_pool.address,
                  non_profit_wallet_address,

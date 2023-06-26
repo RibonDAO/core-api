@@ -10,6 +10,12 @@ module Jwt
         )
       end
 
+      def blocklist(jti:, exp:, authenticatable:)
+        blocklist!(jti:, exp:, authenticatable:)
+      rescue StandardError
+        nil
+      end
+
       def blocklisted?(jti:)
         BlocklistedToken.exists?(jti:)
       end

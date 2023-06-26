@@ -7,7 +7,7 @@ module Donations
 
       def call
         failed_transactions = Batch.all.filter_map do |batch|
-          batch.blockchain_transaction if batch.blockchain_transaction&.failed?
+          batch.blockchain_transaction if batch.blockchain_transaction&.retry?
         end
         failed_transactions.each do |blockchain_transaction|
           batch = blockchain_transaction.owner
