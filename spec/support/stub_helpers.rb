@@ -26,7 +26,7 @@ module StubHelpers
 
   shared_context 'when mocking a request' do
     before do
-      VCR.insert_cassette cassette_name
+      VCR.insert_cassette(cassette_name, allow_playback_repeats: true)
     end
 
     after do

@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
       post 'users/can_donate' => 'users#can_donate'
+      get 'users/first_access_to_integration' => 'users#first_access_to_integration'
       get 'users/completed_tasks' => 'users#completed_tasks'
       post 'users/complete_task' => 'users#complete_task'
       get 'users/tasks_statistics' => 'users/tasks_statistics#index'
@@ -98,6 +99,9 @@ Rails.application.routes.draw do
 
         get 'donations_count' => 'users/impacts#donations_count'
         put 'track', to: 'users/trackings#track_user'
+
+        get 'contributions' => 'users/contributions#index'
+        get 'contributions/:id' => 'users/contributions#show'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -188,6 +192,8 @@ Rails.application.routes.draw do
 
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
+      post 'auth/refresh_token', to: 'authorization#refresh_token'
+      post 'auth/password', to: 'authorization#password_authorization'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       get 'non_profits/:id/stories' => 'non_profits#stories'
       get 'person_payments' => 'person_payments#index'
@@ -196,6 +202,18 @@ Rails.application.routes.draw do
       get 'stories/:id/stories' => 'stories#stories'
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
+    end
+  end
+
+  namespace :patrons do
+    namespace :v1 do
+      post 'auth/refresh_token', to: 'authorization#refresh_token'
+      post 'auth/send_authentication_email', to: 'authorization#send_authentication_email'
+      post 'auth/authorize_from_auth_token', to: 'authorization#authorize_from_auth_token'
+      get 'contributions' => 'contributions#index'
+      resources :contributions, only: %i[] do
+        get 'impacts' => 'contributions/impacts#index'
+      end
     end
   end
 end

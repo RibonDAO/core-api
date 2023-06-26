@@ -24,6 +24,7 @@
 #
 class UserManager < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
+  include AuthenticatableModel
 
   validates :email, uniqueness: { case_sensitive: true }, format: { with: URI::MailTo::EMAIL_REGEXP }
 

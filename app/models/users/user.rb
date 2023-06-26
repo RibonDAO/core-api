@@ -27,6 +27,8 @@ class User < ApplicationRecord
   has_many :user_completed_tasks
   has_many :person_payments, through: :customers
 
+  has_many :contributions, through: :person_payments
+
   has_one :user_donation_stats
   has_one :user_tasks_statistic
   has_one :utm, as: :trackable
@@ -35,6 +37,7 @@ class User < ApplicationRecord
 
   delegate :last_donation_at, to: :user_donation_stats
   delegate :can_donate?, to: :user_donation_stats
+  delegate :user_last_donation_to, to: :user_donation_stats
   delegate :last_donated_cause, to: :user_donation_stats
   delegate :first_completed_all_tasks_at, to: :user_tasks_statistic
   delegate :streak, to: :user_tasks_statistic

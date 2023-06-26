@@ -20,6 +20,7 @@ RSpec.describe BlockchainTransaction, type: :model do
     it { is_expected.to validate_presence_of(:transaction_hash) }
     it { is_expected.to belong_to(:owner) }
     it { is_expected.to belong_to(:chain) }
+    it { is_expected.to define_enum_for(:status).with_values(%i[processing success failed dropped replaced]) }
   end
 
   describe '#transaction_link' do
@@ -34,6 +35,32 @@ RSpec.describe BlockchainTransaction, type: :model do
     it 'the transaction link based on the network and transaction hash' do
       expect(blockchain_transaction.transaction_link)
         .to eq "#{chain.block_explorer_url}tx/#{transaction_hash}"
+    end
+  end
+
+  describe '#retry?' do
+    %w[failed dropped replaced].each do |status|
+      context 'when status is failed or dropped or replaced' do
+        subject(:blockchain_transaction) do
+          build(:blockchain_transaction, status:)
+        end
+
+        it 'returns true' do
+          expect(blockchain_transaction.retry?).to be true
+        end
+      end
+    end
+
+    %w[processing success].each do |status|
+      context 'when status is failed or dropped or replaced' do
+        subject(:blockchain_transaction) do
+          build(:blockchain_transaction, status:)
+        end
+
+        it 'returns false' do
+          expect(blockchain_transaction.retry?).to be false
+        end
+      end
     end
   end
 end

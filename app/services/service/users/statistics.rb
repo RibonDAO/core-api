@@ -38,12 +38,17 @@ module Service
           usd: (person_payments_usd + convert_to_usd(person_payments_brl)) }
       end
 
+      def last_donated_non_profit
+        donations.where.not(non_profit_id: nil).order(created_at: :desc).first&.non_profit_id
+      end
+
       def statistics
         donated = total_donated if customer
         { total_non_profits: (total_non_profits || []).count,
           total_tickets: donations.count,
           total_donated: donated || 0,
-          total_causes: (total_causes || []).count }
+          total_causes: (total_causes || []).count,
+          last_donated_non_profit: }
       end
 
       private

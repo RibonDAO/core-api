@@ -13,11 +13,13 @@ module Manager
     def call
       with_exception_handle do
         response = Request::ApiRequest.get(google_api_url)
+        raise Jwt::Errors::InvalidEmailDomain unless /@ribon\.io\z/.match?(response['email'])
+
         @user_manager = UserManager.create_user_for_google(response)
-        tokens = @user_manager.create_new_auth_token
+        access_token, refresh_token = Jwt::Auth::Issuer.call(@user_manager)
         @user_manager.save
 
-        tokens
+        { access_token:, refresh_token: }
       end
     end
 
