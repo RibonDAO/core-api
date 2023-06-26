@@ -98,6 +98,8 @@ gem 'rails-observers'
 # Authentication
 gem 'jwt'
 
+gem 'parallel_tests', group: [:development, :test]
+
 group :development, :test do
   gem 'aws-sdk-secretsmanager'
   gem 'base64'
