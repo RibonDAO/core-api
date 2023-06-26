@@ -23,7 +23,7 @@ module Service
           boost_new_contributors:,
           boost_new_patrons:,
           total_donors:,
-          total_contributors:,
+          total_contributors:
         }
       end
       # rubocop:enable Metrics/AbcSize
