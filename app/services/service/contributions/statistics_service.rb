@@ -21,7 +21,9 @@ module Service
           total_amount_to_cause: format_money(total_amount_to_cause),
           ribon_fee: format_money(ribon_fee),
           boost_new_contributors:,
-          boost_new_patrons:
+          boost_new_patrons:,
+          total_donors:,
+          total_contributors:,
         }
       end
       # rubocop:enable Metrics/AbcSize
@@ -84,6 +86,10 @@ module Service
 
       def boost_new_patrons
         ContributionQueries.new(contribution:).boost_new_patrons
+      end
+
+      def total_contributors
+        boost_new_contributors + boost_new_patrons
       end
 
       private
