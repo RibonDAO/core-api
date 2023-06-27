@@ -1,6 +1,6 @@
 module PersonPayments
   class RetryBlockchainTransactionsJob < ApplicationJob
-    queue_as :default
+    queue_as :person_payments
 
     def perform
       BlockchainTransactions::UpdateProcessingTransactions.call
