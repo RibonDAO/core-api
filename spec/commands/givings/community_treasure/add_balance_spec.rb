@@ -13,6 +13,7 @@ describe Givings::CommunityTreasure::AddBalance do
     let!(:donation_pool) { create(:pool, token: create(:token, chain:)) }
 
     before do
+      allow(Kernel).to receive(:sleep)
       allow(Web3::Contracts::RibonContract).to receive(:new).and_return(ribon_contract)
       allow(ribon_contract).to receive(:add_pool_balance)
       create(:ribon_config, default_chain_id: chain.chain_id)
