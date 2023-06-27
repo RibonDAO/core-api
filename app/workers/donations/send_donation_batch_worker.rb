@@ -6,6 +6,7 @@ module Donations
     def perform(*_args)
       Integration.all.each do |integration|
         NonProfit.all.each do |non_profit|
+          Helper.sleep(30)
           batch = Donations::CreateDonationsBatch.call(integration:, non_profit:).result
           Donations::CreateBatchBlockchainDonationJob.perform_later(non_profit:, integration:, batch:) if batch
         end
