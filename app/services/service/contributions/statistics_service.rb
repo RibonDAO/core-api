@@ -99,7 +99,7 @@ module Service
       end
 
       def format_money(amount)
-        Money.from_amount(amount, :usd).format
+        Money.from_amount(amount.round(2), :usd).format
       end
     end
   end
