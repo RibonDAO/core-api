@@ -51,7 +51,7 @@ class DonationQueries
           GROUP BY bt.owner_id) as last_blockchain_transaction
           LEFT JOIN blockchain_transactions ON blockchain_transactions.id = last_blockchain_transaction.bt_id
           LEFT JOIN batches ON batches.id = last_blockchain_transaction.batch_id
-          WHERE blockchain_transactions.status = = ANY ('{2,3,4}'::int[])
+          WHERE blockchain_transactions.status = ANY ('{2,3,4}'::int[])
           AND last_blockchain_transaction.batch_id IN (SELECT distinct donation_batches.batch_id as ids
                               FROM donations
                               LEFT JOIN non_profits ON non_profits.id = donations.non_profit_id
