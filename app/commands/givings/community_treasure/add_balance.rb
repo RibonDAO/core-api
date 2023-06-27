@@ -14,6 +14,7 @@ module Givings
       end
 
       def call
+        SleeperHelper.sleep(30)
         ribon_contract.add_pool_balance(donation_pool:, amount:, feeable:)
       end
 
