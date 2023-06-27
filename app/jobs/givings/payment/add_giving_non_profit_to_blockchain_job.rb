@@ -1,7 +1,7 @@
 module Givings
   module Payment
     class AddGivingNonProfitToBlockchainJob < ApplicationJob
-      queue_as :default
+      queue_as :person_payments
       sidekiq_options retry: 3
 
       def perform(non_profit:, amount:, payment:)
