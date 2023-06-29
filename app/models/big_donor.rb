@@ -17,6 +17,7 @@ class BigDonor < ApplicationRecord
 
   has_many :person_payments, as: :payer
   has_many :contributions, through: :person_payments
+  has_many :email_logs, as: :receiver
 
   def blueprint
     BigDonorBlueprint
