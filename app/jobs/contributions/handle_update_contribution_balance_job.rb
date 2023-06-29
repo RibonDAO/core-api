@@ -25,6 +25,8 @@ module Contributions
         Mailers::Contributions::SendPatronContributions100PercentEmailJob.perform_later(big_donor:)
       when 95..99
         Mailers::Contributions::SendPatronContributions95PercentEmailJob.perform_later(big_donor:, statistics:)
+      when 75..94
+        Mailers::Contributions::SendPatronContributions75PercentEmailJob.perform_later(big_donor:, statistics:)
       end
     end
   end

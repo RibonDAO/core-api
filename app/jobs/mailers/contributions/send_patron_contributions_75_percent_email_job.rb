@@ -1,23 +1,24 @@
 module Mailers
   module Contributions
-    class SendPatronContributions100PercentEmailJob < ApplicationJob
+    class SendPatronContributions75PercentEmailJob < ApplicationJob
       queue_as :mailers
 
-      def perform(big_donor:)
-        send_email(big_donor)
+      def perform(big_donor:, statistics:)
+        send_email(big_donor, statistics)
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message })
       end
 
       private
 
-      def send_email(big_donor)
+      def send_email(big_donor, statistics)
         SendgridWebMailer.send_email(receiver: big_donor[:email],
                                      dynamic_template_data: {
                                        first_name: big_donor[:name],
+                                       total_increase: statistics[:total_increase_percentage],
                                        dash_link: dash_link(big_donor)
                                      },
-                                     template_name: 'patron_contributions_100_percent_email_template_id',
+                                     template_name: 'patron_contributions_75_percent_email_template_id',
                                      language:).deliver_later
         create_log(big_donor)
       end
@@ -32,7 +33,7 @@ module Mailers
       end
 
       def create_log(big_donor)
-        EmailLog.log(sendgrid_template_name: 'patron_contributions_100_percent_email_template_id',
+        EmailLog.log(sendgrid_template_name: 'patron_contributions_75_percent_email_template_id',
                      email_type: :patron_contribution, receiver: big_donor)
       end
     end
