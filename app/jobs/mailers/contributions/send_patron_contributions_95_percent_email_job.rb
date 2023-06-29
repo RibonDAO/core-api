@@ -19,7 +19,7 @@ module Mailers
                                        dash_link: dash_link(big_donor)
                                      },
                                      template_name: 'patron_contributions_95_percent_email_template_id',
-                                     language:).deliver_now
+                                     language:).deliver_later
         create_log(big_donor)
       end
 
