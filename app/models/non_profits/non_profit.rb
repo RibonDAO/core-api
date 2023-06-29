@@ -77,4 +77,8 @@ class NonProfit < ApplicationRecord
   def save_wallet
     @old_non_profit_wallet&.update(status: :active)
   end
+
+  def blueprint
+    NonProfitBlueprint
+  end
 end
