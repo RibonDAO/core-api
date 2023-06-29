@@ -16,7 +16,7 @@ RSpec.describe 'Api::V1::Users::Contributions', type: :request do
     it 'returns all user contributions' do
       request
       expect_response_collection_to_have_keys(%w[contribution_balance created_at generated_fee_cents id
-                                                 label liquid_value_cents person_payment receiver
+                                                 label liquid_value_cents person_payment
                                                  updated_at usd_value_cents])
     end
   end
