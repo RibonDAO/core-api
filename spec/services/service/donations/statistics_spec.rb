@@ -48,10 +48,15 @@ RSpec.describe Service::Donations::Statistics, type: :service do
 
   describe '#impact_per_non_profit' do
     it 'returns the impact value per non profit' do
-      expect(service.impact_per_non_profit.first[:impact]).to eq 4
-      expect(service.impact_per_non_profit.second[:impact]).to eq 2
-      expect(service.impact_per_non_profit.first[:non_profit].name).to eq non_profit1.name
-      expect(service.impact_per_non_profit.second[:non_profit].name).to eq non_profit2.name
+      first_non_profit_impact = service.impact_per_non_profit.first
+      second_non_profit_impact = service.impact_per_non_profit.second
+
+      expect(first_non_profit_impact[:impact]).to eq 4
+      expect(second_non_profit_impact[:impact]).to eq 2
+      expect(first_non_profit_impact[:non_profit].name).to eq non_profit1.name
+      expect(second_non_profit_impact[:non_profit].name).to eq non_profit2.name
+      expect(first_non_profit_impact[:formatted_impact]).to eq ['4 days', 'of days of water for', '1 donor']
+      expect(second_non_profit_impact[:formatted_impact]).to eq ['2 days', 'of days of water for', '1 donor']
     end
   end
 
