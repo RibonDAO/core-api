@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_29_140901) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -255,6 +255,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.index ["integration_id"], name: "index_donations_on_integration_id"
     t.index ["non_profit_id"], name: "index_donations_on_non_profit_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
+  end
+
+  create_table "email_logs", force: :cascade do |t|
+    t.string "sendgrid_template_name"
+    t.integer "email_type"
+    t.integer "status"
+    t.string "receiver_type", null: false
+    t.string "receiver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_type", "receiver_id"], name: "index_email_logs_on_receiver"
   end
 
   create_table "histories", force: :cascade do |t|
