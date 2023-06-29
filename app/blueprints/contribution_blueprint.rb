@@ -13,7 +13,7 @@ class ContributionBlueprint < Blueprinter::Base
                                           .new(contribution:).formatted_statistics)
     end
 
-    association :receiver, blueprint: CauseBlueprint, view: :data_and_images
+    association :receiver, blueprint: ->(receiver) { receiver.blueprint }, default: {}
   end
 
   view :non_profit do

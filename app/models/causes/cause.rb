@@ -30,4 +30,8 @@ class Cause < ApplicationRecord
   def active
     non_profits.where(status: :active).present?
   end
+
+  def blueprint
+    CauseBlueprint
+  end
 end
