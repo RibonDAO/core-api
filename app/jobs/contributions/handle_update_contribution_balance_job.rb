@@ -6,7 +6,8 @@ module Contributions
       statistics = Service::Contributions::StatisticsService.new(contribution: contribution_balance.contribution)
                                                             .formatted_statistics
       percentage = statistics[:usage_percentage]
-      send_email(big_donor, percentage) unless email_already_sent?(big_donor, 100)
+      ## TODO try to find a good way to deal with rounding to the nearest email percentage
+      send_email(big_donor, statistics, percentage) unless email_already_sent?(big_donor, percentage)
     end
 
     private
@@ -18,10 +19,12 @@ module Contributions
       )
     end
 
-    def send_email(big_donor, percentage)
+    def send_email(big_donor, statistics, percentage)
       case percentage
       when 100
         Mailers::Contributions::SendPatronContributions100PercentEmailJob.perform_later(big_donor:)
+      when 95..99
+        Mailers::Contributions::SendPatronContributions95PercentEmailJob.perform_later(big_donor:, statistics:)
       end
     end
   end
