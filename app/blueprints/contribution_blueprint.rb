@@ -12,7 +12,7 @@ class ContributionBlueprint < Blueprinter::Base
       ContributionStatsBlueprint.render_as_json(Service::Contributions::StatisticsService
                                           .new(contribution:).formatted_statistics)
     end
-    
+
     association :receiver, blueprint: CauseBlueprint, view: :data_and_images
   end
 
