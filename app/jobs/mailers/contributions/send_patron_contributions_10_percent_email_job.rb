@@ -1,26 +1,27 @@
 module Mailers
   module Contributions
-    class SendPatronContributions50PercentEmailJob < ApplicationJob
+    class SendPatronContributions10PercentEmailJob < ApplicationJob
       queue_as :mailers
 
-      def perform(big_donor:, statistics:, contribution:)
-        send_email(big_donor, statistics, contribution)
+      def perform(big_donor:, statistics:)
+        send_email(big_donor, statistics)
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message })
       end
 
       private
 
-      def send_email(big_donor, statistics, contribution)
+      # TODO: update data
+      def send_email(big_donor, statistics)
         SendgridWebMailer.send_email(receiver: big_donor[:email],
                                      dynamic_template_data: {
                                        first_name: big_donor[:name],
-                                       # TODO: CHECK THIS VALUE
-                                       total_engaged_people: statistics[:total_tickets],
-                                       cause_name: contribution.receiver[:name],
+                                       total_engaged_people: 'pessoas que doaram tickets da contribuição',
+                                       top_NGO_name: 'ong com maior valor recebido',
+                                       top_NGO_impact: "impacto ong maior #{statistics[:top_NGO_impact]}",
                                        dash_link: dash_link(big_donor)
                                      },
-                                     template_name: 'patron_contributions_50_percent_email_template_id',
+                                     template_name: 'patron_contributions_10_percent_email_template_id',
                                      language:).deliver_later
         create_log(big_donor)
       end
@@ -35,7 +36,7 @@ module Mailers
       end
 
       def create_log(big_donor)
-        EmailLog.log(sendgrid_template_name: 'patron_contributions_50_percent_email_template_id',
+        EmailLog.log(sendgrid_template_name: 'patron_contributions_10_percent_email_template_id',
                      email_type: :patron_contribution, receiver: big_donor)
       end
     end
