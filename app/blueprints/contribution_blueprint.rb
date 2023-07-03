@@ -7,7 +7,7 @@ class ContributionBlueprint < Blueprinter::Base
   association :person_payment, blueprint: PersonPaymentBlueprint
   association :contribution_balance, blueprint: ContributionBalanceBlueprint
   association :receiver, blueprint: ->(receiver) { receiver.blueprint }, default: {}
-  
+
   view :with_stats do
     field(:stats) do |contribution|
       ContributionStatsBlueprint.render_as_json(Service::Contributions::StatisticsService
