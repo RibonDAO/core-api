@@ -55,7 +55,9 @@ class PersonPayment < ApplicationRecord
   enum payment_method: {
     credit_card: 0,
     pix: 1,
-    crypto: 2
+    crypto: 2,
+    google_pay: 3,
+    apple_pay: 4
   }
 
   enum currency: {
