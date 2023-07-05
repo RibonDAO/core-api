@@ -49,7 +49,8 @@ class PersonPayment < ApplicationRecord
     failed: 2,
     refunded: 3,
     refund_failed: 4,
-    requires_action: 5
+    requires_action: 5,
+    blocked: 6
   }
 
   enum payment_method: {
