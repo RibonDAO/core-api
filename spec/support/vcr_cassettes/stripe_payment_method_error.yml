@@ -67,7 +67,8 @@ http_interactions:
            "error": {
             "code": "card_declined",
             "message": "error",
-            "type": "card"
+            "type": "card",
+            "request_log_url": "http"
            }
           }
     recorded_at: Wed, 13 Jul 2022 13:37:57 GMT
