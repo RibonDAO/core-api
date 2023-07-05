@@ -24,7 +24,8 @@ module Service
           boost_new_contributors:,
           boost_new_patrons:,
           constribution_receiver_name: contribution.receiver[:name],
-          total_increase_percentage:
+          total_increase_percentage:,
+          usage_percentage:
         }
       end
       # rubocop:enable Metrics/AbcSize

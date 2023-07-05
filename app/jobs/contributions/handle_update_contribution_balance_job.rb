@@ -6,8 +6,12 @@ module Contributions
       statistics = Service::Contributions::StatisticsService.new(contribution: contribution_balance.contribution)
                                                             .formatted_email_statistics
       percentage = find_closest_email_percentage(statistics[:usage_percentage])
-      contribution = contribution_balance.contribution
-      send_email(big_donor, statistics, contribution, percentage) unless email_already_sent?(big_donor, percentage)
+      send_email(big_donor, statistics, percentage) unless email_already_sent?(big_donor, percentage)
+    end
+
+    def find_closest_email_percentage(percentage)
+      closest_percentages = [100, 95, 75, 50, 25, 10, 5]
+      closest_percentages.select { |n| n <= percentage }.max
     end
 
     private
@@ -17,11 +21,6 @@ module Contributions
         sendgrid_template_name: "patron_contributions_#{percentage}_percent_email_template_id",
         receiver: big_donor
       )
-    end
-
-    def find_closest_email_percentage(percentage)
-      closest_percentages = [100, 95, 75, 50, 25, 10, 5]
-      closest_percentages.select { |n| n <= percentage }.max
     end
 
     # rubocop:disable Metrics/CyclomaticComplexity
