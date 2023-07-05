@@ -1,5 +1,6 @@
 class Order
-  attr_accessor :id, :payer, :gateway, :payment, :payment_method, :offer, :card, :operation
+  attr_accessor :id, :payer, :gateway, :payment, :payment_method,
+                :offer, :card, :operation, :payment_method_id
 
   def initialize(params = {})
     self.id        = params[:id]
@@ -7,11 +8,12 @@ class Order
     self.gateway   = params[:gateway]
     self.card      = params[:card]
     self.operation = params[:operation]
+    self.payment_method_id = params[:payment_method_id]
 
     initialize_payment_related_attributes(params)
   end
 
-  def self.from(payment, card = nil, operation = nil)
+  def self.from(payment, card = nil, operation = nil, payment_method_id = nil)
     params = {
       id: payment.id,
       gateway: payment&.offer&.gateway&.to_sym,
@@ -20,7 +22,8 @@ class Order
       payment_method: payment&.payment_method,
       offer: payment&.offer,
       card:,
-      operation:
+      operation:,
+      payment_method_id:
     }
 
     new(params)
