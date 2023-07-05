@@ -16,7 +16,6 @@ FactoryBot.define do
     sendgrid_template_name { 'MyString' }
     email_type { 1 }
     status { 1 }
-    receiver { nil }
-    receiver_id { 'MyString' }
+    receiver { create(:big_donor) }
   end
 end
