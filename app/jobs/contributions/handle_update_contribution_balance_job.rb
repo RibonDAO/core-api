@@ -23,27 +23,13 @@ module Contributions
       )
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity
-    # rubocop:disable Metrics/MethodLength
     def send_email(big_donor, statistics, percentage)
-      case percentage
-      when 100
+      if percentage == 100
         Mailers::Contributions::SendPatronContributions100PercentEmailJob.perform_later(big_donor:)
-      when 95
-        Mailers::Contributions::SendPatronContributions95PercentEmailJob.perform_later(big_donor:, statistics:)
-      when 75
-        Mailers::Contributions::SendPatronContributions75PercentEmailJob.perform_later(big_donor:, statistics:)
-      when 50
-        Mailers::Contributions::SendPatronContributions50PercentEmailJob.perform_later(big_donor:, statistics:)
-      when 25
-        Mailers::Contributions::SendPatronContributions25PercentEmailJob.perform_later(big_donor:, statistics:)
-      when 10
-        Mailers::Contributions::SendPatronContributions10PercentEmailJob.perform_later(big_donor:, statistics:)
-      when 5
-        Mailers::Contributions::SendPatronContributions5PercentEmailJob.perform_later(big_donor:, statistics:)
+      else
+        mailer_class = "Mailers::Contributions::SendPatronContributions#{percentage}PercentEmailJob".constantize
+        mailer_class.perform_later(big_donor:, statistics:)
       end
     end
-    # rubocop:enable Metrics/CyclomaticComplexity
-    # rubocop:enable Metrics/MethodLength
   end
 end
