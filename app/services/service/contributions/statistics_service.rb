@@ -18,6 +18,15 @@ module Service
           total_donors:, total_contributors:
         }
       end
+
+      def formatted_email_statistics
+        {
+          boost_new_contributors:,
+          boost_new_patrons:,
+          constribution_receiver_name: contribution.receiver[:name],
+          total_increase_percentage:
+        }
+      end
       # rubocop:enable Metrics/AbcSize
 
       def initial_amount
