@@ -38,11 +38,11 @@ module Givings
         klass.success_callback(order, result)
       end
 
-      def failure_callback(order, error)
-        if error.error.type == 'blocked'
-          update_blocked(order:, error:)
+      def failure_callback(order, err)
+        if err.error.type == 'blocked'
+          update_blocked(order:, err:)
         else
-          update_failed(order:, error:)
+          update_failed(order:, err:)
         end
       end
 
@@ -51,14 +51,14 @@ module Givings
         order.payment.update(external_id:) if external_id
       end
 
-      def update_blocked(order:, error:)
-        order.payment.update(status: :blocked, error_code: error.code)
-        order.payment.update(external_id: error.external_id) if error&.external_id
+      def update_blocked(order:, err:)
+        order.payment.update(status: :blocked, error_code: err.code)
+        order.payment.update(external_id: err.external_id) if err&.external_id
       end
 
-      def update_failed(order:, error:)
-        order.payment.update(status: :failed, error_code: error.code)
-        order.payment.update(external_id: error.error.request_log_url) if error&.error&.request_log_url
+      def update_failed(order:, err:)
+        order.payment.update(status: :failed, error_code: err.code)
+        order.payment.update(external_id: err.error.request_log_url) if err&.error&.request_log_url
       end
 
       def handle_contribution_creation(payment)
