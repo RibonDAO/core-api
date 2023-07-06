@@ -11,7 +11,6 @@ module Mailers
 
       private
 
-      # TODO: update data
       def send_email(big_donor, statistics)
         SendgridWebMailer.send_email(receiver: big_donor[:email],
                                      dynamic_template_data: {
