@@ -15,6 +15,11 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.active_job.queue_adapter = :sidekiq
   config.force_ssl = true
+  config.ssl_options = {
+    redirect: {
+      exclude: -> request { request.path =~ /health/ }
+    }
+  }
 
   Rails.application.reloader.to_prepare do
     Dir["#{Rails.root}/app/models/rule_groups/*.rb"].each { |file| require_dependency file }

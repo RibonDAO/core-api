@@ -4,6 +4,8 @@ module EncryptionHelper
   require 'openssl'
 
   def self.encrypt_string(string, key, key_iv)
+    return unless key
+
     cipher = OpenSSL::Cipher.new('aes-256-cbc')
     cipher.encrypt
     cipher.key = key

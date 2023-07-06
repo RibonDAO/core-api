@@ -63,7 +63,8 @@ module Service
       private
 
       def format_impacts(non_profit)
-        { non_profit:, impact: impact_sum_by_non_profit(non_profit) }
+        impact =  impact_sum_by_non_profit(non_profit)
+        { non_profit:, impact:, formatted_impact: formatted_impact(non_profit, impact) }
       end
 
       def format_donations(non_profit)
@@ -79,6 +80,12 @@ module Service
         return 0 unless usd_to_impact_factor
 
         (total_usd_cents_donated_for(non_profit) / usd_to_impact_factor).to_i
+      end
+
+      def formatted_impact(non_profit, rounded_impact)
+        ::Impact::Normalizer.new(non_profit, rounded_impact).normalize
+      rescue Exceptions::ImpactNormalizationError
+        ['', '', '']
       end
 
       def total_usd_cents_donated_for(non_profit)

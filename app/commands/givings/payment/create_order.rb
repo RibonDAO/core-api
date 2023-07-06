@@ -20,7 +20,7 @@ module Givings
 
         payment_process_result
       rescue StandardError => e
-        failure_callback(order, payment_process_result, e)
+        failure_callback(order, e)
         Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
         errors.add(:message, e.message)
       end
@@ -31,16 +31,34 @@ module Givings
         return unless result
 
         status = ::Payment::Gateways::Stripe::Helpers.status(result[:status])
-        order.payment.update(status:)
-        order.payment.update(external_id: result[:external_id]) if result[:external_id]
+        update_success(order:, status:, external_id: result[:external_id])
         return unless status == :paid
 
         handle_contribution_creation(order.payment)
         klass.success_callback(order, result)
       end
 
-      def failure_callback(order, _result, error)
+      def failure_callback(order, error)
+        if error.error.type == 'blocked'
+          update_blocked(order:, error:)
+        else
+          update_failed(order:, error:)
+        end
+      end
+
+      def update_success(order:, status:, external_id:)
+        order.payment.update(status:)
+        order.payment.update(external_id:) if external_id
+      end
+
+      def update_blocked(order:, error:)
+        order.payment.update(status: :blocked, error_code: error.code)
+        order.payment.update(external_id: error.external_id) if error&.external_id
+      end
+
+      def update_failed(order:, error:)
         order.payment.update(status: :failed, error_code: error.code)
+        order.payment.update(external_id: error.error.request_log_url) if error&.error&.request_log_url
       end
 
       def handle_contribution_creation(payment)

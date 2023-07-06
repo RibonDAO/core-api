@@ -49,13 +49,16 @@ class PersonPayment < ApplicationRecord
     failed: 2,
     refunded: 3,
     refund_failed: 4,
-    requires_action: 5
+    requires_action: 5,
+    blocked: 6
   }
 
   enum payment_method: {
     credit_card: 0,
     pix: 1,
-    crypto: 2
+    crypto: 2,
+    google_pay: 3,
+    apple_pay: 4
   }
 
   enum currency: {

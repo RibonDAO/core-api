@@ -1,7 +1,7 @@
 module Donations
   class RetryDonationBatchWorker
     include Sidekiq::Worker
-    sidekiq_options queue: :donations
+    sidekiq_options queue: :batches
 
     def perform(*_args)
       RetryBatchTransactionsJob.perform_later

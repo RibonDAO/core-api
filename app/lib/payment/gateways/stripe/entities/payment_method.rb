@@ -14,6 +14,10 @@ module Payment
                                              }
                                            })
           end
+
+          def self.find(id:)
+            ::Stripe::PaymentMethod.retrieve(id)
+          end
         end
       end
     end
