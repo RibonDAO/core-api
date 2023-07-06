@@ -25,7 +25,6 @@ module Mailers
         create_log(big_donor)
       end
 
-      # TODO: CHANGE LINK FOR SPECIFIC CONTRIBUTION
       def dash_link(big_donor)
         Auth::EmailLinkService.new(authenticatable: big_donor).find_or_create_auth_link
       end
