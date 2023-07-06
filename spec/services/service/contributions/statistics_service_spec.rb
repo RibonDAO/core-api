@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Service::Contributions::StatisticsService, type: :service do
   subject(:service) { described_class.new(contribution:) }
-  
+
   include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
 
   let(:cause) { create(:cause) }
