@@ -9,5 +9,16 @@ FactoryBot.define do
         expiration_year: '22'
       )
     end
+    trait(:blocked) do
+      initialize_with do
+        new(
+          cvv: '123',
+          number: '4100000000000019',
+          name: 'User Test',
+          expiration_month: '12',
+          expiration_year: '24'
+        )
+      end
+    end
   end
 end

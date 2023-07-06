@@ -223,6 +223,36 @@ describe Givings::Payment::CreateOrder do
     end
   end
 
+  describe '.call returns blocked' do
+    subject(:command) { described_class.call(order_type_class, args) }
+
+    include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_blocked' } }
+
+    let(:integration) { create(:integration) }
+
+    context 'when the payment is blocked' do
+      let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:card) { build(:credit_card, :blocked) }
+      let(:offer) { create(:offer, price_cents: 1000) }
+      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
+      let(:args) do
+        { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
+          payment_method: :credit_card, user: customer.user, gateway: 'stripe', operation: :purchase }
+      end
+
+      it 'calls the failure callback' do
+        allow(Customer).to receive(:create!).and_return(customer)
+        allow(PersonPayment).to receive(:create!).and_return(person_payment)
+        command
+
+        expect(person_payment.error_code).to eq('card_declined')
+        expect(person_payment.status).to eq('blocked')
+      end
+    end
+  end
+
   describe '.call returns pending' do
     subject(:command) { described_class.call(order_type_class, args) }
 

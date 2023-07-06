@@ -35,20 +35,15 @@ class User < ApplicationRecord
   has_one :legacy_user
   has_one :customer
 
+  has_many :legacy_user_impacts, through: :legacy_user
+  has_many :legacy_contributions, through: :legacy_user
+
   delegate :last_donation_at, to: :user_donation_stats
   delegate :can_donate?, to: :user_donation_stats
   delegate :user_last_donation_to, to: :user_donation_stats
   delegate :last_donated_cause, to: :user_donation_stats
   delegate :first_completed_all_tasks_at, to: :user_tasks_statistic
   delegate :streak, to: :user_tasks_statistic
-
-  def legacy_user_impacts
-    legacy_user&.legacy_user_impacts || []
-  end
-
-  def legacy_contributions
-    legacy_user&.legacy_contributions || []
-  end
 
   scope :created_between, lambda { |start_date, end_date|
                             where('created_at >= ? AND created_at <= ?', start_date, end_date)
