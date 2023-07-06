@@ -65,15 +65,19 @@ module Service
       def top_donations_non_profit
         id = ContributionQueries.new(contribution:).top_donations_non_profit
         non_profit = NonProfit.find_by(id:)
-        DirectImpactService.new(contribution:).direct_impact_for(non_profit)
+        DirectImpactService.new(contribution:).direct_impact_for(non_profit) if non_profit
       end
 
       def top_donations_non_profit_name
-        top_donations_non_profit[:non_profit].name
+        return unless top_donations_non_profit
+
+        top_donations_non_profit[:non_profit]&.name
       end
 
       def top_donations_non_profit_impact
-        top_donations_non_profit[:formatted_impact].join(' ')
+        return unless top_donations_non_profit
+
+        top_donations_non_profit[:formatted_impact]&.join(' ') if top_donations_non_profit
       end
 
       def avg_donations_per_person

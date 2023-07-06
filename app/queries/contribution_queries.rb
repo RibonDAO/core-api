@@ -54,7 +54,7 @@ class ContributionQueries
 
   def top_donations_non_profit
     sql = %(
-      SELECT donations.non_profit_id, sum(donation.value) as total_amount
+      SELECT donations.non_profit_id, sum(donations.value) as total_amount
       FROM contributions
       LEFT JOIN donation_contributions on donation_contributions.contribution_id = contributions.id
       LEFT JOIN donations on donations.id = donation_contributions.donation_id
