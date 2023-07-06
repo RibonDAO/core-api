@@ -27,7 +27,7 @@ http_interactions:
       Connection:
       - keep-alive
       Location:
-      - https://economia.awesomeapi.com.br/json/last/USD-BRL
+      - https://economia.awesomeapi.com.br/json/last/usd-brl
     body:
       encoding: UTF-8
       string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
@@ -35,7 +35,7 @@ http_interactions:
   recorded_at: Fri, 27 May 2022 13:36:17 GMT
 - request:
     method: get
-    uri: https://economia.awesomeapi.com.br/json/last/USD-BRL
+    uri: https://economia.awesomeapi.com.br/json/last/usd-brl
     body:
       encoding: US-ASCII
       string: ''
