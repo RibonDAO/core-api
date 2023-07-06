@@ -11,14 +11,16 @@ class IntegrationImpactBlueprint < Blueprinter::Base
   field :impact_per_non_profit do |object|
     object[:impact_per_non_profit].map do |impact|
       { non_profit: NonProfitBlueprint
-        .render_as_hash(impact[:non_profit], view: :no_cause), impact: impact[:impact] }
+        .render_as_hash(impact[:non_profit], view: :no_cause), impact: impact[:impact],
+        formatted_impact: impact[:formatted_impact] }
     end
   end
 
   field :previous_impact_per_non_profit do |object|
     object[:previous_impact_per_non_profit].map do |impact|
       { non_profit: NonProfitBlueprint
-        .render_as_hash(impact[:non_profit], view: :no_cause), impact: impact[:impact] }
+        .render_as_hash(impact[:non_profit], view: :no_cause),
+        impact: impact[:impact], formatted_impact: impact[:formatted_impact] }
     end
   end
 

@@ -10,18 +10,12 @@ module Service
       # rubocop:disable Metrics/AbcSize
       def formatted_statistics
         {
-          initial_amount: format_money(initial_amount),
-          used_amount: format_money(used_amount),
-          usage_percentage:,
-          remaining_amount: format_money(remaining_amount),
-          total_tickets:,
-          avg_donations_per_person:,
-          boost_amount: format_money(boost_amount),
-          total_increase_percentage:,
-          total_amount_to_cause: format_money(total_amount_to_cause),
-          ribon_fee: format_money(ribon_fee),
-          boost_new_contributors:,
-          boost_new_patrons:
+          initial_amount: format_money(initial_amount), used_amount: format_money(used_amount),
+          usage_percentage:, remaining_amount: format_money(remaining_amount),
+          total_tickets:, avg_donations_per_person:, boost_amount: format_money(boost_amount),
+          total_increase_percentage:, total_amount_to_cause: format_money(total_amount_to_cause),
+          ribon_fee: format_money(ribon_fee), boost_new_contributors:, boost_new_patrons:,
+          total_donors:, total_contributors:
         }
       end
 
@@ -47,7 +41,7 @@ module Service
       end
 
       def usage_percentage
-        ((used_amount.to_f / initial_amount).round(2) * 100).to_i
+        ((used_amount.to_f / initial_amount).round(2) * 100).round(2)
       end
 
       def remaining_amount
@@ -77,7 +71,7 @@ module Service
       end
 
       def total_increase_percentage
-        (boost_amount / initial_amount) * 100.0
+        ((boost_amount / initial_amount) * 100.0).round(2)
       end
 
       def total_amount_to_cause
@@ -96,6 +90,10 @@ module Service
         ContributionQueries.new(contribution:).boost_new_patrons
       end
 
+      def total_contributors
+        boost_new_contributors + boost_new_patrons
+      end
+
       private
 
       def payment
@@ -111,7 +109,7 @@ module Service
       end
 
       def format_money(amount)
-        Money.from_amount(amount, :usd).format
+        Money.from_amount(amount.round(2), :usd).format
       end
     end
   end

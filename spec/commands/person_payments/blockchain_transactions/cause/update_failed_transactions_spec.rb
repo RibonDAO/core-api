@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe PersonPayments::BlockchainTransactions::UpdateFailedTransactions do
+describe PersonPayments::BlockchainTransactions::Cause::UpdateFailedTransactions do
   include ActiveStorage::Blob::Analyzable
   describe '.call' do
     subject(:command) { described_class.call }

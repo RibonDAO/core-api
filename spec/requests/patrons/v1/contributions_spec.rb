@@ -18,7 +18,7 @@ RSpec.describe 'Patrons::V1::Contributions', type: :request do
 
       expect_response_collection_to_have_keys(%w[created_at id label
                                                  updated_at person_payment generated_fee_cents
-                                                 liquid_value_cents usd_value_cents
+                                                 liquid_value_cents usd_value_cents receiver
                                                  contribution_balance stats])
     end
   end
