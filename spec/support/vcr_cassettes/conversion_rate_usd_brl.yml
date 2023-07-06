@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://economia.awesomeapi.com.br/json/last/USD-BRL
+    uri: http://economia.awesomeapi.com.br/json/last/usd-brl
     body:
       encoding: US-ASCII
       string: ''
