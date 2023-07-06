@@ -15,8 +15,7 @@ module Mailers
         SendgridWebMailer.send_email(receiver: big_donor[:email],
                                      dynamic_template_data: {
                                        first_name: big_donor[:name],
-                                       # TODO: CHECK THIS VALUE
-                                       total_engaged_people: statistics[:boost_new_contributors],
+                                       total_engaged_people: statistics[:total_donors],
                                        cause_name: statistics[:contribution_receiver_name],
                                        dash_link: dash_link(big_donor)
                                      },

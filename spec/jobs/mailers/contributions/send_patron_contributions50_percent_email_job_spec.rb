@@ -20,7 +20,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions50PercentEmailJob,
         .with(receiver: big_donor[:email],
               dynamic_template_data: {
                 first_name: big_donor[:name],
-                total_engaged_people: statistics[:boost_new_contributors],
+                total_engaged_people: statistics[:total_donors],
                 cause_name: statistics[:contribution_receiver_name],
                 dash_link: an_instance_of(String)
               },

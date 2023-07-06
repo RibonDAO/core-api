@@ -51,4 +51,18 @@ class ContributionQueries
 
     ActiveRecord::Base.connection.execute(sql).first['count'] || 0
   end
+
+  def top_donations_non_profit
+    sql = %(
+      SELECT donations.non_profit_id, sum(donations.value) as total_amount
+      FROM contributions
+      LEFT JOIN donation_contributions on donation_contributions.contribution_id = contributions.id
+      LEFT JOIN donations on donations.id = donation_contributions.donation_id
+      WHERE contributions.id = #{contribution.id}
+      GROUP BY donations.non_profit_id
+      ORDER BY total_amount DESC
+      LIMIT 1)
+
+    ActiveRecord::Base.connection.execute(sql).first
+  end
 end

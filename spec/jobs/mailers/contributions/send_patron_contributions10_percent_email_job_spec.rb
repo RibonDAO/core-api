@@ -5,7 +5,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions10PercentEmailJob,
     subject(:job) { described_class }
 
     let(:big_donor) { create(:big_donor) }
-    let(:statistics) { { top_NGO_impact: 100 } }
+    let(:statistics) { { top_donations_non_profit_impact: 100, top_donations_non_profit_name: 'top' } }
 
     before do
       allow(SendgridWebMailer).to receive(:send_email).and_return(OpenStruct.new(deliver_later: nil))
@@ -15,14 +15,13 @@ RSpec.describe Mailers::Contributions::SendPatronContributions10PercentEmailJob,
     # rubocop:disable RSpec/ExampleLength
     it 'calls the send email function with correct arguments' do
       job.perform_now(big_donor:, statistics:)
-
       expect(SendgridWebMailer).to have_received(:send_email)
         .with(receiver: big_donor[:email],
               dynamic_template_data: {
                 first_name: big_donor[:name],
-                total_engaged_people: 'pessoas que doaram tickets da contribuição',
-                top_NGO_name: 'ong com maior valor recebido',
-                top_NGO_impact: "impacto ong maior #{statistics[:top_NGO_impact]}",
+                total_engaged_people: statistics[:total_donors],
+                top_NGO_name: statistics[:top_donations_non_profit_name],
+                top_NGO_impact: statistics[:top_donations_non_profit_impact],
                 dash_link: an_instance_of(String)
               },
               template_name: 'patron_contributions_10_percent_email_template_id',

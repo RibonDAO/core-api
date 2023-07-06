@@ -11,14 +11,15 @@ module Mailers
 
       private
 
-      # TODO: update data
       def send_email(big_donor, statistics)
+        return unless statistics[:top_donations_non_profit_name]
+
         SendgridWebMailer.send_email(receiver: big_donor[:email],
                                      dynamic_template_data: {
                                        first_name: big_donor[:name],
-                                       total_engaged_people: 'pessoas que doaram tickets da contribuição',
-                                       top_NGO_name: 'ong com maior valor recebido',
-                                       top_NGO_impact: "impacto ong maior #{statistics[:top_NGO_impact]}",
+                                       total_engaged_people: statistics[:total_donors],
+                                       top_NGO_name: statistics[:top_donations_non_profit_name],
+                                       top_NGO_impact: statistics[:top_donations_non_profit_impact],
                                        dash_link: dash_link(big_donor)
                                      },
                                      template_name: 'patron_contributions_10_percent_email_template_id',
