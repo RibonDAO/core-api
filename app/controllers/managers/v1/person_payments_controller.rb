@@ -86,20 +86,22 @@ module Managers
       end
 
       def page
-        @page ||= find_query_params(request)['page'] || params[:page] || 1
+        @page ||= find_query_params(request)&.fetch('page', nil) || params[:page] || 1
       end
 
       def per
-        @per ||= find_query_params(request)['per_page'] || params[:per] || 10
+        @per ||= find_query_params(request)&.fetch('per_page', nil) || params[:per] || 100
       end
 
       def find_query_params(request)
+        return unless request.query_parameters[:params]
+
         query_params = request.query_parameters[:params]
-        JSON.parse(query_params) if query_params.present?
+        JSON.parse(query_params)
       end
 
       def search_params
-        @search_params ||= find_query_params(request)['search_term']
+        @search_params = find_query_params(request)&.fetch('search_term', nil) || params[:search_term]
       end
 
       def email_or_wallet_address(search_params)
