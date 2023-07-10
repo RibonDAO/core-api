@@ -14,6 +14,7 @@ class OfferGateway < ApplicationRecord
   validates :gateway, :external_id, presence: true
 
   enum gateway: {
-    stripe: 0
+    stripe: 0,
+    stripe_global: 1
   }
 end
