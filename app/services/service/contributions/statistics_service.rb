@@ -99,7 +99,7 @@ module Service
       end
 
       def format_money(amount)
-        Currency::Converters.convert(from: :usd, to: payment.currency, value: amount.round(2)).format
+        Currency::Converters.convert(from: :usd, to: payment.currency, value: amount).round.format
       end
     end
   end
