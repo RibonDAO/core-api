@@ -24,7 +24,7 @@ RSpec.describe 'Api::V1::Users::Contributions', type: :request do
   describe 'GET /show' do
     subject(:request) { get "/api/v1/users/#{user.id}/contributions/#{contribution.id}" }
 
-    include_context('when mocking a request') { let(:cassette_name) { 'multiple_coversion_rates' } }
+    include_context('when mocking a request') { let(:cassette_name) { 'conversion_multiple_rates' } }
 
     let(:user) { create(:user) }
     let(:customer) { create(:customer, user:) }

@@ -7,7 +7,7 @@ module Service
         NAMESPACE = 'Payment::Gateways::'.freeze
 
         def initialize(gateway)
-          @gateway = gateway.to_s.capitalize
+          @gateway = gateway.to_s.camelcase
         end
 
         def call
