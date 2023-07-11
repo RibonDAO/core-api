@@ -91,6 +91,10 @@ class PersonPayment < ApplicationRecord
     amount_cents / 100.0
   end
 
+  def formatted_amount
+    Money.from_cents(amount_cents, currency).format
+  end
+
   def set_fees
     fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym).result
     crypto_fee_cents = crypto? ? 0 : fees[:crypto_fee].cents
