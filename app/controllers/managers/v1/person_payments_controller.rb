@@ -86,14 +86,14 @@ module Managers
       end
 
       def page
-        @page ||= find_query_params(request)&.fetch('page', nil) || params[:page] || 1
+        @page ||= query_params&.fetch('page', 1)
       end
 
       def per
-        @per ||= find_query_params(request)&.fetch('per_page', nil) || params[:per] || 100
+        @per ||= query_params&.fetch('per_page', 10)
       end
 
-      def find_query_params(request)
+      def query_params
         return unless request.query_parameters[:params]
 
         query_params = request.query_parameters[:params]
@@ -101,16 +101,16 @@ module Managers
       end
 
       def search_params
-        @search_params = find_query_params(request)&.fetch('search_term', nil) || params[:search_term]
+        @search_params = query_params&.fetch('search_term', '')
       end
 
       def email_or_wallet_address(search_params)
-        user = if URI::MailTo::EMAIL_REGEXP.match?(search_params)
-                 Customer.find_by(email: search_params)
-               else
-                 CryptoUser.find_by(wallet_address: search_params)
-               end
-        PersonPayment.where(payer: user).order(sortable).page(page).per(per)
+        customer_results = Customer.where('email ILIKE ?', "%#{search_params}%").pluck(:id)
+        crypto_user_results = CryptoUser.where('wallet_address ILIKE ?', "%#{search_params}%").pluck(:id)
+
+        users = customer_results + crypto_user_results
+
+        PersonPayment.where(payer_id: users).order(sortable).page(page).per(per)
       end
 
       def filtered_person_payments
