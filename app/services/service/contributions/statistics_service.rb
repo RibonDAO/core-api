@@ -10,7 +10,7 @@ module Service
       # rubocop:disable Metrics/AbcSize
       def formatted_statistics
         {
-          initial_amount: format_money(initial_amount), used_amount: format_money(used_amount),
+          initial_amount: payment.formatted_amount, used_amount: format_money(used_amount),
           usage_percentage:, remaining_amount: format_money(remaining_amount),
           total_tickets:, avg_donations_per_person:, boost_amount: format_money(boost_amount),
           total_increase_percentage:, total_amount_to_cause: format_money(total_amount_to_cause),
@@ -99,7 +99,7 @@ module Service
       end
 
       def format_money(amount)
-        Money.from_amount(amount.round(2), :usd).format
+        Currency::Converters.convert(from: :usd, to: payment.currency, value: amount).round.format
       end
     end
   end
