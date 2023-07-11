@@ -2,7 +2,7 @@ module Managers
   module V1
     class PersonPaymentsController < ManagersController
       def index
-        @person_payments = PersonPayment.where.not(payer_type: 'BigDonor').order(sortable).page(page).per(per)
+        @person_payments = filtered_person_payments
 
         render json: PersonPaymentBlueprint.render(@person_payments, total_items:, page:, total_pages:)
       end
@@ -78,19 +78,47 @@ module Managers
       end
 
       def total_pages
-        @person_payments.page(@page).total_pages
+        @person_payments.page(@page).per(per).total_pages
       end
 
       def total_items
-        @total_items = @person_payments.count
+        @total_items ||= @person_payments&.total_count
       end
 
       def page
-        @page = params[:page] || 1
+        @page ||= find_query_params(request)&.fetch('page', nil) || params[:page] || 1
       end
 
       def per
-        @per = params[:per] || 100
+        @per ||= find_query_params(request)&.fetch('per_page', nil) || params[:per] || 100
+      end
+
+      def find_query_params(request)
+        return unless request.query_parameters[:params]
+
+        query_params = request.query_parameters[:params]
+        JSON.parse(query_params)
+      end
+
+      def search_params
+        @search_params = find_query_params(request)&.fetch('search_term', nil) || params[:search_term]
+      end
+
+      def email_or_wallet_address(search_params)
+        user = if URI::MailTo::EMAIL_REGEXP.match?(search_params)
+                 Customer.find_by(email: search_params)
+               else
+                 CryptoUser.find_by(wallet_address: search_params)
+               end
+        PersonPayment.where(payer: user).order(sortable).page(page).per(per)
+      end
+
+      def filtered_person_payments
+        if search_params.present?
+          email_or_wallet_address(search_params)
+        else
+          PersonPayment.where.not(payer_type: 'BigDonor').order(sortable).page(page).per(per)
+        end
       end
     end
   end
