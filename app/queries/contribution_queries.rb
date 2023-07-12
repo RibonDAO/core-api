@@ -64,6 +64,6 @@ class ContributionQueries
       LIMIT 1)
 
     id = ActiveRecord::Base.connection.execute(sql).first['non_profit_id']
-    NonProfit.find_by(id:) || nil
+    NonProfit.find_by(id:)
   end
 end

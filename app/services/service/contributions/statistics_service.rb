@@ -66,19 +66,16 @@ module Service
         @top_donations_non_profit ||= ContributionQueries.new(contribution:).top_donations_non_profit
       end
 
-      def top_donations_impact
+      def top_donations_non_profit_impact
         return unless top_donations_non_profit
 
-        DirectImpactService.new(contribution:)
-                           .direct_impact_for(top_donations_non_profit)[:formatted_impact]
+        impact = DirectImpactService.new(contribution:)
+                                    .direct_impact_for(top_donations_non_profit)[:formatted_impact]
+        impact&.join(' ')
       end
 
       def top_donations_non_profit_name
         top_donations_non_profit&.name
-      end
-
-      def top_donations_non_profit_impact
-        top_donations_impact&.join(' ')
       end
 
       def avg_donations_per_person
