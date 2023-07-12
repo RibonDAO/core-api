@@ -15,7 +15,9 @@ RSpec.describe 'Managers::V1::PersonPayments', type: :request do
     end
 
     context 'when there are 20 person_payments' do
-      let(:query_params) { '{"per_page":10,"page":1,"search_term":""}' }
+      let(:query_params) do
+        '{"per_page":10,"page":1,"search_term":"", "status": ["refunded","paid","processing","failed"]}'
+      end
 
       it 'returns a only 10 records per page' do
         expect(response_json.count).to eq(10)
@@ -38,11 +40,25 @@ RSpec.describe 'Managers::V1::PersonPayments', type: :request do
     end
 
     context 'when there is a search term' do
-      let(:query_params) { "{\"per_page\":10,\"page\":1,\"search_term\":\"#{email_search}\"}" }
+      let(:query_params) do
+        "{\"per_page\":10,\"page\":1,\"search_term\":\"#{email_search}\",
+        \"status\": [\"refunded\",\"paid\",\"processing\",\"failed\"]}"
+      end
       let(:email_search) { person_payments.first.payer.email }
 
       it 'returns only records that match the search term' do
         expect(response_json.count).to eq(1)
+      end
+    end
+
+    context 'when there is filter by status' do
+      let(:query_params) do
+        '{"per_page":10,"page":1,"search_term":"", "status": ["paid"]}'
+      end
+      let(:person_payments_count) { person_payments.select { |pp| pp.status == 'paid' }.count }
+
+      it 'returns only records that match the status' do
+        expect(response_json.count).to eq(person_payments_count)
       end
     end
   end
