@@ -1,6 +1,7 @@
 module Managers
   module V1
     class PersonPaymentsController < ManagersController
+      include ActiveRecord::Sanitization::ClassMethods
       def index
         @person_payments = filtered_person_payments
 
@@ -109,8 +110,9 @@ module Managers
       end
 
       def email_or_wallet_address(search_params)
-        customer_results = Customer.where('email ILIKE ?', "%#{search_params}%").pluck(:id)
-        crypto_user_results = CryptoUser.where('wallet_address ILIKE ?', "%#{search_params}%").pluck(:id)
+        customer_results = Customer.where('email ILIKE ?', "%#{sanitize_sql_like(search_params)}%").pluck(:id)
+        crypto_user_results = CryptoUser.where('wallet_address ILIKE ?',
+                                               "%#{sanitize_sql_like(search_params)}%").pluck(:id)
 
         users = customer_results + crypto_user_results
 
