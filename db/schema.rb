@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_29_140901) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_12_132216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -258,7 +258,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_29_140901) do
   end
 
   create_table "email_logs", force: :cascade do |t|
-    t.string "sendgrid_template_name"
+    t.string "email_template_name"
     t.integer "email_type"
     t.integer "status"
     t.string "receiver_type", null: false

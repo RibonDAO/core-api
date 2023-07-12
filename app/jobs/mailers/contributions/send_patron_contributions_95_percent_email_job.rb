@@ -32,7 +32,7 @@ module Mailers
       end
 
       def create_log(big_donor)
-        EmailLog.log(sendgrid_template_name: 'patron_contributions_95_percent_email_template_id',
+        EmailLog.log(email_template_name: 'patron_contributions_95_percent_email_template_id',
                      email_type: :patron_contribution, receiver: big_donor)
       end
     end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Contributions::HandleUpdateContributionBalanceJob, type: :job do
+RSpec.describe Contributions::HandlePatronContributionEmailJob, type: :job do
   describe '#perform' do
     subject(:job) { described_class }
 

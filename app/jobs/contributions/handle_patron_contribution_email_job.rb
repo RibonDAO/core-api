@@ -1,6 +1,6 @@
 module Contributions
-  class HandleUpdateContributionBalanceJob < ApplicationJob
-    queue_as :default
+  class HandlePatronContributionEmailJob < ApplicationJob
+    queue_as :contributions
 
     def perform(contribution_balance:, big_donor:)
       statistics = Service::Contributions::StatisticsService.new(contribution: contribution_balance.contribution)
@@ -10,15 +10,15 @@ module Contributions
     end
 
     def find_closest_email_percentage(percentage)
-      closest_percentages = [100, 95, 75, 50, 25, 10, 5]
-      closest_percentages.select { |n| n <= percentage }.max
+      existing_email_percentages = [100, 95, 75, 50, 25, 10, 5]
+      existing_email_percentages.select { |n| n <= percentage }.max
     end
 
     private
 
     def email_already_sent?(big_donor, percentage)
       EmailLog.email_already_sent?(
-        sendgrid_template_name: "patron_contributions_#{percentage}_percent_email_template_id",
+        email_template_name: "patron_contributions_#{percentage}_percent_email_template_id",
         receiver: big_donor
       )
     end

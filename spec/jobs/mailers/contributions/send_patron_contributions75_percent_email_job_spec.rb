@@ -32,7 +32,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions75PercentEmailJob,
       expect(EmailLog).to have_received(:log).with(
         email_type: :patron_contribution,
         receiver: big_donor,
-        sendgrid_template_name: 'patron_contributions_75_percent_email_template_id'
+        email_template_name: 'patron_contributions_75_percent_email_template_id'
       )
     end
   end

@@ -63,6 +63,7 @@ class ContributionQueries
       ORDER BY total_amount DESC
       LIMIT 1)
 
-    ActiveRecord::Base.connection.execute(sql).first
+    id = ActiveRecord::Base.connection.execute(sql).first['non_profit_id']
+    NonProfit.find_by(id:) || nil
   end
 end
