@@ -3,7 +3,7 @@ class ContributionBalanceObserver < ActiveRecord::Observer
     payer = contribution_balance.contribution.person_payment.payer
     return unless payer.is_a?(BigDonor)
 
-    Contributions::HandleUpdateContributionBalanceJob.perform_later(contribution_balance:, big_donor: payer)
+    Contributions::HandlePatronContributionEmailJob.perform_later(contribution_balance:, big_donor: payer)
   rescue StandardError
     nil
   end
