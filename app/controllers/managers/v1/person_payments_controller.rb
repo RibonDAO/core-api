@@ -93,6 +93,10 @@ module Managers
         @per ||= query_params&.fetch('per_page', 10)
       end
 
+      def status
+        @status ||= query_params&.fetch('status', [])
+      end
+
       def query_params
         return unless request.query_parameters[:params]
 
@@ -110,14 +114,14 @@ module Managers
 
         users = customer_results + crypto_user_results
 
-        PersonPayment.where(payer_id: users).order(sortable).page(page).per(per)
+        PersonPayment.where(payer_id: users, status:).order(sortable).page(page).per(per)
       end
 
       def filtered_person_payments
         if search_params.present?
           email_or_wallet_address(search_params)
         else
-          PersonPayment.where.not(payer_type: 'BigDonor').order(sortable).page(page).per(per)
+          PersonPayment.where.not(payer_type: 'BigDonor').where(status:).order(sortable).page(page).per(per)
         end
       end
     end
