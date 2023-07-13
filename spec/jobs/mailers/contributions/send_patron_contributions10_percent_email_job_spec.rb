@@ -5,7 +5,15 @@ RSpec.describe Mailers::Contributions::SendPatronContributions10PercentEmailJob,
     subject(:job) { described_class }
 
     let(:big_donor) { create(:big_donor) }
-    let(:statistics) { { top_donations_non_profit_impact: 100, top_donations_non_profit_name: 'top' } }
+    let(:statistics) do
+      {
+        top_donations_non_profit_name: 'ongname',
+        top_donations_non_profit_impact: 50,
+        total_donors: 100,
+        contribution_receiver_name: 'ongname',
+        contribution_date: '1/02'
+      }
+    end
 
     before do
       allow(SendgridWebMailer).to receive(:send_email).and_return(OpenStruct.new(deliver_later: nil))
@@ -22,6 +30,8 @@ RSpec.describe Mailers::Contributions::SendPatronContributions10PercentEmailJob,
                 total_engaged_people: statistics[:total_donors],
                 top_NGO_name: statistics[:top_donations_non_profit_name],
                 top_NGO_impact: statistics[:top_donations_non_profit_impact],
+                cause_name: statistics[:contribution_receiver_name],
+                donation_date: statistics[:contribution_date],
                 dash_link: an_instance_of(String)
               },
               template_name: 'patron_contributions_10_percent_email_template_id',

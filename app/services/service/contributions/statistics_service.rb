@@ -25,7 +25,7 @@ module Service
           boost_new_contributors:,
           boost_new_patrons:,
           contribution_receiver_name: contribution.receiver[:name],
-          contribution_date: contribution.created_at.strftime('%d/%m/%Y'),
+          contribution_date: contribution.created_at.strftime('%d/%m'),
           top_donations_non_profit_impact:,
           top_donations_non_profit_name:,
           total_donors:,
