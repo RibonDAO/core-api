@@ -27,7 +27,7 @@ module Api
         end
 
         def gateway
-          @gateway ||= params[:gateway] || :stripe
+          @gateway ||= params[:gateway]&.downcase&.to_sym || :stripe
         end
       end
     end
