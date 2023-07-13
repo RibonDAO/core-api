@@ -24,7 +24,7 @@ RSpec.describe 'Api::V1::Offers', type: :request do
 
       expect(response_json.first.keys)
         .to match_array %w[active created_at currency id position_order
-                           price price_cents price_value subscription title updated_at]
+                           price price_cents price_value subscription title updated_at gateway]
     end
   end
 
