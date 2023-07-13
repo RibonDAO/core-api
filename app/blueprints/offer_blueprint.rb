@@ -9,6 +9,6 @@ class OfferBlueprint < Blueprinter::Base
   end
 
   view :minimal do
-    excludes :external_id, :gateway
+    excludes :external_id
   end
 end
