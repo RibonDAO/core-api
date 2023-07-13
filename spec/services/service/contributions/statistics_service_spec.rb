@@ -10,6 +10,8 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
   let(:contribution) { create(:contribution, receiver: cause, person_payment:) }
   let(:donation) { create(:donation) }
 
+  include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
+
   before do
     create(:ribon_config, contribution_fee_percentage: 20, minimum_contribution_chargeable_fee_cents: 10)
     create(:contribution_balance, contribution:, contribution_increased_amount_cents: 100,
