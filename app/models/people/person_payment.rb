@@ -67,13 +67,9 @@ class PersonPayment < ApplicationRecord
     usd: 1
   }
 
-  def from_big_donor?
-    payer_type == 'BigDonor'
-  end
+  def from_big_donor? = payer_type == 'BigDonor'
 
-  def from_customer?
-    payer_type == 'Customer'
-  end
+  def from_customer? = payer_type == 'Customer'
 
   def crypto_amount
     amount_without_fees = amount - service_fees
@@ -97,7 +93,8 @@ class PersonPayment < ApplicationRecord
   end
 
   def set_fees
-    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym).result
+    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym,
+                                                   gateway:).result
     crypto_fee_cents = crypto? ? 0 : fees[:crypto_fee].cents
 
     create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents:)
@@ -148,5 +145,9 @@ class PersonPayment < ApplicationRecord
 
   def set_currency
     self.currency = offer&.currency || :usd
+  end
+
+  def gateway
+    @gateway ||= offer&.gateway&.downcase&.to_sym || :stripe
   end
 end
