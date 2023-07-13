@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Service::Givings::Fees::Card::StripeGlobalCardFeeCalculator, type: :service do
   subject(:service) { described_class.new(value:, currency:) }
+
   include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
 
   describe '#calculate_fee' do

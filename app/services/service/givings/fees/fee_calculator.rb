@@ -22,7 +22,7 @@ module Service
           {
             stripe: Card::StripeCardFeeCalculator,
             stripe_global: Card::StripeGlobalCardFeeCalculator,
-            polygon: Crypto::PolygonFeeCalculator,
+            polygon: Crypto::PolygonFeeCalculator
           }
         end
       end
