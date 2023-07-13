@@ -27,4 +27,8 @@ class UserQueries
   def total_donations_report
     user.donations.count
   end
+
+  def contributions_to_causes
+    user.contributions.where(receiver_type: 'Cause')
+  end
 end
