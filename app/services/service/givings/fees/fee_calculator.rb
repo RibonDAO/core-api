@@ -21,7 +21,8 @@ module Service
         def calculator_services
           {
             stripe: Card::StripeCardFeeCalculator,
-            polygon: Crypto::PolygonFeeCalculator
+            stripe_global: Card::StripeGlobalCardFeeCalculator,
+            polygon: Crypto::PolygonFeeCalculator,
           }
         end
       end
