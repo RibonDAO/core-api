@@ -1,7 +1,7 @@
 module Request
   class ApiRequest
     def self.get(url, expires_in: nil, headers: {})
-      RedisStore::Cache.find_or_create(key: url.parameterize, expires_in:) do
+      RedisStore::Cache.find_or_create(key: url&.parameterize, expires_in:) do
         HTTParty.get(url, headers:)
       end
     end

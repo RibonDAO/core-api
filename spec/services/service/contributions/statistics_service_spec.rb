@@ -8,6 +8,8 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
   let(:contribution) { create(:contribution, receiver: cause, person_payment:) }
   let(:donation) { create(:donation) }
 
+  include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
+
   before do
     create(:ribon_config, contribution_fee_percentage: 20, minimum_contribution_chargeable_fee_cents: 10)
     create(:contribution_balance, contribution:, contribution_increased_amount_cents: 100,
@@ -23,7 +25,7 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
         .to match_array(%i[initial_amount used_amount usage_percentage
                            remaining_amount total_tickets avg_donations_per_person
                            boost_amount total_increase_percentage total_amount_to_cause ribon_fee
-                           boost_new_contributors boost_new_patrons])
+                           boost_new_contributors boost_new_patrons total_donors total_contributors])
     end
   end
 

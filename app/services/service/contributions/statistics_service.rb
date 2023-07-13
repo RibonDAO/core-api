@@ -10,18 +10,26 @@ module Service
       # rubocop:disable Metrics/AbcSize
       def formatted_statistics
         {
-          initial_amount: format_money(initial_amount),
-          used_amount: format_money(used_amount),
-          usage_percentage:,
-          remaining_amount: format_money(remaining_amount),
-          total_tickets:,
-          avg_donations_per_person:,
-          boost_amount: format_money(boost_amount),
-          total_increase_percentage:,
-          total_amount_to_cause: format_money(total_amount_to_cause),
-          ribon_fee: format_money(ribon_fee),
+          initial_amount: payment.formatted_amount, used_amount: format_money(used_amount),
+          usage_percentage:, remaining_amount: format_money(remaining_amount),
+          total_tickets:, avg_donations_per_person:, boost_amount: format_money(boost_amount),
+          total_increase_percentage:, total_amount_to_cause: format_money(total_amount_to_cause),
+          ribon_fee: format_money(ribon_fee), boost_new_contributors:, boost_new_patrons:,
+          total_donors:, total_contributors:
+        }
+      end
+
+      def formatted_email_statistics
+        {
+          boost_amount:,
           boost_new_contributors:,
-          boost_new_patrons:
+          boost_new_patrons:,
+          constribution_receiver_name: contribution.receiver[:name],
+          top_donations_non_profit_impact:,
+          top_donations_non_profit_name:,
+          total_donors:,
+          total_increase_percentage:,
+          usage_percentage:
         }
       end
       # rubocop:enable Metrics/AbcSize
@@ -37,7 +45,7 @@ module Service
       end
 
       def usage_percentage
-        ((used_amount.to_f / initial_amount).round(2) * 100).to_i
+        ((used_amount.to_f / initial_amount).round(2) * 100).round(2)
       end
 
       def remaining_amount
@@ -54,6 +62,22 @@ module Service
         contribution.users.distinct.count
       end
 
+      def top_donations_non_profit
+        @top_donations_non_profit ||= ContributionQueries.new(contribution:).top_donations_non_profit
+      end
+
+      def top_donations_non_profit_impact
+        return unless top_donations_non_profit
+
+        impact = DirectImpactService.new(contribution:)
+                                    .direct_impact_for(top_donations_non_profit)[:formatted_impact]
+        impact&.join(' ')
+      end
+
+      def top_donations_non_profit_name
+        top_donations_non_profit&.name
+      end
+
       def avg_donations_per_person
         return 0 if total_donors.zero?
 
@@ -67,7 +91,7 @@ module Service
       end
 
       def total_increase_percentage
-        (boost_amount / initial_amount) * 100.0
+        ((boost_amount / initial_amount) * 100.0).round(2)
       end
 
       def total_amount_to_cause
@@ -86,6 +110,10 @@ module Service
         ContributionQueries.new(contribution:).boost_new_patrons
       end
 
+      def total_contributors
+        boost_new_contributors + boost_new_patrons
+      end
+
       private
 
       def payment
@@ -101,7 +129,7 @@ module Service
       end
 
       def format_money(amount)
-        Money.from_amount(amount, :usd).format
+        Currency::Converters.convert(from: :usd, to: payment.currency, value: amount).round.format
       end
     end
   end

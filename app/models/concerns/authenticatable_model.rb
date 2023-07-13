@@ -8,6 +8,6 @@ module AuthenticatableModel
   end
 
   def token_issued_at
-    refresh_tokens.last&.created_at
+    refresh_tokens.first&.created_at
   end
 end

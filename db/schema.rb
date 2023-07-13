@@ -257,6 +257,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_12_155912) do
     t.index ["user_id"], name: "index_donations_on_user_id"
   end
 
+  create_table "email_logs", force: :cascade do |t|
+    t.string "email_template_name"
+    t.integer "email_type"
+    t.integer "status"
+    t.string "receiver_type", null: false
+    t.string "receiver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_type", "receiver_id"], name: "index_email_logs_on_receiver"
+  end
+
   create_table "histories", force: :cascade do |t|
     t.bigint "total_donors"
     t.bigint "total_donations"

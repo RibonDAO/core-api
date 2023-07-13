@@ -122,6 +122,7 @@ Rails.application.routes.draw do
         post 'cryptocurrency' => 'cryptocurrency#create'
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
+        post 'store_pay'   => 'stores#create'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -160,6 +161,7 @@ Rails.application.routes.draw do
 
   namespace :webhooks do
     post 'stripe' => 'stripe#events'
+    post 'alchemy' => 'alchemy#events'
   end
 
   namespace :managers do
