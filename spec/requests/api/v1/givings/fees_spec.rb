@@ -5,7 +5,7 @@ RSpec.describe 'Api::V1::Givings::Fees', type: :request do
     subject(:request) { post '/api/v1/givings/card_fees', params: }
 
     let(:params) do
-      { value: 50, currency: 'brl', gateway: 'stripe' }
+      { value: 50, currency: 'brl', gateway: :stripe }
     end
     let(:result) do
       {
