@@ -18,6 +18,20 @@ module Service
           total_donors:, total_contributors:
         }
       end
+
+      def formatted_email_statistics
+        {
+          boost_amount:,
+          boost_new_contributors:,
+          boost_new_patrons:,
+          constribution_receiver_name: contribution.receiver[:name],
+          top_donations_non_profit_impact:,
+          top_donations_non_profit_name:,
+          total_donors:,
+          total_increase_percentage:,
+          usage_percentage:
+        }
+      end
       # rubocop:enable Metrics/AbcSize
 
       def initial_amount
@@ -46,6 +60,22 @@ module Service
 
       def total_donors
         contribution.users.distinct.count
+      end
+
+      def top_donations_non_profit
+        @top_donations_non_profit ||= ContributionQueries.new(contribution:).top_donations_non_profit
+      end
+
+      def top_donations_non_profit_impact
+        return unless top_donations_non_profit
+
+        impact = DirectImpactService.new(contribution:)
+                                    .direct_impact_for(top_donations_non_profit)[:formatted_impact]
+        impact&.join(' ')
+      end
+
+      def top_donations_non_profit_name
+        top_donations_non_profit&.name
       end
 
       def avg_donations_per_person

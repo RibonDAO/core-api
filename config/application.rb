@@ -57,7 +57,7 @@ module RibonCoreApi
     config.active_job.queue_adapter = :sidekiq
     config.time_zone = 'Brasilia'
     config.active_storage.silence_invalid_content_types_warning = true
-    config.active_record.observers = [:donation_observer, :person_payment_observer, :user_observer]
+    config.active_record.observers = [:donation_observer, :person_payment_observer, :user_observer, :contribution_balance_observer]
     config.api_only = true
   end
 end
