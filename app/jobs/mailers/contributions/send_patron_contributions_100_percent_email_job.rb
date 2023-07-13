@@ -3,18 +3,20 @@ module Mailers
     class SendPatronContributions100PercentEmailJob < ApplicationJob
       queue_as :mailers
 
-      def perform(big_donor:)
-        send_email(big_donor)
+      def perform(big_donor:, statistics:)
+        send_email(big_donor, statistics)
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message })
       end
 
       private
 
-      def send_email(big_donor)
+      def send_email(big_donor, statistics)
         SendgridWebMailer.send_email(receiver: big_donor[:email],
                                      dynamic_template_data: {
                                        first_name: big_donor[:name],
+                                       cause_name: statistics[:contribution_receiver_name],
+                                       donation_date: statistics[:contribution_date],
                                        dash_link: dash_link(big_donor)
                                      },
                                      template_name: 'patron_contributions_100_percent_email_template_id',

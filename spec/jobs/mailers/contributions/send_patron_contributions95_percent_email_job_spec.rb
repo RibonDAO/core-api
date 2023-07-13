@@ -5,13 +5,20 @@ RSpec.describe Mailers::Contributions::SendPatronContributions95PercentEmailJob,
     subject(:job) { described_class }
 
     let(:big_donor) { create(:big_donor) }
-    let(:statistics) { { boost_new_contributors: 10 } }
+    let(:statistics) do
+      {
+        boost_new_contributors: 50,
+        contribution_receiver_name: 'ongname',
+        contribution_date: '1/02'
+      }
+    end
 
     before do
       allow(SendgridWebMailer).to receive(:send_email).and_return(OpenStruct.new(deliver_later: nil))
       allow(EmailLog).to receive(:log)
     end
 
+    # rubocop:disable RSpec/ExampleLength
     it 'calls the send email function with correct arguments' do
       job.perform_now(big_donor:, statistics:)
 
@@ -20,11 +27,14 @@ RSpec.describe Mailers::Contributions::SendPatronContributions95PercentEmailJob,
               dynamic_template_data: {
                 first_name: big_donor[:name],
                 new_contributors: statistics[:boost_new_contributors],
+                cause_name: statistics[:contribution_receiver_name],
+                donation_date: statistics[:contribution_date],
                 dash_link: an_instance_of(String)
               },
               template_name: 'patron_contributions_95_percent_email_template_id',
               language: 'en')
     end
+    # rubocop:enable RSpec/ExampleLength
 
     it 'logs the email' do
       job.perform_now(big_donor:, statistics:)
