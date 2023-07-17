@@ -10,6 +10,7 @@
 #  paid_date          :datetime
 #  payer_type         :string
 #  payment_method     :integer
+#  platform           :string
 #  receiver_type      :string
 #  refund_date        :datetime
 #  status             :integer          default("processing")
