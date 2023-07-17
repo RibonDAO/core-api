@@ -69,8 +69,9 @@ RSpec.describe UserQueries, type: :model do
                                     person_payment: create(:person_payment, payer: customer, status: :paid))
     end
 
-    it 'returns only the contributions to causes' do
-      expect(described_class.new(user:).labelable_contributions).to eq(contributions_to_causes)
+    it 'returns only the contributions to causes that are paid' do
+      expect(described_class.new(user:).labelable_contributions.pluck(:id))
+        .to match_array(contributions_to_causes.pluck(:id))
     end
   end
 end
