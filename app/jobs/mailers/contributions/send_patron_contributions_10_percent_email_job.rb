@@ -20,6 +20,8 @@ module Mailers
                                        total_engaged_people: statistics[:total_donors],
                                        top_NGO_name: statistics[:top_donations_non_profit_name],
                                        top_NGO_impact: statistics[:top_donations_non_profit_impact],
+                                       cause_name: statistics[:contribution_receiver_name],
+                                       donation_date: statistics[:contribution_date],
                                        dash_link: dash_link(big_donor)
                                      },
                                      template_name: 'patron_contributions_10_percent_email_template_id',

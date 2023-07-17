@@ -27,7 +27,8 @@ RSpec.describe Contributions::HandlePatronContributionEmailJob, type: :job do
       job_instance.perform(contribution_balance:, big_donor:)
 
       expect(Mailers::Contributions::SendPatronContributions100PercentEmailJob).to have_received(:perform_later)
-                                                                               .with(big_donor:)
+                                                                               .with(big_donor:,
+                                                                                     statistics: anything)
       expect(Mailers::Contributions::SendPatronContributions95PercentEmailJob).not_to have_received(:perform_later)
       expect(Mailers::Contributions::SendPatronContributions75PercentEmailJob).not_to have_received(:perform_later)
       expect(Mailers::Contributions::SendPatronContributions50PercentEmailJob).not_to have_received(:perform_later)
@@ -53,13 +54,14 @@ RSpec.describe Contributions::HandlePatronContributionEmailJob, type: :job do
     end
 
     it 'sends the appropriate email job for different percentages' do
-      [95, 75, 50, 25, 10, 5].each do |percentage|
+      [100, 95, 75, 50, 25, 10, 5].each do |percentage|
         allow(job_instance).to receive(:find_closest_email_percentage).and_return(percentage)
 
         job_instance.perform(contribution_balance:, big_donor:)
         mailer_class = "Mailers::Contributions::SendPatronContributions#{percentage}PercentEmailJob".constantize
 
-        expect(mailer_class).to have_received(:perform_later).with(big_donor:, statistics: anything)
+        expect(mailer_class).to have_received(:perform_later).with(big_donor:,
+                                                                   statistics: anything)
       end
     end
   end

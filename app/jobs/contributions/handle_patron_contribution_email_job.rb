@@ -24,12 +24,8 @@ module Contributions
     end
 
     def send_email(big_donor, statistics, percentage)
-      if percentage == 100
-        Mailers::Contributions::SendPatronContributions100PercentEmailJob.perform_later(big_donor:)
-      else
-        mailer_class = "Mailers::Contributions::SendPatronContributions#{percentage}PercentEmailJob".constantize
-        mailer_class.perform_later(big_donor:, statistics:)
-      end
+      mailer_class = "Mailers::Contributions::SendPatronContributions#{percentage}PercentEmailJob".constantize
+      mailer_class.perform_later(big_donor:, statistics:)
     end
   end
 end
