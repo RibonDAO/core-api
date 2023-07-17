@@ -53,4 +53,25 @@ RSpec.describe UserQueries, type: :model do
       expect(described_class.users_that_last_contributed_in(1.day.ago)).to eq([user])
     end
   end
+
+  describe '#labelable_contributions' do
+    let(:user) { create(:user) }
+    let(:customer) { create(:customer, user:) }
+    let(:cause) { create(:cause) }
+    let(:non_profit) { create(:non_profit) }
+    let!(:contributions_to_causes) do
+      create_list(:contribution, 2, receiver: cause,
+                                    person_payment: create(:person_payment, payer: customer, status: :paid))
+    end
+
+    before do
+      create_list(:contribution, 2, receiver: non_profit,
+                                    person_payment: create(:person_payment, payer: customer, status: :paid))
+    end
+
+    it 'returns only the contributions to causes that are paid' do
+      expect(described_class.new(user:).labelable_contributions.pluck(:id))
+        .to match_array(contributions_to_causes.pluck(:id))
+    end
+  end
 end

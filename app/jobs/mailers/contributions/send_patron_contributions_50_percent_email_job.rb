@@ -17,6 +17,7 @@ module Mailers
                                        first_name: big_donor[:name],
                                        total_engaged_people: statistics[:total_donors],
                                        cause_name: statistics[:contribution_receiver_name],
+                                       donation_date: statistics[:contribution_date],
                                        dash_link: dash_link(big_donor)
                                      },
                                      template_name: 'patron_contributions_50_percent_email_template_id',

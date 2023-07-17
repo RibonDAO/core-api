@@ -187,4 +187,17 @@ RSpec.describe Contribution, type: :model do
       end
     end
   end
+
+  describe '.with_cause_receiver' do
+    let(:receiver) { create(:cause) }
+    let!(:contributions) { create_list(:contribution, 2, receiver:) }
+
+    before do
+      create_list(:contribution, 2, receiver: create(:non_profit, cause: receiver))
+    end
+
+    it 'returns the contributions to causes' do
+      expect(described_class.with_cause_receiver.pluck(:id)).to match_array(contributions.pluck(:id))
+    end
+  end
 end

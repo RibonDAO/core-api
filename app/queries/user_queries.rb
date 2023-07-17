@@ -27,4 +27,8 @@ class UserQueries
   def total_donations_report
     user.donations.count
   end
+
+  def labelable_contributions
+    user.contributions.with_cause_receiver.with_paid_status
+  end
 end
