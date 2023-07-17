@@ -29,6 +29,6 @@ class UserQueries
   end
 
   def labelable_contributions
-    user.contributions.where(receiver_type: 'Cause').with_paid_status
+    user.contributions.with_cause_receiver.with_paid_status
   end
 end

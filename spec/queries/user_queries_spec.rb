@@ -66,7 +66,7 @@ RSpec.describe UserQueries, type: :model do
 
     before do
       create_list(:contribution, 2, receiver: non_profit,
-                                    person_payment: create(:person_payment, payer: customer))
+                                    person_payment: create(:person_payment, payer: customer, status: :paid))
     end
 
     it 'returns only the contributions to causes' do
