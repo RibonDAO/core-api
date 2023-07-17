@@ -56,6 +56,9 @@ class Contribution < ApplicationRecord
   scope :with_paid_status, lambda {
     joins(:person_payment).where(person_payments: { status: :paid })
   }
+  scope :with_cause_receiver, lambda {
+    where(receiver_type: 'Cause')
+  }
 
   def set_contribution_balance
     return unless contribution_balance.nil?
