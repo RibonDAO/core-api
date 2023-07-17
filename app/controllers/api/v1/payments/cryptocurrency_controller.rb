@@ -36,7 +36,8 @@ module Api
             non_profit:,
             wallet_address: payment_params[:wallet_address],
             transaction_hash: payment_params[:transaction_hash],
-            integration_id: payment_params[:integration_id]
+            integration_id: payment_params[:integration_id],
+            platform: payment_params[:platform]
           }
         end
 
@@ -54,6 +55,7 @@ module Api
 
         def payment_params
           params.permit(:email, :amount, :transaction_hash, :status, :cause_id, :non_profit_id, :wallet_address,
+                        :platform,
                         :integration_id)
         end
       end

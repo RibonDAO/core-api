@@ -491,6 +491,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
     t.integer "liquid_value_cents"
     t.string "payer_type"
     t.uuid "payer_id"
+    t.string "platform"
     t.index ["integration_id"], name: "index_person_payments_on_integration_id"
     t.index ["offer_id"], name: "index_person_payments_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_person_payments_on_payer"
