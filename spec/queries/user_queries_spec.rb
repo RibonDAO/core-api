@@ -54,14 +54,14 @@ RSpec.describe UserQueries, type: :model do
     end
   end
 
-  describe '#contributions_to_causes' do
+  describe '#labelable_contributions' do
     let(:user) { create(:user) }
     let(:customer) { create(:customer, user:) }
     let(:cause) { create(:cause) }
     let(:non_profit) { create(:non_profit) }
     let!(:contributions_to_causes) do
       create_list(:contribution, 2, receiver: cause,
-                                    person_payment: create(:person_payment, payer: customer))
+                                    person_payment: create(:person_payment, payer: customer, status: :paid))
     end
 
     before do
@@ -70,7 +70,7 @@ RSpec.describe UserQueries, type: :model do
     end
 
     it 'returns only the contributions to causes' do
-      expect(described_class.new(user:).contributions_to_causes).to eq(contributions_to_causes)
+      expect(described_class.new(user:).labelable_contributions).to eq(contributions_to_causes)
     end
   end
 end

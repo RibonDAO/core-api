@@ -28,7 +28,7 @@ class UserQueries
     user.donations.count
   end
 
-  def contributions_to_causes
-    user.contributions.where(receiver_type: 'Cause')
+  def labelable_contributions
+    user.contributions.where(receiver_type: 'Cause').with_paid_status
   end
 end

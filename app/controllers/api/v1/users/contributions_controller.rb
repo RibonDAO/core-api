@@ -3,7 +3,7 @@ module Api
     module Users
       class ContributionsController < ApplicationController
         def index
-          @contributions = UserQueries.new(user:).contributions_to_causes
+          @contributions = UserQueries.new(user:).labelable_contributions
           render json: ContributionBlueprint.render(@contributions)
         end
 
