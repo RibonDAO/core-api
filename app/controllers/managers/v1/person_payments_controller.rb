@@ -1,8 +1,9 @@
 module Managers
   module V1
     class PersonPaymentsController < ManagersController
+      include ActiveRecord::Sanitization::ClassMethods
       def index
-        @person_payments = PersonPayment.where.not(payer_type: 'BigDonor').order(sortable).page(page).per(per)
+        @person_payments = filtered_person_payments
 
         render json: PersonPaymentBlueprint.render(@person_payments, total_items:, page:, total_pages:)
       end
@@ -78,19 +79,52 @@ module Managers
       end
 
       def total_pages
-        @person_payments.page(@page).total_pages
+        @person_payments.page(@page).per(per).total_pages
       end
 
       def total_items
-        @total_items = @person_payments.count
+        @total_items ||= @person_payments&.total_count
       end
 
       def page
-        @page = params[:page] || 1
+        @page ||= query_params&.fetch('page', 1)
       end
 
       def per
-        @per = params[:per] || 100
+        @per ||= query_params&.fetch('per_page', 10)
+      end
+
+      def status
+        @status ||= query_params&.fetch('status', [])
+      end
+
+      def query_params
+        return unless request.query_parameters[:params]
+
+        query_params = request.query_parameters[:params]
+        JSON.parse(query_params)
+      end
+
+      def search_params
+        @search_params = query_params&.fetch('search_term', '')
+      end
+
+      def email_or_wallet_address(search_params)
+        customer_results = Customer.where('email ILIKE ?', "%#{sanitize_sql_like(search_params)}%").pluck(:id)
+        crypto_user_results = CryptoUser.where('wallet_address ILIKE ?',
+                                               "%#{sanitize_sql_like(search_params)}%").pluck(:id)
+
+        users = customer_results + crypto_user_results
+
+        PersonPayment.where(payer_id: users, status:).order(sortable).page(page).per(per)
+      end
+
+      def filtered_person_payments
+        if search_params.present?
+          email_or_wallet_address(search_params)
+        else
+          PersonPayment.where.not(payer_type: 'BigDonor').where(status:).order(sortable).page(page).per(per)
+        end
       end
     end
   end
