@@ -101,6 +101,7 @@ Rails.application.routes.draw do
         put 'track', to: 'users/trackings#track_user'
 
         get 'contributions' => 'users/contributions#index'
+        get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
       end
       resources :integrations, only: [] do
