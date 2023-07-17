@@ -5,7 +5,7 @@ module Givings
     module OrderTypes
       class CreditCard
         attr_reader :card, :email, :tax_id, :offer, :payment_method,
-                    :user, :operation, :integration_id, :cause, :non_profit
+                    :user, :operation, :integration_id, :cause, :non_profit, :platform
 
         def initialize(args)
           @card           = args[:card]
@@ -18,6 +18,7 @@ module Givings
           @integration_id = args[:integration_id]
           @cause          = args[:cause]
           @non_profit     = args[:non_profit]
+          @platform       = args[:platform]
         end
 
         def generate_order
@@ -47,7 +48,7 @@ module Givings
 
         def create_payment(payer)
           PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:,
-                                  amount_cents:, status: :processing, receiver: })
+                                  amount_cents:, status: :processing, receiver:, platform: })
         end
 
         def call_add_cause_giving_blockchain_job(order)

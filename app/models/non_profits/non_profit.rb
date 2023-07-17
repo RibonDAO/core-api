@@ -17,11 +17,9 @@
 class NonProfit < ApplicationRecord
   extend Mobility
 
-  translates :impact_description, type: :string, locale_accessors: %i[en pt-BR]
-  translates :logo_description, type: :string, locale_accessors: %i[en pt-BR]
-  translates :main_image_description, type: :string, locale_accessors: %i[en pt-BR]
-  translates :background_image_description, type: :string, locale_accessors: %i[en pt-BR]
-  translates :confirmation_image_description, type: :string, locale_accessors: %i[en pt-BR]
+  translates :impact_description, :logo_description,
+             :main_image_description, :background_image_description,
+             :confirmation_image_description, type: :string
 
   has_one_attached :logo
   has_one_attached :main_image
@@ -78,5 +76,9 @@ class NonProfit < ApplicationRecord
 
   def save_wallet
     @old_non_profit_wallet&.update(status: :active)
+  end
+
+  def blueprint
+    NonProfitBlueprint
   end
 end

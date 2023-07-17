@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Currency::Rates do
   subject(:service) { described_class.new(from:, to:) }
 
-  let(:from) { 'USD' }
-  let(:to) { 'BRL' }
+  let(:from) { 'usd' }
+  let(:to) { 'brl' }
 
   before do
     VCR.insert_cassette 'conversion_rate_usd_brl'

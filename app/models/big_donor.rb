@@ -9,12 +9,15 @@
 #  updated_at :datetime         not null
 #
 class BigDonor < ApplicationRecord
+  include AuthenticatableModel
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
 
   before_validation { email.downcase! }
 
   has_many :person_payments, as: :payer
+  has_many :contributions, through: :person_payments
+  has_many :email_logs, as: :receiver
 
   def blueprint
     BigDonorBlueprint

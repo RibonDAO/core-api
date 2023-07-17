@@ -16,6 +16,8 @@ class Contribution < ApplicationRecord
   belongs_to :person_payment
   has_one :contribution_balance
   has_many :donation_contributions
+  has_many :donations, through: :donation_contributions
+  has_many :users, through: :donations
   has_many :contribution_fees
 
   delegate :liquid_value_cents, to: :person_payment
@@ -54,6 +56,9 @@ class Contribution < ApplicationRecord
   scope :with_paid_status, lambda {
     joins(:person_payment).where(person_payments: { status: :paid })
   }
+  scope :with_cause_receiver, lambda {
+    where(receiver_type: 'Cause')
+  }
 
   def set_contribution_balance
     return unless contribution_balance.nil?
@@ -67,5 +72,15 @@ class Contribution < ApplicationRecord
                                  tickets_balance_cents:, fees_balance_cents:)
   rescue StandardError => e
     Reporter.log(error: e)
+  end
+
+  def label
+    "#{receiver&.name} (#{created_at.strftime('%b/%Y')})"
+  end
+
+  def non_profits
+    return [receiver] if receiver_type == 'NonProfit'
+
+    receiver&.non_profits
   end
 end

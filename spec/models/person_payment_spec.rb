@@ -10,6 +10,7 @@
 #  paid_date          :datetime
 #  payer_type         :string
 #  payment_method     :integer
+#  platform           :string
 #  receiver_type      :string
 #  refund_date        :datetime
 #  status             :integer          default("processing")
@@ -20,7 +21,6 @@
 #  integration_id     :bigint
 #  offer_id           :bigint
 #  payer_id           :uuid
-#  person_id          :uuid
 #  receiver_id        :bigint
 #
 require 'rails_helper'

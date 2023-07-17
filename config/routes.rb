@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
       post 'users/can_donate' => 'users#can_donate'
+      get 'users/first_access_to_integration' => 'users#first_access_to_integration'
       get 'users/completed_tasks' => 'users#completed_tasks'
       post 'users/complete_task' => 'users#complete_task'
       get 'users/tasks_statistics' => 'users/tasks_statistics#index'
@@ -56,6 +57,8 @@ Rails.application.routes.draw do
       post 'users/completed_all_tasks' => 'users/tasks_statistics#first_completed_all_tasks_at'
       get 'users/impact' => 'users#impact'
       get 'users/statistics' => 'users/statistics#index'
+      post 'users/send_delete_account_email' => 'users#send_delete_account_email'
+      delete 'users' => 'users#destroy'
       
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -96,6 +99,10 @@ Rails.application.routes.draw do
 
         get 'donations_count' => 'users/impacts#donations_count'
         put 'track', to: 'users/trackings#track_user'
+
+        get 'contributions' => 'users/contributions#index'
+        get 'labelable_contributions' => 'users/contributions#labelable'
+        get 'contributions/:id' => 'users/contributions#show'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -116,7 +123,7 @@ Rails.application.routes.draw do
         post 'cryptocurrency' => 'cryptocurrency#create'
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
-        post 'google_pay'   => 'stores#google_pay'
+        post 'store_pay'   => 'stores#create'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -155,6 +162,7 @@ Rails.application.routes.draw do
 
   namespace :webhooks do
     post 'stripe' => 'stripe#events'
+    post 'alchemy' => 'alchemy#events'
   end
 
   namespace :managers do
@@ -185,8 +193,10 @@ Rails.application.routes.draw do
       resources :pools, only: [:index]
       resources :stories, only: %i[index show create update destroy]
 
-       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
+      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
+      post 'auth/refresh_token', to: 'authorization#refresh_token'
+      post 'auth/password', to: 'authorization#password_authorization'
       get 'integrations_mobility_attributes' => 'integrations#mobility_attributes'
       get 'non_profits/:id/stories' => 'non_profits#stories'
       get 'person_payments' => 'person_payments#index'
@@ -195,6 +205,18 @@ Rails.application.routes.draw do
       get 'stories/:id/stories' => 'stories#stories'
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
+    end
+  end
+
+  namespace :patrons do
+    namespace :v1 do
+      post 'auth/refresh_token', to: 'authorization#refresh_token'
+      post 'auth/send_authentication_email', to: 'authorization#send_authentication_email'
+      post 'auth/authorize_from_auth_token', to: 'authorization#authorize_from_auth_token'
+      get 'contributions' => 'contributions#index'
+      resources :contributions, only: %i[] do
+        get 'impacts' => 'contributions/impacts#index'
+      end
     end
   end
 end

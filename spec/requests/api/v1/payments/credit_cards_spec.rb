@@ -9,6 +9,7 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
     { email: 'user@test.com', tax_id: '111.111.111-11', offer_id: offer.id,
       external_id: 'pi_123', country: 'Brazil', city: 'Brasilia', state: 'DF',
       integration_id: integration.id, cause_id: cause&.id, non_profit_id: non_profit&.id,
+      platform: 'web',
       card: { cvv: 555, number: '4222 2222 2222 2222', name: 'User Test',
               expiration_month: '05', expiration_year: '25' } }
   end
@@ -18,6 +19,7 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
 
   let(:credit_card_double) do
     CreditCard.new(cvv: params[:card][:cvv], number: params[:card][:number], name: params[:card][:name],
+
                    expiration_month: params[:card][:expiration_month],
                    expiration_year: params[:card][:expiration_year])
   end
@@ -82,6 +84,7 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
         request
         expected_payload = { card: credit_card_double, email: 'user@test.com', tax_id: '111.111.111-11',
                              offer:, operation: :subscribe, payment_method: :credit_card, non_profit:,
+                             platform: 'web',
                              integration_id: integration.id.to_s, user: user_double, cause: }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)
@@ -96,6 +99,7 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
         request
         expected_payload = { card: credit_card_double, email: 'user@test.com', tax_id: '111.111.111-11',
                              offer:, operation: :purchase, payment_method: :credit_card, non_profit:,
+                             platform: 'web',
                              integration_id: integration.id.to_s, user: user_double, cause: }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)
@@ -111,6 +115,7 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
         request
         expected_payload = { card: credit_card_double, email: 'user@test.com', tax_id: '111.111.111-11',
                              offer:, operation: :purchase, payment_method: :credit_card, non_profit:,
+                             platform: 'web',
                              integration_id: integration.id.to_s, user: user_double, cause: }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)
@@ -126,6 +131,7 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
         request
         expected_payload = { card: credit_card_double, email: 'user@test.com', tax_id: '111.111.111-11',
                              offer:, operation: :purchase, payment_method: :credit_card, cause:,
+                             platform: 'web',
                              integration_id: integration.id.to_s, user: user_double, non_profit: }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)

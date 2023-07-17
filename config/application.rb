@@ -20,6 +20,7 @@ Bundler.require(*Rails.groups)
 
 module RibonCoreApi
   extend self
+  API_ENVS = %w[development staging production local].freeze
 
   def redis
     @redis ||= Redis::Namespace.new('api', redis: Redis.new(url: redis_url))
@@ -27,6 +28,12 @@ module RibonCoreApi
 
   def redis_url
     @redis_url ||= config[:redis][:url]
+  end
+
+  API_ENVS.each do |env|
+    define_method("api_env_#{env}?") do
+      config[:api_env] == env
+    end
   end
 
   def load_yaml(config)
@@ -50,7 +57,7 @@ module RibonCoreApi
     config.active_job.queue_adapter = :sidekiq
     config.time_zone = 'Brasilia'
     config.active_storage.silence_invalid_content_types_warning = true
-    config.active_record.observers = [:donation_observer, :person_payment_observer, :user_observer]
+    config.active_record.observers = [:donation_observer, :person_payment_observer, :user_observer, :contribution_balance_observer]
     config.api_only = true
   end
 end

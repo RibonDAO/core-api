@@ -10,6 +10,7 @@
 #  paid_date          :datetime
 #  payer_type         :string
 #  payment_method     :integer
+#  platform           :string
 #  receiver_type      :string
 #  refund_date        :datetime
 #  status             :integer          default("processing")
@@ -20,7 +21,6 @@
 #  integration_id     :bigint
 #  offer_id           :bigint
 #  payer_id           :uuid
-#  person_id          :uuid
 #  receiver_id        :bigint
 #
 class PersonPayment < ApplicationRecord
@@ -50,14 +50,16 @@ class PersonPayment < ApplicationRecord
     failed: 2,
     refunded: 3,
     refund_failed: 4,
-    requires_action: 5
+    requires_action: 5,
+    blocked: 6
   }
 
   enum payment_method: {
     credit_card: 0,
     pix: 1,
     crypto: 2,
-    google_pay: 3
+    google_pay: 3,
+    apple_pay: 4
   }
 
   enum currency: {
@@ -65,13 +67,9 @@ class PersonPayment < ApplicationRecord
     usd: 1
   }
 
-  def from_big_donor?
-    payer_type == 'BigDonor'
-  end
+  def from_big_donor? = payer_type == 'BigDonor'
 
-  def from_customer?
-    payer_type == 'Customer'
-  end
+  def from_customer? = payer_type == 'Customer'
 
   def crypto_amount
     amount_without_fees = amount - service_fees
@@ -90,8 +88,13 @@ class PersonPayment < ApplicationRecord
     amount_cents / 100.0
   end
 
+  def formatted_amount
+    Money.from_cents(amount_cents, currency).format
+  end
+
   def set_fees
-    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym).result
+    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym,
+                                                   gateway:).result
     crypto_fee_cents = crypto? ? 0 : fees[:crypto_fee].cents
 
     create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents:)
@@ -142,5 +145,9 @@ class PersonPayment < ApplicationRecord
 
   def set_currency
     self.currency = offer&.currency || :usd
+  end
+
+  def gateway
+    @gateway ||= offer&.gateway&.downcase&.to_sym || :stripe
   end
 end

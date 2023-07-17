@@ -157,4 +157,47 @@ RSpec.describe Contribution, type: :model do
       end
     end
   end
+
+  describe '#label' do
+    let(:receiver) { create(:cause, name: 'Cause name') }
+    let(:contribution) { create(:contribution, receiver:, created_at: '2023-05-01') }
+
+    it 'returns the cause name and reference date of the contribution' do
+      expect(contribution.label).to eq('Cause name (May/2023)')
+    end
+  end
+
+  describe '#non_profits' do
+    context 'when the receiver is a non profit' do
+      let(:receiver) { create(:non_profit) }
+      let(:contribution) { create(:contribution, receiver:) }
+
+      it 'returns an array with that non profit' do
+        expect(contribution.non_profits).to eq([receiver])
+      end
+    end
+
+    context 'when the receiver is a cause' do
+      let(:receiver) { create(:cause) }
+      let(:non_profits) { create_list(:non_profit, 2, cause: receiver) }
+      let(:contribution) { create(:contribution, receiver:) }
+
+      it 'returns an array with all the non profits of the cause' do
+        expect(contribution.non_profits).to eq(non_profits)
+      end
+    end
+  end
+
+  describe '.with_cause_receiver' do
+    let(:receiver) { create(:cause) }
+    let!(:contributions) { create_list(:contribution, 2, receiver:) }
+
+    before do
+      create_list(:contribution, 2, receiver: create(:non_profit, cause: receiver))
+    end
+
+    it 'returns the contributions to causes' do
+      expect(described_class.with_cause_receiver.pluck(:id)).to match_array(contributions.pluck(:id))
+    end
+  end
 end

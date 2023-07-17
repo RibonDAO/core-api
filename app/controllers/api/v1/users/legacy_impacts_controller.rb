@@ -7,7 +7,7 @@ module Api
         end
 
         def contributions
-          render json: LegacyContributionsBlueprint.render(user.legacy_contributions)
+          render json: LegacyContributionsBlueprint.render(user.legacy_contributions.order(day: :desc))
         end
 
         private

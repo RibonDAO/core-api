@@ -9,6 +9,7 @@ module Service
 
       def label_donation
         payer_contribution = next_contribution_to_label_the_donation
+        return unless payer_contribution
 
         create_donation_contribution(contribution: payer_contribution)
         update_contribution_balance(contribution_balance: payer_contribution.contribution_balance)

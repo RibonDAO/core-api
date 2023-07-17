@@ -23,4 +23,10 @@ RSpec.describe Service::Givings::Impact::NonProfitImpactCalculator, type: :servi
       expect(service.rounded_impact).to eq 133
     end
   end
+
+  describe '#formatted_impact' do
+    it 'returns the formatted impact' do
+      expect(service.formatted_impact).to eq(['4 months and 13 days', 'of days of water for', '1 donor'])
+    end
+  end
 end

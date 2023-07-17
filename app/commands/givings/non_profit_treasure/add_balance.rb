@@ -13,6 +13,7 @@ module Givings
       end
 
       def call
+        SleeperHelper.sleep(30)
         ribon_contract.contribute_to_non_profit(non_profit_pool:, non_profit_wallet_address:, amount:)
       end
 

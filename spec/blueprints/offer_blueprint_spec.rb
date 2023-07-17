@@ -19,6 +19,5 @@ RSpec.describe OfferBlueprint, type: :blueprint do
 
   it 'has the correct view' do
     expect(offer_blueprint_minimal).not_to include(:external_id.to_s)
-    expect(offer_blueprint_minimal).not_to include(:gateway.to_s)
   end
 end

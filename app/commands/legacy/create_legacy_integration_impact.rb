@@ -20,7 +20,7 @@ module Legacy
           LegacyIntegrationImpact.where(legacy_integration:)
                                  .where(reference_date: date_range)
                                  .where(legacy_non_profit: legacy_non_profit(impact[:non_profit]))
-                                 .first_or_create(legacy_integration_impact_params(impact))
+                                 .first_or_create!(legacy_integration_impact_params(impact))
         end
       end
     end

@@ -35,6 +35,23 @@ module Api
         end
       end
 
+      def first_access_to_integration
+        @integration = Integration.find_by_id_or_unique_address params[:integration_id]
+
+        if current_user
+
+          current_user.create_user_donation_stats! unless current_user.user_donation_stats
+
+          first_access_to = current_user.user_last_donation_to(@integration).nil?
+
+          render json: { first_access_to_integration: first_access_to }
+
+        else
+
+          render json: { first_access_to_integration: true }
+        end
+      end
+
       def completed_tasks
         if current_user
           render json: UserCompletedTaskBlueprint.render(current_user.user_completed_tasks)
@@ -45,15 +62,40 @@ module Api
 
       def complete_task
         if current_user
-
           task = ::Users::UpsertTask.call(user: current_user, task_identifier: params[:task_identifier]).result
 
           ::Users::IncrementStreak.call(user: current_user)
           render json: UserCompletedTaskBlueprint.render(task)
-
         else
           head :unauthorized
         end
+      end
+
+      def send_delete_account_email
+        if current_user
+          jwt = ::Jwt::Encoder.encode({ email: current_user.email })
+          Mailers::SendUserDeletionEmailJob.perform_now(user: current_user, jwt:)
+
+          render json: { sent: true }, status: :ok
+        else
+          head :unauthorized
+        end
+      end
+
+      def destroy
+        email = ::Jwt::Decoder.decode(token: params[:token]).first['email']
+        return head :unauthorized unless email
+
+        user = User.find_by(email:)
+        command = ::Users::Anonymize.call(user)
+
+        if command.success?
+          head :ok
+        else
+          head :unprocessable_entity
+        end
+      rescue StandardError
+        head :unauthorized
       end
 
       private

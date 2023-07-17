@@ -16,6 +16,7 @@ describe Donations::CreateBatchBlockchainDonation do
       let!(:donation_pool) { create(:pool, token:) }
 
       before do
+        allow(Kernel).to receive(:sleep)
         allow(Web3::Contracts::RibonContract).to receive(:new).and_return(ribon_contract)
         allow(ribon_contract).to receive(:donate_through_integration).and_return('0xFF20')
         create(:ribon_config, default_ticket_value: 100, default_chain_id: chain.chain_id)
@@ -69,6 +70,7 @@ describe Donations::CreateBatchBlockchainDonation do
       let(:ribon_contract) { instance_double(Web3::Contracts::RibonContract) }
 
       before do
+        allow(Kernel).to receive(:sleep)
         create(:ribon_config, default_ticket_value: 100)
         allow(Web3::Contracts::RibonContract).to receive(:new).and_return(ribon_contract)
         allow(ribon_contract).to receive(:donate_through_integration)

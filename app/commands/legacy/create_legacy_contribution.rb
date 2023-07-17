@@ -13,9 +13,10 @@ module Legacy
 
     def call
       with_exception_handle do
+        return if legacy_contribution_exist?
+
         LegacyContribution.create!(
-          legacy_user:,
-          day: legacy_contribution[:created_at],
+          legacy_user:, day: legacy_contribution[:created_at],
           value_cents: legacy_contribution[:value_cents],
           legacy_payment_id: legacy_contribution[:legacy_payment_id],
           legacy_payment_method: legacy_contribution[:legacy_payment_method],
@@ -26,6 +27,10 @@ module Legacy
     end
 
     private
+
+    def legacy_contribution_exist?
+      LegacyContribution.find_by(legacy_payment_id: legacy_contribution[:legacy_payment_id]).present?
+    end
 
     def legacy_user
       l_user = LegacyUser.where(email:).first

@@ -22,7 +22,7 @@ en:
   sources:
     has_source_message: "Source already created."
   manager:
-    login_success: "Signed in successfully with Google"
+    login_success: "Signed in successfully"
   pools:
     create_failed: "Could not create pool"
     fetch_failed: "Could not fetch pool"
@@ -42,3 +42,7 @@ en:
     donate: "Donate"
   vouchers:
     invalid_voucher: "Invalid ticket."
+  patrons:
+    not_found: "Patron not found."
+    email_sent: "Email sent successfully."
+    login_success: "Signed in successfully"

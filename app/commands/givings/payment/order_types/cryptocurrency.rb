@@ -5,7 +5,7 @@ module Givings
     module OrderTypes
       class Cryptocurrency
         attr_reader :wallet_address, :payment_method, :user, :amount, :transaction_hash, :integration_id, :cause,
-                    :non_profit
+                    :non_profit, :platform
 
         def initialize(args)
           @wallet_address   = args[:wallet_address]
@@ -16,6 +16,7 @@ module Givings
           @integration_id   = args[:integration_id]
           @cause = args[:cause]
           @non_profit = args[:non_profit]
+          @platform = args[:platform]
         end
 
         def generate_order
@@ -39,12 +40,13 @@ module Givings
         private
 
         def find_or_create_crypto_user
-          CryptoUser.find_by(wallet_address:) || CryptoUser.create!(wallet_address:, person: Person.create!)
+          CryptoUser.find_by(wallet_address:) || CryptoUser.create!(wallet_address:)
         end
 
         def create_payment(payer)
           PersonPayment.create!({ payer:, paid_date:, integration:,
-                                  payment_method:, amount_cents:, status: :processing, receiver: })
+                                  payment_method:, amount_cents:, status: :processing, receiver:,
+                                  platform: })
         end
 
         def create_blockchain_transaction(payment)
