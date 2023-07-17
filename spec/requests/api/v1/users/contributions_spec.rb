@@ -8,8 +8,8 @@ RSpec.describe 'Api::V1::Users::Contributions', type: :request do
 
     let(:user) { create(:user) }
     let(:customer) { create(:customer, user:) }
-    let!(:person_payment) { create(:person_payment, payer: customer) }
-    let(:receiver) { create(:non_profit, :with_impact) }
+    let!(:person_payment) { create(:person_payment, payer: customer, status: :paid) }
+    let(:receiver) { create(:cause) }
 
     before { create(:contribution, person_payment:, receiver:) }
 
@@ -28,7 +28,7 @@ RSpec.describe 'Api::V1::Users::Contributions', type: :request do
 
     let(:user) { create(:user) }
     let(:customer) { create(:customer, user:) }
-    let!(:person_payment) { create(:person_payment, payer: customer) }
+    let!(:person_payment) { create(:person_payment, payer: customer, status: :paid) }
     let(:receiver) { create(:non_profit, :with_impact) }
     let!(:contribution) { create(:contribution, person_payment:, receiver:) }
 
