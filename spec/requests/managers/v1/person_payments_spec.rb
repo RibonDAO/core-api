@@ -27,7 +27,7 @@ RSpec.describe 'Managers::V1::PersonPayments', type: :request do
         expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                    offer page paid_date payment_method
                                                    payer payer_identification
-                                                   service_fees status total_items total_pages])
+                                                   service_fees status total_items total_pages platform])
       end
 
       it 'returns the total number of pages' do

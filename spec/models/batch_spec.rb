@@ -2,11 +2,12 @@
 #
 # Table name: batches
 #
-#  id         :bigint           not null, primary key
-#  amount     :decimal(, )
-#  cid        :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id               :bigint           not null, primary key
+#  amount           :decimal(, )
+#  cid              :string
+#  reference_period :date
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 require 'rails_helper'
 
