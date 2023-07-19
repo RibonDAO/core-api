@@ -3,10 +3,8 @@ require 'rails_helper'
 RSpec.describe Service::Contributions::StatisticsService, type: :service do
   subject(:service) { described_class.new(contribution:) }
 
-  include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
-
   let(:cause) { create(:cause) }
-  let(:person_payment) { create(:person_payment, usd_value_cents: 1_000, currency: 'brl') }
+  let(:person_payment) { create(:person_payment, usd_value_cents: 1_000) }
   let(:contribution) { create(:contribution, receiver: cause, person_payment:) }
   let(:donation) { create(:donation) }
 
