@@ -56,6 +56,16 @@ class NonProfit < ApplicationRecord
     impact_for(date:)&.impact_by_ticket
   end
 
+  def formatted_impact_by_ticket(date: Time.zone.now)
+    ::Impact::Normalizer.new(self, impact_by_ticket(date:)).normalize
+  rescue Exceptions::ImpactNormalizationError
+    ['', '', '']
+  end
+
+  def impact_by_ticket_text(date: Time.zone.now)
+    formatted_impact_by_ticket(date:).join(' ')
+  end
+
   def wallet_address
     if non_profit_wallets.where(status: :active).last
       non_profit_wallets.where(status: :active).last.public_key
