@@ -24,7 +24,7 @@ module Contributions
     private
 
     def formatted_impact_for(non_profit, value)
-      Service::Givings::Impact::NonProfitImpactCalculator
+      Givings::Impact::NonProfitImpactCalculator
         .new(non_profit:, value:, currency: :usd).formatted_impact
     end
 
