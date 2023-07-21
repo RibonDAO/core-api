@@ -4,7 +4,7 @@ module Givings
   module Card
     class CalculateCardGiving < ApplicationCommand
       prepend SimpleCommand
-      include Service::Givings::Fees
+      include Givings::Fees
 
       attr_reader :currency, :value, :gateway
 
