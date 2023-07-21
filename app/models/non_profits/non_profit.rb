@@ -58,6 +58,8 @@ class NonProfit < ApplicationRecord
 
   def formatted_impact_by_ticket(date: Time.zone.now)
     ::Impact::Normalizer.new(self, impact_by_ticket(date:)).normalize
+  rescue Exceptions::ImpactNormalizationError
+    ['', '', '']
   end
 
   def impact_by_ticket_text(date: Time.zone.now)
