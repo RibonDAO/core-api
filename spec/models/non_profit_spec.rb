@@ -147,4 +147,31 @@ RSpec.describe NonProfit, type: :model do
       expect(non_profit.wallet_address).to eq 'newWalletAddressActive'
     end
   end
+
+  describe '#formatted_impact_by_ticket' do
+    let(:non_profit) { create(:non_profit) }
+
+    before do
+      create(:ribon_config, default_ticket_value: 1)
+      create(:non_profit_impact, non_profit:, start_date: 1.day.ago, donor_recipient: 'cat',
+                                 impact_description: 'water, waters', measurement_unit: 'days_months_and_years',
+                                 end_date: 1.day.from_now, usd_cents_to_one_impact_unit: 1)
+    end
+
+    it 'returns the impact normalize for 1 ticket impact' do
+      expect(non_profit.formatted_impact_by_ticket).to eq ['1 day', 'of water for', '1 cat']
+    end
+  end
+
+  describe '#impact_by_ticket_text' do
+    let(:non_profit) { create(:non_profit) }
+
+    before do
+      allow(non_profit).to receive(:formatted_impact_by_ticket).and_return(['1 day', 'of water for', '1 cat'])
+    end
+
+    it 'returns the formatted impact by ticket as a joined text' do
+      expect(non_profit.impact_by_ticket_text).to eq '1 day of water for 1 cat'
+    end
+  end
 end
