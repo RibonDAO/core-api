@@ -35,8 +35,8 @@ module Mailers
     end
 
     def rounded_impact
-      Service::Givings::Impact::NonProfitImpactCalculator.new(value: (offer.price_cents / 100), non_profit:,
-                                                              currency: offer.currency).rounded_impact
+      Givings::Impact::NonProfitImpactCalculator.new(value: (offer.price_cents / 100), non_profit:,
+                                                     currency: offer.currency).rounded_impact
     end
 
     def normalized_impact
