@@ -4,7 +4,7 @@ module Donations
     sidekiq_options retry: 3
 
     def perform(pool:)
-      Service::Donations::PoolBalances.new(pool:).add_balance_history
+      Donations::PoolBalances.new(pool:).add_balance_history
     end
   end
 end
