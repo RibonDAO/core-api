@@ -10,7 +10,7 @@ class ContributionBlueprint < Blueprinter::Base
 
   view :with_stats do
     field(:stats) do |contribution|
-      ContributionStatsBlueprint.render_as_json(Contributions::StatisticsService
+      ContributionStatsBlueprint.render_as_json(Contributions::Statistics
                                           .new(contribution:).formatted_statistics)
     end
   end
