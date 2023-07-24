@@ -12,10 +12,10 @@ RSpec.describe 'Integrations::V1::Impacts', type: :request do
         donations_per_non_profit: [{ non_profit: { name: 'Non Profit 1' }, donations: 5 }],
         donors_per_non_profit: [{ non_profit: { name: 'Non Profit 1' }, donors: 3 }] }
     end
-    let(:impact_service_instance) { instance_double(Service::Integrations::Impact, formatted_impact: impact) }
+    let(:impact_service_instance) { instance_double(Integrations::Impact, formatted_impact: impact) }
 
     before do
-      allow(Service::Integrations::Impact).to receive(:new).and_return(impact_service_instance)
+      allow(Integrations::Impact).to receive(:new).and_return(impact_service_instance)
     end
 
     it 'returns the integration impact' do

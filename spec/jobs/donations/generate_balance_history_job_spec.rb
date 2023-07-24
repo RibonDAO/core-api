@@ -5,7 +5,7 @@ RSpec.describe Donations::GenerateBalanceHistoryJob, type: :job do
     subject(:perform_job) { described_class.perform_now(pool:) }
 
     let(:pool) { build(:pool) }
-    let(:service) { Service::Donations::PoolBalances }
+    let(:service) { Donations::PoolBalances }
     let(:service_mock) { instance_double(service) }
 
     before do

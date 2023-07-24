@@ -8,7 +8,7 @@ RSpec.describe Donations::DecreasePoolBalanceJob, type: :job do
     let!(:pool) { create(:pool, cause:) }
     let!(:non_profit) { create(:non_profit, cause:) }
     let!(:donation) { create(:donation, non_profit:) }
-    let(:service) { Service::Donations::PoolBalances }
+    let(:service) { Donations::PoolBalances }
     let(:service_mock) { instance_double(service) }
 
     before do

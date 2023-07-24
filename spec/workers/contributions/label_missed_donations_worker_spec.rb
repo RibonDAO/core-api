@@ -11,7 +11,7 @@ RSpec.describe Contributions::LabelMissedDonationsWorker, type: :worker do
     let(:donations_with_label) { create_list(:donation, 2) }
 
     before do
-      allow(Service::Contributions::TicketLabelingService).to receive(:new)
+      allow(Contributions::TicketLabelingService).to receive(:new)
       donations_with_label.each do |donation|
         create(:donation_contribution, donation:)
       end
@@ -20,7 +20,7 @@ RSpec.describe Contributions::LabelMissedDonationsWorker, type: :worker do
     it 'calls the service with right params' do
       worker.perform
 
-      expect(Service::Contributions::TicketLabelingService)
+      expect(Contributions::TicketLabelingService)
         .to have_received(:new).with(donation: donations_without_label.first)
     end
   end
