@@ -24,14 +24,14 @@ module ContributionServices
       return if accumulated_fees_result <= contribution_balance.fees_balance_cents
 
       remaining_fee = accumulated_fees_result - contribution_balance.fees_balance_cents
-      RemainingContributionFeeHandlerService.new(contribution:, remaining_fee:).spread_remaining_fee
+      RemainingContributionFeeHandler.new(contribution:, remaining_fee:).spread_remaining_fee
     end
 
     private
 
     def handle_fee_creation_for(contribution_balance:, fee_cents:, contribution_increased_amount_cents:)
-      ContributionFeeCreatorService.new(contribution_balance:, fee_cents:, contribution:,
-                                        contribution_increased_amount_cents:).handle_fee_creation
+      ContributionFeeCreator.new(contribution_balance:, fee_cents:, contribution:,
+                                 contribution_increased_amount_cents:).handle_fee_creation
     end
   end
 end

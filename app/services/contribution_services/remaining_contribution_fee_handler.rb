@@ -41,8 +41,8 @@ module ContributionServices
     def handle_fee_creation_for(contribution_balance:, fee_cents:, contribution_increased_amount_cents:)
       transfer_ticket_balance_to_fees_balance(contribution_balance:, fee_cents:)
 
-      ContributionFeeCreatorService.new(contribution_balance:, fee_cents:, contribution:,
-                                        contribution_increased_amount_cents:).handle_fee_creation
+      ContributionFeeCreator.new(contribution_balance:, fee_cents:, contribution:,
+                                 contribution_increased_amount_cents:).handle_fee_creation
     end
 
     def transfer_ticket_balance_to_fees_balance(contribution_balance:, fee_cents:)
