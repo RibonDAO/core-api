@@ -13,7 +13,7 @@ module Givings
 
       def call
         payment = find_person_payment
-        refund = Service::Givings::Payment::Orchestrator.new(payload: refund_params).call if payment&.external_id?
+        refund = Givings::Payment::Orchestrator.new(payload: refund_params).call if payment&.external_id?
         success_refund(payment, refund)
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message }, level: :fatal)

@@ -73,7 +73,7 @@ module Donations
     end
 
     def label_donation
-      Service::Contributions::TicketLabelingService.new(donation:).label_donation
+      Contributions::TicketLabelingService.new(donation:).label_donation
     end
 
     def ticket_value

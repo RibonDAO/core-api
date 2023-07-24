@@ -34,11 +34,11 @@ module Users
     private
 
     def user_statistics_service
-      @user_statistics_service ||= Service::Users::Statistics.new(donations:, user:, customer:)
+      @user_statistics_service ||= Users::Statistics.new(donations:, user:, customer:)
     end
 
     def crypto_user_statistics_service
-      @crypto_user_statistics_service ||= Service::CryptoUsers::Statistics.new(wallet_address:)
+      @crypto_user_statistics_service ||= CryptoUsers::Statistics.new(wallet_address:)
     end
 
     def total_crypto_user_user_donate
