@@ -1,5 +1,5 @@
-module Contributions
-  class StatisticsService
+module ContributionServices
+  class Statistics
     attr_reader :contribution
 
     def initialize(contribution:)

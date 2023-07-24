@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Contributions
-  class ContributionFeeCreatorService
+module ContributionServices
+  class ContributionFeeCreator
     attr_reader :contribution_balance, :fee_cents, :contribution_increased_amount_cents, :contribution
 
     def initialize(contribution_balance:, fee_cents:,

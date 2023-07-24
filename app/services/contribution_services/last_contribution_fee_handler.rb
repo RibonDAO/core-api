@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Contributions
-  class LastContributionFeeHandlerService
+module ContributionServices
+  class LastContributionFeeHandler
     attr_reader :accumulated_fees_result, :contribution_balance, :contribution
 
     def initialize(accumulated_fees_result:, contribution_balance:, contribution:)

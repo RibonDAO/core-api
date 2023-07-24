@@ -1,5 +1,5 @@
-module Contributions
-  class TicketLabelingService
+module ContributionServices
+  class TicketLabeling
     attr_reader :donation
 
     def initialize(donation:)

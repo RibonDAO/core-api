@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Contributions
-  class ContributionFeeCalculatorService
+module ContributionServices
+  class ContributionFeeCalculator
     attr_reader :payer_balance, :initial_contributions_balance, :fee_to_be_paid
 
     def initialize(payer_balance:, fee_to_be_paid:, initial_contributions_balance:)

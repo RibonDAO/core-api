@@ -1,5 +1,5 @@
-module Contributions
-  class DirectImpactService
+module ContributionServices
+  class DirectImpact
     attr_reader :contribution
 
     def initialize(contribution:)
