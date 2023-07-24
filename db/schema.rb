@@ -149,6 +149,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
     t.datetime "updated_at", null: false
     t.string "cover_image_description"
     t.string "main_image_description"
+    t.boolean "active", default: true
   end
 
   create_table "chains", force: :cascade do |t|

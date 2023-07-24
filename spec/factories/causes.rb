@@ -3,6 +3,7 @@
 # Table name: causes
 #
 #  id                      :bigint           not null, primary key
+#  active                  :boolean          default(TRUE)
 #  cover_image_description :string
 #  main_image_description  :string
 #  name                    :string
