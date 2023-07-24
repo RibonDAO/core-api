@@ -1,5 +1,6 @@
 module Managers
   class ManagersController < ActionController::API
+    before_action :set_language
     before_action :authenticate
 
     rescue_from ActiveRecord::RecordNotFound do |_e|
@@ -38,6 +39,12 @@ module Managers
 
     def render_errors(errors, status = :unprocessable_entity)
       render json: ErrorBlueprint.render(OpenStruct.new(errors)), status:
+    end
+
+    private
+
+    def set_language
+      I18n.locale = request.headers['Language']&.to_sym || :en
     end
   end
 end
