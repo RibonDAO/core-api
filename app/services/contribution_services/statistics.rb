@@ -69,8 +69,8 @@ module ContributionServices
     def top_donations_non_profit_impact
       return unless top_donations_non_profit
 
-      impact = DirectImpactService.new(contribution:)
-                                  .direct_impact_for(top_donations_non_profit)[:formatted_impact]
+      impact = DirectImpact.new(contribution:)
+                           .direct_impact_for(top_donations_non_profit)[:formatted_impact]
       impact&.join(' ')
     end
 
