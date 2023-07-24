@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Users::Statistics, type: :service do
+RSpec.describe UserServices::Statistics, type: :service do
   subject(:service) { described_class.new(donations:, user:, customer:) }
 
   let(:user) { create(:user) }
