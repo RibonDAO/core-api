@@ -3,6 +3,7 @@
 # Table name: causes
 #
 #  id                      :bigint           not null, primary key
+#  active                  :boolean          default(TRUE)
 #  cover_image_description :string
 #  main_image_description  :string
 #  name                    :string
@@ -23,15 +24,17 @@ class Cause < ApplicationRecord
 
   validates :name, presence: true
 
+  before_save :deactivate_non_profits, if: :will_save_change_to_active?
+
   def default_pool
     pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
   end
 
-  def active
-    non_profits.where(status: :active).present?
-  end
-
   def blueprint
     CauseBlueprint
+  end
+
+  def deactivate_non_profits
+    non_profits.where(status: :active).find_each { |n| n.update(status: :inactive) } unless active
   end
 end
