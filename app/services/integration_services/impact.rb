@@ -1,4 +1,4 @@
-module Integrations
+module IntegrationServices
   class Impact
     attr_reader :integration, :start_date, :end_date
 
