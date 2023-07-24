@@ -5,7 +5,7 @@ module Patrons
         before_action :set_contribution
 
         def index
-          impact = Contributions::DirectImpactService.new(contribution: @contribution).impact
+          impact = Contributions::DirectImpact.new(contribution: @contribution).impact
 
           render json: ContributionDirectImpactBlueprint.render(impact)
         end
