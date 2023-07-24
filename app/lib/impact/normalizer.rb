@@ -34,7 +34,9 @@ module Impact
     end
 
     def formatted_impact_description
-      impact = impact_description.split(',').map(&:strip).then do |descriptions|
+      return '' unless impact_description
+
+      impact = impact_description&.split(',')&.map(&:strip).then do |descriptions|
         rounded_impact == 1 ? descriptions.first : descriptions.last
       end
 
