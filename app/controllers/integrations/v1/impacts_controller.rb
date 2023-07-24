@@ -18,8 +18,8 @@ module Integrations
       end
 
       def impact_service
-        @impact_service ||= Service::Integrations::Impact.new(integration: current_integration,
-                                                              start_date:, end_date:)
+        @impact_service ||= Integrations::Impact.new(integration: current_integration,
+                                                     start_date:, end_date:)
       end
     end
   end

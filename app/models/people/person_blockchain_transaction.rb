@@ -34,7 +34,7 @@ class PersonBlockchainTransaction < ApplicationRecord
     return unless person_payment.receiver_type == 'Cause'
 
     pool = person_payment.receiver.default_pool
-    Service::Donations::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
+    Donations::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
   end
 
   def retry?
