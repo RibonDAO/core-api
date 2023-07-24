@@ -13,5 +13,6 @@
 FactoryBot.define do
   factory :cause do
     name { 'Cause' }
+    active { true }
   end
 end
