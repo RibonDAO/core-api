@@ -34,7 +34,7 @@ module Users
     private
 
     def user_statistics_service
-      @user_statistics_service ||= Users::Statistics.new(donations:, user:, customer:)
+      @user_statistics_service ||= UserServices::Statistics.new(donations:, user:, customer:)
     end
 
     def crypto_user_statistics_service
