@@ -11,7 +11,6 @@ module Api
         @causes = CauseQueries.new.active_with_pool_balance
         @random_causes = @causes.shuffle
 
-
         render json: CauseBlueprint.render(@random_causes, view: :data_and_images)
       end
 
