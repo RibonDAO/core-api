@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Users::Devices', type: :request do
   describe 'POST /create' do
-    subject(:request) { post "/api/v1/users/#{user.id}/devices", params: {device_id: "abcdf", device_token: "fdcba"} }
+    subject(:request) do
+      post "/api/v1/users/#{user.id}/devices", params: { device_id: 'abcdf', device_token: 'fdcba' }
+    end
 
     let(:user) { create(:user) }
 
@@ -22,5 +24,4 @@ RSpec.describe 'Api::V1::Users::Devices', type: :request do
       expect(response).to have_http_status :unprocessable_entity
     end
   end
-
 end

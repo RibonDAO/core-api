@@ -5,7 +5,7 @@ module Api
         def create
           user.devices.create!(device_id: params[:device_id], device_token: params[:device_token])
           head :ok
-        rescue
+        rescue StandardError
           head :unprocessable_entity
         end
 
