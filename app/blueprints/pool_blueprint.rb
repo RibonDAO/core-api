@@ -5,7 +5,5 @@ class PoolBlueprint < Blueprinter::Base
 
   association :token, blueprint: TokenBlueprint
 
- 
-    association :pool_balance, blueprint: PoolBalanceBlueprint
-
+  association :pool_balance, blueprint: PoolBalanceBlueprint
 end
