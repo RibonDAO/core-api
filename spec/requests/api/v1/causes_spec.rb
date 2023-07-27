@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Causes', type: :request do
   describe 'GET /index' do
-    subject(:request) { get '/api/v1/causes'}
+    subject(:request) { get '/api/v1/causes' }
 
     let!(:cause) { create(:cause) }
     let(:pool) { create(:pool, cause:) }
