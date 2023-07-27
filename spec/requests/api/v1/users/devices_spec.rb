@@ -8,7 +8,7 @@ RSpec.describe 'Api::V1::Users::Devices', type: :request do
 
     let(:user) { create(:user) }
 
-    it 'returns' do
+    it 'returns http status ok' do
       request
       expect(response).to have_http_status :ok
     end
@@ -19,7 +19,7 @@ RSpec.describe 'Api::V1::Users::Devices', type: :request do
 
     let(:user) { create(:user) }
 
-    it 'returns' do
+    it 'returns http status unprocessable_entity' do
       request
       expect(response).to have_http_status :unprocessable_entity
     end
