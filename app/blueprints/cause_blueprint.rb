@@ -16,7 +16,7 @@ class CauseBlueprint < Blueprinter::Base
   end
 
   view :data_and_images do
-    excludes :non_profits, :pools
+    excludes :non_profits
   end
 
   view :minimal do
