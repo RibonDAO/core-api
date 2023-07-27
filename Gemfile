@@ -49,7 +49,7 @@ gem 'devise'
 
 gem 'devise_token_auth'
 
-gem 'omniauth-google-oauth2'
+gem 'omniauth-google-oauth2', '~> 0.8.0'
 
 gem 'nio4r'
 
