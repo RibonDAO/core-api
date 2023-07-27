@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 require "sidekiq/cron/web"
 
+
 Rails.application.routes.draw do
   root to: 'rails_admin/main#dashboard'
   get '/health', to: 'main#health'
@@ -9,6 +10,13 @@ Rails.application.routes.draw do
     mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  devise_for :admins, 
+    controllers: {
+      omniauth_callbacks: 'admins/omniauth_callbacks',
+      sessions: 'admins/sessions',
+      registrations: 'admins/registrations'
+    }
   
   Rails.application.routes.draw do
     post '/graphql', to: 'graphql#execute'
@@ -74,6 +82,7 @@ Rails.application.routes.draw do
 
       get 'chains' => 'chains#index'
       
+      
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
         post 'create_legacy_contribution' => 'legacy_user_impact#create_legacy_contribution'
@@ -133,7 +142,7 @@ Rails.application.routes.draw do
         put 'settings/:id' => 'ribon_config#update'
       end
       mount_devise_token_auth_for 'UserManager', at: 'auth', skip: [:omniauth_callbacks]
-      namespace :manager do
+      namespace :manager do        
         post 'auth/request', to: 'authorization#google_authorization'
         post 'payments/cryptocurrency/big_donation' => 'payments/cryptocurrency#create_big_donation'
         get 'pools_manager' => 'pools#index'

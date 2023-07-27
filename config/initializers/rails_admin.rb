@@ -4,19 +4,13 @@ RailsAdmin.config do |config|
   config.main_app_name = ["Ribon", "Admin"]
   config.parent_controller = RailsAdmin::RailsAdminAbstractController.to_s
 
-  config.authenticate_with do
-    # this is a rails controller helper
-    authenticate_or_request_with_http_basic('Login required') do |email, password|
-
-      # Here we're checking for username & password provided with basic auth
-      resource = Admin.find_by(email: email)
-
-      # we're using devise helpers to verify password and sign in the user
-      if resource&.valid_password?(password)
-        sign_in :admin, resource
-      end
+  
+    config.authenticate_with do
+      warden.authenticate! scope: :admin
     end
-  end
+    config.current_user_method(&:current_admin)
+
+  
 
   config.actions do
     dashboard                     # mandatory
