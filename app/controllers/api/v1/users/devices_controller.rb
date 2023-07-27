@@ -3,7 +3,7 @@ module Api
     module Users
       class DevicesController < ApplicationController
         def create
-          user.devices.create!(device_id: params[:device_id], device_token: params[:device_token])
+          user.devices.create!(device_params)
           head :ok
         rescue StandardError
           head :unprocessable_entity
@@ -13,6 +13,10 @@ module Api
 
         def user
           @user ||= User.find params[:user_id]
+        end
+
+        def device_params
+          params.permit(:device_id, :device_token)
         end
       end
     end
