@@ -7,13 +7,6 @@ module Api
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
 
-      def free_donation_causes
-        @causes = CauseQueries.new.active_with_pool_balance
-        @random_causes = @causes.shuffle
-
-        render json: CauseBlueprint.render(@random_causes, view: :data_and_images)
-      end
-
       def create
         command = Causes::UpsertCause.call(cause_params)
         if command.success?
