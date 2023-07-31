@@ -103,6 +103,7 @@ Rails.application.routes.draw do
         get 'contributions' => 'users/contributions#index'
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
+        post 'devices' => 'users/devices#create'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'

@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -149,6 +150,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
     t.datetime "updated_at", null: false
     t.string "cover_image_description"
     t.string "main_image_description"
+    t.boolean "active", default: true
   end
 
   create_table "chains", force: :cascade do |t|
@@ -214,6 +216,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_customers_on_user_id", unique: true
+  end
+
+  create_table "devices", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "device_id"
+    t.string "device_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "donation_batches", force: :cascade do |t|
@@ -692,6 +703,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
   add_foreign_key "contribution_fees", "contributions"
   add_foreign_key "contribution_fees", "contributions", column: "payer_contribution_id"
   add_foreign_key "contributions", "person_payments"
+  add_foreign_key "devices", "users"
   add_foreign_key "donation_batches", "batches"
   add_foreign_key "donation_batches", "donations"
   add_foreign_key "donation_blockchain_transactions", "chains"
