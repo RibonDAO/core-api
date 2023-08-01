@@ -6,6 +6,8 @@ module Payment
           case stripe_status
           when 'requires_action'
             :requires_action
+          when 'requires_confirmation'
+            :requires_confirmation
           when 'processing'
             :processing
           when 'canceled'
