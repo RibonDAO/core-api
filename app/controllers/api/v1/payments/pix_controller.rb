@@ -8,7 +8,7 @@ module Api
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::Pix, order_params)
 
           if command.success?
-            head :created
+            render json: command.result, status: :created
           else
             render_errors(command.errors)
           end
@@ -49,7 +49,7 @@ module Api
         end
 
         def operation
-          :create_intent
+          :create_pix_intent
         end
 
         def payment_params

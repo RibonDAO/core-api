@@ -9,20 +9,24 @@ module Payment
           payment = Billing::UniquePayment.create(stripe_customer:, stripe_payment_method:, offer: order&.offer)
 
           {
-            external_customer_id: stripe_customer.id,
-            external_payment_method_id: stripe_payment_method.id,
+            external_customer_id: stripe_customer&.id,
+            external_payment_method_id: stripe_payment_method&.id,
             external_id: payment&.id,
             status: payment&.status
           }
         end
 
-        def create_intent(order)
+        def create_pix_intent(order)
           setup_customer(order)
-          payment = Billing::Intent.create(stripe_customer:, stripe_payment_method:, offer: order&.offer)
+          payment = Billing::Intent
+                    .create(stripe_customer:, stripe_payment_method:, customer: stripe_customer,
+                            offer: order&.offer, payment_method_types: ['pix'],
+                            payment_method_data: { type: 'pix' },
+                            payment_method_options: { pix: { expires_at: 30.minutes.from_now.to_i } })
 
           {
             external_customer_id: stripe_customer.id,
-            external_payment_method_id: stripe_payment_method.id,
+            external_payment_method_id: stripe_payment_method&.id,
             external_id: payment&.id,
             status: payment&.status,
             client_secret: payment&.client_secret
@@ -66,7 +70,7 @@ module Payment
         def payment_method_by_order(order)
           return Entities::PaymentMethod.find(id: order&.payment_method_id) if order&.payment_method_id
 
-          Entities::PaymentMethod.create(card: order&.card)
+          Entities::PaymentMethod.create(card: order&.card) if order&.card
         end
       end
     end
