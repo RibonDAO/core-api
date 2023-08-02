@@ -22,6 +22,7 @@
 #  offer_id           :bigint
 #  payer_id           :uuid
 #  receiver_id        :bigint
+#  subscription_id    :bigint
 #
 require 'rails_helper'
 

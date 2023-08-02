@@ -22,6 +22,7 @@
 #  offer_id           :bigint
 #  payer_id           :uuid
 #  receiver_id        :bigint
+#  subscription_id    :bigint
 #
 class PersonPayment < ApplicationRecord
   include UuidHelper
@@ -35,6 +36,7 @@ class PersonPayment < ApplicationRecord
   belongs_to :offer, optional: true
   belongs_to :receiver, polymorphic: true, optional: true
   belongs_to :payer, polymorphic: true
+  belongs_to :subscription, optional: true
 
   has_many :person_blockchain_transactions
   has_one :person_payment_fee

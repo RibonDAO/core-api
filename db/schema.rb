@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -506,10 +506,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
     t.string "payer_type"
     t.uuid "payer_id"
     t.string "platform"
+    t.bigint "subscription_id"
     t.index ["integration_id"], name: "index_person_payments_on_integration_id"
     t.index ["offer_id"], name: "index_person_payments_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_person_payments_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_person_payments_on_receiver"
+    t.index ["subscription_id"], name: "index_person_payments_on_subscription_id"
   end
 
   create_table "pool_balances", force: :cascade do |t|
