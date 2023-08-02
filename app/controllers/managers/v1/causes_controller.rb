@@ -34,7 +34,8 @@ module Managers
       private
 
       def cause_params
-        params.permit(:id, :name, :cover_image, :main_image, :main_image_description, :cover_image_description)
+        params.permit(:id, :name, :cover_image, :main_image, :main_image_description, :cover_image_description,
+                      :active)
       end
     end
   end

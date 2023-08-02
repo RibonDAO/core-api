@@ -46,7 +46,8 @@ module Api
           :cover_image,
           :main_image,
           :cover_image_description,
-          :main_image_description
+          :main_image_description,
+          :active
         )
       end
     end
