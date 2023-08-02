@@ -40,7 +40,6 @@ class Order
       payment_method: payment&.payment_method,
       offer: payment&.offer,
       operation:,
-      payment_method_id:,
       payment_method_types: ['pix'],
       payment_method_data: { type: 'pix' },
       payment_method_options: { pix: { expires_at: 30.minutes.from_now.to_i } }
