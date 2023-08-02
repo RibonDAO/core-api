@@ -8,10 +8,10 @@ module External
             external_id = result['id']
             payment = PersonPayment.where(external_id:).last
 
-            return if payment&.status == 'paid'
+            return unless payment&.status == 'requires_confirmation'
             return unless payment
 
-            payment.update(status: 'paid', paid_date: Time.zone.at(result[:created]))
+            payment.update(status: 'paid', paid_date: Time.zone.now)
             handle_contribution_creation(payment)
             add_giving_to_blockchain(payment)
           end

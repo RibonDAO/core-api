@@ -16,13 +16,13 @@ module Payment
           }
         end
 
-        def create_pix_intent(order)
+        def create_intent(order)
           setup_customer(order)
           payment = Billing::Intent
                     .create(stripe_customer:, stripe_payment_method:, customer: stripe_customer,
-                            offer: order&.offer, payment_method_types: ['pix'],
-                            payment_method_data: { type: 'pix' },
-                            payment_method_options: { pix: { expires_at: 30.minutes.from_now.to_i } })
+                            offer: order&.offer, payment_method_types: order&.payment_method_types,
+                            payment_method_data: order&.payment_method_data,
+                            payment_method_options: order&.payment_method_options)
 
           {
             external_customer_id: stripe_customer.id,

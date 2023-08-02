@@ -25,20 +25,14 @@ module Givings
           customer = find_or_create_customer
           payment  = create_payment(customer)
 
-          Order.from(payment, nil, operation)
+          Order.from_pix(payment, operation)
         end
 
         def process_payment(order)
           Service::Givings::Payment::Orchestrator.new(payload: order).call
         end
 
-        def success_callback(order, _result)
-          if non_profit
-            call_add_non_profit_giving_blockchain_job(order)
-          else
-            call_add_cause_giving_blockchain_job(order)
-          end
-        end
+        def success_callback; end
 
         private
 
@@ -49,18 +43,6 @@ module Givings
         def create_payment(payer)
           PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:,
                                   amount_cents:, status: :processing, receiver:, platform: })
-        end
-
-        def call_add_cause_giving_blockchain_job(order)
-          AddGivingCauseToBlockchainJob.perform_later(amount: order.payment.crypto_amount,
-                                                      payment: order.payment,
-                                                      pool: cause&.default_pool)
-        end
-
-        def call_add_non_profit_giving_blockchain_job(order)
-          AddGivingNonProfitToBlockchainJob.perform_later(non_profit:,
-                                                          amount: order.payment.crypto_amount,
-                                                          payment: order.payment)
         end
 
         def amount_cents

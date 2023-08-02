@@ -33,7 +33,8 @@ module Api
         end
 
         def find_or_create_user
-          current_user || User.find_or_create_by(email: payment_params[:email], language: I18n.locale)
+          current_user || User.find_by(email: payment_params[:email]) || User.create(email: payment_params[:email],
+                                                                                     language: I18n.locale)
         end
 
         def offer
@@ -49,7 +50,7 @@ module Api
         end
 
         def operation
-          :create_pix_intent
+          :create_intent
         end
 
         def payment_params
