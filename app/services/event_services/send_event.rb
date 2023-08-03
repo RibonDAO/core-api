@@ -8,7 +8,7 @@ module EventServices
     end
 
     def call
-      return unless user.present?
+      return if user.blank?
 
       Crm::Customer::Track.new.send_event(user, event)
     end
