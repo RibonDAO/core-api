@@ -8,7 +8,7 @@ module Crm
           event.data
         )
       rescue Customerio::InvalidResponse => e
-        [e.code, e.message]
+        Reporter.log(error: e)
       end
     end
   end
