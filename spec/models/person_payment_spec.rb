@@ -83,9 +83,10 @@ RSpec.describe PersonPayment, type: :model do
   end
 
   describe '#set_fees' do
-    subject(:person_payment) { create(:person_payment, amount_cents:, offer:) }
+    subject(:person_payment) { create(:person_payment, amount_cents:, offer:, payment_method:) }
 
     let(:amount_cents) { 1500 }
+    let(:payment_method) { :credit_card }
 
     before do
       command = command_double(klass: Givings::Card::CalculateCardGiving,
@@ -100,6 +101,18 @@ RSpec.describe PersonPayment, type: :model do
 
       expect(fee.card_fee_cents).to eq 67
       expect(fee.crypto_fee_cents).to eq 3
+    end
+
+    context 'when the payment is crypto' do
+      let(:payment_method) { :crypto }
+
+      it 'sets the fees as 0' do
+        person_payment.set_fees
+        fee = person_payment.reload.person_payment_fee
+
+        expect(fee.card_fee_cents).to eq 0
+        expect(fee.crypto_fee_cents).to eq 0
+      end
     end
   end
 
