@@ -21,12 +21,13 @@ module Webhooks
       RibonCoreApi.config[:stripe][:endpoint_secret]
     end
 
+    # TODO: Refactor this method to use a event handler factory for each event
     def event_handler(event)
       result = event.data.object
       external_id = result['payment_intent']
       case event.type
       when 'payment_intent.succeeded'
-        ::External::Stripe::Events::PaymentIntentService.handle_payment_intent_succeeded(event)
+        ::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded.handle(event)
       when 'charge.refunded'
         update_status(external_id, 'refunded') if external_id
         update_date(external_id, Time.zone.at(result[:created])) if external_id
