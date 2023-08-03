@@ -4,7 +4,7 @@ RSpec.describe EventServices::SendEvent, type: :service do
   subject(:service) { described_class.new(user:, event:) }
 
   describe '#send_event' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, email: 'user100@example.com') }
 
     let(:event) do
       OpenStruct.new({
