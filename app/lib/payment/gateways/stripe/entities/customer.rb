@@ -7,9 +7,9 @@ module Payment
             ::Stripe::Customer.create({
                                         email: customer&.email,
                                         name: customer&.name,
-                                        payment_method: payment_method.id,
+                                        payment_method: payment_method&.id,
                                         invoice_settings: {
-                                          default_payment_method: payment_method.id
+                                          default_payment_method: payment_method&.id
                                         }
                                       })
           end
