@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Crm::Customer::Track do
   subject(:service) { described_class.new }
 
-  let(:user) { build(:user, email: "user100@example.com") }
+  let(:user) { build(:user, email: 'user100@example.com') }
   let(:event) do
     OpenStruct.new({
                      name: 'purchase',
