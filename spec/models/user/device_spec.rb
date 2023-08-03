@@ -8,8 +8,8 @@ RSpec.describe Device, type: :model do
   end
 
   describe 'Active record validation' do
-    it { is_expected.to validate_presence_of(:device_id) }
     it { is_expected.to validate_presence_of(:device_token) }
+    it { is_expected.to validate_uniqueness_of(:device_token) }
     it { is_expected.to belong_to(:user) }
   end
 end
