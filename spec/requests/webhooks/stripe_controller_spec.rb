@@ -59,6 +59,24 @@ RSpec.describe 'Webhooks::Stripe', type: :request do
           expect { request }.not_to change(person_payment, :refund_date)
         end
       end
+
+      context 'when it is a payment_intent.succeeded' do
+        let(:event_params) do
+          file = Rails.root.join('spec/support/webhooks/stripe/payment_intent_succeeded.json').read
+          JSON.parse file
+        end
+
+        before do
+          allow(::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded).to receive(:handle)
+        end
+
+        it 'calls the event handle class' do
+          request
+
+          expect(::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded)
+            .to have_received(:handle).with(RecursiveOpenStruct.new(event_params))
+        end
+      end
     end
   end
 end
