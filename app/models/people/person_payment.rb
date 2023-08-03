@@ -53,7 +53,8 @@ class PersonPayment < ApplicationRecord
     refunded: 3,
     refund_failed: 4,
     requires_action: 5,
-    blocked: 6
+    blocked: 6,
+    requires_confirmation: 7
   }
 
   enum payment_method: {
@@ -95,11 +96,11 @@ class PersonPayment < ApplicationRecord
   end
 
   def set_fees
-    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym,
-                                                   gateway:).result
-    crypto_fee_cents = crypto? ? 0 : fees[:crypto_fee].cents
+    return create_person_payment_fee!(card_fee_cents: 0, crypto_fee_cents: 0) if crypto?
 
-    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents:)
+    fees = Givings::Card::CalculateCardGiving
+           .call(value: amount_value, currency: currency&.to_sym, gateway:).result
+    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents: fees[:crypto_fee].cents)
   rescue StandardError => e
     Reporter.log(error: e)
   end
