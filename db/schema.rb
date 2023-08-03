@@ -599,6 +599,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.string "title"
+    t.text "actions"
+    t.text "rules"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "address"
