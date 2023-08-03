@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -571,14 +570,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
     t.index ["non_profit_id"], name: "index_stories_on_non_profit_id"
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "title"
-    t.text "actions"
-    t.text "rules"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "subscriptions", force: :cascade do |t|
     t.string "payment_method"
     t.string "status"
@@ -595,6 +586,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_31_183207) do
     t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_subscriptions_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "title"
+    t.text "actions"
+    t.text "rules"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tokens", force: :cascade do |t|
