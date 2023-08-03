@@ -1,5 +1,5 @@
 class Device < ApplicationRecord
   belongs_to :user
 
-  validates :device_token, uniqueness, presence: true
+  validates :device_token, presence: true, uniqueness: true
 end
