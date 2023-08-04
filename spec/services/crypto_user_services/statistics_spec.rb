@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CryptoUsers::Statistics, type: :service do
+RSpec.describe CryptoUserServices::Statistics, type: :service do
   subject(:service) { described_class.new(wallet_address:) }
 
   let(:wallet_address) { '0x44d5e936dad202ec600b6a6a5' }
