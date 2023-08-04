@@ -12,7 +12,8 @@ module Payment
             external_customer_id: stripe_customer&.id,
             external_payment_method_id: stripe_payment_method&.id,
             external_id: payment&.id,
-            status: payment&.status
+            status: payment&.status,
+            client_secret: payment&.client_secret
           }
         end
 
@@ -41,7 +42,8 @@ module Payment
             external_customer_id: stripe_customer.id,
             external_payment_method_id: stripe_payment_method.id,
             external_subscription_id: subscription.id,
-            external_invoice_id: subscription.latest_invoice
+            external_invoice_id: subscription.latest_invoice,
+            client_secret: subscription&.client_secret
           }
         end
 
