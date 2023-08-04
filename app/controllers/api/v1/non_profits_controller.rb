@@ -9,10 +9,7 @@ module Api
       end
 
       def free_donation_non_profits
-        @non_profits = NonProfitQueries.new.active_with_pool_balance
-        @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
-
-        render json: NonProfitBlueprint.render(@random_non_profits)
+        render json: NonProfitBlueprint.render(non_profits_cache)
       end
 
       def stories
@@ -64,6 +61,13 @@ module Api
         return { unique_address: non_profit_params[:id] } if uuid_regex.match?(non_profit_params[:id])
 
         { id: non_profit_params[:id] }
+      end
+
+      def non_profits_cache
+        Rails.cache.fetch('cached_non_profits', expires_in: 1.hour) do
+          @non_profits = NonProfit.where(status: :active)
+          @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
+        end
       end
     end
   end
