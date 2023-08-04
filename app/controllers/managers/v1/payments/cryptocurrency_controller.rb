@@ -22,7 +22,8 @@ module Managers
             payer: big_donor,
             receiver: cause,
             transaction_hash: payment_params[:transaction_hash],
-            integration_id: payment_params[:integration_id]
+            integration_id: payment_params[:integration_id],
+            create_contribution_command:
           }
         end
 
@@ -37,6 +38,16 @@ module Managers
         def payment_params
           params.permit(:amount, :transaction_hash, :status, :cause_id, :big_donor_id,
                         :integration_id)
+        end
+
+        def create_contribution_command
+          return Contributions::CreateNonFeeableContribution unless feeable
+
+          Contributions::CreateContribution
+        end
+
+        def feeable
+          @feeable ||= payment_params[:feeable].nil? ? true : payment_params[:feeable].to_s.to_bool
         end
       end
     end
