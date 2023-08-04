@@ -38,7 +38,7 @@ module Users
     end
 
     def crypto_user_statistics_service
-      @crypto_user_statistics_service ||= CryptoUsers::Statistics.new(wallet_address:)
+      @crypto_user_statistics_service ||= CryptoUserServices::Statistics.new(wallet_address:)
     end
 
     def total_crypto_user_user_donate

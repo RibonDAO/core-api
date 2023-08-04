@@ -1,4 +1,4 @@
-module CryptoUsers
+module CryptoUserServices
   class Statistics
     attr_reader :wallet_address
 
