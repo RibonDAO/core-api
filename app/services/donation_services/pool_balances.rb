@@ -1,4 +1,4 @@
-module Donations
+module DonationServices
   class PoolBalances
     attr_reader :pool
 

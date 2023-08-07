@@ -1,4 +1,4 @@
-module Donations
+module DonationServices
   class DonationBlockchainTransaction
     attr_reader :donation_blockchain_transaction
 

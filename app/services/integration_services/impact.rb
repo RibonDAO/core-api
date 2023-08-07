@@ -22,7 +22,7 @@ module IntegrationServices
     private
 
     def statistics_service
-      @statistics_service ||= Donations::Statistics.new(donations: filtered_donations)
+      @statistics_service ||= DonationServices::Statistics.new(donations: filtered_donations)
     end
 
     def filtered_donations

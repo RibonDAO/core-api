@@ -1,4 +1,4 @@
-module Donations
+module DonationServices
   class Statistics
     attr_reader :donations
 
