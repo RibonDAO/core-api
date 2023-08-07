@@ -8,7 +8,7 @@ module Api
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::StorePay, order_params)
 
           if command.success?
-            head :created
+            render json: command.result, status: :created
           else
             render_errors(command.errors)
           end
