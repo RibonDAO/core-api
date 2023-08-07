@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Patrons::V1::Contributions::Impacts', type: :request do
   describe 'GET /index' do
+    include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
+
     include_context 'when making a patron request' do
       let(:request) { get "/patrons/v1/contributions/#{contribution.id}/impacts", headers: }
     end
