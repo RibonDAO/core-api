@@ -30,7 +30,7 @@ module Service
       end
 
       def formatted_amount_for(value)
-        Money.from_amount(value, :usd).format
+        Money.from_amount(value, :currency).format
       end
 
       def value_for(non_profit)
@@ -38,6 +38,10 @@ module Service
                             .where(contribution:)
                             .where(non_profits: { id: non_profit.id })
                             .sum(:value)
+      end
+
+      def currency
+        contribution.person_payment.currency
       end
     end
   end
