@@ -13,7 +13,7 @@
 FactoryBot.define do
   factory :contribution_fee do
     association :contribution, factory: :contribution
-    payer_contribution { nil }
+    payer_contribution { build(:contribution) }
     fee_cents { 1 }
   end
 end
