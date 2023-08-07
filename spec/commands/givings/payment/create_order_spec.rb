@@ -37,6 +37,10 @@ describe Givings::Payment::CreateOrder do
         expect { command }.to change(PersonPayment, :count).by(1)
       end
 
+      it 'creates a new subscription' do
+        expect { command }.to change(Subscription, :count).by(1)
+      end
+
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         allow(PersonPayment).to receive(:create!).and_return(person_payment)
@@ -98,6 +102,10 @@ describe Givings::Payment::CreateOrder do
 
       it 'creates a PersonPayment' do
         expect { command }.to change(PersonPayment, :count).by(1)
+      end
+
+      it 'does not create a new subscription' do
+        expect { command }.not_to change(Subscription, :count)
       end
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
