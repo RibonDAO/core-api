@@ -30,7 +30,7 @@ module Service
       end
 
       def formatted_amount_for(value)
-        Money.from_amount(value, :currency).format
+        Currency::Converters.convert(from: :usd, to: currency, value:).round.format
       end
 
       def value_for(non_profit)
