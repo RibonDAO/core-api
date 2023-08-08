@@ -8,7 +8,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions75PercentEmailJob,
     let(:statistics) do
       {
         boost_amount: 50,
-        contribution_receiver_name: 'ongname',
+        contribution_receiver: create(:cause),
         contribution_date: '1/02'
       }
     end
@@ -27,7 +27,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions75PercentEmailJob,
               dynamic_template_data: {
                 first_name: big_donor[:name],
                 total_increase: statistics[:boost_amount],
-                cause_name: statistics[:contribution_receiver_name],
+                cause_name: statistics[:contribution_receiver].name,
                 donation_date: statistics[:contribution_date],
                 dash_link: an_instance_of(String)
               },

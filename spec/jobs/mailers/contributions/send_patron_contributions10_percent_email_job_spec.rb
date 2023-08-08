@@ -10,7 +10,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions10PercentEmailJob,
         top_donations_non_profit_name: 'ongname',
         top_donations_non_profit_impact: 50,
         total_donors: 100,
-        contribution_receiver_name: 'ongname',
+        contribution_receiver: create(:cause),
         contribution_date: '1/02'
       }
     end
@@ -30,7 +30,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions10PercentEmailJob,
                 total_engaged_people: statistics[:total_donors],
                 top_NGO_name: statistics[:top_donations_non_profit_name],
                 top_NGO_impact: statistics[:top_donations_non_profit_impact],
-                cause_name: statistics[:contribution_receiver_name],
+                cause_name: statistics[:contribution_receiver].name,
                 donation_date: statistics[:contribution_date],
                 dash_link: an_instance_of(String)
               },
