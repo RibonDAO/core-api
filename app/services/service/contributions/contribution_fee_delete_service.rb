@@ -19,7 +19,8 @@ module Service
       private
 
       def update_contribution_balance
-        ::Contributions::IncreaseContributionBalanceFee.call(contribution_balance:, fee_cents:)
+        ::Contributions::IncreaseContributionBalanceFee.call(contribution_balance:, fee_cents:,
+                                                             payer_contribution_increased_amount_cents:)
       end
 
       def delete_contribution_fee
@@ -32,6 +33,10 @@ module Service
 
       def fee_cents
         contribution_fee.fee_cents
+      end
+
+      def payer_contribution_increased_amount_cents
+        contribution_fee.payer_contribution_increased_amount_cents
       end
     end
   end
