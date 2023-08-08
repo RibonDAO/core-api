@@ -27,7 +27,8 @@ RSpec.describe Service::Contributions::ContributionFeeDeleteService, type: :serv
 
       expect(::Contributions::IncreaseContributionBalanceFee).to have_received(:call).with(
         contribution_balance: payer_contribution.contribution_balance,
-        fee_cents: contribution_fee.fee_cents
+        fee_cents: contribution_fee.fee_cents,
+        payer_contribution_increased_amount_cents: contribution_fee.payer_contribution_increased_amount_cents
       )
     end
   end
