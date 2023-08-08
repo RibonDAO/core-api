@@ -20,4 +20,11 @@ class Subscription < ApplicationRecord
   belongs_to :payer, polymorphic: true
   belongs_to :receiver, polymorphic: true, optional: true
   belongs_to :offer, optional: true
+
+  enum status: {
+    processing: 'processing',
+    active: 'active',
+    inactive: 'inactive',
+    canceled: 'canceled'
+  }
 end
