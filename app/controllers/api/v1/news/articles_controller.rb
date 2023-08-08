@@ -65,7 +65,9 @@ module Api
         end
 
         def language
-          I18n.locale
+          return I18n.locale if %i[pt-BR en-US].include? I18n.locale
+
+          'en-US'
         end
 
         def article_params
