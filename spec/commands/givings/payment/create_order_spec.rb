@@ -74,10 +74,13 @@ describe Givings::Payment::CreateOrder do
             ), pool: nil)
         end
 
-        it 'update the status of payment_person' do
+        it 'update the status of payment_person and subscription' do
           command
           person_payment = PersonPayment.where(offer:).last
+          subscription = person_payment.subscription
+
           expect(person_payment.status).to eq('paid')
+          expect(subscription.status).to eq('active')
         end
       end
     end
@@ -140,7 +143,7 @@ describe Givings::Payment::CreateOrder do
             ), pool: nil)
         end
 
-        it 'update the status and external_id of payment_person' do
+        it 'update the status and external_id of payment_person and subscription' do
           order = command
           person_payment = PersonPayment.where(offer:).last
           expect(person_payment.external_id).to eq(order.result[:external_id])
