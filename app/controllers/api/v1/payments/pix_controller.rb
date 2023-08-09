@@ -1,11 +1,11 @@
 module Api
   module V1
     module Payments
-      class StoresController < ApplicationController
+      class PixController < ApplicationController
         include ::Givings::Payment
 
         def create
-          command = ::Givings::Payment::CreateOrder.call(OrderTypes::StorePay, order_params)
+          command = ::Givings::Payment::CreateOrder.call(OrderTypes::Pix, order_params)
 
           if command.success?
             render json: command.result, status: :created
@@ -18,26 +18,23 @@ module Api
 
         def order_params
           {
-            payment_method_id:,
             email: payment_params[:email],
+            name: payment_params[:name],
             offer:,
             operation:,
+            payment_method: :pix,
             tax_id: payment_params[:tax_id],
             user: find_or_create_user,
             integration_id: payment_params[:integration_id],
             cause:,
             non_profit:,
-            name: payment_params[:name],
-            payment_method_type: payment_params[:payment_method_type]
+            platform: payment_params[:platform]
           }
         end
 
-        def payment_method_id
-          @payment_method_id ||= payment_params[:payment_method_id]
-        end
-
         def find_or_create_user
-          current_user || User.find_or_create_by(email: payment_params[:email])
+          current_user || User.find_by(email: payment_params[:email]) || User.create(email: payment_params[:email],
+                                                                                     language: I18n.locale)
         end
 
         def offer
@@ -53,14 +50,12 @@ module Api
         end
 
         def operation
-          return :subscribe if offer.subscription?
-
-          :purchase
+          :create_intent
         end
 
         def payment_params
           params.permit(:email, :tax_id, :offer_id, :country, :city, :state, :integration_id,
-                        :cause_id, :non_profit_id, :name, :payment_method_id, :payment_method_type)
+                        :cause_id, :non_profit_id, :platform, :name)
         end
       end
     end

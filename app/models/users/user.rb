@@ -5,7 +5,7 @@
 #  id         :bigint           not null, primary key
 #  deleted_at :datetime
 #  email      :string
-#  language   :integer          default("en")
+#  language   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  legacy_id  :integer
@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_many :donations
   has_many :customers
   has_many :user_completed_tasks
+  has_many :devices
   has_many :person_payments, through: :customers
 
   has_many :contributions, through: :person_payments

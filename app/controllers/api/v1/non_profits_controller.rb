@@ -8,9 +8,11 @@ module Api
       end
 
       def free_donation_non_profits
-        @non_profits = NonProfitQueries.new.active_with_pool_balance
-
-        render json: NonProfitBlueprint.render(@non_profits)
+        @non_profits = NonProfit.where(status: :active).order(cause_id: :asc)
+        @non_profits_with_pool_balance = @non_profits.select do |non_profit|
+          non_profit.cause.active && non_profit.cause.with_pool_balance
+        end
+        render json: NonProfitBlueprint.render(@non_profits_with_pool_balance)
       end
 
       def stories

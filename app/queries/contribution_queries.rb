@@ -21,6 +21,7 @@ class ContributionQueries
       .with_tickets_balance
       .with_paid_status
       .where.not(contribution_id: contribution.id)
+      .joins(:contribution).where(contributions: { receiver: contribution.receiver })
       .order(tickets_balance_cents: :asc)
   end
 
