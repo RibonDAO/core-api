@@ -1,82 +1,109 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::News::Articles', type: :request do
-  describe 'GET /index with 2 articles available' do
-    subject(:request) { get '/api/v1/news/articles' }
-
-    before do
-      create_list(:article, 2, visible: true)
+  describe 'GET /index' do
+    let(:headers) do
+      { Language: 'en' }
     end
 
-    it 'returns a list of articles' do
-      request
+    describe 'with 2 articles available' do
+      subject(:request) { get '/api/v1/news/articles', headers: }
 
-      expect_response_collection_to_have_keys(%w[author image_url created_at id published_at title updated_at
-                                                 visible language link published_at_in_words])
+      before do
+        create_list(:article, 2, visible: true)
+      end
+
+      it 'returns a list of articles' do
+        request
+
+        expect_response_collection_to_have_keys(%w[author image_url created_at id published_at title updated_at
+                                                   visible language link published_at_in_words])
+      end
+
+      it 'returns 2 articles' do
+        request
+
+        expect(response_json.count).to eq(2)
+      end
     end
 
-    it 'returns 2 articles' do
-      request
+    describe 'with 1 article available' do
+      subject(:request) { get '/api/v1/news/articles', headers: }
 
-      expect(response_json.count).to eq(2)
+      before do
+        create(:article, visible: true)
+        create_list(:article, 2, visible: false)
+      end
+
+      it 'returns 1 article' do
+        request
+
+        expect(response_json.count).to eq(1)
+      end
+    end
+
+    describe 'when some articles are unpublished' do
+      subject(:request) { get '/api/v1/news/articles', headers: }
+
+      before do
+        create(:article, visible: true)
+        create_list(:article, 2, visible: true, published_at: 1.day.from_now)
+      end
+
+      it 'returns 1 article' do
+        request
+
+        expect(response_json.count).to eq(1)
+      end
+    end
+
+    describe 'with 2 hidden articles' do
+      subject(:request) { get '/api/v1/news/articles?show_hidden_articles=true', headers: }
+
+      before do
+        create_list(:article, 2, visible: false)
+      end
+
+      it 'returns 2 articles' do
+        request
+
+        expect(response_json.count).to eq(2)
+      end
+    end
+
+    describe 'with an 8 items pagination' do
+      subject(:request) { get '/api/v1/news/articles?page=1&per=8', headers: }
+
+      before do
+        create_list(:article, 10, visible: true)
+      end
+
+      it 'returns 8 articles' do
+        request
+
+        expect(response_json.count).to eq(8)
+      end
     end
   end
 
-  describe 'GET /index with 1 article available' do
-    subject(:request) { get '/api/v1/news/articles' }
-
-    before do
-      create(:article, visible: true)
-      create_list(:article, 2, visible: false)
+  describe 'GET /index with pt-BR' do
+    let(:headers) do
+      { Language: 'pt-BR' }
     end
 
-    it 'returns 1 article' do
-      request
+    describe 'with 2 articles available' do
+      subject(:request) { get '/api/v1/news/articles', headers: }
 
-      expect(response_json.count).to eq(1)
-    end
-  end
+      before do
+        create_list(:article, 2, visible: true, language: 'pt-BR')
+        create_list(:article, 2, visible: true, language: 'en-US')
+      end
 
-  describe 'GET /index when some articles are unpublished' do
-    subject(:request) { get '/api/v1/news/articles' }
+      it 'returns 2 articles in pt-BR' do
+        request
 
-    before do
-      create(:article, visible: true)
-      create_list(:article, 2, visible: true, published_at: 1.day.from_now)
-    end
-
-    it 'returns 1 article' do
-      request
-
-      expect(response_json.count).to eq(1)
-    end
-  end
-
-  describe 'GET /index with 2 hidden articles' do
-    subject(:request) { get '/api/v1/news/articles?show_hidden_articles=true' }
-
-    before do
-      create_list(:article, 2, visible: false)
-    end
-
-    it 'returns 2 articles' do
-      request
-
-      expect(response_json.count).to eq(2)
-    end
-  end
-
-  describe 'GET /index with an 8 items pagination' do
-    subject(:request) { get '/api/v1/news/articles?page=1&per=8' }
-
-    before do
-      create_list(:article, 10, visible: true)
-    end
-
-    it 'returns 8 articles' do
-      request
-
-      expect(response_json.count).to eq(8)
+        expect(response_json.count).to eq(2)
+      end
     end
   end
 
