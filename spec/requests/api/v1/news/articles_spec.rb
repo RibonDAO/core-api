@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::News::Articles', type: :request do
   describe 'GET /index' do
     let(:headers) do
-      { Language: 'en-US' }
+      { Language: 'en' }
     end
 
     describe 'with 2 articles available' do
@@ -82,6 +82,27 @@ RSpec.describe 'Api::V1::News::Articles', type: :request do
         request
 
         expect(response_json.count).to eq(8)
+      end
+    end
+  end
+
+  describe 'GET /index with pt-BR' do
+    let(:headers) do
+      { Language: 'pt-BR' }
+    end
+
+    describe 'with 2 articles available' do
+      subject(:request) { get '/api/v1/news/articles', headers: }
+
+      before do
+        create_list(:article, 2, visible: true, language: 'pt-BR')
+        create_list(:article, 2, visible: true, language: 'en-US')
+      end
+
+      it 'returns 2 articles in pt-BR' do
+        request
+
+        expect(response_json.count).to eq(2)
       end
     end
   end
