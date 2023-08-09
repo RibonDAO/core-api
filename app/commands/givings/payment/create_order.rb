@@ -31,8 +31,7 @@ module Givings
         return unless result
 
         status = ::Payment::Gateways::Stripe::Helpers.status(result[:status])
-        update_success(order:, status:, external_id: result[:external_id],
-                       external_subscription_id: result[:external_subscription_id])
+        update_success(order:, status:, result:)
         return unless status == :paid
 
         handle_contribution_creation(order.payment)
@@ -47,11 +46,11 @@ module Givings
         end
       end
 
-      def update_success(order:, status:, external_id:, external_subscription_id:)
+      def update_success(order:, status:, result:)
+        external_id = result[:external_id]
+        external_subscription_id = result[:external_subscription_id]
         order.payment.update(status:)
-
         order.payment.update(external_id:) if external_id
-
         order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
       end
 
