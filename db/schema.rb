@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
-
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -53,6 +52,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "provider"
+    t.string "uid"
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
@@ -85,7 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "link"
-    t.string "language"
+    t.integer "language", default: 0
     t.index ["author_id"], name: "index_articles_on_author_id"
   end
 
@@ -370,9 +371,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
     t.integer "donations_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "user_email"
-    t.integer "user_legacy_id"
-    t.datetime "user_created_at"
     t.bigint "legacy_user_id"
     t.index ["legacy_non_profit_id"], name: "index_legacy_user_impacts_on_legacy_non_profit_id"
     t.index ["legacy_user_id"], name: "index_legacy_user_impacts_on_legacy_user_id"
@@ -420,8 +418,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "measurement_unit"
     t.string "donor_recipient"
+    t.string "measurement_unit"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -591,14 +589,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.string "title"
-    t.text "actions"
-    t.text "rules"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -666,7 +656,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_01_172348) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "language"
+    t.integer "language", default: 0
     t.integer "legacy_id"
     t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
