@@ -1,0 +1,30 @@
+{
+  "webhookId": "wh_32t3rmbv6e4qykd6",
+  "id": "whevt_1kcqgit9yl4er110",
+  "createdAt": "2023-06-26T17:50:36.498323155Z",
+  "type": "DROPPED_TRANSACTION",
+  "event": {
+      "appId": "1kihlwt7wkfsesgr",
+      "network": "ETH_MAINNET",
+      "transaction": {
+          "chainId": "0x1",
+          "nonce": "0x420a8",
+          "maxPriorityFeePerGas": "0x104c533c00",
+          "maxFeePerGas": "0x37e11d6000",
+          "gasLimit": "0x3d090",
+          "to": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+          "value": "0x0",
+          "accessList": [],
+          "v": "0x1",
+          "r": "0x60b3601b1eebe4367e73d4c2bfa25d4b70fb494e15030ec312956aa028ef24ae",
+          "s": "0x47d9e88be9f1693a3aecef621e2529b8e42d3b13d7c54d11ab9b62b699ecda58",
+          "input": "",
+          "from": "0x5ab9d116a53ef41063e3eae26a7ebe736720e9ba",
+          "type": "0x2",
+          "hash": "0x5cae384413d28da53c50596144d15c78628154892f355de002537e2904a8c5af",
+          "blockHash": null,
+          "blockNumber": null,
+          "transactionIndex": null
+      }
+  }
+}

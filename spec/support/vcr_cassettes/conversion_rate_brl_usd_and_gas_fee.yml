@@ -1,0 +1,343 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://owlracle.info/poly/gas
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 15 Mar 2023 17:48:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"1e2-5js9XtKG0p2lMiLE5ImzZYP9dJ0"
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=28gxhhs6FE%2FC7CgQCOvElJ1mZrAaeuuKkq5wCQa3%2BasHlsCklDbpPwRGkXLsFxYB5gxw%2FzhGgOdaEv82cgVxnC7y1rT9vMkYpGC%2FX%2BHnbgYhTbu8eKqlb6P%2BZs5JYaTB"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7a86960f19d90313-GRU
+      Alt-Svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"timestamp":"2023-03-15T17:48:14.969Z","baseFee":109.51475970735002,"lastBlock":40381873,"avgTime":2.522613065326633,"avgTx":89.18,"avgGas":204094.540107083,"speeds":[{"acceptance":0.35,"gasPrice":147.4532439,"estimatedFee":0.03521045034124961},{"acceptance":0.6,"gasPrice":170.159765853,"estimatedFee":0.040632554613101446},{"acceptance":0.9,"gasPrice":221.886191766,"estimatedFee":0.05298433950957474},{"acceptance":1,"gasPrice":583.561339005,"estimatedFee":0.1393489692369439}]}'
+  recorded_at: Wed, 15 Mar 2023 17:48:14 GMT
+- request:
+    method: get
+    uri: http://economia.awesomeapi.com.br/json/last/usd-brl
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 308
+      message: Permanent Redirect
+    headers:
+      Date:
+      - Wed, 15 Mar 2023 17:48:15 GMT
+      Content-Type:
+      - text/html
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Location:
+      - https://economia.awesomeapi.com.br/json/last/usd-brl
+      Cf-Cache-Status:
+      - BYPASS
+      Server-Timing:
+      - cf-q-config;dur=7.9999881563708e-06
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=roZeYamvvonQUA%2Fl5EMxlh7sgJJsfCMHEmxzuYwccTEFjsxXhDhpTOClBY57iC5tKVzZ9BBWPAAP6%2BnMeSo37sbf7ywrkochXhOtxBr6r%2BcGnmPz4gWPLZNMSILUruA%2FyrjOATA9PF7tKkqW"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7a86961339daa4d1-GRU
+      Alt-Svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
+        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n<script
+        defer src=\"https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993\"
+        integrity=\"sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==\"
+        data-cf-beacon='{\"rayId\":\"7a86961339daa4d1\",\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"version\":\"2023.2.0\",\"si\":100}'
+        crossorigin=\"anonymous\"></script>\n</body>\r\n</html>\r\n"
+  recorded_at: Wed, 15 Mar 2023 17:48:15 GMT
+- request:
+    method: get
+    uri: https://economia.awesomeapi.com.br/json/last/usd-brl
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 15 Mar 2023 17:48:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD,OPTIONS,GET,POST
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Worker-Token
+      Content-Security-Policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;form-action ''self'';frame-ancestors ''self'';img-src ''self''
+        data:;object-src ''none'';script-src ''self'';script-src-attr ''none'';style-src
+        ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      Cross-Origin-Embedder-Policy:
+      - require-corp
+      Cross-Origin-Opener-Policy:
+      - same-origin
+      Cross-Origin-Resource-Policy:
+      - same-origin
+      X-Dns-Prefetch-Control:
+      - 'off'
+      Expect-Ct:
+      - max-age=0
+      X-Frame-Options:
+      - SAMEORIGIN
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Download-Options:
+      - noopen
+      X-Content-Type-Options:
+      - nosniff
+      Origin-Agent-Cluster:
+      - "?1"
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - no-referrer
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
+      Pragma:
+      - cache
+      Etag:
+      - W/"f1-OSnefEXAqR13GXVGTE30Dn3epCw"
+      X-Cache-Status:
+      - HIT
+      Cf-Cache-Status:
+      - EXPIRED
+      Server-Timing:
+      - cf-q-config;dur=8.000002708286e-06
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=vIef%2Bij8VZiyZ1iogM9ZiBpUS5dG1ZliLLUTdUX0RK3ezjroMBE0k1ZzG%2F60AU81VapPeC97EQY0gt2cEhXA16QD4wIM4My9ok1b%2BLqTBTXXV%2BJzG1bx8FACYh2kNNhFUg1GvHG7o7Csv0TX"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7a869613cf0a0180-GRU
+      Alt-Svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"USDBRL":{"code":"USD","codein":"BRL","name":"Dólar Americano/Real
+        Brasileiro","high":"5.3281","low":"5.2505","varBid":"0.0636","pctChange":"1.21","bid":"5.3173","ask":"5.3184","timestamp":"1678902483","create_date":"2023-03-15
+        14:48:03"}}'
+  recorded_at: Wed, 15 Mar 2023 17:48:15 GMT
+- request:
+    method: get
+    uri: http://economia.awesomeapi.com.br/json/last/brl-usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 308
+      message: Permanent Redirect
+    headers:
+      Date:
+      - Wed, 15 Mar 2023 17:48:15 GMT
+      Content-Type:
+      - text/html
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Location:
+      - https://economia.awesomeapi.com.br/json/last/brl-usd
+      Cf-Cache-Status:
+      - BYPASS
+      Server-Timing:
+      - cf-q-config;dur=5.9999874792993e-06
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=9u1TeaQB30RZbK7WHjP0upln3caRQhTmXXxunbN3hFa7V24GcP%2F3N1MafopgLlgO9I3pPty3YW3%2B%2BMjFBhXyWxKgvPWaApmE%2F6O5DRwBpnYZBB0UYdOsbvNTdkvnOE%2B6ByYyTmJeXSYJO32Y"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7a8696144ffa5205-GRU
+      Alt-Svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
+        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n<script
+        defer src=\"https://static.cloudflareinsights.com/beacon.min.js/vaafb692b2aea4879b33c060e79fe94621666317369993\"
+        integrity=\"sha512-0ahDYl866UMhKuYcW078ScMalXqtFJggm7TmlUtp0UlD4eQk0Ixfnm5ykXKvGJNFjLMoortdseTfsRT8oCfgGA==\"
+        data-cf-beacon='{\"rayId\":\"7a8696144ffa5205\",\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"version\":\"2023.2.0\",\"si\":100}'
+        crossorigin=\"anonymous\"></script>\n</body>\r\n</html>\r\n"
+  recorded_at: Wed, 15 Mar 2023 17:48:15 GMT
+- request:
+    method: get
+    uri: https://economia.awesomeapi.com.br/json/last/brl-usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 15 Mar 2023 17:48:15 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD,OPTIONS,GET,POST
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Worker-Token
+      Content-Security-Policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;form-action ''self'';frame-ancestors ''self'';img-src ''self''
+        data:;object-src ''none'';script-src ''self'';script-src-attr ''none'';style-src
+        ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      Cross-Origin-Embedder-Policy:
+      - require-corp
+      Cross-Origin-Opener-Policy:
+      - same-origin
+      Cross-Origin-Resource-Policy:
+      - same-origin
+      X-Dns-Prefetch-Control:
+      - 'off'
+      Expect-Ct:
+      - max-age=0
+      X-Frame-Options:
+      - SAMEORIGIN
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Download-Options:
+      - noopen
+      X-Content-Type-Options:
+      - nosniff
+      Origin-Agent-Cluster:
+      - "?1"
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - no-referrer
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
+      Pragma:
+      - cache
+      Etag:
+      - W/"f3-0pajkThcZSnE91rVeN/PxN59HzM"
+      X-Cache-Status:
+      - STALE
+      Cf-Cache-Status:
+      - EXPIRED
+      Server-Timing:
+      - cf-q-config;dur=6.0000020312145e-06
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=QIaXdb92X1%2Byjrtp3NwqB3JGD6xnVP7wupfIikuV%2B%2BSQPqyyXzcz9TqHHe50OhhRDVpPAaxQMgSaxoG6tiCsMbBC81a5oF5rezUJccDpy%2BD0NY%2B%2Fg1n%2BNJJT5Eg%2B5kYnJGoOT00tMKTS1r%2F1"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7a869614ec99a4c9-GRU
+      Alt-Svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"BRLUSD":{"code":"BRL","codein":"USD","name":"Real Brasileiro/Dólar
+        Americano","high":"0.1905","low":"0.1877","varBid":"-0.0018","pctChange":"-0.92","bid":"0.1885","ask":"0.1885","timestamp":"1678901515","create_date":"2023-03-15
+        14:31:55"}}'
+  recorded_at: Wed, 15 Mar 2023 17:48:15 GMT
+recorded_with: VCR 6.1.0

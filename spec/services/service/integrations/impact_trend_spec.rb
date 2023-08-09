@@ -40,17 +40,39 @@ RSpec.describe Service::Integrations::ImpactTrend, type: :service do
   let(:end_date) { 1.day.ago }
 
   describe '#formatted_impact' do
-    it 'returns all the stats in a hash' do
-      expect(impact_trend_service.formatted_impact)
-        .to eq({
-                 total_donations: 10, previous_total_donations: 5, total_donors: 6, previous_total_donors: 3,
-                 impact_per_non_profit: [], donations_per_non_profit: [], donors_per_non_profit: [],
-                 total_donations_balance: 5, total_donors_balance: 3,
-                 total_donations_trend: 100.0, total_donors_trend: 100.0, previous_impact_per_non_profit: [],
-                 previous_donations_per_non_profit: [], previous_donors_per_non_profit: [],
-                 donations_splitted_into_intervals: [], donors_splitted_into_intervals: [],
-                 total_new_donors: 2, total_donors_recurrent: 4
-               })
+    subject(:method) { impact_trend_service.formatted_impact }
+
+    it 'returns current impact' do
+      expect(method).to include(impact_per_non_profit: [])
+      expect(method).to include(donations_per_non_profit: [])
+      expect(method).to include(donors_per_non_profit: [])
+      expect(method).to include(donations_splitted_into_intervals: [])
+      expect(method).to include(donors_splitted_into_intervals: [])
+    end
+
+    it 'returns previous impact' do
+      expect(method).to include(previous_total_donations: 5)
+      expect(method).to include(previous_total_donors: 3)
+      expect(method).to include(previous_impact_per_non_profit: [])
+      expect(method).to include(previous_donations_per_non_profit: [])
+      expect(method).to include(previous_donors_per_non_profit: [])
+      expect(method).to include(previous_donations_splitted_into_intervals: [])
+      expect(method).to include(previous_donors_splitted_into_intervals: [])
+    end
+
+    it 'returns impact balance' do
+      expect(method).to include(total_donations: 10)
+      expect(method).to include(total_donors: 6)
+      expect(method).to include(total_new_donors: 2)
+      expect(method).to include(total_donors_recurrent: 4)
+      expect(method).to include(total_donations_balance: 5)
+      expect(method).to include(total_donors_balance: 3)
+      expect(method).to include(total_donations_trend: 100.0)
+      expect(method).to include(total_donors_trend: 100.0)
+    end
+
+    it 'returns correct hash length' do
+      expect(method.size).to eq(20)
     end
   end
 end

@@ -7,8 +7,16 @@ jobs:
   updateTestFlow:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-
+      - uses: actions/checkout@v1
+        with:
+          ref: develop
+      - name: Wait for tests to succeed
+        uses: lewagon/wait-on-check-action@v1.2.0
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          check-name: 'Tests (6)'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 15
       - name: Merge PR branch -> develop
         uses: devmasx/merge-branch@master
         with:
@@ -16,3 +24,34 @@ jobs:
           from_branch: ${{ github.event.pull_request.head.ref }}
           target_branch: develop
           github_token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Copy dockerfile
+        run: cp .worker_config/Dockerfile Dockerfile
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: "${{ steps.current-time.outputs.time }}"
+          replace-with: '-'
+          flags: 'g'
+
+      - name: Beanstalk Deploy for app
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          application_name: ribon-core-api-dev
+          environment_name: ribon-core-worker-dev
+          region: us-east-1
+          version_label: "ribon-worker-api-${{ steps.format-time.outputs.replaced }}"
+          deployment_package: deploy.zip
+
+      - name: Deployed!
+        run: echo App deployed to ELB

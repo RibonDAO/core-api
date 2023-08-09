@@ -3,6 +3,7 @@
 # Table name: donations
 #
 #  id             :bigint           not null, primary key
+#  platform       :string
 #  value          :decimal(, )
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -16,5 +17,6 @@ FactoryBot.define do
     integration { build(:integration) }
     user { build(:user) }
     value { 1.0 }
+    platform { 'app' }
   end
 end

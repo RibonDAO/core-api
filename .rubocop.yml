@@ -23,6 +23,8 @@ AllCops:
 
 Layout/LineLength:
   Max: 115
+  Exclude:
+    - app/queries/**/*
 
 Metrics/BlockLength:
   Exclude:
@@ -31,7 +33,10 @@ Metrics/BlockLength:
     - lib/tasks/auto_annotate_models.rake
 
 Metrics/MethodLength:
-  Max: 12
+  Max: 15
+  Exclude:
+    - app/mailers/sendgrid_web_mailer.rb
+    - app/queries/**/*
 
 Lint/AmbiguousBlockAssociation:
   Exclude:
@@ -80,6 +85,8 @@ Style/OpenStructUse:
 Lint/MissingSuper:
   Exclude:
     - app/commands/**/*
+    - app/lib/**/*
+    - app/mailers/sendgrid_web_mailer.rb
 
 Rails/FilePath:
   Enabled: false
@@ -87,7 +94,8 @@ Rails/FilePath:
 Metrics/AbcSize:
   Exclude:
     - app/controllers/api/v1/manager/**/*
-    - app/services/service/integrations/impact_trend.rb
+    - app/controllers/api/v1/person_payments_controller.rb
+    - app/lib/date_range/splitter.rb
 
 Rails/DynamicFindBy:
   Enabled: false

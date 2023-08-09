@@ -4,12 +4,14 @@ RSpec.describe Service::Donations::Statistics, type: :service do
   subject(:service) { described_class.new(donations:) }
 
   let(:user) { create(:user) }
-  let(:user2) { create(:user) }
+  let(:user2) { create(:user, created_at: 10.days.ago) }
   let(:donations) { Donation.all }
   let(:non_profit1) { create(:non_profit) }
   let(:non_profit2) { create(:non_profit) }
 
   before do
+    travel_to Time.zone.local(2023, 1, 1, 12, 0, 0)
+
     create(:non_profit_impact, usd_cents_to_one_impact_unit: 10,
                                non_profit: non_profit1, start_date: 1.day.ago, end_date: 1.day.from_now)
     create(:non_profit_impact, usd_cents_to_one_impact_unit: 10,
@@ -46,19 +48,15 @@ RSpec.describe Service::Donations::Statistics, type: :service do
 
   describe '#impact_per_non_profit' do
     it 'returns the impact value per non profit' do
-      expect(service.impact_per_non_profit.first[:impact]).to eq 4
-      expect(service.impact_per_non_profit.second[:impact]).to eq 2
-      expect(service.impact_per_non_profit.first[:non_profit].name).to eq non_profit1.name
-      expect(service.impact_per_non_profit.second[:non_profit].name).to eq non_profit2.name
-    end
-  end
+      first_non_profit_impact = service.impact_per_non_profit.first
+      second_non_profit_impact = service.impact_per_non_profit.second
 
-  describe '#donations_per_non_profit' do
-    it 'returns the donations count per non profit' do
-      expect(service.donations_per_non_profit.first[:donations]).to eq 4
-      expect(service.donations_per_non_profit.second[:donations]).to eq 2
-      expect(service.donations_per_non_profit.first[:non_profit].name).to eq non_profit1.name
-      expect(service.donations_per_non_profit.second[:non_profit].name).to eq non_profit2.name
+      expect(first_non_profit_impact[:impact]).to eq 4
+      expect(second_non_profit_impact[:impact]).to eq 2
+      expect(first_non_profit_impact[:non_profit].name).to eq non_profit1.name
+      expect(second_non_profit_impact[:non_profit].name).to eq non_profit2.name
+      expect(first_non_profit_impact[:formatted_impact]).to eq ['4 days', 'of days of water for', '1 donor']
+      expect(second_non_profit_impact[:formatted_impact]).to eq ['2 days', 'of days of water for', '1 donor']
     end
   end
 
@@ -72,18 +70,20 @@ RSpec.describe Service::Donations::Statistics, type: :service do
   end
 
   describe '#donations_splitted_into_intervals' do
-    it 'returns the donations count in date intervals' do
-      expect(service.donations_splitted_into_intervals.first[:initial_date]).to eq(
-        Time.zone.now.strftime('%d/%m/%Y')
-      )
+    it 'returns the donations count splitted into intervals' do
       expect(service.donations_splitted_into_intervals.first[:count]).to eq 6
+      expect(service.donations_splitted_into_intervals.first[:initial_date]).to eq(
+        Time.zone.today.strftime('%d/%m/%Y')
+      )
     end
   end
 
   describe '#donors_splitted_into_intervals' do
-    it 'returns the donors count in date intervals' do
-      expect(service.donors_splitted_into_intervals.first[:initial_date]).to eq Time.zone.now.strftime('%d/%m/%Y')
+    it 'returns the donors count splitted into intervals' do
       expect(service.donors_splitted_into_intervals.first[:count]).to eq 2
+      expect(service.donors_splitted_into_intervals.first[:initial_date]).to eq(
+        Time.zone.today.strftime('%d/%m/%Y')
+      )
     end
   end
 end

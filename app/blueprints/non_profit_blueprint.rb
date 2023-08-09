@@ -1,9 +1,11 @@
 class NonProfitBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :updated_at, :created_at, :name, :wallet_address, :impact_description, :status
+  fields :updated_at, :created_at, :name, :wallet_address, :status,
+         :logo_description, :main_image_description, :background_image_description,
+         :confirmation_image_description
 
-  association :cause, blueprint: CauseBlueprint, view: :minimal
+  association :cause, blueprint: CauseBlueprint, view: :data_and_images
 
   association :stories, blueprint: StoryBlueprint, view: :minimal
 
@@ -14,6 +16,10 @@ class NonProfitBlueprint < Blueprinter::Base
                                                        saver: { quality: 95 }, format: :jpg })
   end
 
+  field(:impact_description) do |object|
+    object.impact_for&.impact_description || object.impact_description
+  end
+
   field(:main_image) do |object|
     ImagesHelper.image_url_for(object.main_image, variant: { resize_to_fit: [450, 450],
                                                              saver: { quality: 95 }, format: :jpg })
@@ -21,6 +27,10 @@ class NonProfitBlueprint < Blueprinter::Base
 
   field(:background_image) do |object|
     ImagesHelper.image_url_for(object.background_image)
+  end
+
+  field(:confirmation_image) do |object|
+    ImagesHelper.image_url_for(object.confirmation_image)
   end
 
   field(:impact_by_ticket) do |object|

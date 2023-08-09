@@ -4,13 +4,12 @@ RSpec.describe 'Api::V1::UserGivingsController', type: :request do
   describe 'GET /v1/givings/user_givings' do
     subject(:request) { get url }
 
-    let(:person) { create(:person) }
-    let(:customer) { create(:customer, person:) }
+    let(:customer) { create(:customer) }
     let(:email) { customer.email }
     let(:currency) { :usd }
     let(:url) { "/api/v1/givings/user_givings?email=#{email}&currency=#{currency}" }
     let!(:paid_payment) do
-      create_list(:person_payment, 2, status: :paid, person:,
+      create_list(:person_payment, 2, status: :paid, payer: customer,
                                       offer: create(:offer, currency: :usd, price_cents: 1000))
     end
 

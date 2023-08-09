@@ -8,7 +8,6 @@
 #  name          :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  person_id     :uuid
 #  tax_id        :string
 #  user_id       :bigint
 #
@@ -25,6 +24,7 @@ RSpec.describe Customer, type: :model do
   describe 'Active record validation' do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to have_many(:person_payments) }
   end
 
   describe '.valid?' do
@@ -35,7 +35,7 @@ RSpec.describe Customer, type: :model do
 
   describe '#save' do
     context 'when create customer' do
-      let(:customer) { create(:customer, customer_keys: {}) }
+      let(:customer) { create(:customer, email: 'customer@customer.com', customer_keys: {}) }
 
       it { expect(customer.id).not_to be_nil }
       it { expect(customer.name).to eq 'a customer' }
@@ -46,7 +46,7 @@ RSpec.describe Customer, type: :model do
 
   describe '#update' do
     context 'when update customer with customer keys' do
-      let(:customer) { create(:customer, customer_keys: { stripe: 'stripe_key' }) }
+      let(:customer) { create(:customer, email: 'customer@customer.com', customer_keys: { stripe: 'stripe_key' }) }
 
       it { expect(customer.id).not_to be_nil }
       it { expect(customer.name).to eq 'a customer' }

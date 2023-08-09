@@ -50,7 +50,7 @@ module Api
         end
 
         def offer_params
-          params.permit(:id, :price_cents, :currency, :active,
+          params.permit(:id, :price_cents, :currency, :active, :subscription,
                         offer_gateway_attributes: %i[id gateway external_id])
         end
       end

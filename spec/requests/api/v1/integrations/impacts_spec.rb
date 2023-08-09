@@ -34,8 +34,10 @@ RSpec.describe 'Api::V1::Integrations::Impacts', type: :request do
                                       previous_total_donors total_donations_balance total_donations_trend
                                       total_donors_balance total_donors_trend donations_per_non_profit
                                       donors_per_non_profit previous_donations_per_non_profit
-                                      previous_donors_per_non_profit donations_splitted_into_intervals
-                                      donors_splitted_into_intervals total_new_donors total_donors_recurrent])
+                                      previous_donors_per_non_profit total_new_donors total_donors_recurrent
+                                      donations_splitted_into_intervals donors_splitted_into_intervals
+                                      previous_donations_splitted_into_intervals
+                                      previous_donors_splitted_into_intervals])
     end
   end
 end

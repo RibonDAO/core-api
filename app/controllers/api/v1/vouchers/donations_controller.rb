@@ -30,12 +30,16 @@ module Api
           @external_id ||= donation_params[:external_id]
         end
 
+        def platform
+          @platform ||= donation_params[:platform]
+        end
+
         def donation_command
-          ::Donations::Donate.new(integration:, non_profit:, user:)
+          ::Donations::Donate.new(integration:, non_profit:, user:, platform:, skip_allowance: true)
         end
 
         def donation_params
-          params.permit(:integration_id, :non_profit_id, :email, :external_id)
+          params.permit(:integration_id, :non_profit_id, :email, :external_id, :platform)
         end
       end
     end

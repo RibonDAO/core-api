@@ -7,6 +7,17 @@ pt-BR:
           has_one: Não é possível excluir o registro pois existe um %{record} dependente
           has_many: Não é possível excluir o registro pois existem %{record} dependentes
   date:
+    past: "Há %{date}"
+    time_units:
+      half_minute: "30 segundos"
+      minute: "1 minuto"
+      minutes: "%{count} minutos"
+      hour: "1 hora"
+      hours: "%{count} horas"
+      day: "1 dia"
+      days: "%{count} dias"
+      week: "1 semana"
+      weeks: "%{count} semanas"
     abbr_day_names:
       - dom
       - seg
@@ -222,17 +233,36 @@ pt-BR:
     pm: ""
   donations:
     blocked_message: "Não foi possível doar. Espere sua próxima doação."
-    invalid_voucher: "Voucher inválido."
+    invalid_voucher: "Ticket inválido."
     user_not_found: "Usuário não encontrado. Realize o logout e tente novamente."
     integration_not_found: "A Integração de origem não foi encontrada. Recarregue a página e tente novamente."
     non_profit_not_found: "A ONG para qual você tentou doar não existe. Recarregue a página e tente novamente."
+  articles:
+    not_published_yet: "Não publicado ainda"
   sources:
     has_source_message: "Source já criada."
   manager:
-    login_success: "Logado com sucesso no Google"
-  pools: 
+    login_success: "Logado com sucesso"
+  pools:
     create_failed: "Não foi possível criar a pool"
     fetch_failed: "Não foi possível obter o endereço da pool"
   causes:
     create_failed: "Não foi possível criar a causa"
     update_failed: "Não foi possível atualizar a causa"
+  impact_normalizer:
+    year: "ano"
+    years: "anos"
+    month: "mês"
+    months: "meses"
+    day: "dia"
+    days: "dias"
+    for: "para"
+    and: "e"
+    of: "de"
+    donate: "Doe"
+  vouchers:
+    invalid_voucher: "Ticket inválido."
+  patrons:
+    not_found: "Patrono não encontrado."
+    email_sent: "Email enviado com sucesso."
+    login_success: "Autenticado com sucesso."

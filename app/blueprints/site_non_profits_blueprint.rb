@@ -1,16 +1,16 @@
 class SiteNonProfitsBlueprint < Blueprinter::Base
-  fields :name
-
   field(:main_image) do |object|
-    ImagesHelper.image_url_for(object.main_image, variant: { resize_to_fit: [800, 800],
-                                                             saver: { quality: 95 }, format: :jpg })
+    ImagesHelper.image_url_for(object.main_image)
   end
 
-  field :description do |non_profit, options|
-    if options[:language] == 'pt-BR'
-      "Doe #{non_profit.impact_by_ticket} #{non_profit.impact_description_pt_br}"
-    else
-      "Donate #{non_profit.impact_by_ticket} #{non_profit.impact_description}"
-    end
+  field(:logo) do |object|
+    ImagesHelper.image_url_for(object.logo)
+  end
+
+  field :description do |non_profit|
+    "#{I18n.t('impact_normalizer.donate')} #{Impact::Normalizer.new(
+      non_profit,
+      non_profit.impact_by_ticket
+    ).normalize.join(' ')}"
   end
 end

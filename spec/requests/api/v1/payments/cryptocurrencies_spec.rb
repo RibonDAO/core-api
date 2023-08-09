@@ -14,7 +14,7 @@ RSpec.describe 'Api::V1::Payments::Cryptocurrency', type: :request do
     subject(:request) { post '/api/v1/payments/cryptocurrency', params: }
 
     let(:params) do
-      { email: 'user@test.com', transaction_hash: '0xFFFF', amount: '5.00' }
+      { email: 'user@test.com', transaction_hash: '0xFFFF', amount: '5.00', platform: 'web' }
     end
 
     context 'when the command is successful' do
@@ -45,9 +45,8 @@ RSpec.describe 'Api::V1::Payments::Cryptocurrency', type: :request do
   describe 'PUT /cryptocurrency' do
     subject(:request) { put '/api/v1/payments/cryptocurrency', params: }
 
-    let(:person) { build(:person) }
-    let(:customer) { build(:customer, person:) }
-    let(:person_payment) { build(:person_payment, person:) }
+    let(:customer) { build(:customer) }
+    let(:person_payment) { build(:person_payment, payer: customer) }
     let!(:blockchain_transaction) do
       build(:person_blockchain_transaction, person_payment:, transaction_hash: '0xFFFF')
     end

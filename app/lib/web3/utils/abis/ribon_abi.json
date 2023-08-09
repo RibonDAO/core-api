@@ -15,10 +15,38 @@
         "internalType": "address",
         "name": "_nonProfitCouncil",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_feeWallet",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_poolIncreaseFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_directlyContributionFee",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "directlyContributionFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "DirectlyContributionFeeChanged",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -38,13 +66,13 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "integration",
+        "name": "integrationController",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "string",
-        "name": "_donation_batch",
+        "name": "donationBatch",
         "type": "string"
       },
       {
@@ -76,7 +104,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "integration",
+        "name": "integrationController",
         "type": "address"
       },
       {
@@ -86,7 +114,7 @@
         "type": "uint256"
       }
     ],
-    "name": "IntegrationBalanceAdded",
+    "name": "IntegrationControllerBalanceAdded",
     "type": "event"
   },
   {
@@ -95,7 +123,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "integration",
+        "name": "integrationController",
         "type": "address"
       },
       {
@@ -105,7 +133,7 @@
         "type": "uint256"
       }
     ],
-    "name": "IntegrationBalanceRemoved",
+    "name": "IntegrationControllerBalanceRemoved",
     "type": "event"
   },
   {
@@ -236,10 +264,23 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "poolIncreaseFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "PoolIncreaseFeeChanged",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
-        "name": "_integration",
+        "name": "_integrationController",
         "type": "address"
       },
       {
@@ -248,7 +289,7 @@
         "type": "uint256"
       }
     ],
-    "name": "addIntegrationBalance",
+    "name": "addIntegrationControllerBalance",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -282,9 +323,37 @@
         "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "feeable",
+        "type": "bool"
       }
     ],
     "name": "addPoolBalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_pool",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_nonProfit",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "contributeToNonProfit",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -309,6 +378,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "directlyContributionFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -322,7 +404,7 @@
       },
       {
         "internalType": "address",
-        "name": "_integration",
+        "name": "_integrationController",
         "type": "address"
       },
       {
@@ -339,6 +421,38 @@
     "name": "donateThroughIntegration",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "existPool",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeWallet",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -384,6 +498,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "integrationControllers",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "integrationCouncil",
     "outputs": [
@@ -397,25 +530,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "integrations",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "nonProfitCouncil",
     "outputs": [
@@ -423,6 +537,19 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "poolIncreaseFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -451,7 +578,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_integration",
+        "name": "_integrationController",
         "type": "address"
       },
       {
@@ -460,7 +587,7 @@
         "type": "uint256"
       }
     ],
-    "name": "removeIntegrationBalance",
+    "name": "removeIntegrationControllerBalance",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -479,6 +606,19 @@
       }
     ],
     "name": "removeNonProfitFromWhitelist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_directlyContributionFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setDirectlyContributionFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -518,6 +658,19 @@
       }
     ],
     "name": "setNonProfitCouncil",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_poolIncreaseFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPoolIncreaseFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

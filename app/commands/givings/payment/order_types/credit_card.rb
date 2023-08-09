@@ -5,7 +5,7 @@ module Givings
     module OrderTypes
       class CreditCard
         attr_reader :card, :email, :tax_id, :offer, :payment_method,
-                    :user, :operation, :integration_id, :cause, :non_profit
+                    :user, :operation, :integration_id, :cause, :non_profit, :platform
 
         def initialize(args)
           @card           = args[:card]
@@ -18,11 +18,12 @@ module Givings
           @integration_id = args[:integration_id]
           @cause          = args[:cause]
           @non_profit     = args[:non_profit]
+          @platform       = args[:platform]
         end
 
         def generate_order
           customer = find_or_create_customer
-          payment  = create_payment(customer.person)
+          payment  = create_payment(customer)
 
           Order.from(payment, card, operation)
         end
@@ -32,27 +33,34 @@ module Givings
         end
 
         def success_callback(order, _result)
-          return if non_profit
-
-          call_add_giving_blockchain_job(order)
+          if non_profit
+            call_add_non_profit_giving_blockchain_job(order)
+          else
+            call_add_cause_giving_blockchain_job(order)
+          end
         end
 
         private
 
         def find_or_create_customer
-          Customer.find_by(user_id: user.id) || Customer.create!(email:, tax_id:, name:, user:,
-                                                                 person: Person.create!)
+          Customer.find_by(user_id: user.id) || Customer.create!(email:, tax_id:, name:, user:)
         end
 
-        def create_payment(person)
-          PersonPayment.create!({ person:, offer:, paid_date:, integration:, payment_method:,
-                                  amount_cents:, status: :processing, receiver: })
+        def create_payment(payer)
+          PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:,
+                                  amount_cents:, status: :processing, receiver:, platform: })
         end
 
-        def call_add_giving_blockchain_job(order)
-          AddGivingToBlockchainJob.perform_later(amount: order.payment.crypto_amount,
-                                                 payment: order.payment,
-                                                 pool: cause&.default_pool)
+        def call_add_cause_giving_blockchain_job(order)
+          AddGivingCauseToBlockchainJob.perform_later(amount: order.payment.crypto_amount,
+                                                      payment: order.payment,
+                                                      pool: cause&.default_pool)
+        end
+
+        def call_add_non_profit_giving_blockchain_job(order)
+          AddGivingNonProfitToBlockchainJob.perform_later(non_profit:,
+                                                          amount: order.payment.crypto_amount,
+                                                          payment: order.payment)
         end
 
         def amount_cents

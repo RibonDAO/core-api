@@ -7,12 +7,13 @@ describe Vouchers::Donate do
     subject(:command) { described_class.call(integration:, donation_command:, external_id:) }
 
     context 'when the voucher is valid' do
-      let(:donation_command) { Donations::Donate.new(integration:, non_profit:, user:) }
+      let(:donation_command) { Donations::Donate.new(integration:, non_profit:, user:, platform:) }
       let(:external_id) { 'external_id' }
       let(:integration) { build(:integration, integration_webhook: build(:integration_webhook)) }
       let(:non_profit) { build(:non_profit) }
       let(:user) { build(:user) }
       let(:donation) { build(:donation) }
+      let(:platform) { 'web' }
       let(:donation_command_double) { command_double(klass: Donations::Donate, result: donation) }
 
       before do
@@ -47,12 +48,13 @@ describe Vouchers::Donate do
     end
 
     context 'when the voucher is invalid' do
-      let(:donation_command) { Donations::Donate.new(integration:, non_profit:, user:) }
+      let(:donation_command) { Donations::Donate.new(integration:, non_profit:, user:, platform:) }
       let(:external_id) { nil }
       let(:integration) { build(:integration) }
       let(:non_profit) { build(:non_profit) }
       let(:user) { build(:user) }
       let(:donation) { build(:donation) }
+      let(:platform) { 'web' }
       let(:donation_command_double) { command_double(klass: Donations::Donate, result: donation) }
 
       before do

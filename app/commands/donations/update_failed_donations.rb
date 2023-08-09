@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# replaced by the batch
+
 module Donations
   class UpdateFailedDonations < ApplicationCommand
     prepend SimpleCommand

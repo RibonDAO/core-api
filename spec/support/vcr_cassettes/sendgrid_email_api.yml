@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.sendgrid.com/v3/mail/send
+    body:
+      encoding: UTF-8
+      string: '{"personalizations":[{"to":[{"email":"user100@example.com"}],"dynamic_template_data":{"lastWeekImpact":"0
+        1 day of water"}}],"categories":["All Contacts"],"from":{"email":"ana@ribon.io","name":"Ana
+        da Ribon"},"template_id":"d-176422cd49e24a1b81fdb16054125cb3"}'
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - application/json
+      User-Agent:
+      - sendgrid/6.6.2;ruby
+      Authorization:
+      - Bearer sendgrid_api_key
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 27 Feb 2023 15:30:54 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '116'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - https://sendgrid.api-docs.io
+      Access-Control-Allow-Methods:
+      - POST
+      Access-Control-Allow-Headers:
+      - Authorization, Content-Type, On-behalf-of, x-sg-elas-acl
+      Access-Control-Max-Age:
+      - '600'
+      X-No-Cors-Reason:
+      - https://sendgrid.com/docs/Classroom/Basics/API/cors.html
+      Strict-Transport-Security:
+      - max-age=600; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"errors":[{"message":"The provided authorization grant is invalid,
+        expired, or revoked","field":null,"help":null}]}'
+  recorded_at: Mon, 27 Feb 2023 15:30:54 GMT
+recorded_with: VCR 6.1.0

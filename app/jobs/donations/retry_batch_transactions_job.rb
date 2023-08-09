@@ -1,6 +1,6 @@
 module Donations
   class RetryBatchTransactionsJob < ApplicationJob
-    queue_as :default
+    queue_as :batches
 
     def perform
       BlockchainTransactions::UpdateProcessingTransactions.call

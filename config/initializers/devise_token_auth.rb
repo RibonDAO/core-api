@@ -14,9 +14,9 @@ DeviseTokenAuth.setup do |config|
   # to 31. It is recommended to not use a value more than 10 in other environments.
   config.token_cost = Rails.env.test? ? 4 : 10
 
-  # Sets the max number of concurrent devices per user, which is 10 by default.
+  # Sets the max number of concurrent platforms per user, which is 10 by default.
   # After this limit is reached, the oldest tokens will be removed.
-  # config.max_number_of_devices = 10
+  # config.max_number_of_platforms = 10
 
   # Sometimes it's necessary to make several requests to the API at the same
   # time. In this case, each request in the batch will need to share the same

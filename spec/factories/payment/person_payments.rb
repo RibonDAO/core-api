@@ -6,8 +6,11 @@ FactoryBot.define do
     amount_cents { 1000 }
     status { :processing }
     association :integration, factory: :integration
-    association :person, factory: :person
+    association :payer, factory: :customer
     offer { build(:offer) }
     external_id { nil }
+    receiver { build(:non_profit) }
+    liquid_value_cents { 2000 }
+    usd_value_cents { 2000 }
   end
 end

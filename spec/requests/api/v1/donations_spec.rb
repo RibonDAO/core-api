@@ -7,11 +7,13 @@ RSpec.describe 'Api::V1::Donations', type: :request do
     let(:integration) { create(:integration) }
     let(:non_profit) { create(:non_profit) }
     let(:user) { create(:user) }
+    let(:platform) { 'web' }
     let(:params) do
       {
         integration_id: integration.id,
         non_profit_id: non_profit.id,
-        user_id: user.id
+        user_id: user.id,
+        platform:
       }
     end
 
@@ -28,7 +30,8 @@ RSpec.describe 'Api::V1::Donations', type: :request do
       expect(Donations::Donate).to have_received(:call).with(
         integration:,
         non_profit:,
-        user:
+        user:,
+        platform:
       )
     end
 
@@ -71,7 +74,7 @@ RSpec.describe 'Api::V1::Donations', type: :request do
         request
 
         expect(response_json['donation'].keys)
-          .to match_array %w[id created_at integration_id non_profit_id updated_at user_id value]
+          .to match_array %w[id created_at integration_id non_profit_id updated_at user_id value platform]
       end
     end
   end

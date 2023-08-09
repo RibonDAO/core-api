@@ -3,7 +3,7 @@ module Graphql
     module FetchIntegrations
       Query = Graphql::RibonApi::Client.parse <<-'GRAPHQL'
         query {
-          integrations {
+          integrationControllers {
             id
             balance
           }

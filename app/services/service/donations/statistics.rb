@@ -3,7 +3,7 @@ module Service
     class Statistics
       attr_reader :donations
 
-      GROUP_INTERVALS = 5
+      MAXIMUM_INTERVALS = 5
 
       def initialize(donations:)
         @donations = donations
@@ -40,10 +40,8 @@ module Service
       end
 
       def total_new_donors
-        start_date = donations.minimum(:created_at)
-        end_date = donations.maximum(:created_at)
         users_ids = donations.pluck(:user_id).uniq
-        users.where(id: users_ids).created_between(start_date, end_date).count
+        User.where(id: users_ids).created_between(start_date, end_date).count
       end
 
       def total_donors_recurrent
@@ -65,6 +63,25 @@ module Service
                    .select { |result| (result[:donors]).positive? }
       end
 
+      def donations_splitted_into_intervals
+        date_ranges_splitted.map do |date_range|
+          {
+            initial_date: date_range[:start_date].strftime('%d/%m/%Y'),
+            count: donations.created_between(date_range[:start_date], date_range[:end_date]).count
+          }
+        end
+      end
+
+      def donors_splitted_into_intervals
+        date_ranges_splitted.map do |date_range|
+          {
+            initial_date: date_range[:start_date].strftime('%d/%m/%Y'),
+            count: donations.created_between(date_range[:start_date],
+                                             date_range[:end_date]).distinct.count(:user_id)
+          }
+        end
+      end
+
       private
 
       def days_spacing
@@ -83,7 +100,8 @@ module Service
       end
 
       def format_impacts(non_profit)
-        { non_profit:, impact: impact_sum_by_non_profit(non_profit) }
+        impact =  impact_sum_by_non_profit(non_profit)
+        { non_profit:, impact:, formatted_impact: formatted_impact(non_profit, impact) }
       end
 
       def format_donations(non_profit)
@@ -95,9 +113,16 @@ module Service
       end
 
       def impact_sum_by_non_profit(non_profit)
-        usd_to_impact_factor = non_profit.impact_for.usd_cents_to_one_impact_unit
+        usd_to_impact_factor = non_profit.impact_for&.usd_cents_to_one_impact_unit
+        return 0 unless usd_to_impact_factor
 
         (total_usd_cents_donated_for(non_profit) / usd_to_impact_factor).to_i
+      end
+
+      def formatted_impact(non_profit, rounded_impact)
+        ::Impact::Normalizer.new(non_profit, rounded_impact).normalize
+      rescue Exceptions::ImpactNormalizationError
+        ['', '', '']
       end
 
       def total_usd_cents_donated_for(non_profit)
@@ -105,19 +130,19 @@ module Service
       end
 
       def start_date
-        @start_date ||= donations.order(:created_at).first.created_at
+        @start_date ||= donations.order(:created_at).first&.created_at
       end
 
       def end_date
-        @end_date ||= donations.order(:created_at).last.created_at
+        @end_date ||= donations.order(:created_at).last&.created_at
+      end
+
+      def date_ranges_splitted
+        @date_ranges_splitted = DateRange::Splitter.new(start_date, end_date, MAXIMUM_INTERVALS).split
       end
 
       def non_profits
         NonProfit.all
-      end
-
-      def users
-        User.all
       end
     end
   end

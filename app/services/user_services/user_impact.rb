@@ -17,7 +17,8 @@ module UserServices
     end
 
     def impact_sum_by_non_profit(non_profit)
-      usd_to_impact_factor = non_profit.impact_for(date: Time.zone.now).usd_cents_to_one_impact_unit
+      usd_to_impact_factor = non_profit.impact_for&.usd_cents_to_one_impact_unit
+      return 0 unless usd_to_impact_factor
 
       (total_usd_cents_donated_for(non_profit) / usd_to_impact_factor).to_i
     end
