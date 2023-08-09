@@ -16,7 +16,8 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                                  logo_description main_image_description
                                                  background_image_description confirmation_image_description
                                                  impact_by_ticket stories cause status non_profit_impacts
-                                                 confirmation_image])
+                                                 confirmation_image formatted_impact_by_ticket
+                                                 impact_by_ticket_text])
     end
 
     it 'returns 2 non profits' do
@@ -67,7 +68,8 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                                    logo_description main_image_description
                                                    background_image_description confirmation_image_description
                                                    impact_by_ticket stories cause status non_profit_impacts
-                                                   confirmation_image])
+                                                   confirmation_image formatted_impact_by_ticket
+                                                   impact_by_ticket_text])
       end
 
       it 'returns 2 non profits' do
@@ -139,7 +141,7 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                       logo_description main_image_description
                                       background_image_description confirmation_image_description
                                       main_image name status stories updated_at wallet_address non_profit_impacts
-                                      confirmation_image])
+                                      confirmation_image formatted_impact_by_ticket impact_by_ticket_text])
     end
   end
 
@@ -155,7 +157,7 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                       logo_description main_image_description
                                       background_image_description confirmation_image_description
                                       main_image name status stories updated_at wallet_address non_profit_impacts
-                                      confirmation_image])
+                                      confirmation_image formatted_impact_by_ticket impact_by_ticket_text])
     end
   end
 

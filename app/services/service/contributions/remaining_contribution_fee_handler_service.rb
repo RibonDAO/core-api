@@ -75,7 +75,7 @@ module Service
       end
 
       def handle_last_contribution_fee(accumulated_fees_result:, contribution_balance:)
-        # TODO: refactor this logic to use in last_contribution_fee_handler_service
+        # TODO: refactor this logic to use in last_contribution_fee_handler_service too
 
         fee_cents = [accumulated_fees_result, contribution_balance.tickets_balance_cents].min
         contribution_increased_amount_cents =

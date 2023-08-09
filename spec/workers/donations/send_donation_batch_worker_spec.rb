@@ -18,6 +18,7 @@ RSpec.describe Donations::SendDonationBatchWorker, type: :worker do
     end
 
     before do
+      allow(Kernel).to receive(:sleep)
       allow(Donations::CreateDonationsBatch).to receive(:call).and_return(result)
     end
 

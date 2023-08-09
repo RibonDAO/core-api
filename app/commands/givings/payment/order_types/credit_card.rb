@@ -23,7 +23,8 @@ module Givings
 
         def generate_order
           customer = find_or_create_customer
-          payment  = create_payment(customer)
+          subscription = create_subscription(customer) if operation == :subscribe
+          payment = create_payment(customer, subscription)
 
           Order.from(payment, card, operation)
         end
@@ -46,9 +47,13 @@ module Givings
           Customer.find_by(user_id: user.id) || Customer.create!(email:, tax_id:, name:, user:)
         end
 
-        def create_payment(payer)
+        def create_payment(payer, subscription)
           PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:,
-                                  amount_cents:, status: :processing, receiver:, platform: })
+                                  amount_cents:, status: :processing, receiver:, platform:, subscription: })
+        end
+
+        def create_subscription(payer)
+          Subscription.create!({ payer:, offer:, payment_method:, status: :active, receiver:, platform: })
         end
 
         def call_add_cause_giving_blockchain_job(order)

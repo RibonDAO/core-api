@@ -7,7 +7,7 @@
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  cause_id   :bigint           not null
+#  cause_id   :bigint
 #  token_id   :bigint           not null
 #
 FactoryBot.define do

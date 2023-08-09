@@ -7,7 +7,6 @@
 #  transaction_hash :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  batch_id         :bigint           not null
 #  chain_id         :bigint           not null
 #  donation_id      :bigint           not null
 #

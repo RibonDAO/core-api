@@ -16,8 +16,7 @@ module Legacy
         return if legacy_contribution_exist?
 
         LegacyContribution.create!(
-          legacy_user:,
-          day: legacy_contribution[:created_at],
+          legacy_user:, day: legacy_contribution[:created_at],
           value_cents: legacy_contribution[:value_cents],
           legacy_payment_id: legacy_contribution[:legacy_payment_id],
           legacy_payment_method: legacy_contribution[:legacy_payment_method],

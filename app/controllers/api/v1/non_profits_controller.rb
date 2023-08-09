@@ -2,9 +2,10 @@ module Api
   module V1
     class NonProfitsController < ApplicationController
       def index
-        @non_profits = NonProfit.where(status: :active).order(cause_id: :asc)
+        @non_profits = NonProfit.where(status: :active)
+        @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
 
-        render json: NonProfitBlueprint.render(@non_profits)
+        render json: NonProfitBlueprint.render(@random_non_profits)
       end
 
       def free_donation_non_profits
