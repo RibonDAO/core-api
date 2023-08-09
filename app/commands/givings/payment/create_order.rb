@@ -48,7 +48,11 @@ module Givings
 
       def update_success(order:, status:, external_id:)
         order.payment.update(status:)
-        order.payment.update(external_id:) if external_id
+        order.payment&.subscription&.update(status: :active)
+        return unless external_id
+
+        order.payment.update(external_id:)
+        order.payment&.subscription&.update(external_id:)
       end
 
       def update_blocked(order:, err:)
@@ -58,6 +62,7 @@ module Givings
 
       def update_failed(order:, err:)
         order.payment.update(status: :failed, error_code: err.code)
+        order.payment&.subscription&.update(status: :inactive)
         order.payment.update(external_id: err.error.request_log_url) if err&.error&.request_log_url
       end
 
