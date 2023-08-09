@@ -85,7 +85,7 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
 
       let!(:pool) { create(:pool, cause:, token:) }
 
-      let!(:non_profit) { create(:non_profit, cause:, status: :active) }
+      let(:non_profit) { create(:non_profit, cause:, status: :active) }
 
       before do
         create(:pool_balance, pool:, balance: 1000)
