@@ -8,7 +8,7 @@
 #  payment_method :string
 #  platform       :string
 #  receiver_type  :string
-#  status         :string
+#  status         :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  external_id    :string
