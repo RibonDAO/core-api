@@ -45,11 +45,8 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
     subject(:request) { get '/api/v1/free_donation_non_profits' }
 
     let!(:cause) { create(:cause) }
-
     let!(:pool) { create(:pool, cause:, token:) }
-
     let(:chain) { create(:chain) }
-
     let(:token) { create(:token, chain:) }
 
     before do
@@ -82,13 +79,12 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
 
     describe 'GET /index with 1 non profit available because of pool balance' do
       let!(:cause) { create(:cause) }
-
       let!(:pool) { create(:pool, cause:, token:) }
-
-      let(:non_profit) { create(:non_profit, cause:, status: :active) }
 
       before do
         create(:pool_balance, pool:, balance: 1000)
+        create(:non_profit, cause:, status: :active)
+        create(:non_profit)
       end
 
       it 'returns 1 non profit' do
