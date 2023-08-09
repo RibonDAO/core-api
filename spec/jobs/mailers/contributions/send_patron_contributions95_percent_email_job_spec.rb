@@ -5,10 +5,11 @@ RSpec.describe Mailers::Contributions::SendPatronContributions95PercentEmailJob,
     subject(:job) { described_class }
 
     let(:big_donor) { create(:big_donor) }
+    let(:cause) { create(:cause, name_pt_br: 'Causa') }
     let(:statistics) do
       {
         boost_new_contributors: 50,
-        contribution_receiver: create(:cause),
+        contribution_receiver: cause,
         contribution_date: '1/02'
       }
     end
@@ -44,6 +45,18 @@ RSpec.describe Mailers::Contributions::SendPatronContributions95PercentEmailJob,
         receiver: big_donor,
         email_template_name: 'patron_contributions_95_percent_email_template_id'
       )
+    end
+
+    it 'set the locale language' do
+      job.perform_now(big_donor:, statistics:)
+
+      expect(I18n.locale).to eq(:en)
+    end
+
+    it 'uses the receiver name according with the language' do
+      job.perform_now(big_donor:, statistics:)
+
+      expect(cause.name).to eq(cause.name_en)
     end
   end
 end
