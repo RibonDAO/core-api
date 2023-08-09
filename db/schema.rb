@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_09_124908) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_09_172133) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -574,7 +574,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_09_124908) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.string "payment_method"
-    t.string "status"
+    t.integer "status"
     t.string "payer_type"
     t.uuid "payer_id"
     t.string "receiver_type"
