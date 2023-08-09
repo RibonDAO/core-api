@@ -9,7 +9,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions25PercentEmailJob,
       {
         boost_new_contributors: 50,
         boost_new_patrons: 100,
-        contribution_receiver_name: 'ongname',
+        contribution_receiver: create(:cause),
         contribution_date: '1/02'
       }
     end
@@ -29,7 +29,7 @@ RSpec.describe Mailers::Contributions::SendPatronContributions25PercentEmailJob,
                 first_name: big_donor[:name],
                 new_contributors: statistics[:boost_new_contributors],
                 new_patrons: statistics[:boost_new_patrons],
-                cause_name: statistics[:contribution_receiver_name],
+                cause_name: statistics[:contribution_receiver].name,
                 donation_date: statistics[:contribution_date],
                 dash_link: an_instance_of(String)
               },
