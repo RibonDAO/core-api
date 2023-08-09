@@ -12,7 +12,7 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  external_id    :string
-#  offer_id       :uuid
+#  offer_id       :bigint
 #  payer_id       :uuid
 #  receiver_id    :uuid
 #
