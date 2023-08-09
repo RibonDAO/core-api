@@ -52,7 +52,7 @@ module Givings
 
         order.payment.update(external_id:) if external_id
 
-        order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
+        order.payment&.subscription&.update(external_subscription_id:) if external_subscription_id
       end
 
       def update_blocked(order:, err:)
