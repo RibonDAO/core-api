@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_09_172133) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_09_175233) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -579,7 +579,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_09_172133) do
     t.uuid "payer_id"
     t.string "receiver_type"
     t.uuid "receiver_id"
-    t.string "external_id"
+    t.string "external_subscription_id"
     t.datetime "cancel_date"
     t.string "platform"
     t.datetime "created_at", null: false
