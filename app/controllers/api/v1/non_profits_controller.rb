@@ -3,10 +3,10 @@ module Api
     class NonProfitsController < ApplicationController
       def index
         @non_profits = NonProfit.where(status: :active).order(cause_id: :asc)
-
         render json: NonProfitBlueprint.render(@non_profits)
       end
 
+      # we don't use this function anymore but we will remove when the shuffle feature is in production
       def free_donation_non_profits
         @non_profits = NonProfit.where(status: :active).order(cause_id: :asc)
         @non_profits_with_pool_balance = @non_profits.select do |non_profit|
