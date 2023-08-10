@@ -53,7 +53,8 @@ module Givings
         end
 
         def create_subscription(payer)
-          Subscription.create!({ payer:, offer:, payment_method:, status: :active, receiver:, platform: })
+          Subscription.create!({ payer:, offer:, payment_method:, status: :active, receiver:, platform:,
+                                 integration: })
         end
 
         def call_add_cause_giving_blockchain_job(order)
