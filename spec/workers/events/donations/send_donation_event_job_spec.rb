@@ -23,12 +23,11 @@ RSpec.describe Events::Donations::SendDonationEventJob, type: :worker do
                          value: donation.value,
                          created_at: donation.created_at,
                          total_number_of_donations: donation.user.donations.count,
-                         donation_impact: normalizer_double.normalize.join(' ')
+                         donation_impact: normalizer_double.normalize.join(' '),
+                         language: donation.user.language
                        }
                      })
     end
-
-    include_context('when mocking a request') { let(:cassette_name) { 'send_event_customer_job' } }
 
     before do
       create(:ribon_config)
@@ -40,7 +39,7 @@ RSpec.describe Events::Donations::SendDonationEventJob, type: :worker do
     end
 
     context 'when it calls with donation params' do
-      it 'calls the send email function with correct arguments' do
+      it 'calls the send event function with correct arguments' do
         job.perform_now(donation:)
 
         expect(EventServices::SendEvent).to have_received(:new).with(user: donation.user, event:)
