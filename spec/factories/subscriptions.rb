@@ -26,5 +26,6 @@ FactoryBot.define do
     offer { build(:offer) }
     receiver { build(:non_profit) }
     external_id { nil }
+    integration { build(:integration) }
   end
 end
