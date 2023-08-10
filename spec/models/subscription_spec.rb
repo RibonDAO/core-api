@@ -26,5 +26,6 @@ RSpec.describe Subscription, type: :model do
     it { is_expected.to belong_to(:payer) }
     it { is_expected.to belong_to(:receiver).optional }
     it { is_expected.to belong_to(:offer).optional }
+    it { is_expected.to belong_to(:integration) }
   end
 end
