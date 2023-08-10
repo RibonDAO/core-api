@@ -30,6 +30,10 @@ class Cause < ApplicationRecord
     pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
   end
 
+  def with_pool_balance
+    default_pool.respond_to?(:pool_balance) && default_pool.pool_balance.balance.positive?
+  end
+
   def blueprint
     CauseBlueprint
   end

@@ -44,14 +44,19 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
   describe 'GET /free_donation_non_profits' do
     subject(:request) { get '/api/v1/free_donation_non_profits' }
 
+    let!(:cause) { create(:cause) }
+    let!(:pool) { create(:pool, cause:, token:) }
+    let(:chain) { create(:chain) }
+    let(:token) { create(:token, chain:) }
+
     before do
-      create(:chain)
-      create(:ribon_config)
+      create(:ribon_config, default_chain_id: chain.chain_id)
+      create(:pool_balance, pool:, balance: 1000)
     end
 
     describe 'GET /index with 2 non profits available' do
       before do
-        create_list(:non_profit, 2)
+        create_list(:non_profit, 2, cause:)
       end
 
       it 'returns a list of non profits' do
@@ -74,12 +79,12 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
 
     describe 'GET /index with 1 non profit available because of pool balance' do
       let!(:cause) { create(:cause) }
-      let!(:pool) { create(:pool, cause:) }
+      let!(:pool) { create(:pool, cause:, token:) }
 
       before do
-        create(:pool_balance, pool:, balance: 0)
+        create(:pool_balance, pool:, balance: 1000)
+        create(:non_profit, cause:, status: :active)
         create(:non_profit)
-        create_list(:non_profit, 2, cause:, status: :active)
       end
 
       it 'returns 1 non profit' do

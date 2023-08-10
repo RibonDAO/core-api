@@ -5,7 +5,7 @@
 #  id         :bigint           not null, primary key
 #  deleted_at :datetime
 #  email      :string
-#  language   :integer
+#  language   :integer          default("en")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  legacy_id  :integer

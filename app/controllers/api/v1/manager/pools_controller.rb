@@ -5,7 +5,7 @@ module Api
         def index
           @pools = Pool.all
 
-          render json: PoolBlueprint.render(@pools, view: :manager)
+          render json: PoolBlueprint.render(@pools)
         end
       end
     end
