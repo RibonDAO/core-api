@@ -2,13 +2,13 @@ module Api
   module V1
     class CausesController < ApplicationController
       def index
-        @causes = Cause.all
+        @causes = Cause.where(active: true).shuffle
 
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
 
       def free_donation_causes
-        @causes = CauseQueries.new.active_with_pool_balance
+        @causes = Cause.where(active: true).shuffle
 
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
