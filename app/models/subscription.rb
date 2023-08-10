@@ -12,6 +12,7 @@
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  external_id    :string
+#  integration_id :bigint
 #  offer_id       :bigint
 #  payer_id       :uuid
 #  receiver_id    :uuid
@@ -20,6 +21,7 @@ class Subscription < ApplicationRecord
   belongs_to :payer, polymorphic: true
   belongs_to :receiver, polymorphic: true, optional: true
   belongs_to :offer, optional: true
+  belongs_to :integration, optional: true
 
   enum status: {
     active: 0,
