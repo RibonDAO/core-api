@@ -8,6 +8,7 @@ module Api
         render json: NonProfitBlueprint.render(@random_non_profits)
       end
 
+      # we don't use this function anymore but we will remove when the shuffle feature is in production
       def free_donation_non_profits
         @non_profits = NonProfitQueries.new.active_with_pool_balance
         @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
