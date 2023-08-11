@@ -21,7 +21,7 @@ module Contributions
     rescue StandardError => e
       errors.add(:message, e.message)
       Reporter.log(error: e)
-      send_error_event
+      send_error_event(e)
     end
 
     private
