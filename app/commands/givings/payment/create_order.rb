@@ -47,11 +47,8 @@ module Givings
       end
 
       def update_success(order:, status:, result:)
-        external_id = result[:external_id]
-        external_subscription_id = result[:external_subscription_id]
         order.payment.update(status:)
-        order.payment.update(external_id:) if external_id
-        order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
+        update_external_ids(order:, result:)
       end
 
       def update_blocked(order:, err:)
@@ -67,6 +64,16 @@ module Givings
 
       def handle_contribution_creation(payment)
         PersonPayments::CreateContributionJob.perform_later(payment)
+      end
+
+      def update_external_ids(order:, result:)
+        external_id = result[:external_id]
+        external_subscription_id = result[:external_subscription_id]
+        external_invoice_id = result[:external_invoice_id]
+
+        order.payment.update(external_id:) if external_id
+        order.payment.update(external_id: external_invoice_id) if external_invoice_id
+        order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
       end
     end
   end
