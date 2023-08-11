@@ -21,12 +21,24 @@ module Contributions
     rescue StandardError => e
       errors.add(:message, e.message)
       Reporter.log(error: e)
+      send_error_event
     end
 
     private
 
     def handle_contribution_fees(contribution)
       Service::Contributions::FeesLabelingService.new(contribution:).spread_fee_to_payers
+    end
+
+    def send_error_event
+      EventServices::SendEvent.new(
+        user: payment.payer.user,
+        event: {
+          name: 'payment_error',
+          payment:,
+          error: e
+        }
+      ).call
     end
   end
 end
