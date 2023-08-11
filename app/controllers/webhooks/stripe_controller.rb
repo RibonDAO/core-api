@@ -18,7 +18,7 @@ module Webhooks
     private
 
     def endpoint_secret
-      RibonCoreApi.config[:stripe][:endpoint_secret]
+      RibonCoreApi.config[:stripe_global][:endpoint_secret]
     end
 
     # TODO: Refactor this method to use a event handler factory for each event
