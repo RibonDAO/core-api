@@ -11,7 +11,7 @@ module Payment
 
               update_payment_status(payment)
               handle_contribution_creation(payment)
-              add_giving_to_blockchain(payment)
+              handle_giving_to_blockchain(payment)
             end
 
             private
@@ -20,7 +20,9 @@ module Payment
               payment.update(status: 'paid', paid_date: Time.zone.now)
             end
 
-            def add_giving_to_blockchain(payment)
+            def handle_giving_to_blockchain(payment)
+              return if payment.person_blockchain_transaction&.success?
+
               return call_add_cause_giving_blockchain_job(payment) if payment.receiver_type == 'Cause'
 
               call_add_non_profit_giving_blockchain_job(payment)
