@@ -30,13 +30,13 @@ module Contributions
       Service::Contributions::FeesLabelingService.new(contribution:).spread_fee_to_payers
     end
 
-    def send_error_event(e)
+    def send_error_event(error)
       EventServices::SendEvent.new(
         user: payment.payer.user,
         event: {
           name: 'payment_error',
           payment:,
-          error: e
+          error:
         }
       ).call
     end
