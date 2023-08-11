@@ -77,6 +77,42 @@ RSpec.describe 'Webhooks::Stripe', type: :request do
             .to have_received(:handle).with(RecursiveOpenStruct.new(event_params))
         end
       end
+
+      context 'when it is a invoice.paid' do
+        let(:event_params) do
+          file = Rails.root.join('spec/support/webhooks/stripe/invoice_paid.json').read
+          JSON.parse file
+        end
+
+        before do
+          allow(::Payment::Gateways::Stripe::Events::InvoicePaid).to receive(:handle)
+        end
+
+        it 'calls the event handle class' do
+          request
+
+          expect(::Payment::Gateways::Stripe::Events::InvoicePaid)
+            .to have_received(:handle).with(RecursiveOpenStruct.new(event_params))
+        end
+      end
+
+      context 'when it is a invoice.payment_failed' do
+        let(:event_params) do
+          file = Rails.root.join('spec/support/webhooks/stripe/invoice_payment_failed.json').read
+          JSON.parse file
+        end
+
+        before do
+          allow(::Payment::Gateways::Stripe::Events::InvoicePaymentFailed).to receive(:handle)
+        end
+
+        it 'calls the event handle class' do
+          request
+
+          expect(::Payment::Gateways::Stripe::Events::InvoicePaymentFailed)
+            .to have_received(:handle).with(RecursiveOpenStruct.new(event_params))
+        end
+      end
     end
   end
 end
