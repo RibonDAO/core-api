@@ -18,7 +18,7 @@ module Webhooks
     private
 
     def endpoint_secret
-      RibonCoreApi.config[:stripe][:endpoint_secret]
+      RibonCoreApi.config[:stripe_global][:endpoint_secret]
     end
 
     def event_handler(event)
