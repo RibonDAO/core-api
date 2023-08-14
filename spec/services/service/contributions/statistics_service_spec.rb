@@ -12,7 +12,7 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
 
   before do
     create(:ribon_config, contribution_fee_percentage: 20, minimum_contribution_chargeable_fee_cents: 10)
-    create(:contribution_balance, contribution:, contribution_increased_amount_cents: 100,
+    create(:contribution_balance, contribution:, contribution_increased_amount_cents: 1000,
                                   fees_balance_cents: 300, tickets_balance_cents: 300)
     create_list(:donation_contribution, 3, contribution:, donation:)
     create(:donation_contribution, contribution:)
@@ -73,19 +73,19 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
 
   describe '#boost_amount' do
     it 'returns the boost amount' do
-      expect(service.boost_amount).to eq(1)
+      expect(service.boost_amount).to eq(7)
     end
   end
 
   describe '#total_increase_percentage' do
     it 'returns the total increase percentage' do
-      expect(service.total_increase_percentage).to eq(10)
+      expect(service.total_increase_percentage).to eq(70)
     end
   end
 
   describe '#total_amount_to_cause' do
     it 'returns the total amount to cause' do
-      expect(service.total_amount_to_cause).to eq(8)
+      expect(service.total_amount_to_cause).to eq(17)
     end
   end
 
