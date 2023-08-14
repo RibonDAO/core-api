@@ -1,5 +1,5 @@
 module Webhooks
-  class StripeController < ApplicationController
+  class StripeGlobalController < ApplicationController
     def events
       payload = request.body.read
       sig_header = request.env['HTTP_STRIPE_SIGNATURE']
@@ -17,27 +17,34 @@ module Webhooks
 
     private
 
-    # TODO: Change this to regular stripe after changing the endpoints of stripe global on stripe dashboard
     def endpoint_secret
       RibonCoreApi.config[:stripe_global][:endpoint_secret]
     end
 
+    # TODO: Refactor this method to use a event handler factory for each event
     def event_handler(event)
+      result = event.data.object
+      external_id = result['payment_intent']
       case event.type
       when 'payment_intent.succeeded'
         ::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded.handle(event)
-      when 'invoice.paid'
-        ::Payment::Gateways::Stripe::Events::InvoicePaid.handle(event)
-      when 'invoice.payment_failed'
-        ::Payment::Gateways::Stripe::Events::InvoicePaymentFailed.handle(event)
       when 'charge.refunded'
-        ::Payment::Gateways::Stripe::Events::ChargeRefunded.handle(event)
+        update_status(external_id, 'refunded') if external_id
+        update_date(external_id, Time.zone.at(result[:created])) if external_id
       when 'charge.refund.updated'
-        ::Payment::Gateways::Stripe::Events::ChargeRefundUpdated.handle(event)
+        update_status(external_id, 'refund_failed') if external_id
       else
         Rails.logger.info { "Unhandled event type: #{event.type}" }
       end
       nil
+    end
+
+    def update_status(external_id, status)
+      PersonPayment.where(external_id:).last&.update(status:)
+    end
+
+    def update_date(external_id, refund_date)
+      PersonPayment.where(external_id:).last&.update(refund_date:)
     end
   end
 end
