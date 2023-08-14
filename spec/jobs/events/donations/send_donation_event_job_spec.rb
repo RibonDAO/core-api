@@ -23,8 +23,7 @@ RSpec.describe Events::Donations::SendDonationEventJob, type: :worker do
                          value: donation.value,
                          created_at: donation.created_at,
                          total_number_of_donations: donation.user.donations.count,
-                         donation_impact: normalizer_double.normalize.join(' '),
-                         language: donation.user.language
+                         donation_impact: normalizer_double.normalize.join(' ')
                        }
                      })
     end

@@ -21,8 +21,7 @@ module Events
                            value: donation.value,
                            created_at: donation.created_at,
                            total_number_of_donations: donation.user.donations.count,
-                           donation_impact: impact_normalizer(donation.non_profit),
-                           language: donation.user.language
+                           donation_impact: impact_normalizer(donation.non_profit)
                          }
                        })
       end
