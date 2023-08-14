@@ -11,7 +11,8 @@ RSpec.describe EventServices::SendEvent, type: :service do
                        name: 'purchase',
                        data: {
                          price: 1000,
-                         quantity: 1
+                         quantity: 1,
+                         language: 'en'
                        }
                      })
     end

@@ -19,6 +19,7 @@ class Customer < ApplicationRecord
   belongs_to :user
 
   has_many :person_payments, as: :payer
+  has_many :contributions, through: :person_payments
 
   def blueprint
     CustomerBlueprint
