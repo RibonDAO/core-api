@@ -17,9 +17,8 @@ module Webhooks
 
     private
 
-    # TODO: Change this to regular stripe after changing the endpoints of stripe global on stripe dashboard
     def endpoint_secret
-      RibonCoreApi.config[:stripe_global][:endpoint_secret]
+      RibonCoreApi.config[:stripe][:endpoint_secret]
     end
 
     # TODO: Refactor this method to use a event handler factory for each event
