@@ -8,11 +8,12 @@
 #  payment_method :string
 #  platform       :string
 #  receiver_type  :string
-#  status         :string
+#  status         :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  external_id    :string
-#  offer_id       :uuid
+#  integration_id :bigint
+#  offer_id       :bigint
 #  payer_id       :uuid
 #  receiver_id    :uuid
 #
@@ -25,5 +26,6 @@ FactoryBot.define do
     offer { build(:offer) }
     receiver { build(:non_profit) }
     external_id { nil }
+    integration { build(:integration) }
   end
 end
