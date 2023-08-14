@@ -11,7 +11,6 @@ RSpec.describe Events::Donations::SendDonationEventJob, type: :job do
     let(:normalizer_double) { instance_double(Impact::Normalizer) }
     let(:event_service_double) { instance_double(EventServices::SendEvent) }
 
-
     let(:event) do
       OpenStruct.new({
                        name: 'donated',
