@@ -9,7 +9,8 @@ RSpec.describe Crm::Customer::Track do
                      name: 'purchase',
                      data: {
                        price: 1000,
-                       quantity: 1
+                       quantity: 1,
+                       language: 'en'
                      }
                    })
   end
