@@ -3,14 +3,13 @@ require 'sidekiq/testing'
 
 RSpec.describe Events::Contributions::SendContributionEventJob, type: :job do
   describe '#perform' do
-    subject(:job) { described_class.new }
+    subject(:perform_job) { described_class }
 
     let(:user) { create(:user) }
-    let(:customer) { create(:customer, user: user) }
+    let(:customer) { create(:customer, user:) }
     let(:person_payment) { create(:person_payment, payer: customer) }
-    let(:contribution) { create(:contribution, person_payment: person_payment) }
+    let(:contribution) { create(:contribution, person_payment:) }
     let(:event_service_double) { instance_double(EventServices::SendEvent) }
-    let(:job) { described_class }
 
     let(:event) do
       OpenStruct.new({
@@ -33,16 +32,16 @@ RSpec.describe Events::Contributions::SendContributionEventJob, type: :job do
 
     before do
       create(:ribon_config)
-      allow(job).to receive(:perform_later).with(contribution:)
       allow(EventServices::SendEvent).to receive(:new).and_return(event_service_double)
       allow(event_service_double).to receive(:call)
     end
 
     context 'when it calls with contribution params' do
       it 'calls the send event function with correct arguments' do
-        job.perform_now(contribution:)
+        perform_job.perform_now(contribution:)
 
-        expect(EventServices::SendEvent).to have_received(:new).with(user: contribution.person_payment.payer.user, event:)
+        expect(EventServices::SendEvent).to have_received(:new).with(user: contribution.person_payment.payer.user,
+                                                                     event:)
       end
     end
   end
