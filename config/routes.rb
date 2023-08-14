@@ -164,6 +164,7 @@ Rails.application.routes.draw do
 
   namespace :webhooks do
     post 'stripe' => 'stripe#events'
+    post 'stripe_global' => 'stripe_global#events'
     post 'alchemy' => 'alchemy#events'
   end
 

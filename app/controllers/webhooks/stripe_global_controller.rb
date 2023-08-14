@@ -1,5 +1,5 @@
 module Webhooks
-  class StripeController < ApplicationController
+  class StripeGlobalController < ApplicationController
     def events
       payload = request.body.read
       sig_header = request.env['HTTP_STRIPE_SIGNATURE']
@@ -17,7 +17,6 @@ module Webhooks
 
     private
 
-    # TODO: Change this to regular stripe after changing the endpoints of stripe global on stripe dashboard
     def endpoint_secret
       RibonCoreApi.config[:stripe_global][:endpoint_secret]
     end
