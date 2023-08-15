@@ -15,7 +15,7 @@
 #  integration_id :bigint
 #  offer_id       :bigint
 #  payer_id       :uuid
-#  receiver_id    :uuid
+#  receiver_id    :bigint
 #
 require 'rails_helper'
 
