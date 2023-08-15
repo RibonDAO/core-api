@@ -98,6 +98,9 @@ gem 'rails-observers'
 # Authentication
 gem 'jwt'
 
+# CRM
+gem 'customerio'
+
 group :development, :test do
   gem 'aws-sdk-secretsmanager'
   gem 'base64'
