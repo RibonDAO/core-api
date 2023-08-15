@@ -33,6 +33,7 @@ class NonProfit < ApplicationRecord
   has_many :pools, through: :non_profit_pools
   has_many :stories, dependent: :delete_all
   has_many :person_payments, as: :receiver
+  has_many :subscriptions, as: :receiver
 
   accepts_nested_attributes_for :stories
   accepts_nested_attributes_for :non_profit_impacts
