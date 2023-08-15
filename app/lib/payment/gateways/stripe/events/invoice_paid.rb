@@ -14,7 +14,6 @@ module Payment
               external_id = data['id']
 
               @payment = PersonPayment.where(subscription:, external_id:).first_or_initialize
-
               set_payment_attributes
               payment.save!
 
