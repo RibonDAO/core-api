@@ -21,7 +21,7 @@ FactoryBot.define do
   factory :subscription do
     cancel_date { nil }
     association :payer, factory: :customer
-    status { nil }
+    status { :active }
     payment_method { nil }
     offer { build(:offer) }
     receiver { build(:non_profit) }
