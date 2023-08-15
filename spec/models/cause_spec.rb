@@ -17,6 +17,8 @@ RSpec.describe Cause, type: :model do
     subject { build(:cause) }
 
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to have_many(:person_payments) }
+    it { is_expected.to have_many(:subscriptions) }
   end
 
   describe '.associations' do

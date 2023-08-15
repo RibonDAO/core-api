@@ -24,6 +24,8 @@ RSpec.describe NonProfit, type: :model do
     it { is_expected.to validate_presence_of(:wallet_address) }
     it { is_expected.to validate_presence_of(:status) }
     it { is_expected.to have_many(:non_profit_pools) }
+    it { is_expected.to have_many(:person_payments) }
+    it { is_expected.to have_many(:subscriptions) }
     it { is_expected.to have_many(:pools).through(:non_profit_pools) }
     it { is_expected.to belong_to(:cause) }
   end
