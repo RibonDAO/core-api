@@ -126,6 +126,7 @@ Rails.application.routes.draw do
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
         post 'pix'   => 'pix#create'
+        get 'subscriptions_for_customer/:user_id' => 'subscriptions#subscriptions_for_customer'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
