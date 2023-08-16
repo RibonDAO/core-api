@@ -4,59 +4,60 @@ module Payment
       module Events
         class InvoicePaid
           class << self
+            attr_reader :subscription, :data, :payment
+
             def handle(event)
-              data = event.data.object
-              subscription = Subscription.find_by(external_id: data['subscription'])
+              @data = event.data.object
+              @subscription = Subscription.find_by(external_id: data['subscription'])
               return unless subscription
 
               external_id = data['id']
 
-              payment = PersonPayment.find_or_create_by!(subscription:, external_id:)
-              return unless payment
-              return unless payment.status == 'requires_confirmation'
+              @payment = PersonPayment.where(subscription:, external_id:).first_or_initialize
+              set_payment_attributes
+              payment.save!
 
-              payment.update(person_payment_params(subscription, data))
-              handle_contribution_creation(payment)
-              handle_giving_to_blockchain(payment)
+              handle_contribution_creation
+              handle_giving_to_blockchain
             end
 
             private
 
-            def person_payment_params(subscription, data)
-              {
-                paid_date: Time.zone.at(data['created']),
-                amount_cents: data['amount_paid'],
-                payment_method: subscription.payment_method,
-                offer: subscription.offer,
-                receiver: subscription.receiver,
-                payer: subscription.payer,
-                platform: subscription.platform,
-                integration_id: subscription.integration_id || 1,
-                status: :paid
-              }
+            # rubocop:disable Metrics/AbcSize
+            def set_payment_attributes
+              payment.paid_date = Time.zone.at(data['created'])
+              payment.amount_cents = data['amount_paid']
+              payment.payment_method = subscription.payment_method
+              payment.offer = subscription.offer
+              payment.receiver = subscription.receiver
+              payment.payer = subscription.payer
+              payment.platform = subscription.platform
+              payment.integration = subscription.integration
+              payment.status = :paid
             end
+            # rubocop:enable Metrics/AbcSize
 
-            def handle_giving_to_blockchain(payment)
+            def handle_giving_to_blockchain
               return if payment.person_blockchain_transaction&.success?
 
-              return call_add_cause_giving_blockchain_job(payment) if payment.receiver_type == 'Cause'
+              return call_add_cause_giving_blockchain_job if payment.receiver_type == 'Cause'
 
-              call_add_non_profit_giving_blockchain_job(payment)
+              call_add_non_profit_giving_blockchain_job
             end
 
-            def handle_contribution_creation(payment)
+            def handle_contribution_creation
               return if payment.contribution.present?
 
               PersonPayments::CreateContributionJob.perform_later(payment)
             end
 
-            def call_add_cause_giving_blockchain_job(payment)
+            def call_add_cause_giving_blockchain_job
               Givings::Payment::AddGivingCauseToBlockchainJob
                 .perform_later(amount: payment.crypto_amount, payment:,
                                pool: payment.receiver&.default_pool)
             end
 
-            def call_add_non_profit_giving_blockchain_job(payment)
+            def call_add_non_profit_giving_blockchain_job
               Givings::Payment::AddGivingNonProfitToBlockchainJob
                 .perform_later(non_profit: payment.receiver,
                                amount: payment.crypto_amount, payment:)

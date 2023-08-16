@@ -4,32 +4,37 @@ module Payment
       module Events
         class InvoicePaymentFailed
           class << self
+            attr_reader :subscription, :payment, :data
+
             def handle(event)
-              data = event.data.object
-              subscription = Subscription.find_by(external_id: data['subscription'])
+              @data = event.data.object
+              @subscription = Subscription.find_by(external_id: data['subscription'])
               return unless subscription
 
               subscription.update(status: :inactive)
-              PersonPayment.find_or_create_by!(person_payment_params(subscription, data))
+
+              external_id = data['id']
+
+              @payment = PersonPayment.where(subscription:, external_id:).first_or_initialize
+              set_payment_attributes
+              payment.save!
             end
 
             private
 
-            def person_payment_params(subscription, data)
-              {
-                external_id: data['external_id'],
-                paid_date: Time.zone.at(data['created']),
-                amount_cents: data['amount_paid'],
-                payment_method: subscription.payment_method,
-                offer: subscription.offer,
-                receiver: subscription.receiver,
-                subscription:,
-                payer: subscription.payer,
-                platform: subscription.platform,
-                integration_id: subscription.integration_id || 1,
-                status: :failed
-              }
+            # rubocop:disable Metrics/AbcSize
+            def set_payment_attributes
+              payment.paid_date = Time.zone.at(data['created'])
+              payment.amount_cents = data['amount_paid']
+              payment.payment_method = subscription.payment_method
+              payment.offer = subscription.offer
+              payment.receiver = subscription.receiver
+              payment.payer = subscription.payer
+              payment.platform = subscription.platform
+              payment.integration = subscription.integration
+              payment.status = :failed
             end
+            # rubocop:enable Metrics/AbcSize
           end
         end
       end

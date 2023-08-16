@@ -22,10 +22,10 @@ FactoryBot.define do
     cancel_date { nil }
     association :payer, factory: :customer
     status { :active }
-    payment_method { nil }
+    payment_method { 'credit_card' }
     offer { build(:offer) }
     receiver { build(:non_profit) }
     external_id { nil }
-    integration { build(:integration) }
+    association :integration
   end
 end
