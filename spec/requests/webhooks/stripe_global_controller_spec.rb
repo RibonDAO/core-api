@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe 'Webhooks::Stripe', type: :request do
-  describe '/webhooks/stripe' do
-    subject(:request) { post '/webhooks/stripe', params: event_params }
+RSpec.describe 'Webhooks::StripeGlobal', type: :request do
+  describe '/webhooks/stripe_global' do
+    subject(:request) { post '/webhooks/stripe_global', params: event_params }
 
     context 'when it is not a request from stripe' do
       let(:event_params) do
@@ -74,42 +74,6 @@ RSpec.describe 'Webhooks::Stripe', type: :request do
           request
 
           expect(::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded)
-            .to have_received(:handle).with(RecursiveOpenStruct.new(event_params))
-        end
-      end
-
-      context 'when it is a invoice.paid' do
-        let(:event_params) do
-          file = Rails.root.join('spec/support/webhooks/stripe/invoice_paid.json').read
-          JSON.parse file
-        end
-
-        before do
-          allow(::Payment::Gateways::Stripe::Events::InvoicePaid).to receive(:handle)
-        end
-
-        it 'calls the event handle class' do
-          request
-
-          expect(::Payment::Gateways::Stripe::Events::InvoicePaid)
-            .to have_received(:handle).with(RecursiveOpenStruct.new(event_params))
-        end
-      end
-
-      context 'when it is a invoice.payment_failed' do
-        let(:event_params) do
-          file = Rails.root.join('spec/support/webhooks/stripe/invoice_payment_failed.json').read
-          JSON.parse file
-        end
-
-        before do
-          allow(::Payment::Gateways::Stripe::Events::InvoicePaymentFailed).to receive(:handle)
-        end
-
-        it 'calls the event handle class' do
-          request
-
-          expect(::Payment::Gateways::Stripe::Events::InvoicePaymentFailed)
             .to have_received(:handle).with(RecursiveOpenStruct.new(event_params))
         end
       end

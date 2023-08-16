@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_10_145122) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_15_192726) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -574,18 +574,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_10_145122) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.string "payment_method"
-    t.integer "status"
     t.string "payer_type"
     t.uuid "payer_id"
-    t.string "receiver_type"
-    t.uuid "receiver_id"
     t.string "external_id"
     t.datetime "cancel_date"
     t.string "platform"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "offer_id"
     t.bigint "integration_id"
+    t.string "receiver_type"
+    t.bigint "receiver_id"
+    t.integer "status"
+    t.bigint "offer_id"
     t.index ["integration_id"], name: "index_subscriptions_on_integration_id"
     t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_subscriptions_on_payer"
