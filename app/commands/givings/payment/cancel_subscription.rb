@@ -16,6 +16,7 @@ module Givings
 
         success_unsubscribe(subscription, unsubscribe)
       rescue StandardError => e
+        failure_callback(e)
         Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
       end
 
@@ -25,6 +26,10 @@ module Givings
         return unless unsubscribe[:status] == 'canceled'
 
         subscription.update!(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
+      end
+
+      def failure_callback(err)
+        errors.add(:message, err.message)
       end
 
       def subscription
