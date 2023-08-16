@@ -24,7 +24,7 @@ module Givings
       def success_unsubscribe(subscription, unsubscribe)
         return unless unsubscribe[:status] == 'canceled'
 
-        subscription.update(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
+        subscription.update!(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
       end
 
       def subscription
