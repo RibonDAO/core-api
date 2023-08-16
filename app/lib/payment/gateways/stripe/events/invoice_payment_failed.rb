@@ -4,8 +4,10 @@ module Payment
       module Events
         class InvoicePaymentFailed
           class << self
+            attr_reader :subscription, :payment, :data
+
             def handle(event)
-              data = event.data.object
+              @data = event.data.object
               @subscription = Subscription.find_by(external_id: data['subscription'])
               return unless subscription
 
