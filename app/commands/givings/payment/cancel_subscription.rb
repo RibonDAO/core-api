@@ -31,9 +31,13 @@ module Givings
         Subscription.find_by(id: subscription_id)
       end
 
+      def gateway
+        subscription.offer.gateway
+      end
+
       def cancel_params
         OpenStruct.new(external_identifier: subscription.external_id, operation: 'unsubscribe',
-                       gateway: 'stripe')
+                       gateway:)
       end
     end
   end
