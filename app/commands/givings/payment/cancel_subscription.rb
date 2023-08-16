@@ -6,7 +6,7 @@ module Givings
       attr_reader :subscription_id
 
       def initialize(args)
-        @subscription = args[:subscription_id]
+        @subscription_id = args[:subscription_id]
       end
 
       def call
