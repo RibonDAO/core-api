@@ -8,7 +8,6 @@ describe Givings::Payment::CreditCardRefund do
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
-    let(:offer) { create(:offer) }
     let(:person_payment) do
       build(:person_payment, offer:, amount_cents: 1, external_id: 'pi_123',
                              refund_date: '2022-10-25 12:20:41')
@@ -20,11 +19,13 @@ describe Givings::Payment::CreditCardRefund do
     end
 
     context 'when using a CreditCard payment and refund on stripe' do
-      let(:gateway) { create(:offer_gateway, offer:, gateway: 'stripe') }
+      let(:offer) { create(:offer) }
+      let(:gateway) { offer.gateway }
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new)
         command
+
         expect(Service::Givings::Payment::Orchestrator)
           .to have_received(:new).with(payload: an_object_containing(
             external_id: person_payment.external_id, gateway:,
@@ -50,7 +51,8 @@ describe Givings::Payment::CreditCardRefund do
     end
 
     context 'when using a CreditCard payment and refund on stripe global' do
-      let(:gateway) { create(:offer_gateway, offer:, gateway: 'stripe_global') }
+      let(:offer) { create(:offer, :with_stripe_global) }
+      let(:gateway) { offer.gateway }
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new)

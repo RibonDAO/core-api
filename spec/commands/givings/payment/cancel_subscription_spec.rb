@@ -8,7 +8,6 @@ describe Givings::Payment::CancelSubscription do
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
-    let(:offer) { create(:offer) }
     let(:subscription) do
       build(:subscription, external_id: 'sub_1Ne15GAvG66WJy8BS3oZ9VGW', cancel_date: nil, offer:)
     end
@@ -20,7 +19,8 @@ describe Givings::Payment::CancelSubscription do
     end
 
     context 'when canceling a subscription on stripe' do
-      let(:gateway) { create(:offer_gateway, offer:, gateway: 'stripe') }
+      let(:offer) { create(:offer) }
+      let(:gateway) { offer.gateway }
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new)
@@ -51,7 +51,8 @@ describe Givings::Payment::CancelSubscription do
     end
 
     context 'when canceling a subscription on stripe global' do
-      let(:gateway) { create(:offer_gateway, offer:, gateway: 'stripe_global') }
+      let(:offer) { create(:offer, :with_stripe_global) }
+      let(:gateway) { offer.gateway }
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new)
