@@ -15,6 +15,7 @@ module Payment
                                       })
           end
 
+          # TODO: Update pix, stores and credit_cards controller to pass the address on customer creation
           def self.default_address
             {
               country: 'BR',
