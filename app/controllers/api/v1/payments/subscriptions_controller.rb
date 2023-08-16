@@ -13,12 +13,6 @@ module Api
             render_errors(command.errors)
           end
         end
-
-        private
-
-        def subscription_params
-          params.permit(:id)
-        end
       end
     end
   end
