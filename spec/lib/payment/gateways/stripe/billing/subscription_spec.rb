@@ -10,13 +10,13 @@ RSpec.describe Payment::Gateways::Stripe::Billing::Subscription do
     let(:stripe_customer) { OpenStruct.new({ id: 'cus_123' }) }
 
     before do
-      allow(::Stripe::Subscription).to receive(:create)
+      allow(Stripe::Subscription).to receive(:create)
     end
 
     it 'calls the Stripe::Subscription with correct params' do
       method_call
 
-      expect(::Stripe::Subscription)
+      expect(Stripe::Subscription)
         .to have_received(:create)
         .with(customer: stripe_customer.id,
               items: [
@@ -31,14 +31,14 @@ RSpec.describe Payment::Gateways::Stripe::Billing::Subscription do
     let(:subscription) { OpenStruct.new({ external_identifier: 'sub_1JgyE4JuOnwQq9QxTbs7qfzm' }) }
 
     before do
-      allow(::Stripe::Subscription).to receive(:delete)
+      allow(Stripe::Subscription).to receive(:cancel)
     end
 
     it 'calls the Stripe::Subscription with correct params' do
       method_call
 
-      expect(::Stripe::Subscription)
-        .to have_received(:delete)
+      expect(Stripe::Subscription)
+        .to have_received(:cancel)
         .with(subscription.external_identifier)
     end
   end
