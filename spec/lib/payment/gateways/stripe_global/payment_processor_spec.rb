@@ -4,8 +4,8 @@ RSpec.describe Payment::Gateways::StripeGlobal::PaymentProcessor do
   let(:payment_processor_call) { described_class.new.send(operation, payload) }
 
   before do
-    allow(::Stripe::PaymentMethod).to receive(:create).and_return(OpenStruct.new({ id: 'pay_123' }))
-    allow(::Stripe::Customer).to receive(:create).and_return(OpenStruct.new({ id: 'cus_123' }))
+    allow(Stripe::PaymentMethod).to receive(:create).and_return(OpenStruct.new({ id: 'pay_123' }))
+    allow(Stripe::Customer).to receive(:create).and_return(OpenStruct.new({ id: 'cus_123' }))
   end
 
   describe '#purchase' do
@@ -17,7 +17,7 @@ RSpec.describe Payment::Gateways::StripeGlobal::PaymentProcessor do
     let(:offer) { create(:offer, price_cents: 100, subscription: true) }
 
     before do
-      allow(::Stripe::PaymentIntent).to receive(:create)
+      allow(Stripe::PaymentIntent).to receive(:create)
     end
 
     it 'calls Stripe::PaymentIntent api' do
@@ -40,7 +40,7 @@ RSpec.describe Payment::Gateways::StripeGlobal::PaymentProcessor do
     let(:offer) { create(:offer, price_cents: 100, subscription: true) }
 
     before do
-      allow(::Stripe::Subscription)
+      allow(Stripe::Subscription)
         .to receive(:create)
         .and_return(OpenStruct.new({ id: 'sub_123',
                                      latest_invoice: 'in_123' }))
@@ -68,7 +68,7 @@ RSpec.describe Payment::Gateways::StripeGlobal::PaymentProcessor do
     let(:offer) { create(:offer, price_cents: 100, subscription: false) }
 
     before do
-      allow(::Stripe::Refund)
+      allow(Stripe::Refund)
         .to receive(:create)
     end
 
@@ -88,14 +88,14 @@ RSpec.describe Payment::Gateways::StripeGlobal::PaymentProcessor do
     let(:payload) { OpenStruct.new({ external_identifier: 'sub_123' }) }
 
     before do
-      allow(::Stripe::Subscription).to receive(:delete)
+      allow(Stripe::Subscription).to receive(:cancel)
     end
 
     it 'calls Stripe::Subscription api' do
       payment_processor_call
 
-      expect(::Stripe::Subscription)
-        .to have_received(:delete)
+      expect(Stripe::Subscription)
+        .to have_received(:cancel)
         .with(payload.external_identifier)
     end
   end
