@@ -15,6 +15,10 @@ RSpec.describe 'Api::V1::Payments::Subscriptions', type: :request do
     context 'when is successfully cancelled' do
       subject(:request) { put "/api/v1/payments/cancel_subscription/#{subscription.id}" }
 
+      let(:create_order_command_double) do
+        command_double(klass: Givings::Payment::CancelSubscription, success: true)
+      end
+
       it 'returns http status ok' do
         request
 
