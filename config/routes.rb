@@ -127,6 +127,7 @@ Rails.application.routes.draw do
         post 'store_pay'   => 'stores#create'
         post 'pix'   => 'pix#create'
         get 'subscriptions_for_customer/:user_id' => 'subscriptions#subscriptions_for_customer'
+        put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'

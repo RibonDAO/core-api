@@ -15,7 +15,7 @@ module Payment
           end
 
           def self.cancel(subscription:)
-            ::Stripe::Subscription.delete(subscription.external_identifier)
+            ::Stripe::Subscription.cancel(subscription.external_identifier)
           end
         end
       end

@@ -2,34 +2,33 @@
 
 require 'rails_helper'
 
-describe Givings::Payment::CreditCardRefund do
+describe Givings::Payment::CancelSubscription do
   describe '.call' do
     subject(:command) { described_class.call(args) }
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
-    let(:person_payment) do
-      build(:person_payment, offer:, amount_cents: 1, external_id: 'pi_123',
-                             refund_date: '2022-10-25 12:20:41')
+    let(:subscription) do
+      build(:subscription, external_id: 'sub_1Ne15GAvG66WJy8BS3oZ9VGW', cancel_date: nil, offer:)
     end
-    let(:args) { { external_id: 'pi_123' } }
+
+    let(:args) { { subscription: } }
 
     before do
-      allow(PersonPayment).to receive(:find_by).and_return(person_payment)
+      allow(Subscription).to receive(:find_by).and_return(subscription)
     end
 
-    context 'when using a CreditCard payment and refund on stripe' do
+    context 'when canceling a subscription on stripe' do
       let(:offer) { create(:offer) }
       let(:gateway) { offer.gateway }
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new)
-        command
 
+        command
         expect(Service::Givings::Payment::Orchestrator)
           .to have_received(:new).with(payload: an_object_containing(
-            external_id: person_payment.external_id, gateway:,
-            operation: 'refund'
+            subscription:, gateway:, operation: 'unsubscribe'
           ))
       end
 
@@ -41,26 +40,27 @@ describe Givings::Payment::CreditCardRefund do
         expect(orchestrator_double).to have_received(:call)
       end
 
-      context 'when the refund is sucessfull' do
-        it 'update the status and external_id of person_payment' do
+      context 'when the cancelation is sucessfull' do
+        it 'update the status and cancel_date of subscription' do
           command
-          expect(person_payment.status).to eq('refunded')
-          expect(person_payment.refund_date).to eq Time.zone.parse('2022-10-25 12:20:40')
+
+          expect(subscription.status).to eq('canceled')
+          expect(subscription.cancel_date).not_to be_nil
         end
       end
     end
 
-    context 'when using a CreditCard payment and refund on stripe global' do
+    context 'when canceling a subscription on stripe global' do
       let(:offer) { create(:offer, :with_stripe_global) }
       let(:gateway) { offer.gateway }
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new)
+
         command
         expect(Service::Givings::Payment::Orchestrator)
           .to have_received(:new).with(payload: an_object_containing(
-            external_id: person_payment.external_id, gateway:,
-            operation: 'refund'
+            subscription:, gateway:, operation: 'unsubscribe'
           ))
       end
 
@@ -72,11 +72,12 @@ describe Givings::Payment::CreditCardRefund do
         expect(orchestrator_double).to have_received(:call)
       end
 
-      context 'when the refund is sucessfull' do
-        it 'update the status and external_id of person_payment' do
+      context 'when the cancelation is sucessfull' do
+        it 'update the status and cancel_date of subscription' do
           command
-          expect(person_payment.status).to eq('refunded')
-          expect(person_payment.refund_date).to eq Time.zone.parse('2022-10-25 12:20:40')
+
+          expect(subscription.status).to eq('canceled')
+          expect(subscription.cancel_date).not_to be_nil
         end
       end
     end
