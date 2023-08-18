@@ -13,9 +13,9 @@ describe Givings::Card::CalculateCardGiving do
 
   describe '.call' do
     before do
-      mock_instance(klass: Givings::Fees::Card::StripeCardFeeCalculator,
+      mock_instance(klass: GivingServices::Fees::Card::StripeCardFeeCalculator,
                     methods: { calculate_fee: calculate_card_fee })
-      mock_instance(klass: Givings::Fees::Crypto::PolygonFeeCalculator,
+      mock_instance(klass: GivingServices::Fees::Crypto::PolygonFeeCalculator,
                     methods: { calculate_fee: calculate_crypto_fee })
       mock_instance(klass: Currency::Rates, methods: { add_rate: })
     end

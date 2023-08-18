@@ -20,19 +20,19 @@ describe Givings::Payment::CreditCardRefund do
         allow(PersonPayment).to receive(:find_by).and_return(person_payment)
       end
 
-      it 'calls Givings::Payment::Orchestrator with correct payload' do
-        allow(Givings::Payment::Orchestrator).to receive(:new)
+      it 'calls GivingServices::Payment::Orchestrator with correct payload' do
+        allow(GivingServices::Payment::Orchestrator).to receive(:new)
         command
-        expect(Givings::Payment::Orchestrator)
+        expect(GivingServices::Payment::Orchestrator)
           .to have_received(:new).with(payload: an_object_containing(
             external_id: person_payment.external_id, gateway: 'stripe',
             operation: 'refund'
           ))
       end
 
-      it 'calls Givings::Payment::Orchestrator process' do
-        orchestrator_double = instance_double(Givings::Payment::Orchestrator, { call: nil })
-        allow(Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
+      it 'calls GivingServices::Payment::Orchestrator process' do
+        orchestrator_double = instance_double(GivingServices::Payment::Orchestrator, { call: nil })
+        allow(GivingServices::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         command
 
         expect(orchestrator_double).to have_received(:call)
