@@ -31,7 +31,7 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
     let!(:cause) { create(:cause) }
     let!(:person_payment) { create(:person_payment, receiver: cause) }
     let(:person_blockchain_transaction) { create(:person_blockchain_transaction, person_payment:) }
-    let(:service) { Donations::PoolBalances }
+    let(:service) { DonationServices::PoolBalances }
     let(:service_mock) { instance_double(service) }
 
     before do
@@ -53,7 +53,7 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
     let!(:non_profit) { create(:non_profit) }
     let!(:person_payment) { create(:person_payment, receiver: non_profit) }
     let(:person_blockchain_transaction) { create(:person_blockchain_transaction, person_payment:) }
-    let(:service) { Donations::PoolBalances }
+    let(:service) { DonationServices::PoolBalances }
     let(:service_mock) { instance_double(service) }
 
     before do
