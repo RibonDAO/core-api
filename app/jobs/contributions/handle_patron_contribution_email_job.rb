@@ -3,8 +3,8 @@ module Contributions
     queue_as :contributions
 
     def perform(contribution_balance:, big_donor:)
-      statistics = Contributions::Statistics.new(contribution: contribution_balance.contribution)
-                                            .formatted_email_statistics
+      statistics = GivingServices::Payment::Orchestrator.new(contribution: contribution_balance.contribution)
+                                                        .formatted_email_statistics
       percentage = find_closest_email_percentage(statistics[:usage_percentage])
       send_email(big_donor, statistics, percentage) unless email_already_sent?(big_donor, percentage)
     end

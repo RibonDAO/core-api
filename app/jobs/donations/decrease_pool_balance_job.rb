@@ -5,7 +5,7 @@ module Donations
 
     def perform(donation:)
       pool = donation.non_profit.cause.default_pool
-      Donations::PoolBalances.new(pool:).decrease_balance(donation.value / 100)
+      DonationServices::PoolBalances.new(pool:).decrease_balance(donation.value / 100)
     end
   end
 end
