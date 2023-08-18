@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Integrations::Impact, type: :service do
+RSpec.describe IntegrationServices::Impact, type: :service do
   subject(:service) { described_class.new(integration:, start_date:, end_date:) }
 
   let(:integration) { create(:integration) }
@@ -29,9 +29,9 @@ RSpec.describe Integrations::Impact, type: :service do
     let(:non_profit) { create(:non_profit) }
 
     it 'returns the impact value per non profit' do
-      allow(Donations::Statistics)
+      allow(DonationServices::Statistics)
         .to receive(:new).and_return(
-          instance_double(Donations::Statistics, impact_per_non_profit: [{ non_profit:, impact: 10 }])
+          instance_double(DonationServices::Statistics, impact_per_non_profit: [{ non_profit:, impact: 10 }])
         )
 
       expect(service.impact_per_non_profit.first[:impact]).to eq 10
@@ -43,9 +43,9 @@ RSpec.describe Integrations::Impact, type: :service do
     let(:non_profit) { create(:non_profit) }
 
     it 'returns the donations count per non profit' do
-      allow(Donations::Statistics)
+      allow(DonationServices::Statistics)
         .to receive(:new).and_return(
-          instance_double(Donations::Statistics,
+          instance_double(DonationServices::Statistics,
                           donations_per_non_profit: [{ non_profit:, donations: 10 }])
         )
 
@@ -58,9 +58,9 @@ RSpec.describe Integrations::Impact, type: :service do
     let(:non_profit) { create(:non_profit) }
 
     it 'returns the donors count per non profit' do
-      allow(Donations::Statistics)
+      allow(DonationServices::Statistics)
         .to receive(:new).and_return(
-          instance_double(Donations::Statistics, donors_per_non_profit: [{ non_profit:, donors: 10 }])
+          instance_double(DonationServices::Statistics, donors_per_non_profit: [{ non_profit:, donors: 10 }])
         )
 
       expect(service.donors_per_non_profit.first[:donors]).to eq 10
@@ -70,9 +70,9 @@ RSpec.describe Integrations::Impact, type: :service do
 
   describe '#donations_splitted_into_intervals' do
     it 'returns the donations count in date intervals' do
-      allow(Donations::Statistics)
+      allow(DonationServices::Statistics)
         .to receive(:new).and_return(
-          instance_double(Donations::Statistics,
+          instance_double(DonationServices::Statistics,
                           donations_splitted_into_intervals: [{ initial_date: Time.zone.today.to_s, count: 10 }])
         )
 
@@ -83,9 +83,9 @@ RSpec.describe Integrations::Impact, type: :service do
 
   describe '#donors_splitted_into_intervals' do
     it 'returns the donors count in date intervals' do
-      allow(Donations::Statistics)
+      allow(DonationServices::Statistics)
         .to receive(:new).and_return(
-          instance_double(Donations::Statistics,
+          instance_double(DonationServices::Statistics,
                           donors_splitted_into_intervals: [{ initial_date: Time.zone.today.to_s, count: 10 }])
         )
 

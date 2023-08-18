@@ -1,16 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe Integrations::ImpactTrend, type: :service do
+RSpec.describe IntegrationServices::ImpactTrend, type: :service do
   subject(:impact_trend_service) { described_class.new(start_date:, end_date:, integration:) }
 
   before do
-    allow(Integrations::Impact).to receive(:new).and_return(previous_impact_service)
-    allow(Integrations::Impact)
+    allow(IntegrationServices::Impact).to receive(:new).and_return(previous_impact_service)
+    allow(IntegrationServices::Impact)
       .to receive(:new).with(integration:, start_date:, end_date:).and_return(impact_service)
   end
 
   let(:impact_service) do
-    instance_double(Integrations::Impact, {
+    instance_double(IntegrationServices::Impact, {
                       total_donations: 10,
                       total_donors: 6,
                       total_new_donors: 2,
@@ -23,7 +23,7 @@ RSpec.describe Integrations::ImpactTrend, type: :service do
                     })
   end
   let(:previous_impact_service) do
-    instance_double(Integrations::Impact, {
+    instance_double(IntegrationServices::Impact, {
                       total_donations: 5,
                       total_donors: 3,
                       total_new_donors: 1,
