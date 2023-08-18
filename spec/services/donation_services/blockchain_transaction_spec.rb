@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Donations::BlockchainTransaction, type: :service do
+RSpec.describe DonationServices::BlockchainTransaction, type: :service do
   subject(:service) { described_class.new(blockchain_transaction:) }
 
   describe '#update_status' do

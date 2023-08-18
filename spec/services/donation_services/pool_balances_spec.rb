@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Donations::PoolBalances, type: :service do
+RSpec.describe DonationServices::PoolBalances, type: :service do
   include ActiveStorage::Blob::Analyzable
   subject(:service) { described_class.new(pool:) }
 
