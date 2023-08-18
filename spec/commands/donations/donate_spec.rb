@@ -12,7 +12,7 @@ describe Donations::Donate do
       let(:integration) { create(:integration) }
       let(:non_profit) { create(:non_profit, :with_impact) }
       let(:user) { create(:user) }
-      let(:ticket_labeling_instance) { instance_double(Contributions::TicketLabelingService) }
+      let(:ticket_labeling_instance) { instance_double(ContributionServices::TicketLabeling) }
 
       before do
         create(:chain)
@@ -20,7 +20,7 @@ describe Donations::Donate do
           .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(Donations::SetLastDonatedCause).to receive(:call)
           .and_return(command_double(klass: Donations::SetLastDonatedCause))
-        allow(Contributions::TicketLabelingService).to receive(:new)
+        allow(ContributionServices::TicketLabeling).to receive(:new)
           .and_return(ticket_labeling_instance)
         allow(ticket_labeling_instance).to receive(:label_donation)
         create(:ribon_config, default_ticket_value: 100)
