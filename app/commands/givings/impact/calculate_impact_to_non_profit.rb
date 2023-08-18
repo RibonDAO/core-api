@@ -29,7 +29,7 @@ module Givings
       end
 
       def impact_service
-        @impact_service ||= Givings::Impact::NonProfitImpactCalculator.new(value:, non_profit:, currency:)
+        @impact_service ||= GivingServices::Impact::NonProfitImpactCalculator.new(value:, non_profit:, currency:)
       end
     end
   end

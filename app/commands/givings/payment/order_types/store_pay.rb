@@ -29,7 +29,7 @@ module Givings
         end
 
         def process_payment(order)
-          Givings::Payment::Orchestrator.new(payload: order).call
+          GivingServices::Payment::Orchestrator.new(payload: order).call
         end
 
         def success_callback(order, _result)
