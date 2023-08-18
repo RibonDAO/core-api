@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Api::V1::Integrations::Impacts', type: :request do
+RSpec.describe 'Api::V1::IntegrationServices::Impacts', type: :request do
   describe 'GET /index' do
     subject(:request) { get "/api/v1/integrations/#{id}/impacts" }
 
@@ -19,11 +19,11 @@ RSpec.describe 'Api::V1::Integrations::Impacts', type: :request do
         total_donors_balance: 2, total_donations_trend: 100.0, total_donors_trend: 100.0,
         total_new_donors: 2, total_donors_recurrent: 4 }
     end
-    let(:impact_service_instance) { instance_double(Integrations::ImpactTrend, formatted_impact: impact) }
+    let(:impact_service_instance) { instance_double(IntegrationServices::ImpactTrend, formatted_impact: impact) }
     let(:non_profit) { build(:non_profit) }
 
     before do
-      allow(Integrations::ImpactTrend).to receive(:new).and_return(impact_service_instance)
+      allow(IntegrationServices::ImpactTrend).to receive(:new).and_return(impact_service_instance)
     end
 
     it 'returns the required keys' do

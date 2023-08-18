@@ -5,7 +5,7 @@ RSpec.describe Donations::UpdateBlockchainTransactionStatusJob, type: :job do
     subject(:perform_job) { described_class.perform_now(blockchain_transaction) }
 
     let(:blockchain_transaction) { build(:blockchain_transaction) }
-    let(:service) { Donations::BlockchainTransaction }
+    let(:service) { DonationServices::BlockchainTransaction }
     let(:service_mock) { instance_double(service) }
 
     before do
