@@ -1,4 +1,4 @@
-module GivingServiceservices
+module GivingServices
   module Impact
     class NonProfitImpactCalculator
       attr_reader :non_profit, :value, :currency
