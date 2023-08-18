@@ -1,4 +1,4 @@
-module Givings
+module GivingServices
   module Payment
     class Orchestrator
       attr_reader :payload

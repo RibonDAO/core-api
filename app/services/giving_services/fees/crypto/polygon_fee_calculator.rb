@@ -1,4 +1,4 @@
-module Givings
+module GivingServices
   module Fees
     module Crypto
       class PolygonFeeCalculator

@@ -1,4 +1,4 @@
-module Givings
+module GivingServices
   module Fees
     module Card
       class StripeGlobalCardFeeCalculator

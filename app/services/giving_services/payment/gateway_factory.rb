@@ -1,4 +1,4 @@
-module Givings
+module GivingServices
   module Payment
     class GatewayFactory
       attr_reader :gateway

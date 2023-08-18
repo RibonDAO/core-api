@@ -1,4 +1,4 @@
-module Givings
+module GivingServices
   module Fees
     class FeeCalculator
       attr_reader :value, :kind, :currency
