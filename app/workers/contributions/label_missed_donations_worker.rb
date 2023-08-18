@@ -5,7 +5,7 @@ module Contributions
 
     def perform(*_args)
       Donation.without_label.find_each do |donation|
-        Contributions::TicketLabeling.new(donation:).label_donation
+        ContributionServices::TicketLabeling.new(donation:).label_donation
       end
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })

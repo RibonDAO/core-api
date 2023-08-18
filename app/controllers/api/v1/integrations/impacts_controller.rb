@@ -27,7 +27,7 @@ module Api
         end
 
         def impact_service
-          @impact_service ||= Integrations::ImpactTrend.new(integration:, start_date:, end_date:)
+          @impact_service ||= IntegrationServices::ImpactTrend.new(integration:, start_date:, end_date:)
         end
       end
     end

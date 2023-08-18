@@ -4,7 +4,7 @@ module Donations
     sidekiq_options retry: 3
 
     def perform(donation_blockchain_transaction)
-      Donations::DonationBlockchainTransaction.new(donation_blockchain_transaction:).update_status
+      DonationServices::DonationBlockchainTransaction.new(donation_blockchain_transaction:).update_status
     end
   end
 end
