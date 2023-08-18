@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Givings::Fees::FeeCalculator, type: :service do
+RSpec.describe GivingServices::Fees::FeeCalculator, type: :service do
   subject(:service) { described_class.new(value:, kind:, currency:) }
 
-  let(:stripe_card_service_class) { Givings::Fees::Card::StripeCardFeeCalculator }
-  let(:stripe_global_card_service_class) { Givings::Fees::Card::StripeGlobalCardFeeCalculator }
+  let(:stripe_card_service_class) { GivingServices::Fees::Card::StripeCardFeeCalculator }
+  let(:stripe_global_card_service_class) { GivingServices::Fees::Card::StripeGlobalCardFeeCalculator }
 
   let!(:card_service_instance) do
     mock_instance(klass: stripe_card_service_class,

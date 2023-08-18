@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Givings::Fees::Crypto::PolygonFeeCalculator, type: :service do
+RSpec.describe GivingServices::Fees::Crypto::PolygonFeeCalculator, type: :service do
   subject(:service) { described_class.new(currency:) }
 
   describe '#calculate_fee' do

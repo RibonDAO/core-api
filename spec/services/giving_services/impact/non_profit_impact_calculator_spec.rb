@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Givings::Impact::NonProfitImpactCalculator, type: :service do
+RSpec.describe GivingServices::Impact::NonProfitImpactCalculator, type: :service do
   subject(:service) { described_class.new(non_profit:, value:, currency:) }
 
   let(:non_profit) { create(:non_profit) }

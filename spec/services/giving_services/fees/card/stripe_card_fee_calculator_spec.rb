@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Givings::Fees::Card::StripeCardFeeCalculator, type: :service do
+RSpec.describe GivingServices::Fees::Card::StripeCardFeeCalculator, type: :service do
   subject(:service) { described_class.new(value:, currency:) }
 
   describe '#calculate_fee' do

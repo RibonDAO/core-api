@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Givings::Payment::GatewayFactory, type: :service do
+RSpec.describe GivingServices::Payment::GatewayFactory, type: :service do
   subject(:service_call) { described_class.new(gateway_symbol).call }
 
   describe '#call' do
