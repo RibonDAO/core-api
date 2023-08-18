@@ -14,7 +14,7 @@ module Donations
       private
 
       def update_status(blockchain_transaction)
-        Donations::BlockchainTransaction.new(blockchain_transaction:).update_status
+        DonationServices::BlockchainTransaction.new(blockchain_transaction:).update_status
       rescue StandardError => e
         Reporter.log(error: e)
       end
