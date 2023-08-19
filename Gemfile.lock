@@ -294,7 +294,7 @@ GEM
     pkg-config (1.4.9)
     prettier_print (1.1.0)
     public_suffix (5.0.0)
-    puma (5.6.4)
+    puma (5.6.7)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.0)
@@ -535,7 +535,7 @@ DEPENDENCIES
   nio4r
   omniauth-google-oauth2
   pg (~> 1.1)
-  puma (= 5.6.4)
+  puma (= 5.6.7)
   rack-cors
   rails (~> 7.0.1)
   rails-observers
