@@ -200,4 +200,16 @@ RSpec.describe Contribution, type: :model do
       expect(described_class.with_cause_receiver.pluck(:id)).to match_array(contributions.pluck(:id))
     end
   end
+
+  describe '.with_payment_in_blockchain' do
+    before do
+      create(:contribution, person_payment: create(:person_payment, :with_payment_in_blockchain), id: 1)
+      create(:contribution, person_payment: create(:person_payment, :with_payment_in_blockchain), id: 2)
+      create(:contribution, person_payment: create(:person_payment), id: 3)
+    end
+
+    it 'returns all the contributions which have a payment in blockchain already' do
+      expect(described_class.with_payment_in_blockchain.pluck(:id)).to match_array [1, 2]
+    end
+  end
 end

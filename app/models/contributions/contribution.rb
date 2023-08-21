@@ -56,6 +56,10 @@ class Contribution < ApplicationRecord
   scope :with_paid_status, lambda {
     joins(:person_payment).where(person_payments: { status: :paid })
   }
+  scope :with_payment_in_blockchain, lambda {
+    joins(person_payment: :person_blockchain_transactions)
+      .where(person_blockchain_transactions: { treasure_entry_status: :success })
+  }
   scope :with_cause_receiver, lambda {
     where(receiver_type: 'Cause')
   }

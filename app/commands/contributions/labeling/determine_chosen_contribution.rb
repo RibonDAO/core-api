@@ -25,12 +25,14 @@ module Contributions
       def contributions_with_tickets_balance
         @contributions_with_tickets_balance ||= Contribution
                                                 .with_paid_status
+                                                .with_payment_in_blockchain
                                                 .with_tickets_balance_higher_than(donation.value)
       end
 
       def contributions_with_fees_balance
         @contributions_with_fees_balance ||= Contribution
                                              .with_paid_status
+                                             .with_payment_in_blockchain
                                              .with_fees_balance_higher_than(donation.value)
       end
 
