@@ -7,19 +7,9 @@ RSpec.describe Donations::HandlePostDonationJob, type: :job do
     let(:donation) { create(:donation) }
 
     before do
-      allow(Mailers::SendDonationsEmailJob).to receive(:perform_later)
-      allow(Mailers::SendOneDonationEmailJob).to receive(:perform_later)
       allow(Donations::DecreasePoolBalanceJob).to receive(:perform_later)
       allow(Events::Donations::SendDonationEventJob).to receive(:perform_later)
       perform_job
-    end
-
-    it 'calls the send donations email job' do
-      expect(Mailers::SendDonationsEmailJob).to have_received(:perform_later).with(donation:)
-    end
-
-    it 'calls the send one donation email job' do
-      expect(Mailers::SendOneDonationEmailJob).to have_received(:perform_later).with(donation:)
     end
 
     it 'calls the decrease pool balance job' do
