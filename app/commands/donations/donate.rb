@@ -5,7 +5,7 @@ module Donations
     prepend SimpleCommand
     attr_reader :non_profit, :integration, :donation, :user, :platform, :skip_allowance
 
-    def initialize(integration:, non_profit:, user:, platform:, skip_allowance: false)
+    def initialize(integration:, non_profit:, user:, platform:, skip_allowance: false, set_utm: nil)
       @integration = integration
       @non_profit = non_profit
       @user = user
@@ -26,7 +26,7 @@ module Donations
       set_user_last_donation_at
       set_last_donated_cause
       label_donation
-
+      set_utm
       donation
     end
 
