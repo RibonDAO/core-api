@@ -41,6 +41,7 @@ class PersonPayment < ApplicationRecord
   has_many :person_blockchain_transactions
   has_one :person_payment_fee
   has_one :contribution
+  has_one :utm, as: :trackable
 
   validates :paid_date, :status, :payment_method, presence: true
 

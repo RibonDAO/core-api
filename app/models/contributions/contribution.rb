@@ -16,7 +16,6 @@ class Contribution < ApplicationRecord
   belongs_to :person_payment
   
   has_one :contribution_balance
-  has_one :utm, as: :trackable
 
   has_many :donation_contributions
   has_many :donations, through: :donation_contributions

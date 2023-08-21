@@ -17,7 +17,7 @@ class Donation < ApplicationRecord
   belongs_to :user
 
   has_one :donation_batch
-  has_ono :utm, as: :trackable
+  has_one :utm, as: :trackable
   has_one :donation_contribution
   has_many :donation_blockchain_transactions
 
