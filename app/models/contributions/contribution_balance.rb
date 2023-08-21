@@ -31,6 +31,10 @@ class ContributionBalance < ApplicationRecord
     joins(contribution: :person_payment)
       .where(person_payments: { status: :paid })
   }
+  scope :with_payment_in_blockchain, lambda {
+    joins(contribution: { person_payment: :person_blockchain_transactions })
+      .where(person_blockchain_transactions: { treasure_entry_status: :success })
+  }
 
   scope :with_fees_balance, -> { where('fees_balance_cents > 0') }
   scope :with_tickets_balance, -> { where('tickets_balance_cents > 0') }
