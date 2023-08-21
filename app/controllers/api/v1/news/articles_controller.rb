@@ -65,7 +65,7 @@ module Api
         end
 
         def language
-          return 'pt-BR' if I18n.locale == :'pt-BR'
+          return I18n.locale if I18n.locale == 'pt-BR'
 
           'en-US'
         end

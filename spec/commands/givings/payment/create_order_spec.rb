@@ -37,6 +37,10 @@ describe Givings::Payment::CreateOrder do
         expect { command }.to change(PersonPayment, :count).by(1)
       end
 
+      it 'creates a new subscription' do
+        expect { command }.to change(Subscription, :count).by(1)
+      end
+
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
         allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         allow(PersonPayment).to receive(:create!).and_return(person_payment)
@@ -70,10 +74,15 @@ describe Givings::Payment::CreateOrder do
             ), pool: nil)
         end
 
-        it 'update the status of payment_person' do
+        it 'update the status of payment_person and subscription and external_id' do
           command
           person_payment = PersonPayment.where(offer:).last
+          subscription = person_payment.subscription
+
           expect(person_payment.status).to eq('paid')
+          expect(subscription.status).to eq('active')
+          expect(subscription.external_id).to eq(command.result[:external_subscription_id])
+          expect(person_payment.external_id).to eq(command.result[:external_invoice_id])
         end
       end
     end
@@ -98,6 +107,10 @@ describe Givings::Payment::CreateOrder do
 
       it 'creates a PersonPayment' do
         expect { command }.to change(PersonPayment, :count).by(1)
+      end
+
+      it 'does not create a new subscription' do
+        expect { command }.not_to change(Subscription, :count)
       end
 
       it 'calls Service::Givings::Payment::Orchestrator with correct payload' do

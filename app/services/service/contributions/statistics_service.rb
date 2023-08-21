@@ -88,7 +88,7 @@ module Service
       def boost_amount
         return 0 if balance&.contribution_increased_amount_cents.nil?
 
-        balance.contribution_increased_amount_cents / 100.0
+        (balance.contribution_increased_amount_cents / 100.0) - ribon_fee
       end
 
       def total_increase_percentage
@@ -96,7 +96,7 @@ module Service
       end
 
       def total_amount_to_cause
-        initial_amount + boost_amount - ribon_fee
+        initial_amount + boost_amount
       end
 
       def ribon_fee

@@ -1,0 +1,379 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://owlracle.info/poly/gas
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Date:
+      - Thu, 06 Jul 2023 14:43:53 GMT
+      Content-Type:
+      - text/plain; charset=utf-8
+      Content-Length:
+      - '60'
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Express
+      Location:
+      - https://api.owlracle.info/v2/poly/gas?
+      Vary:
+      - Accept
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=g0KE%2BmO2yw%2Bpzfk8YnaLbSlvWqm4VBPk0US9RFqjrpk8Xt4ZB1dLIUUsEGeB1KlA5pQe14cO8QyDfA4G8Kadtuq3d4H1CP9Yi1FeWy9wWnnBZiEdWn666aCvCTzG43t0"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7e289f6058a12ec5-BSB
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: Found. Redirecting to https://api.owlracle.info/v2/poly/gas?
+  recorded_at: Thu, 06 Jul 2023 14:43:53 GMT
+- request:
+    method: get
+    uri: https://api.owlracle.info/v2/poly/gas
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Thu, 06 Jul 2023 14:43:54 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '60'
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"3c-GZ/SkDPSLbrxETaPN3jD/YxoIJU"
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=Sz8Tm8s5Egy5osdiRVUVDPpdLCDWrbzg5U%2BKaTaXcN1uexiTWVrH5%2F7R3d4QEMYq7PzXWk2hPX19%2BRSYdh94UOTLSnl7zOcAY5fq%2FBthl%2Bw2rtkFaOA5iq%2BMP4JmWRYIiKV9oA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7e289f64784d2ebe-BSB
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"error":{"type":"Bad Request","message":"Missing API key"}}'
+  recorded_at: Thu, 06 Jul 2023 14:43:53 GMT
+- request:
+    method: get
+    uri: http://economia.awesomeapi.com.br/json/last/brl-usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 308
+      message: Permanent Redirect
+    headers:
+      Date:
+      - Thu, 06 Jul 2023 14:43:54 GMT
+      Content-Type:
+      - text/html
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Location:
+      - https://economia.awesomeapi.com.br/json/last/brl-usd
+      Cf-Cache-Status:
+      - BYPASS
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=FmTjzIbKZsqxeZYWIvyobvbiecK%2BG2rguH9n9eq53GxUfbbj1vNSKdYLwOyIj0ZVbe%2BYB9SeQ%2BJ%2FxOsyALd%2B5rzsTbjtLX8WMOX%2B%2BEexh%2B8pCHcBgSKAnRVFCiSoCnGlKwTWPKnG%2FYxWeh1L"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7e289f67ed592ece-BSB
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
+        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n<script
+        defer src=\"https://static.cloudflareinsights.com/beacon.min.js/v52afc6f149f6479b8c77fa569edb01181681764108816\"
+        integrity=\"sha512-jGCTpDpBAYDGNYR5ztKt4BQPGef1P0giN6ZGVUi835kFF88FOmmn8jBQWNgrNd8g/Yu421NdgWhwQoaOPFflDw==\"
+        data-cf-beacon='{\"rayId\":\"7e289f67ed592ece\",\"version\":\"2023.4.0\",\"b\":1,\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"si\":100}'
+        crossorigin=\"anonymous\"></script>\n</body>\r\n</html>\r\n"
+  recorded_at: Thu, 06 Jul 2023 14:43:54 GMT
+- request:
+    method: get
+    uri: https://economia.awesomeapi.com.br/json/last/brl-usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 06 Jul 2023 14:43:54 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD,OPTIONS,GET,POST
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Worker-Token
+      Content-Security-Policy:
+      - 'img-src ''self'' *.awesomeapi.com.br;default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src
+        ''self'' https: data:;form-action ''self'';frame-ancestors ''self'';object-src
+        ''none'';script-src ''self'';script-src-attr ''none'';style-src ''self'' https:
+        ''unsafe-inline'';upgrade-insecure-requests'
+      Cross-Origin-Opener-Policy:
+      - unsafe-none
+      Cross-Origin-Resource-Policy:
+      - cross-origin
+      X-Dns-Prefetch-Control:
+      - 'off'
+      Expect-Ct:
+      - max-age=0
+      X-Frame-Options:
+      - SAMEORIGIN
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Download-Options:
+      - noopen
+      X-Content-Type-Options:
+      - nosniff
+      Origin-Agent-Cluster:
+      - "?1"
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - no-referrer
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
+      Pragma:
+      - cache
+      Etag:
+      - W/"f3-TSFgsa5Gf33kTZ+YI2UH0gA2yfs"
+      X-Cache-Status:
+      - STALE
+      Cf-Cache-Status:
+      - MISS
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=6YLyoEbMhhj4NCHDKLakIs2yE2m5lrgvLI1o4ExoDaeOQ5eK7o74UZTYMwV4%2BlcYpfKAYj6JXOqJgUSzLXfdMXN%2BDqwH7gYCjxuu3xWJMux3qSnMrD5N7LbWKJd8PexMc6SGgbw2de5KA3kt"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7e289f685a4b2eca-BSB
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"BRLUSD":{"code":"BRL","codein":"USD","name":"Real Brasileiro/Dólar
+        Americano","high":"0.2064","low":"0.2044","varBid":"-0.0015","pctChange":"-0.73","bid":"0.2046","ask":"0.2047","timestamp":"1688652988","create_date":"2023-07-06
+        11:16:28"}}'
+  recorded_at: Thu, 06 Jul 2023 14:43:54 GMT
+- request:
+    method: get
+    uri: http://economia.awesomeapi.com.br/json/last/usd-brl
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 308
+      message: Permanent Redirect
+    headers:
+      Date:
+      - Thu, 06 Jul 2023 14:43:54 GMT
+      Content-Type:
+      - text/html
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Location:
+      - https://economia.awesomeapi.com.br/json/last/usd-brl
+      Cf-Cache-Status:
+      - BYPASS
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=FsGt2a5wP4xU%2FDouf2eivKSXUy%2FR%2FXL8%2Fmd7cITj40DEbIjcFFIYyXowVi0A0Rqv0MVELRGgrCmOuZUutshgB04%2FXGkg2UrpAxij4vAsSFMezXljY7%2FaMmsfhJ1fBHvqmKQRSxIOvzBM1631"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7e289f697da52ec5-BSB
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
+        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n<script
+        defer src=\"https://static.cloudflareinsights.com/beacon.min.js/v52afc6f149f6479b8c77fa569edb01181681764108816\"
+        integrity=\"sha512-jGCTpDpBAYDGNYR5ztKt4BQPGef1P0giN6ZGVUi835kFF88FOmmn8jBQWNgrNd8g/Yu421NdgWhwQoaOPFflDw==\"
+        data-cf-beacon='{\"rayId\":\"7e289f697da52ec5\",\"version\":\"2023.4.0\",\"b\":1,\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"si\":100}'
+        crossorigin=\"anonymous\"></script>\n</body>\r\n</html>\r\n"
+  recorded_at: Thu, 06 Jul 2023 14:43:54 GMT
+- request:
+    method: get
+    uri: https://economia.awesomeapi.com.br/json/last/usd-brl
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 06 Jul 2023 14:43:54 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD,OPTIONS,GET,POST
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Worker-Token
+      Content-Security-Policy:
+      - 'img-src ''self'' *.awesomeapi.com.br;default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src
+        ''self'' https: data:;form-action ''self'';frame-ancestors ''self'';object-src
+        ''none'';script-src ''self'';script-src-attr ''none'';style-src ''self'' https:
+        ''unsafe-inline'';upgrade-insecure-requests'
+      Cross-Origin-Opener-Policy:
+      - unsafe-none
+      Cross-Origin-Resource-Policy:
+      - cross-origin
+      X-Dns-Prefetch-Control:
+      - 'off'
+      Expect-Ct:
+      - max-age=0
+      X-Frame-Options:
+      - SAMEORIGIN
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Download-Options:
+      - noopen
+      X-Content-Type-Options:
+      - nosniff
+      Origin-Agent-Cluster:
+      - "?1"
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - no-referrer
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
+      Pragma:
+      - cache
+      Etag:
+      - W/"f0-kKz0dDWbmSk01T49HH9avK61GoE"
+      X-Cache-Status:
+      - STALE
+      Cf-Cache-Status:
+      - EXPIRED
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=p2kf6QELs5ASCZEvjP8NAUqV3U6l4tAv9vZOVEHyeBxPYT%2BqotZY2X%2FVW9N7hfU6Xs7WPRkjYakGt%2FgMPhiQMQlu%2FFfolk6MG083YwW9DS0pyZzmi%2Fl0ufjljl7e1pc8ooBMvQSFsPhJ0MYv"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 7e289f6a5e162ecd-BSB
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"USDBRL":{"code":"USD","codein":"BRL","name":"Dólar Americano/Real
+        Brasileiro","high":"4.9043","low":"4.843","varBid":"0.0524","pctChange":"1.08","bid":"4.8997","ask":"4.9008","timestamp":"1688654414","create_date":"2023-07-06
+        11:40:14"}}'
+  recorded_at: Thu, 06 Jul 2023 14:43:54 GMT
+recorded_with: VCR 6.1.0

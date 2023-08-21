@@ -8,22 +8,24 @@
 #  payment_method :string
 #  platform       :string
 #  receiver_type  :string
-#  status         :string
+#  status         :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  external_id    :string
-#  offer_id       :uuid
+#  integration_id :bigint
+#  offer_id       :bigint
 #  payer_id       :uuid
-#  receiver_id    :uuid
+#  receiver_id    :bigint
 #
 FactoryBot.define do
   factory :subscription do
     cancel_date { nil }
     association :payer, factory: :customer
-    status { nil }
-    payment_method { nil }
+    status { :active }
+    payment_method { 'credit_card' }
     offer { build(:offer) }
     receiver { build(:non_profit) }
     external_id { nil }
+    association :integration
   end
 end

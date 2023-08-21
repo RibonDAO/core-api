@@ -33,6 +33,7 @@ class NonProfit < ApplicationRecord
   has_many :pools, through: :non_profit_pools
   has_many :stories, dependent: :delete_all
   has_many :person_payments, as: :receiver
+  has_many :subscriptions, as: :receiver
 
   accepts_nested_attributes_for :stories
   accepts_nested_attributes_for :non_profit_impacts
@@ -54,6 +55,16 @@ class NonProfit < ApplicationRecord
 
   def impact_by_ticket(date: Time.zone.now)
     impact_for(date:)&.impact_by_ticket
+  end
+
+  def formatted_impact_by_ticket(date: Time.zone.now)
+    ::Impact::Normalizer.new(self, impact_by_ticket(date:)).normalize
+  rescue Exceptions::ImpactNormalizationError
+    ['', '', '']
+  end
+
+  def impact_by_ticket_text(date: Time.zone.now)
+    formatted_impact_by_ticket(date:).join(' ')
   end
 
   def wallet_address

@@ -16,7 +16,8 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                                  logo_description main_image_description
                                                  background_image_description confirmation_image_description
                                                  impact_by_ticket stories cause status non_profit_impacts
-                                                 confirmation_image])
+                                                 confirmation_image formatted_impact_by_ticket
+                                                 impact_by_ticket_text])
     end
 
     it 'returns 2 non profits' do
@@ -44,19 +45,14 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
   describe 'GET /free_donation_non_profits' do
     subject(:request) { get '/api/v1/free_donation_non_profits' }
 
-    let!(:cause) { create(:cause) }
-    let!(:pool) { create(:pool, cause:, token:) }
-    let(:chain) { create(:chain) }
-    let(:token) { create(:token, chain:) }
-
     before do
-      create(:ribon_config, default_chain_id: chain.chain_id)
-      create(:pool_balance, pool:, balance: 1000)
+      create(:chain)
+      create(:ribon_config)
     end
 
     describe 'GET /index with 2 non profits available' do
       before do
-        create_list(:non_profit, 2, cause:)
+        create_list(:non_profit, 2)
       end
 
       it 'returns a list of non profits' do
@@ -67,7 +63,8 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                                    logo_description main_image_description
                                                    background_image_description confirmation_image_description
                                                    impact_by_ticket stories cause status non_profit_impacts
-                                                   confirmation_image])
+                                                   confirmation_image formatted_impact_by_ticket
+                                                   impact_by_ticket_text])
       end
 
       it 'returns 2 non profits' do
@@ -79,12 +76,12 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
 
     describe 'GET /index with 1 non profit available because of pool balance' do
       let!(:cause) { create(:cause) }
-      let!(:pool) { create(:pool, cause:, token:) }
+      let!(:pool) { create(:pool, cause:) }
 
       before do
-        create(:pool_balance, pool:, balance: 1000)
-        create(:non_profit, cause:, status: :active)
+        create(:pool_balance, pool:, balance: 0)
         create(:non_profit)
+        create_list(:non_profit, 2, cause:, status: :active)
       end
 
       it 'returns 1 non profit' do
@@ -139,7 +136,7 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                       logo_description main_image_description
                                       background_image_description confirmation_image_description
                                       main_image name status stories updated_at wallet_address non_profit_impacts
-                                      confirmation_image])
+                                      confirmation_image formatted_impact_by_ticket impact_by_ticket_text])
     end
   end
 
@@ -155,7 +152,7 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
                                       logo_description main_image_description
                                       background_image_description confirmation_image_description
                                       main_image name status stories updated_at wallet_address non_profit_impacts
-                                      confirmation_image])
+                                      confirmation_image formatted_impact_by_ticket impact_by_ticket_text])
     end
   end
 
