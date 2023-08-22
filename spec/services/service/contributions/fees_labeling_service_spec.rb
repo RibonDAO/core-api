@@ -6,24 +6,33 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
   end
 
   describe '#spread_fee_to_payers' do
-    let(:person_payment) { create(:person_payment, usd_value_cents: 1000, status: :paid) }
+    let(:person_payment) do
+      create(:person_payment, :with_payment_in_blockchain,
+             usd_value_cents: 1000, status: :paid)
+    end
     let(:contribution) { create(:contribution, person_payment:) }
     let!(:contribution_balance1) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
-                                                 person_payment: create(:person_payment, status: :paid)),
+                                                 person_payment: create(:person_payment,
+                                                                        :with_payment_in_blockchain,
+                                                                        status: :paid)),
              fees_balance_cents: 50)
     end
     let!(:contribution_balance2) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
-                                                 person_payment: create(:person_payment, status: :paid)),
+                                                 person_payment: create(:person_payment,
+                                                                        :with_payment_in_blockchain,
+                                                                        status: :paid)),
              fees_balance_cents: 30)
     end
     let!(:contribution_balance3) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
-                                                 person_payment: create(:person_payment, status: :paid)),
+                                                 person_payment: create(:person_payment,
+                                                                        :with_payment_in_blockchain,
+                                                                        status: :paid)),
              fees_balance_cents: 20)
     end
 
@@ -60,28 +69,36 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     let!(:contribution_balance1) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
-                                                 person_payment: create(:person_payment, status: :paid)),
+                                                 person_payment: create(:person_payment,
+                                                                        :with_payment_in_blockchain,
+                                                                        status: :paid)),
              fees_balance_cents: 5)
     end
     # 13.6363
     let!(:contribution_balance2) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
-                                                 person_payment: create(:person_payment, status: :paid)),
+                                                 person_payment: create(:person_payment,
+                                                                        :with_payment_in_blockchain,
+                                                                        status: :paid)),
              fees_balance_cents: 15)
     end
     # 27.2727
     let!(:contribution_balance3) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
-                                                 person_payment: create(:person_payment, status: :paid)),
+                                                 person_payment: create(:person_payment,
+                                                                        :with_payment_in_blockchain,
+                                                                        status: :paid)),
              fees_balance_cents: 30)
     end
     # 54.5454
     let!(:contribution_balance4) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
-                                                 person_payment: create(:person_payment, status: :paid)),
+                                                 person_payment: create(:person_payment,
+                                                                        :with_payment_in_blockchain,
+                                                                        status: :paid)),
              fees_balance_cents: 60)
     end
 

@@ -19,20 +19,27 @@ RSpec.describe ContributionQueries, type: :model do
     context 'when the receiver is the same' do
       let!(:contribution_balance1) do
         create(:contribution_balance,
-               contribution: create(:contribution, receiver: contribution.receiver,
-                                                   person_payment: create(:person_payment, status: :paid)),
+               contribution: create(:contribution,
+                                    receiver: contribution.receiver,
+                                    person_payment: create(:person_payment,
+                                                           :with_payment_in_blockchain,
+                                                           status: :paid)),
                fees_balance_cents: 5)
       end
       let!(:contribution_balance2) do
         create(:contribution_balance,
                contribution: create(:contribution, receiver: contribution.receiver,
-                                                   person_payment: create(:person_payment, status: :paid)),
+                                                   person_payment: create(:person_payment,
+                                                                          :with_payment_in_blockchain,
+                                                                          status: :paid)),
                fees_balance_cents: 15)
       end
       let!(:contribution_balance3) do
         create(:contribution_balance,
                contribution: create(:contribution, receiver: contribution.receiver,
-                                                   person_payment: create(:person_payment, status: :paid)),
+                                                   person_payment: create(:person_payment,
+                                                                          :with_payment_in_blockchain,
+                                                                          status: :paid)),
                fees_balance_cents: 25)
       end
 
