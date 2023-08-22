@@ -9,7 +9,10 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
     { email: 'user@test.com', tax_id: '111.111.111-11', offer_id: offer.id,
       external_id: 'pi_123', country: 'Brazil', city: 'Brasilia', state: 'DF',
       integration_id: integration.id, cause_id: cause&.id, non_profit_id: non_profit&.id,
-      payment_method_id:, payment_method_type:, name: 'name' }
+      payment_method_id:, payment_method_type:, name: 'name',
+      utm_source: 'utm source',
+      utm_medium: 'utm medium',
+      utm_campaign: 'utm campaign' }
   end
   let(:payment_method_id) { 'pm_123' }
   let(:payment_method_type) { 'google_pay' }
@@ -35,6 +38,10 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
         command_double(klass: ::Givings::Payment::CreateOrder, success: true)
       end
 
+      before do
+        allow(Tracking::AddUtm).to receive(:call)
+      end
+
       it 'returns http status created' do
         request
 
@@ -51,6 +58,11 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
         request
 
         expect(response).to have_http_status :unprocessable_entity
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 

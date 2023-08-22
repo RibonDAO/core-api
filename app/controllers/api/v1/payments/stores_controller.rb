@@ -8,6 +8,7 @@ module Api
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::StorePay, order_params)
 
           if command.success?
+            Tracking::AddUtm.call(utm_params:, trackable: command.result)
             render json: command.result, status: :created
           else
             render_errors(command.errors)
@@ -61,6 +62,12 @@ module Api
         def payment_params
           params.permit(:email, :tax_id, :offer_id, :country, :city, :state, :integration_id,
                         :cause_id, :non_profit_id, :name, :payment_method_id, :payment_method_type)
+        end
+
+        def utm_params
+          params.permit(:utm_source,
+                        :utm_medium,
+                        :utm_campaign)
         end
       end
     end
