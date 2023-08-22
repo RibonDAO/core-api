@@ -11,7 +11,10 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
       integration_id: integration.id, cause_id: cause&.id, non_profit_id: non_profit&.id,
       platform: 'web',
       card: { cvv: 555, number: '4222 2222 2222 2222', name: 'User Test',
-              expiration_month: '05', expiration_year: '25' } }
+              expiration_month: '05', expiration_year: '25' },
+      utm_source: 'utm source',
+      utm_medium: 'utm medium',
+      utm_campaign: 'utm campaign' }
   end
   let(:create_order_command_double) do
     command_double(klass: ::Givings::Payment::CreateOrder)
@@ -57,10 +60,19 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
         command_double(klass: ::Givings::Payment::CreateOrder, success: true)
       end
 
+      before do
+        allow(Tracking::AddUtm).to receive(:call)
+      end
+
       it 'returns http status created' do
         request
 
         expect(response).to have_http_status :created
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 

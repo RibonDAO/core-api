@@ -8,12 +8,16 @@ RSpec.describe 'Api::V1::Donations', type: :request do
     let(:non_profit) { create(:non_profit) }
     let(:user) { create(:user) }
     let(:platform) { 'web' }
+
     let(:params) do
       {
         integration_id: integration.id,
         non_profit_id: non_profit.id,
         user_id: user.id,
-        platform:
+        platform:,
+        utm_source: 'utm source',
+        utm_medium: 'utm medium',
+        utm_campaign: 'utm campaign'
       }
     end
 
@@ -62,6 +66,7 @@ RSpec.describe 'Api::V1::Donations', type: :request do
         allow(Donations::Donate).to receive(:call)
           .and_return(command_double(klass: Donations::Donate,
                                      success: true, result: donation))
+        allow(Tracking::AddUtm).to receive(:call)
       end
 
       it 'returns http status ok' do
@@ -75,6 +80,11 @@ RSpec.describe 'Api::V1::Donations', type: :request do
 
         expect(response_json['donation'].keys)
           .to match_array %w[id created_at integration_id non_profit_id updated_at user_id value platform]
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
   end

@@ -26,7 +26,6 @@
 #
 class PersonPayment < ApplicationRecord
   include UuidHelper
-
   before_create :set_currency
   after_create :set_fees
   after_create :set_liquid_value_cents
@@ -48,13 +47,8 @@ class PersonPayment < ApplicationRecord
   scope :without_contribution, -> { where.missing(:contribution) }
 
   enum status: {
-    processing: 0,
-    paid: 1,
-    failed: 2,
-    refunded: 3,
-    refund_failed: 4,
-    requires_action: 5,
-    blocked: 6,
+    processing: 0, paid: 1, failed: 2, refunded: 3,
+    refund_failed: 4, requires_action: 5, blocked: 6,
     requires_confirmation: 7
   }
 

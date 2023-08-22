@@ -9,7 +9,10 @@ RSpec.describe 'Api::V1::Payments::Pix', type: :request do
     { email: 'user@test.com', tax_id: '111.111.111-11', offer_id: offer.id, name: 'Test User',
       external_id: 'pi_123', country: 'Brazil', city: 'Brasilia', state: 'DF',
       integration_id: integration.id, cause_id: cause&.id, non_profit_id: non_profit&.id,
-      platform: 'web' }
+      platform: 'web',
+      utm_source: 'utm source',
+      utm_medium: 'utm medium',
+      utm_campaign: 'utm campaign'}
   end
   let(:create_order_command_double) do
     command_double(klass: ::Givings::Payment::CreateOrder)
@@ -32,10 +35,19 @@ RSpec.describe 'Api::V1::Payments::Pix', type: :request do
         command_double(klass: ::Givings::Payment::CreateOrder, success: true)
       end
 
+      before do
+        allow(Tracking::AddUtm).to receive(:call)
+      end
+
       it 'returns http status created' do
         request
 
         expect(response).to have_http_status :created
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 
