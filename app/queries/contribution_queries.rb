@@ -9,10 +9,10 @@ class ContributionQueries
 
   def ordered_feeable_contribution_balances
     ContributionBalance
+      .created_before(contribution.created_at)
       .with_fees_balance
       .with_paid_status
       .with_payment_in_blockchain
-      .created_before(contribution.created_at)
       .where.not(contribution_id: contribution.id)
       .joins(:contribution).where(contributions: { receiver: contribution.receiver })
       .order(fees_balance_cents: :asc)
@@ -20,10 +20,10 @@ class ContributionQueries
 
   def ordered_feeable_tickets_contribution_balances
     ContributionBalance
+      .created_before(contribution.created_at)
       .with_tickets_balance
       .with_paid_status
       .with_payment_in_blockchain
-      .created_before(contribution.created_at)
       .where.not(contribution_id: contribution.id)
       .joins(:contribution).where(contributions: { receiver: contribution.receiver })
       .order(tickets_balance_cents: :asc)

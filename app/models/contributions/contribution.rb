@@ -63,7 +63,7 @@ class Contribution < ApplicationRecord
   scope :with_cause_receiver, lambda {
     where(receiver_type: 'Cause')
   }
-  scope :created_before, ->(date) { where('created_at < ?', date) }
+  scope :created_before, ->(date) { where('contributions.created_at < ?', date) }
 
   def set_contribution_balance
     return unless contribution_balance.nil?
