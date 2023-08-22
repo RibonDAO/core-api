@@ -5,9 +5,11 @@ describe Tracking::AddUtm do
     subject(:command) do
       described_class.call(
         trackable: user,
-        utm_source: 'source',
-        utm_medium: 'medium',
-        utm_campaign: 'campaign'
+        utm_params: {
+          utm_source: 'source',
+          utm_medium: 'medium',
+          utm_campaign: 'campaign'
+        }
       )
     end
 
@@ -30,17 +32,16 @@ describe Tracking::AddUtm do
     end
 
     context 'when does not send all parameters correctly' do
-      let(:utm_source) { nil }
-      let(:utm_medium) { nil }
-      let(:utm_campaign) { nil }
 
       it 'expects not to create a new utm' do
         expect do
           described_class.call(
             trackable: create(:user),
-            utm_source: nil,
-            utm_medium: nil,
-            utm_campaign: nil
+            utm_params: {
+              utm_source: nil,
+              utm_medium: nil,
+              utm_campaign: nil
+            }
           )
         end.not_to change(Utm, :count)
       end
