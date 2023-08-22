@@ -12,7 +12,7 @@ RSpec.describe 'Api::V1::Payments::Pix', type: :request do
       platform: 'web',
       utm_source: 'utm source',
       utm_medium: 'utm medium',
-      utm_campaign: 'utm campaign'}
+      utm_campaign: 'utm campaign' }
   end
   let(:create_order_command_double) do
     command_double(klass: ::Givings::Payment::CreateOrder)
