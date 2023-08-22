@@ -38,6 +38,7 @@ class ContributionBalance < ApplicationRecord
 
   scope :with_fees_balance, -> { where('fees_balance_cents > 0') }
   scope :with_tickets_balance, -> { where('tickets_balance_cents > 0') }
+  scope :created_before, ->(date) { where('created_at < ?', date) }
 
   def enough_tickets_balance?(amount)
     tickets_balance_cents >= amount
