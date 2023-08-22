@@ -14,6 +14,7 @@ class PersonBlockchainTransaction < ApplicationRecord
 
   after_create :update_status_from_eth_chain
   after_update :increase_pool_balance, if: :success?
+  after_update :charge_contribution_fees
 
   enum treasure_entry_status: {
     processing: 0,
@@ -35,6 +36,13 @@ class PersonBlockchainTransaction < ApplicationRecord
 
     pool = person_payment.receiver.default_pool
     Service::Donations::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
+  end
+
+  def charge_contribution_fees
+    return unless treasure_entry_status_changed? && success?
+    return unless person_payment.receiver_type == 'Cause'
+
+    Service::Contributions::FeesLabelingService.new(contribution: person_payment.contribution).spread_fee_to_payers
   end
 
   def retry?

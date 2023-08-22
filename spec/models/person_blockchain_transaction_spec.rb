@@ -93,4 +93,47 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
       end
     end
   end
+
+  describe '#charge_contribution_fees' do
+    let!(:cause) { create(:cause) }
+    let!(:person_payment) { create(:person_payment, receiver: cause) }
+    let!(:contribution) { create(:contribution, person_payment:) }
+    let(:person_blockchain_transaction) do
+      create(:person_blockchain_transaction, person_payment:,
+                                             treasure_entry_status: :success)
+    end
+    let(:fees_service) { Service::Contributions::FeesLabelingService }
+    let(:fees_service_mock) { instance_double(fees_service) }
+
+    before do
+      allow(fees_service).to receive(:new).and_return(fees_service_mock)
+      allow(fees_service_mock).to receive(:spread_fee_to_payers)
+    end
+
+    context 'when the treasury entry status changed to success' do
+      before do
+        allow(person_blockchain_transaction).to receive(:treasure_entry_status_changed?).and_return(true)
+      end
+
+      it 'calls charge_contribution_fees' do
+        person_blockchain_transaction.charge_contribution_fees
+
+        expect(fees_service).to have_received(:new).with(contribution:)
+        expect(fees_service_mock).to have_received(:spread_fee_to_payers)
+      end
+    end
+
+    context 'when the treasury entry status did not change' do
+      before do
+        allow(person_blockchain_transaction).to receive(:treasure_entry_status_changed?).and_return(false)
+      end
+
+      it 'does not call charge_contribution_fees' do
+        person_blockchain_transaction.charge_contribution_fees
+
+        expect(fees_service).not_to have_received(:new)
+        expect(fees_service_mock).not_to have_received(:spread_fee_to_payers)
+      end
+    end
+  end
 end
