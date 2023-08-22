@@ -78,6 +78,10 @@ class Contribution < ApplicationRecord
     Reporter.log(error: e)
   end
 
+  def already_spread_fees?
+    contribution_fees.any?
+  end
+
   def label
     "#{receiver&.name} (#{created_at.strftime('%b/%Y')})"
   end

@@ -212,4 +212,24 @@ RSpec.describe Contribution, type: :model do
       expect(described_class.with_payment_in_blockchain.pluck(:id)).to match_array [1, 2]
     end
   end
+
+  describe '#already_spread_fees?' do
+    let(:contribution) { create(:contribution) }
+
+    context 'when there are contribution fees created' do
+      before do
+        create(:contribution_fee, contribution:)
+      end
+
+      it 'returns true' do
+        expect(contribution.already_spread_fees?).to be_truthy
+      end
+    end
+
+    context 'when there are no contribution fees created' do
+      it 'returns false' do
+        expect(contribution.already_spread_fees?).to be_falsey
+      end
+    end
+  end
 end
