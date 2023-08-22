@@ -47,6 +47,11 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
 
         expect(response).to have_http_status :created
       end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
+      end
     end
 
     context 'when the command is failure' do
@@ -58,11 +63,6 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
         request
 
         expect(response).to have_http_status :unprocessable_entity
-      end
-
-      it 'calls add utm command' do
-        request
-        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 

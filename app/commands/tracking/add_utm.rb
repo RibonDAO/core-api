@@ -4,7 +4,7 @@ module Tracking
 
     attr_reader :utm_source, :utm_medium, :utm_campaign, :trackable
 
-    def initialize(utm_params, trackable:)
+    def initialize(utm_params:, trackable:)
       @utm_source = utm_params[:utm_source]
       @utm_medium = utm_params[:utm_medium]
       @utm_campaign = utm_params[:utm_campaign]
