@@ -32,7 +32,6 @@ describe Tracking::AddUtm do
     end
 
     context 'when does not send all parameters correctly' do
-
       it 'expects not to create a new utm' do
         expect do
           described_class.call(
