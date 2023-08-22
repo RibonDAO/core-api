@@ -19,7 +19,7 @@ class Donation < ApplicationRecord
   has_one :donation_batch
   has_one :donation_contribution
   has_one :utm, as: :trackable
-  
+
   has_many :donation_blockchain_transactions
 
   enum platform: {
