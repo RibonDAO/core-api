@@ -119,4 +119,28 @@ RSpec.describe ContributionBalance, type: :model do
       expect(described_class.created_before(2.days.ago)).to match_array(previous_contributions)
     end
   end
+
+  describe '.confirmed_on_blockchain_before' do
+    let(:recent_contributions) do
+      create_list(:contribution_balance, 2)
+    end
+    let(:previous_contributions) do
+      create_list(:contribution_balance, 2)
+    end
+
+    before do
+      recent_contributions.each do |contribution_balance|
+        create(:person_blockchain_transaction, succeeded_at: 1.day.ago,
+                                               person_payment: contribution_balance.contribution.person_payment)
+      end
+      previous_contributions.each do |contribution_balance|
+        create(:person_blockchain_transaction, succeeded_at: 5.days.ago,
+                                               person_payment: contribution_balance.contribution.person_payment)
+      end
+    end
+
+    it 'returns all the contributions created before the passed date' do
+      expect(described_class.confirmed_on_blockchain_before(2.days.ago)).to match_array(previous_contributions)
+    end
+  end
 end

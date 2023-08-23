@@ -64,6 +64,10 @@ class Contribution < ApplicationRecord
     where(receiver_type: 'Cause')
   }
   scope :created_before, ->(date) { where('contributions.created_at < ?', date) }
+  scope :confirmed_on_blockchain_before, lambda { |date|
+    joins(person_payment: :person_blockchain_transactions)
+      .where(person_blockchain_transactions: { succeeded_at: ..date }).distinct
+  }
 
   def set_contribution_balance
     return unless contribution_balance.nil?

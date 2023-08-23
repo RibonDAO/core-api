@@ -39,6 +39,10 @@ class ContributionBalance < ApplicationRecord
   scope :with_fees_balance, -> { where('fees_balance_cents > 0') }
   scope :with_tickets_balance, -> { where('tickets_balance_cents > 0') }
   scope :created_before, ->(date) { where('contribution_balances.created_at < ?', date) }
+  scope :confirmed_on_blockchain_before, lambda { |date|
+    joins(contribution: { person_payment: :person_blockchain_transactions })
+      .where(person_blockchain_transactions: { succeeded_at: ..date }).distinct
+  }
 
   def enough_tickets_balance?(amount)
     tickets_balance_cents >= amount
