@@ -14,7 +14,9 @@ class PersonBlockchainTransaction < ApplicationRecord
   belongs_to :person_payment
 
   after_create :update_status_from_eth_chain
-  after_update :increase_pool_balance, if: :success?
+  after_update :handle_blockchain_success, if: proc { |obj|
+    obj.saved_change_to_treasure_entry_status? && obj.success?
+  }
 
   enum treasure_entry_status: {
     processing: 0,
@@ -31,11 +33,22 @@ class PersonBlockchainTransaction < ApplicationRecord
       .perform_later(self)
   end
 
+  def handle_blockchain_success
+    increase_pool_balance
+    set_succeeded_at
+  end
+
   def increase_pool_balance
     return unless person_payment.receiver_type == 'Cause'
 
     pool = person_payment.receiver.default_pool
     Service::Donations::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
+  end
+
+  def set_succeeded_at
+    return if succeeded_at.present?
+
+    update(succeeded_at: Time.current)
   end
 
   def retry?

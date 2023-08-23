@@ -60,12 +60,20 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
     before do
       allow(service).to receive(:new).with(pool:).and_return(service_mock)
       allow(service_mock).to receive(:increase_balance)
-      person_blockchain_transaction.update(treasure_entry_status: :success)
     end
 
     it 'calls increase_pool_balance' do
+      person_blockchain_transaction.update(treasure_entry_status: :success)
+
       expect(service).not_to have_received(:new).with(pool:)
       expect(service_mock).not_to have_received(:increase_balance)
+    end
+
+    it 'calls set_succeeded_at' do
+      allow(Time).to receive(:current).and_return(DateTime.parse('2021-01-01'))
+
+      expect { person_blockchain_transaction.update(treasure_entry_status: :success) }
+        .to change(person_blockchain_transaction, :succeeded_at).to(Time.current)
     end
   end
 
@@ -91,6 +99,32 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
         it 'returns false' do
           expect(person_blockchain_transaction.retry?).to be false
         end
+      end
+    end
+  end
+
+  describe '#set_succeeded_at' do
+    let(:person_blockchain_transaction) { create(:person_blockchain_transaction) }
+
+    before do
+      allow(Time).to receive(:current).and_return(DateTime.parse('2021-01-01'))
+    end
+
+    context 'when succeeded at is present' do
+      before do
+        person_blockchain_transaction.update(succeeded_at: DateTime.parse('2020-01-01'))
+      end
+
+      it 'does not change the succeeded at attribute' do
+        expect { person_blockchain_transaction.set_succeeded_at }
+          .not_to change(person_blockchain_transaction, :succeeded_at)
+      end
+    end
+
+    context 'when succeeded at is not present' do
+      it 'changes the succeeded at to current time' do
+        expect { person_blockchain_transaction.set_succeeded_at }
+          .to change(person_blockchain_transaction, :succeeded_at).to(Time.current)
       end
     end
   end
