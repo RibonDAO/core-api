@@ -1,5 +1,8 @@
 class SubscriptionBlueprint < Blueprinter::Base
   identifier :id
 
-  association :person_payments, blueprint: PersonPaymentBlueprint
+  fields :status, :cancel_date
+
+  association :person_payments, blueprint: PersonPaymentBlueprint, view: :subscription
+
 end

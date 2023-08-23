@@ -13,12 +13,11 @@ module Api
             render_errors(command.errors)
           end
         end
-        
+
         def subscriptions_for_customer
           user = User.find(params[:user_id])
           ids = user.customers.pluck(:id)
-          @subscriptions = Subscription.where(payer_id: ids)
-
+          @subscriptions = Subscription.where(payer_id: ids, status: :active)
           render json: SubscriptionBlueprint.render(@subscriptions)
         end
       end
