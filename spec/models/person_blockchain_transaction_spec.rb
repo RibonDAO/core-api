@@ -3,6 +3,7 @@
 # Table name: person_blockchain_transactions
 #
 #  id                    :bigint           not null, primary key
+#  succeeded_at          :datetime
 #  transaction_hash      :string
 #  treasure_entry_status :integer          default("processing")
 #  created_at            :datetime         not null
