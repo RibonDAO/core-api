@@ -9,9 +9,9 @@ RSpec.describe Service::Contributions::ContributionFeeDeleteService, type: :serv
     )
   end
 
-  let(:contribution) { create(:contribution, :with_contribution_balance) }
-  let(:payer_contribution) { create(:contribution, :with_contribution_balance) }
-  let(:contribution_fee) { create(:contribution_fee, contribution:, payer_contribution:) }
+  let!(:contribution) { create(:contribution, :with_contribution_balance) }
+  let!(:payer_contribution) { create(:contribution, :with_contribution_balance) }
+  let!(:contribution_fee) { create(:contribution_fee, contribution:, payer_contribution:) }
 
   describe '#handle_fee_delete' do
     before do
@@ -19,7 +19,7 @@ RSpec.describe Service::Contributions::ContributionFeeDeleteService, type: :serv
     end
 
     it 'delete a contribution fee' do
-      expect { service.handle_fee_delete }.not_to change(ContributionFee, :count)
+      expect { service.handle_fee_delete }.to change(ContributionFee, :count).by(-1)
     end
 
     it 'updates the contribution balance' do
