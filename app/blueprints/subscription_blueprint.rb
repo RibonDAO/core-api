@@ -4,5 +4,4 @@ class SubscriptionBlueprint < Blueprinter::Base
   fields :status, :cancel_date
 
   association :person_payments, blueprint: PersonPaymentBlueprint, view: :subscription
-
 end

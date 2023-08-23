@@ -7,7 +7,7 @@ module Donations
     def perform(*_args)
       Integration.all.each do |integration|
         NonProfit.all.each do |non_profit|
-          [Time.zone.today.at_beginning_of_month, 1.month.ago.to_date.at_beginning_of_month].each do |period|
+          [Time.zone.today.at_beginning_of_month, 1.month.ago.at_beginning_of_month].each do |period|
             batch = Donations::CreateDonationsBatch.call(integration:, non_profit:, period:).result
             Donations::CreateBatchBlockchainDonationJob.perform_later(non_profit:, integration:, batch:) if batch
           end

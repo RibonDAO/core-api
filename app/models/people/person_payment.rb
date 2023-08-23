@@ -41,19 +41,15 @@ class PersonPayment < ApplicationRecord
   has_many :person_blockchain_transactions
   has_one :person_payment_fee
   has_one :contribution
+  has_one :utm, as: :trackable
 
   validates :paid_date, :status, :payment_method, presence: true
 
   scope :without_contribution, -> { where.missing(:contribution) }
 
   enum status: {
-    processing: 0,
-    paid: 1,
-    failed: 2,
-    refunded: 3,
-    refund_failed: 4,
-    requires_action: 5,
-    blocked: 6,
+    processing: 0, paid: 1, failed: 2, refunded: 3,
+    refund_failed: 4, requires_action: 5, blocked: 6,
     requires_confirmation: 7
   }
 
