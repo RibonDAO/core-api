@@ -6,6 +6,7 @@ module Api
           command = ::Vouchers::Donate.call(donation_command:, integration:, external_id:)
 
           if command.success?
+            Tracking::AddUtm.call(utm_params:, trackable: command.result.donation)
             render json: VoucherBlueprint.render(command.result), status: :created
           else
             render_errors(command.errors)
@@ -40,6 +41,12 @@ module Api
 
         def donation_params
           params.permit(:integration_id, :non_profit_id, :email, :external_id, :platform)
+        end
+
+        def utm_params
+          params.permit(:utm_source,
+                        :utm_medium,
+                        :utm_campaign)
         end
       end
     end
