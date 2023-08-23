@@ -8,8 +8,15 @@ RSpec.describe 'Api::V1::Users', type: :request do
       let(:params) do
         {
           email: 'yan@ribon.io',
-          language: 'en'
+          language: 'en',
+          utm_source: 'utm source',
+          utm_medium: 'utm medium',
+          utm_campaign: 'utm campaign'
         }
+      end
+
+      before do
+        allow(Tracking::AddUtm).to receive(:call)
       end
 
       it 'creates a new user in database' do
@@ -26,6 +33,11 @@ RSpec.describe 'Api::V1::Users', type: :request do
         request
 
         expect_response_to_have_keys %w[created_at id email updated_at]
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 

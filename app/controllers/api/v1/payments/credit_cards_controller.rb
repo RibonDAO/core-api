@@ -8,6 +8,7 @@ module Api
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::CreditCard, order_params)
 
           if command.success?
+            Tracking::AddUtm.call(utm_params:, trackable: command.result)
             head :created
           else
             render_errors(command.errors)
@@ -72,6 +73,12 @@ module Api
           params.permit(:email, :tax_id, :offer_id, :country, :city, :state, :integration_id,
                         :cause_id, :non_profit_id,
                         :platform, card: %i[cvv number name expiration_month expiration_year])
+        end
+
+        def utm_params
+          params.permit(:utm_source,
+                        :utm_medium,
+                        :utm_campaign)
         end
       end
     end
