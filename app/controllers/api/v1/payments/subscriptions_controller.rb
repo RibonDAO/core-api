@@ -13,6 +13,12 @@ module Api
             render_errors(command.errors)
           end
         end
+
+        def show
+          subscription = Subscription.find(params[:id])
+
+          render json: SubscriptionBlueprint.render(subscription)
+        end
       end
     end
   end
