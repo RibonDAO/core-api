@@ -28,7 +28,7 @@ class PersonPaymentBlueprint < Blueprinter::Base
   end
 
   view :minimal do
-    only :paid_date
+    field :paid_date
   end
 
   view :big_donations do |_|
