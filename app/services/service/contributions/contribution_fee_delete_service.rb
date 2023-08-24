@@ -10,8 +10,10 @@ module Service
       end
 
       def handle_fee_delete
-        delete_contribution_fee
-        update_contribution_balance
+        ActiveRecord::Base.transaction do
+          delete_contribution_fee
+          update_contribution_balance
+        end
       rescue StandardError => e
         Reporter.log(error: e)
       end
