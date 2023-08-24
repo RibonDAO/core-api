@@ -104,6 +104,7 @@ Rails.application.routes.draw do
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
+        post 'send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -152,7 +153,6 @@ Rails.application.routes.draw do
 
       namespace :subscriptions do
         put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
-        post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
       end
     end
   end

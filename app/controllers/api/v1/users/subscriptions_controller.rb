@@ -9,6 +9,10 @@ module Api
           render json: SubscriptionBlueprint.render(@subscriptions)
         end
 
+        def send_cancel_subscription_email
+          render json: { message: 'Email sent' }, status: :ok
+        end
+
         private
 
         def user
