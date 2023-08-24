@@ -45,6 +45,12 @@ class PersonBlockchainTransaction < ApplicationRecord
     Service::Donations::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
   end
 
+  def charge_contribution_fees
+    return unless saved_change_to_treasure_entry_status? && success?
+
+    Service::Contributions::FeesLabelingService.new(contribution: person_payment.contribution).spread_fee_to_payers
+  end
+
   def set_succeeded_at
     return if succeeded_at.present?
 

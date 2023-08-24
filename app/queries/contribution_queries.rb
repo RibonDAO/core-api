@@ -11,6 +11,7 @@ class ContributionQueries
     ContributionBalance
       .with_fees_balance
       .with_paid_status
+      .confirmed_on_blockchain_before(contribution.created_at)
       .where.not(contribution_id: contribution.id)
       .joins(:contribution).where(contributions: { receiver: contribution.receiver })
       .order(fees_balance_cents: :asc)
@@ -20,6 +21,7 @@ class ContributionQueries
     ContributionBalance
       .with_tickets_balance
       .with_paid_status
+      .confirmed_on_blockchain_before(contribution.created_at)
       .where.not(contribution_id: contribution.id)
       .joins(:contribution).where(contributions: { receiver: contribution.receiver })
       .order(tickets_balance_cents: :asc)
