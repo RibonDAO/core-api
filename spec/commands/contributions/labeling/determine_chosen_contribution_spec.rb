@@ -15,7 +15,7 @@ describe Contributions::Labeling::DetermineChosenContribution do
     context 'when there are no valid base contributions' do
       before do
         person_payment = create(:person_payment, status: :refunded)
-        contribution = create(:contribution, person_payment:, created_at: 1.day.ago)
+        contribution = create(:contribution, person_payment:)
         create(:contribution_balance, contribution:, tickets_balance_cents: 10_000)
         create(:person_blockchain_transaction, person_payment:, succeeded_at: 1.day.ago)
       end
