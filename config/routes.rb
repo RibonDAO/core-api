@@ -101,6 +101,7 @@ Rails.application.routes.draw do
         put 'track', to: 'users/trackings#track_user'
 
         get 'contributions' => 'users/contributions#index'
+        get 'subscriptions' => 'users/subscriptions#index'
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
@@ -126,7 +127,6 @@ Rails.application.routes.draw do
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
         post 'pix'   => 'pix#create'
-        get 'subscriptions_for_customer/:user_id' => 'subscriptions#subscriptions_for_customer'
         put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
       end
       namespace :vouchers do
