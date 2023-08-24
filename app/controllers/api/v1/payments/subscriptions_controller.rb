@@ -13,10 +13,6 @@ module Api
             render_errors(command.errors)
           end
         end
-
-        def send_cancel_subscription_email
-          render json: { message: 'Email sent' }, status: :ok
-        end
       end
     end
   end
