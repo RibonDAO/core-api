@@ -5,4 +5,5 @@ class SubscriptionBlueprint < Blueprinter::Base
 
   association :offer, blueprint: OfferBlueprint, view: :minimal
   association :receiver, blueprint: ->(receiver) { receiver.blueprint }, default: {}
+  association :person_payments, blueprint: PersonPaymentBlueprint, view: :minimal
 end

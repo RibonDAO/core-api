@@ -27,6 +27,10 @@ class PersonPaymentBlueprint < Blueprinter::Base
     association :receiver, blueprint: CauseBlueprint
   end
 
+  view :minimal do
+    only :paid_date
+  end
+
   view :big_donations do |_|
     field :transaction_hash do |payment|
       payment.person_blockchain_transaction&.transaction_hash
