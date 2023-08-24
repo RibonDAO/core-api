@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_15_192726) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_23_175839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -470,6 +470,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_15_192726) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "person_payment_id"
+    t.datetime "succeeded_at"
     t.index ["person_payment_id"], name: "index_person_blockchain_transactions_on_person_payment_id"
   end
 
