@@ -17,6 +17,7 @@ describe Contributions::Labeling::DetermineChosenContribution do
         person_payment = create(:person_payment, status: :refunded)
         contribution = create(:contribution, person_payment:)
         create(:contribution_balance, contribution:, tickets_balance_cents: 10_000)
+        create(:person_blockchain_transaction, person_payment:, succeeded_at: 1.day.ago)
       end
 
       it 'does not apply any rules and return nil' do
