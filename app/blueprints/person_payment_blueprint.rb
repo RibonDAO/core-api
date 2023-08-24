@@ -27,10 +27,6 @@ class PersonPaymentBlueprint < Blueprinter::Base
     association :receiver, blueprint: CauseBlueprint
   end
 
-  view :subscription do
-    association :receiver, blueprint: ->(receiver) { receiver.blueprint }, default: {}
-  end
-
   view :big_donations do |_|
     field :transaction_hash do |payment|
       payment.person_blockchain_transaction&.transaction_hash
