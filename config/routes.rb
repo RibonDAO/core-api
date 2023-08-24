@@ -104,6 +104,7 @@ Rails.application.routes.draw do
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
+        get 'subscriptions' => 'users/subscriptions#index'
         post 'send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
       end
       resources :integrations, only: [] do
