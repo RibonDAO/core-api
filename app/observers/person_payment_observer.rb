@@ -6,6 +6,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
        person_payment.subscription.nil?
       Mailers::SendPersonPaymentEmailJob.perform_later(person_payment:)
     end
+    Events::Contributions::SendPersonPaymentEventJob.perform_later(person_payment:)
   rescue StandardError
     nil
   end
