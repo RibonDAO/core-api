@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Api::V1::Users::Contributions', type: :request do
+RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
   describe 'GET /api/v1/users/:user_id/subscriptions' do
     context 'when is successfully cancelled' do
       subject(:request) { get "/api/v1/users/#{user.id}/subscriptions" }
