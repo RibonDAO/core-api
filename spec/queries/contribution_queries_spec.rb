@@ -7,16 +7,13 @@ RSpec.describe ContributionQueries, type: :model do
 
     context 'when the receiver is different' do
       let(:contribution_balance1) do
-        create(:contribution_balance, :with_paid_status,
-               created_at: 1.day.ago, fees_balance_cents: 5)
+        create(:contribution_balance, :with_paid_status, fees_balance_cents: 5)
       end
       let(:contribution_balance2) do
-        create(:contribution_balance, :with_paid_status,
-               created_at: 1.day.ago,  fees_balance_cents: 15)
+        create(:contribution_balance, :with_paid_status,  fees_balance_cents: 15)
       end
       let(:contribution_balance3) do
-        create(:contribution_balance, :with_paid_status,
-               created_at: 1.day.ago,  fees_balance_cents: 25)
+        create(:contribution_balance, :with_paid_status,  fees_balance_cents: 25)
       end
 
       it 'returns no contributions' do
@@ -28,7 +25,6 @@ RSpec.describe ContributionQueries, type: :model do
     context 'when the receiver is the same' do
       let!(:contribution_balance1) do
         create(:contribution_balance,
-               created_at: 1.day.ago,
                contribution: create(:contribution,
                                     receiver: contribution.receiver,
                                     person_payment: create(:person_payment,
@@ -38,7 +34,6 @@ RSpec.describe ContributionQueries, type: :model do
       end
       let!(:contribution_balance2) do
         create(:contribution_balance,
-               created_at: 1.day.ago,
                contribution: create(:contribution, receiver: contribution.receiver,
                                                    person_payment: create(:person_payment,
                                                                           :with_payment_in_blockchain,
@@ -47,7 +42,6 @@ RSpec.describe ContributionQueries, type: :model do
       end
       let!(:contribution_balance3) do
         create(:contribution_balance,
-               created_at: 1.day.ago,
                contribution: create(:contribution, receiver: contribution.receiver,
                                                    person_payment: create(:person_payment,
                                                                           :with_payment_in_blockchain,

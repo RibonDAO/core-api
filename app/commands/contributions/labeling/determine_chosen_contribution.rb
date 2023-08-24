@@ -32,8 +32,7 @@ module Contributions
       def contributions_with_fees_balance
         @contributions_with_fees_balance ||= Contribution
                                              .with_paid_status
-                                             .with_payment_in_blockchain
-                                             .created_before(donation.created_at)
+                                             .confirmed_on_blockchain_before(donation.created_at)
                                              .with_fees_balance_higher_than(donation.value)
       end
 

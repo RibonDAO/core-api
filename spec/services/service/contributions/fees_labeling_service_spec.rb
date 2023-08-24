@@ -13,7 +13,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     let(:contribution) { create(:contribution, person_payment:) }
     let!(:contribution_balance1) do
       create(:contribution_balance,
-             created_at: 1.day.ago,
              contribution: create(:contribution, receiver: contribution.receiver,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
@@ -22,7 +21,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     end
     let!(:contribution_balance2) do
       create(:contribution_balance,
-             created_at: 1.day.ago,
              contribution: create(:contribution, receiver: contribution.receiver,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
@@ -31,7 +29,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     end
     let!(:contribution_balance3) do
       create(:contribution_balance,
-             created_at: 1.day.ago,
              contribution: create(:contribution, receiver: contribution.receiver,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
@@ -71,7 +68,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 4.5454
     let!(:contribution_balance1) do
       create(:contribution_balance,
-             created_at: 1.day.ago,
              contribution: create(:contribution, receiver: contribution.receiver,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
@@ -81,7 +77,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 13.6363
     let!(:contribution_balance2) do
       create(:contribution_balance,
-             created_at: 1.day.ago,
              contribution: create(:contribution, receiver: contribution.receiver,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
@@ -91,7 +86,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 27.2727
     let!(:contribution_balance3) do
       create(:contribution_balance,
-             created_at: 1.day.ago,
              contribution: create(:contribution, receiver: contribution.receiver,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
@@ -101,7 +95,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 54.5454
     let!(:contribution_balance4) do
       create(:contribution_balance,
-             created_at: 1.day.ago,
              contribution: create(:contribution, receiver: contribution.receiver,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
