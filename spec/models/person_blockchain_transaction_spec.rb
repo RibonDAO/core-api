@@ -121,7 +121,7 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
 
     context 'when the treasury entry status changed to success' do
       before do
-        allow(person_blockchain_transaction).to receive(:treasure_entry_status_changed?).and_return(true)
+        allow(person_blockchain_transaction).to receive(:saved_change_to_treasure_entry_status?).and_return(true)
       end
 
       it 'calls charge_contribution_fees' do
@@ -134,7 +134,7 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
 
     context 'when the treasury entry status did not change' do
       before do
-        allow(person_blockchain_transaction).to receive(:treasure_entry_status_changed?).and_return(false)
+        allow(person_blockchain_transaction).to receive(:saved_change_to_treasure_entry_status?).and_return(false)
       end
 
       it 'does not call charge_contribution_fees' do
