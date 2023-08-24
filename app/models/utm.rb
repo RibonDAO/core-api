@@ -15,4 +15,5 @@ class Utm < ApplicationRecord
   belongs_to :trackable, polymorphic: true
 
   validates :source, presence: true
+  validates :trackable_id, uniqueness: { scope: :trackable_type }
 end
