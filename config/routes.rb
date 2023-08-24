@@ -127,9 +127,7 @@ Rails.application.routes.draw do
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
-        post 'pix'   => 'pix#create'
-        get 'subscription/:id' => 'subscriptions#show'
-        put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
+        post 'pix'   => 'pix#create'        
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -154,6 +152,7 @@ Rails.application.routes.draw do
       end
 
       namespace :subscriptions do
+        get 'subscription/:id' => 'subscriptions#show'
         put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
       end
     end
