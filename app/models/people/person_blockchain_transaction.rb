@@ -36,6 +36,7 @@ class PersonBlockchainTransaction < ApplicationRecord
   def handle_blockchain_success
     increase_pool_balance
     set_succeeded_at
+    charge_contribution_fees
   end
 
   def increase_pool_balance
