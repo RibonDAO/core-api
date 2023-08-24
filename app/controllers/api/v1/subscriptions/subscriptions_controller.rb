@@ -1,6 +1,6 @@
 module Api
   module V1
-    module Payments
+    module Subscriptions
       class SubscriptionsController < ApplicationController
         include ::Givings::Payment
 
