@@ -48,6 +48,7 @@ class PersonBlockchainTransaction < ApplicationRecord
 
   def charge_contribution_fees
     return unless saved_change_to_treasure_entry_status? && success?
+    return if person_payment&.contribution&.generated_fee_cents&.zero?
 
     Service::Contributions::FeesLabelingService.new(contribution: person_payment.contribution).spread_fee_to_payers
   end
