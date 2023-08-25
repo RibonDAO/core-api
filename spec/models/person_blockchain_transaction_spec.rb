@@ -124,6 +124,17 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
         allow(person_blockchain_transaction).to receive(:saved_change_to_treasure_entry_status?).and_return(true)
       end
 
+      context 'when the generated fee is zero' do
+        let(:contribution) { create(:contribution, person_payment:, generated_fee_cents: 0) }
+
+        it 'does not call the fees labeling service' do
+          person_blockchain_transaction.charge_contribution_fees
+
+          expect(fees_service).not_to have_received(:new)
+          expect(fees_service_mock).not_to have_received(:spread_fee_to_payers)
+        end
+      end
+
       it 'calls charge_contribution_fees' do
         person_blockchain_transaction.charge_contribution_fees
 
