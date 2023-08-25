@@ -37,7 +37,7 @@ module Api
         def articles_list
           return Article if params[:show_hidden_articles].present?
 
-          Article.where(visible: true, published_at: ..Time.zone.now)
+          Article.where(visible: true, published_at: ..Time.zone.now, language:)
         end
 
         def sortable
@@ -62,6 +62,12 @@ module Api
 
         def per
           @per = params[:per] || 100
+        end
+
+        def language
+          return 'pt-BR' if I18n.locale == :'pt-BR'
+
+          'en-US'
         end
 
         def article_params

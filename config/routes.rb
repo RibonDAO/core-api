@@ -103,6 +103,7 @@ Rails.application.routes.draw do
         get 'contributions' => 'users/contributions#index'
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
+        post 'devices' => 'users/devices#create'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -124,6 +125,8 @@ Rails.application.routes.draw do
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
+        post 'pix'   => 'pix#create'
+        put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -162,6 +165,7 @@ Rails.application.routes.draw do
 
   namespace :webhooks do
     post 'stripe' => 'stripe#events'
+    post 'stripe_global' => 'stripe_global#events'
     post 'alchemy' => 'alchemy#events'
   end
 

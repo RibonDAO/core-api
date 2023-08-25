@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_23_175839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -149,6 +149,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
     t.datetime "updated_at", null: false
     t.string "cover_image_description"
     t.string "main_image_description"
+    t.boolean "active", default: true
   end
 
   create_table "chains", force: :cascade do |t|
@@ -214,6 +215,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_customers_on_user_id", unique: true
+  end
+
+  create_table "devices", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "device_id"
+    t.string "device_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "donation_batches", force: :cascade do |t|
@@ -460,6 +470,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "person_payment_id"
+    t.datetime "succeeded_at"
     t.index ["person_payment_id"], name: "index_person_blockchain_transactions_on_person_payment_id"
   end
 
@@ -492,10 +503,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
     t.string "payer_type"
     t.uuid "payer_id"
     t.string "platform"
+    t.bigint "subscription_id"
     t.index ["integration_id"], name: "index_person_payments_on_integration_id"
     t.index ["offer_id"], name: "index_person_payments_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_person_payments_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_person_payments_on_receiver"
+    t.index ["subscription_id"], name: "index_person_payments_on_subscription_id"
   end
 
   create_table "pool_balances", force: :cascade do |t|
@@ -555,6 +568,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
     t.datetime "updated_at", null: false
     t.string "image_description"
     t.index ["non_profit_id"], name: "index_stories_on_non_profit_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.string "payment_method"
+    t.string "payer_type"
+    t.uuid "payer_id"
+    t.string "external_id"
+    t.datetime "cancel_date"
+    t.string "platform"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "integration_id"
+    t.string "receiver_type"
+    t.bigint "receiver_id"
+    t.integer "status"
+    t.bigint "offer_id"
+    t.index ["integration_id"], name: "index_subscriptions_on_integration_id"
+    t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
+    t.index ["payer_type", "payer_id"], name: "index_subscriptions_on_payer"
+    t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
   end
 
   create_table "tokens", force: :cascade do |t|
@@ -674,6 +707,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
   add_foreign_key "contribution_fees", "contributions"
   add_foreign_key "contribution_fees", "contributions", column: "payer_contribution_id"
   add_foreign_key "contributions", "person_payments"
+  add_foreign_key "devices", "users"
   add_foreign_key "donation_batches", "batches"
   add_foreign_key "donation_batches", "donations"
   add_foreign_key "donation_blockchain_transactions", "chains"
@@ -705,6 +739,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_174518) do
   add_foreign_key "pools", "causes"
   add_foreign_key "pools", "tokens"
   add_foreign_key "stories", "non_profits"
+  add_foreign_key "subscriptions", "integrations"
+  add_foreign_key "subscriptions", "offers"
   add_foreign_key "user_completed_tasks", "users"
   add_foreign_key "user_donation_stats", "users"
   add_foreign_key "user_tasks_statistics", "users"

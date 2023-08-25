@@ -8,6 +8,7 @@ module Api
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::Cryptocurrency, order_params)
 
           if command.success?
+            Tracking::AddUtm.call(utm_params:, trackable: command.result)
             head :created
           else
             render_errors(command.errors)
@@ -57,6 +58,12 @@ module Api
           params.permit(:email, :amount, :transaction_hash, :status, :cause_id, :non_profit_id, :wallet_address,
                         :platform,
                         :integration_id)
+        end
+
+        def utm_params
+          params.permit(:utm_source,
+                        :utm_medium,
+                        :utm_campaign)
         end
       end
     end

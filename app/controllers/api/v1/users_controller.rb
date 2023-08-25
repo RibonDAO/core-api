@@ -15,6 +15,7 @@ module Api
         @user = User.new(user_params)
 
         if @user.save
+          Tracking::AddUtm.call(utm_params:, trackable: @user)
           render json: UserBlueprint.render(@user), status: :created
         else
           head :unprocessable_entity
@@ -111,6 +112,12 @@ module Api
 
       def user_params
         params.permit(:email, :language, :platform)
+      end
+
+      def utm_params
+        params.permit(:utm_source,
+                      :utm_medium,
+                      :utm_campaign)
       end
     end
   end

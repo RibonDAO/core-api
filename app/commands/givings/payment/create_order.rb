@@ -31,7 +31,7 @@ module Givings
         return unless result
 
         status = ::Payment::Gateways::Stripe::Helpers.status(result[:status])
-        update_success(order:, status:, external_id: result[:external_id])
+        update_success(order:, status:, result:)
         return unless status == :paid
 
         handle_contribution_creation(order.payment)
@@ -46,9 +46,9 @@ module Givings
         end
       end
 
-      def update_success(order:, status:, external_id:)
+      def update_success(order:, status:, result:)
         order.payment.update(status:)
-        order.payment.update(external_id:) if external_id
+        update_external_ids(order:, result:)
       end
 
       def update_blocked(order:, err:)
@@ -58,11 +58,22 @@ module Givings
 
       def update_failed(order:, err:)
         order.payment.update(status: :failed, error_code: err.code)
+        order.payment&.subscription&.update(status: :inactive)
         order.payment.update(external_id: err.error.request_log_url) if err&.error&.request_log_url
       end
 
       def handle_contribution_creation(payment)
         PersonPayments::CreateContributionJob.perform_later(payment)
+      end
+
+      def update_external_ids(order:, result:)
+        external_id = result[:external_id]
+        external_subscription_id = result[:external_subscription_id]
+        external_invoice_id = result[:external_invoice_id]
+
+        order.payment.update(external_id:) if external_id
+        order.payment.update(external_id: external_invoice_id) if external_invoice_id
+        order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
       end
     end
   end

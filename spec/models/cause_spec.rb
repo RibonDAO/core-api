@@ -3,6 +3,7 @@
 # Table name: causes
 #
 #  id                      :bigint           not null, primary key
+#  active                  :boolean          default(TRUE)
 #  cover_image_description :string
 #  main_image_description  :string
 #  name                    :string
@@ -16,6 +17,8 @@ RSpec.describe Cause, type: :model do
     subject { build(:cause) }
 
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to have_many(:person_payments) }
+    it { is_expected.to have_many(:subscriptions) }
   end
 
   describe '.associations' do
@@ -46,19 +49,11 @@ RSpec.describe Cause, type: :model do
   end
 
   describe '#active' do
-    context 'when the non_profits is empty' do
-      let(:cause) { create(:cause, non_profits: []) }
-
-      it 'returns false' do
-        expect(cause.active).to be_falsey
-      end
-    end
-
     context 'when the cause has non_profits but its inactive' do
       let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :inactive)]) }
 
       it 'returns false' do
-        expect(cause.active).to be_falsey
+        expect(cause.active).to be_truthy
       end
     end
 

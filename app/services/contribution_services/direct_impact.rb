@@ -29,7 +29,7 @@ module ContributionServices
     end
 
     def formatted_amount_for(value)
-      Money.from_amount(value, :usd).format
+      Currency::Converters.convert(from: :usd, to: currency, value:).round.format
     end
 
     def value_for(non_profit)
@@ -37,6 +37,10 @@ module ContributionServices
                           .where(contribution:)
                           .where(non_profits: { id: non_profit.id })
                           .sum(:value)
+    end
+
+    def currency
+      contribution.person_payment.currency
     end
   end
 end

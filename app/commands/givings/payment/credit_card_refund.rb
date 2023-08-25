@@ -12,9 +12,10 @@ module Givings
       end
 
       def call
-        payment = find_person_payment
-        refund = GivingServices::Payment::Orchestrator.new(payload: refund_params).call if payment&.external_id?
-        success_refund(payment, refund)
+        if person_payment&.external_id?
+          refund = GivingServices::Payment::Orchestrator.new(payload: refund_params).call
+        end
+        success_refund(person_payment, refund)
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
         errors.add(:message, e.message)
@@ -22,19 +23,23 @@ module Givings
 
       private
 
-      def success_refund(payment, refund)
+      def success_refund(person_payment, refund)
         return unless refund[:status] == 'succeeded'
 
-        payment.update(status: :refunded,
-                       refund_date: Time.zone.at(refund[:created]))
+        person_payment.update(status: :refunded,
+                              refund_date: Time.zone.at(refund[:created]))
       end
 
-      def find_person_payment
+      def person_payment
         PersonPayment.find_by({ external_id: })
       end
 
+      def gateway
+        person_payment.offer.gateway
+      end
+
       def refund_params
-        Refund.from(external_id, 'stripe', 'refund')
+        Refund.from(external_id, gateway, 'refund')
       end
     end
   end

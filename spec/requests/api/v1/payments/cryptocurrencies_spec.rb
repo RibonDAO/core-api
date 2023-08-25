@@ -14,7 +14,13 @@ RSpec.describe 'Api::V1::Payments::Cryptocurrency', type: :request do
     subject(:request) { post '/api/v1/payments/cryptocurrency', params: }
 
     let(:params) do
-      { email: 'user@test.com', transaction_hash: '0xFFFF', amount: '5.00', platform: 'web' }
+      { email: 'user@test.com',
+        transaction_hash: '0xFFFF',
+        amount: '5.00',
+        platform: 'web',
+        utm_source: 'utm source',
+        utm_medium: 'utm medium',
+        utm_campaign: 'utm campaign' }
     end
 
     context 'when the command is successful' do
@@ -22,10 +28,19 @@ RSpec.describe 'Api::V1::Payments::Cryptocurrency', type: :request do
         command_double(klass: ::Givings::Payment::CreateOrder, success: true)
       end
 
+      before do
+        allow(Tracking::AddUtm).to receive(:call)
+      end
+
       it 'returns http status created' do
         request
 
         expect(response).to have_http_status :created
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 
