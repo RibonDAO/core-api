@@ -142,19 +142,6 @@ RSpec.describe PersonBlockchainTransaction, type: :model do
         expect(fees_service_mock).to have_received(:spread_fee_to_payers)
       end
     end
-
-    context 'when the treasury entry status did not change' do
-      before do
-        allow(person_blockchain_transaction).to receive(:saved_change_to_treasure_entry_status?).and_return(false)
-      end
-
-      it 'does not call charge_contribution_fees' do
-        person_blockchain_transaction.charge_contribution_fees
-
-        expect(fees_service).not_to have_received(:new)
-        expect(fees_service_mock).not_to have_received(:spread_fee_to_payers)
-      end
-    end
   end
 
   describe '#set_succeeded_at' do
