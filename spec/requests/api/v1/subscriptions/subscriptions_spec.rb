@@ -4,11 +4,11 @@ RSpec.describe 'Api::V1::Subscriptions::Subscriptions', type: :request do
   let(:subscription) { create(:subscription) }
   let(:params) { subscription.id }
   let(:create_order_command_double) do
-    command_double(klass: Givings::Payment::CancelSubscription)
+    command_double(klass: Subscriptions::CancelSubscription)
   end
 
   before do
-    allow(Givings::Payment::CancelSubscription).to receive(:call).and_return(create_order_command_double)
+    allow(Subscriptions::CancelSubscription).to receive(:call).and_return(create_order_command_double)
   end
 
   describe 'PUT /api/v1/subscriptions/cancel_subscription/:id' do
@@ -16,7 +16,7 @@ RSpec.describe 'Api::V1::Subscriptions::Subscriptions', type: :request do
       subject(:request) { put "/api/v1/subscriptions/cancel_subscription/#{subscription.id}" }
 
       let(:create_order_command_double) do
-        command_double(klass: Givings::Payment::CancelSubscription, success: true)
+        command_double(klass: Subscriptions::CancelSubscription, success: true)
       end
 
       it 'returns http status ok' do
@@ -30,7 +30,7 @@ RSpec.describe 'Api::V1::Subscriptions::Subscriptions', type: :request do
       subject(:request) { put "/api/v1/subscriptions/cancel_subscription/#{subscription.id}" }
 
       let(:create_order_command_double) do
-        command_double(klass: Givings::Payment::CancelSubscription, success: false)
+        command_double(klass: Subscriptions::CancelSubscription, success: false)
       end
 
       it 'returns http status unprocessable entity' do

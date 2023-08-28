@@ -2,10 +2,10 @@ module Api
   module V1
     module Subscriptions
       class SubscriptionsController < ApplicationController
-        include ::Givings::Payment
+        include ::Subscriptions
 
         def unsubscribe
-          command = ::Givings::Payment::CancelSubscription.call(subscription_id: params[:id])
+          command = ::Subscriptions::CancelSubscription.call(subscription_id: params[:id])
 
           if command.success?
             head :ok
