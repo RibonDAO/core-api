@@ -10,7 +10,7 @@ http_interactions:
         User-Agent:
           - Customer.io Ruby Client/5.1.0
         Authorization:
-          - Basic ZWY0MTAzNjA0YmQxNjNmZDQ0OTM6YzdjNWNjZDQ0M2FmYzk4ZGU3YzY=
+          - Basic CUSTOMERIO_API_KEY
         Content-Type:
           - application/json
     response:
@@ -48,7 +48,7 @@ http_interactions:
         User-Agent:
           - Customer.io Ruby Client/5.1.0
         Authorization:
-          - Basic NzNmZjhjYzdmYWE1ZTdkN2U5NzU6Y2I1MWI4ZGQ2MDA1YmE3MDY1ZjY=
+          - Basic CUSTOMERIO_API_KEY
         Content-Type:
           - application/json
     response:
