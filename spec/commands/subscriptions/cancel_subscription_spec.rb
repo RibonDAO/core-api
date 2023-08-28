@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Givings::Payment::CancelSubscription do
+describe Subscriptions::CancelSubscription do
   describe '.call' do
     subject(:command) { described_class.call(args) }
 
