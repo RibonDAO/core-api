@@ -59,7 +59,8 @@ Rails.application.routes.draw do
       get 'users/statistics' => 'users/statistics#index'
       post 'users/send_delete_account_email' => 'users#send_delete_account_email'
       delete 'users' => 'users#destroy'
-      
+      post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
+
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
       get 'free_donation_causes' => 'causes#free_donation_causes'
@@ -105,7 +106,7 @@ Rails.application.routes.draw do
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
         get 'subscriptions' => 'users/subscriptions#index'
-        post 'send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
+        
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
