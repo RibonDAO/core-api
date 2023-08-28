@@ -26,4 +26,27 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
       end
     end
   end
+
+  describe 'POST /api/v1/users/send_cancel_subscription_email' do
+    context 'when successfully send cancel subscription email' do
+      subject(:request) do
+        post '/api/v1/users/send_cancel_subscription_email', params: { subscription_id: subscription.id }
+      end
+
+      include_context('when mocking a request') { let(:cassette_name) { 'send_event_customer' } }
+
+      let(:subscription) { create(:subscription) }
+      let(:person_payment) { create(:person_payment, subscription:) }
+
+      before do
+        person_payment
+        request
+      end
+
+      it 'send request successfully' do
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to eq({ message: 'Email sent' }.to_json)
+      end
+    end
+  end
 end
