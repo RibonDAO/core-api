@@ -20,12 +20,11 @@ RSpec.describe Labeling::RelabelService, type: :service do
     end
 
     it 'remakes the contribution balances and deletes the fees and donation contributions' do
-      expect { service.setup_records }.to change(ContributionBalance, :count).from(3).to(0)
-                                                                             .and change(ContributionFee,
-                                                                                         :count).from(3).to(0)
-        .and change(
-          DonationContribution, :count
-        ).from(3).to(0)
+      expect { service.setup_records }
+        .to change(ContributionBalance, :count)
+        .from(3).to(0)
+        .and change(ContributionFee, :count).from(3).to(0)
+                                            .and change(DonationContribution, :count).from(3).to(0)
     end
 
     it 'remakes the contribution balances to all contributions' do
