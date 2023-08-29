@@ -41,10 +41,9 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
       let(:user) { create(:user, email: 'user151@example.com') }
       let(:customer) { create(:customer, user:) }
       let(:person_payment) { create(:person_payment, payer: customer, subscription:) }
-      let(:subscription) { create(:subscription) }
+      let(:subscription) { create(:subscription, payer: customer) }
 
       before do
-        user
         person_payment
       end
 

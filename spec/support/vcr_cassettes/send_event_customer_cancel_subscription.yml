@@ -19,7 +19,7 @@ http_interactions:
       message: Found
     headers:
       Date:
-      - Tue, 29 Aug 2023 19:50:01 GMT
+      - Tue, 29 Aug 2023 20:05:49 GMT
       Content-Type:
       - text/plain; charset=utf-8
       Content-Length:
@@ -35,19 +35,19 @@ http_interactions:
       Cf-Cache-Status:
       - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=FZF6MTUtbwOvEO11LiEEyyQQsKUDe%2FNgKPGwy6HZpuK7lcrvqZvHIB7MTQozzkMJ0LXoqewsR9o9sUSJ7%2BzQuAFBn56TVS5bvdN2IFtoGp5wi6lGxegc6qQC%2BI4EjxrW"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=2A07nsdUhYcvIQYq3OTzTeK%2FA%2Fw6rBsmcAV7qs%2FVcBZ7nv5FLEzha%2F%2BrdIEygilgoz5%2BZh8f3%2FU05pQMnEkJcL%2FmpKlOKJNPO%2Ffs%2FJT%2Bxsx%2F8IY6etOIYZYrZRpCHH1Q"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Cf-Ray:
-      - 7fe752124c0902eb-GRU
+      - 7fe76934499f1d13-GRU
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: UTF-8
       string: Found. Redirecting to https://api.owlracle.info/v2/poly/gas?
-  recorded_at: Tue, 29 Aug 2023 19:50:01 GMT
+  recorded_at: Tue, 29 Aug 2023 20:05:49 GMT
 - request:
     method: get
     uri: https://api.owlracle.info/v2/poly/gas
@@ -67,7 +67,7 @@ http_interactions:
       message: Bad Request
     headers:
       Date:
-      - Tue, 29 Aug 2023 19:50:02 GMT
+      - Tue, 29 Aug 2023 20:05:49 GMT
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
@@ -83,20 +83,20 @@ http_interactions:
       Cf-Cache-Status:
       - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=5WoolvlRYWpjjUAINH1UkJxYekdsHLnKxY0QmN5lx986CM9xDXR%2BLH15Kg9LxclUQUdDQu%2F1%2Fa6kBncOJdijzFdoyEfngI9i5ICK7XiW4tW7mChl3nxoeOGHi%2FXehyDrxpsI%2FQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=MSixBBhE5WgSibhG%2BaUgBR0smFV8bvf2xOaq%2BsrAJ4HxZPVtdkC55clnzmKlqxvoU%2BnoFyBCAJo62gdTYZxrUD1qTVNICFKTkvuoTuYNikZeUZk3rVMS7lg32xEQ%2F7XwKS52%2BA%3D%3D"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Cf-Ray:
-      - 7fe752151fa202f3-GRU
+      - 7fe76937c85da4d2-GRU
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: UTF-8
       string: '{"error":{"status":400,"type":"Bad Request","message":"Missing API
         key"}}'
-  recorded_at: Tue, 29 Aug 2023 19:50:02 GMT
+  recorded_at: Tue, 29 Aug 2023 20:05:49 GMT
 - request:
     method: get
     uri: http://economia.awesomeapi.com.br/json/last/brl-usd
@@ -116,7 +116,7 @@ http_interactions:
       message: Permanent Redirect
     headers:
       Date:
-      - Tue, 29 Aug 2023 19:50:02 GMT
+      - Tue, 29 Aug 2023 20:05:49 GMT
       Content-Type:
       - text/html
       Transfer-Encoding:
@@ -128,7 +128,7 @@ http_interactions:
       Cf-Cache-Status:
       - BYPASS
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=0gFml0oYlXak6wuSm8MlDHwjbr9n1ruKGknwJAyB1RXwRzIaoXBPFfsNHkMUO%2FnZ1tcigaDIOH%2FuTbG%2FDAEbdNirJF3%2BI91KniTwaSAmd84dt9Ek0DyUfsuFIRMl420y%2F0PNsmpXZH7xu8Id"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=K83Z8P8f9uuZkQCWlf1rVyfqekKvOGcuS1y7WUTmRXM7%2B2wloGDYFVU%2FSRb8ALr7r3K6eIcDTjpRCNOh4viD1FwBZLK4%2BdNwPfv5Z3JM9m3yA0CT%2F1RtGiS3cxhoDdYUwxifxYMQlbnJRDIG"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Vary:
@@ -136,7 +136,7 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 7fe752185ebd1b15-GRU
+      - 7fe7693a7a6c1a9c-GRU
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
@@ -145,9 +145,9 @@ http_interactions:
         Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n<script
         defer src=\"https://static.cloudflareinsights.com/beacon.min.js/v8b253dfea2ab4077af8c6f58422dfbfd1689876627854\"
         integrity=\"sha512-bjgnUKX4azu3dLTVtie9u6TKqgx29RBwfj3QXYt5EKfWM/9hPSAI/4qcV5NACjwAo8UtTeWefx6Zq5PHcMm7Tg==\"
-        data-cf-beacon='{\"rayId\":\"7fe752185ebd1b15\",\"version\":\"2023.8.0\",\"b\":1,\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"si\":100}'
+        data-cf-beacon='{\"rayId\":\"7fe7693a7a6c1a9c\",\"version\":\"2023.8.0\",\"b\":1,\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"si\":100}'
         crossorigin=\"anonymous\"></script>\n</body>\r\n</html>\r\n"
-  recorded_at: Tue, 29 Aug 2023 19:50:02 GMT
+  recorded_at: Tue, 29 Aug 2023 20:05:49 GMT
 - request:
     method: get
     uri: https://economia.awesomeapi.com.br/json/last/brl-usd
@@ -167,7 +167,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 29 Aug 2023 19:50:02 GMT
+      - Tue, 29 Aug 2023 20:05:49 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -214,13 +214,13 @@ http_interactions:
       Pragma:
       - cache
       Etag:
-      - W/"f0-LktoKnhPhTMumnTQq/4M1utj9rE"
+      - W/"ef-Jamu1lMMMf4w59bKBTkNrak0OVY"
       X-Cache-Status:
       - STALE
       Cf-Cache-Status:
       - EXPIRED
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=BPJpVXX3KlTqKT0yYUL%2FyPx8s3spF%2Bm%2Fh0GZG1vd8zbuecHjtzoXRwwzVRsJdpWSCvne%2BazWFASdLd0SUB%2BOGgml4VT5P4yYX%2BnM%2BQy9gf%2FcvFG8hgQXjNCPad%2B9TtaYP%2FDow6U%2FWPDqip8C"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=yROw6G620Eb2Bs4KYMSMVSVhdDfYwFRRK2PPTSszZSU8qN4QseNQ0dDZykpi4rFKstuEo%2Bg8jn4oWob5ARxj%2Ftb0t8nnf%2BN%2BkBslWKcWUz%2BqQROBFRItZnNSzcMt4YR7a9ukqL6jIKQg5Kc1"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Vary:
@@ -228,21 +228,21 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 7fe75218d99c6b02-GRU
+      - 7fe7693aeb11a5f8-GRU
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: UTF-8
       string: '{"BRLUSD":{"code":"BRL","codein":"USD","name":"Real Brasileiro/Dólar
-        Americano","high":"0.2062","low":"0.204","varBid":"0.0009","pctChange":"0.44","bid":"0.2061","ask":"0.2062","timestamp":"1693338307","create_date":"2023-08-29
-        16:45:07"}}'
-  recorded_at: Tue, 29 Aug 2023 19:50:02 GMT
+        Americano","high":"0.2062","low":"0.204","varBid":"0.001","pctChange":"0.49","bid":"0.2061","ask":"0.2062","timestamp":"1693337799","create_date":"2023-08-29
+        16:36:39"}}'
+  recorded_at: Tue, 29 Aug 2023 20:05:49 GMT
 - request:
     method: post
-    uri: https://track.customer.io/api/v1/customers/user101@example.com/events
+    uri: https://track.customer.io/api/v1/customers/user151@example.com/events
     body:
       encoding: UTF-8
-      string: '{"name":"cancel_subscription","data":{"receiver_name":"Evidence Action","subscription_id":246,"user":{"id":4079,"email":"user101@example.com","created_at":"2023-08-29T19:50:00.935Z","updated_at":"2023-08-29T19:50:00.935Z","language":null,"legacy_id":null,"deleted_at":null},"amount":"R$10.00","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWJzY3JpcHRpb25faWQiOjI0NiwiZXhwIjoxNjkzMzQwNDAyfQ.69-fEZX7RYJs8FXL9vzSiEM7su3RJ0CXgXo-n2abKKw","status":"active","language":null}}'
+      string: '{"name":"cancel_subscription","data":{"receiver_name":"Evidence Action","subscription_id":364,"user":{"id":6339,"email":"user151@example.com","created_at":"2023-08-29T20:05:47.424Z","updated_at":"2023-08-29T20:05:47.424Z","language":null,"legacy_id":null,"deleted_at":null},"amount":"R$10.00","token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWJzY3JpcHRpb25faWQiOjM2NCwiZXhwIjoxNjkzMzQxMzQ5fQ.OhsbrHQTfYuwtr26AAQy_5-MudkU8fZU7311eN-c-KA","status":"active","language":null}}'
     headers:
       User-Agent:
       - Customer.io Ruby Client/5.1.0
@@ -264,7 +264,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 29 Aug 2023 19:50:02 GMT
+      - Tue, 29 Aug 2023 20:05:50 GMT
       Status:
       - 200 OK
       Via:
@@ -274,5 +274,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: "{}\n"
-  recorded_at: Tue, 29 Aug 2023 19:50:02 GMT
+  recorded_at: Tue, 29 Aug 2023 20:05:50 GMT
 recorded_with: VCR 6.1.0
