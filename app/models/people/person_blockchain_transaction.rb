@@ -17,7 +17,7 @@ class PersonBlockchainTransaction < ApplicationRecord
   after_update :handle_blockchain_success, if: proc { |obj|
     obj.saved_change_to_treasure_entry_status? && obj.success?
   }
-  after_update :charge_contribution_fees, if: :success
+  after_update :charge_contribution_fees, if: :success?
 
   enum treasure_entry_status: {
     processing: 0,
