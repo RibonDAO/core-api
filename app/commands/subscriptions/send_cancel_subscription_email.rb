@@ -9,7 +9,6 @@ module Subscriptions
     end
 
     def call
-      build_event(subscription)
       EventServices::SendEvent.new(user: subscription.payer.user,
                                    event: build_event(subscription)).call
     rescue StandardError => e
