@@ -16,10 +16,10 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
 
       before do
         subscription
-        request
       end
 
       it 'returns all user subscriptions' do
+        request
         expect(response).to have_http_status(:ok)
         expect_response_collection_to_have_keys(%w[id status cancel_date created_at offer receiver
                                                    person_payments])
@@ -33,17 +33,24 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
         post '/api/v1/users/send_cancel_subscription_email', params: { subscription_id: subscription.id }
       end
 
-      include_context('when mocking a request') { let(:cassette_name) { 'send_event_customer' } }
-
+      include_context('when mocking a request') do
+        let(:cassette_name) do
+          'send_event_customer_cancel_subscription'
+        end
+      end
+      let(:user) { create(:user, email: 'user151@example.com') }
+      let(:customer) { create(:customer, user:) }
+      let(:person_payment) { create(:person_payment, payer: customer, subscription:) }
       let(:subscription) { create(:subscription) }
-      let(:person_payment) { create(:person_payment, subscription:) }
 
       before do
+        user
         person_payment
-        request
       end
 
       it 'send request successfully' do
+        request
+
         expect(response).to have_http_status(:ok)
         expect(response.body).to eq({ message: 'Email sent' }.to_json)
       end
