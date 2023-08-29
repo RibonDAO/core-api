@@ -8,12 +8,18 @@ RSpec.describe PersonPaymentObserver, type: :observer do
 
     before do
       allow(Mailers::SendPersonPaymentEmailJob).to receive(:perform_later).with(person_payment:)
+      allow(Events::PersonPayments::SendFailedPaymentEventJob).to receive(:perform_later).with(person_payment:)
     end
 
     context 'when person payment has no subscription' do
       it 'calls the mailer job' do
         person_payment.update(status: :paid)
         expect(Mailers::SendPersonPaymentEmailJob).to have_received(:perform_later).with(person_payment:)
+      end
+
+      it 'does not call the event job' do
+        expect(Events::PersonPayments::SendFailedPaymentEventJob)
+          .not_to have_received(:perform_later).with(person_payment:)
       end
     end
 
@@ -25,6 +31,12 @@ RSpec.describe PersonPaymentObserver, type: :observer do
       it 'does not call the mailer job' do
         person_payment.update(status: :paid)
         expect(Mailers::SendPersonPaymentEmailJob).not_to have_received(:perform_later).with(person_payment:)
+      end
+
+      it 'calls the event job' do
+        person_payment.update(status: :failed)
+        expect(Events::PersonPayments::SendFailedPaymentEventJob).to have_received(:perform_later)
+          .with(person_payment:)
       end
     end
   end
