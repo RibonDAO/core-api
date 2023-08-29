@@ -25,6 +25,7 @@ module Subscriptions
       return unless unsubscribe[:status] == 'canceled'
 
       subscription.update!(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
+      send_email(subscription)
     end
 
     def failure_callback(err)
@@ -37,6 +38,10 @@ module Subscriptions
 
     def gateway
       subscription.offer.gateway
+    end
+
+    def send_email(subscription)
+      SendCancelSubscriptionEmail.new(subscription:).call
     end
 
     def cancel_params
