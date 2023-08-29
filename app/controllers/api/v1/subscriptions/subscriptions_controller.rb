@@ -5,7 +5,10 @@ module Api
         include ::Subscriptions
 
         def unsubscribe
-          command = ::Subscriptions::CancelSubscription.call(subscription_id: params[:id])
+          subscription_id = ::Jwt::Decoder.decode(params[:token])[:subscription_id]
+          return head :unauthorized unless subscription_id
+
+          command = ::Subscriptions::CancelSubscription.call(subscription_id:)
 
           if command.success?
             head :ok
