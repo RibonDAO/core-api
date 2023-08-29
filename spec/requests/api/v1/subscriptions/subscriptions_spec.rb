@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Subscriptions::Subscriptions', type: :request do
   let(:subscription) { create(:subscription) }
-  let(:params) { subscription.id }
   let(:create_order_command_double) do
     command_double(klass: Subscriptions::CancelSubscription)
   end
@@ -13,10 +12,17 @@ RSpec.describe 'Api::V1::Subscriptions::Subscriptions', type: :request do
 
   describe 'PUT /api/v1/subscriptions/cancel_subscription/:id' do
     context 'when is successfully cancelled' do
-      subject(:request) { put "/api/v1/subscriptions/cancel_subscription/#{subscription.id}" }
+      subject(:request) { put '/api/v1/subscriptions/cancel_subscription', params: { token: } }
+
+      let(:token) { Jwt::Encoder.encode({ subscription_id: subscription.id }) }
 
       let(:create_order_command_double) do
         command_double(klass: Subscriptions::CancelSubscription, success: true)
+      end
+
+      before do
+        subscription
+        allow(SecureRandom).to receive(:hex).and_return('dummy')
       end
 
       it 'returns http status ok' do
@@ -27,10 +33,15 @@ RSpec.describe 'Api::V1::Subscriptions::Subscriptions', type: :request do
     end
 
     context 'when command returns error' do
-      subject(:request) { put "/api/v1/subscriptions/cancel_subscription/#{subscription.id}" }
+      subject(:request) { put '/api/v1/subscriptions/cancel_subscription', params: { token: } }
 
+      let(:token) { Jwt::Encoder.encode({ subscription_id: subscription.id }) }
       let(:create_order_command_double) do
         command_double(klass: Subscriptions::CancelSubscription, success: false)
+      end
+
+      before do
+        allow(SecureRandom).to receive(:hex).and_return('dummy')
       end
 
       it 'returns http status unprocessable entity' do
