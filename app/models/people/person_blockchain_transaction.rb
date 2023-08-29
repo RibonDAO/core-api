@@ -14,9 +14,7 @@ class PersonBlockchainTransaction < ApplicationRecord
   belongs_to :person_payment
 
   after_create :update_status_from_eth_chain
-  after_update :handle_blockchain_success, if: proc { |obj|
-    obj.saved_change_to_treasure_entry_status? && obj.success?
-  }
+  after_update :handle_blockchain_success, if: :success?
 
   enum treasure_entry_status: {
     processing: 0,
