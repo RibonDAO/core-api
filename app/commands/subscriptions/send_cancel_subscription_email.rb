@@ -33,8 +33,7 @@ module Subscriptions
     end
 
     def jwt
-      user = subscription.payer.user
-      @jwt ||= ::Jwt::Encoder.encode({ email: user.email })
+      @jwt ||= ::Jwt::Encoder.encode({ subscription_id: subscription.id })
     end
   end
 end
