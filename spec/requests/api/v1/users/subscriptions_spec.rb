@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
   describe 'GET /api/v1/users/:user_id/subscriptions' do
     context 'when successfully get user subscriptions' do
-      subject(:request) { get "/api/v1/users/subscriptions", headers: { Email: user.email }}
+      subject(:request) { get '/api/v1/users/subscriptions', headers: { Email: user.email } }
 
       include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
 
