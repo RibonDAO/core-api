@@ -26,6 +26,7 @@ module Subscriptions
 
       subscription.update!(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
       send_email(subscription)
+      subscription
     end
 
     def failure_callback(err)

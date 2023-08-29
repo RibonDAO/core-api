@@ -4,7 +4,7 @@ module Api
       class SubscriptionsController < ApplicationController
         include ::Subscriptions
         def index
-          ids = user.customers.pluck(:id)
+          ids = current_user.customers.pluck(:id)
           @subscriptions = Subscription.where(payer_id: ids, status: :active)
 
           render json: SubscriptionBlueprint.render(@subscriptions)
@@ -21,10 +21,6 @@ module Api
         end
 
         private
-
-        def user
-          @user ||= User.find params[:user_id]
-        end
 
         def subscription
           @subscription ||= Subscription.find params[:subscription_id]

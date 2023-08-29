@@ -60,6 +60,7 @@ Rails.application.routes.draw do
       post 'users/send_delete_account_email' => 'users#send_delete_account_email'
       delete 'users' => 'users#destroy'
       post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
+      get 'users/subscriptions' => 'users/subscriptions#index'
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -105,7 +106,6 @@ Rails.application.routes.draw do
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
-        get 'subscriptions' => 'users/subscriptions#index'
         
       end
       resources :integrations, only: [] do
