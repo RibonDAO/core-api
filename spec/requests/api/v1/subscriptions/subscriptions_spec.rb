@@ -17,7 +17,8 @@ RSpec.describe 'Api::V1::Subscriptions::Subscriptions', type: :request do
       let(:token) { Jwt::Encoder.encode({ subscription_id: subscription.id }) }
 
       let(:create_order_command_double) do
-        command_double(klass: Subscriptions::CancelSubscription, success: true)
+        command_double(klass: Subscriptions::CancelSubscription, success: true,
+                       result: OpenStruct.new(subscription:))
       end
 
       before do
