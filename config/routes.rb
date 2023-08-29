@@ -154,7 +154,7 @@ Rails.application.routes.draw do
 
       namespace :subscriptions do
         get 'subscription/:id' => 'subscriptions#show'
-        put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
+        put 'cancel_subscription' => 'subscriptions#unsubscribe'
       end
     end
   end
