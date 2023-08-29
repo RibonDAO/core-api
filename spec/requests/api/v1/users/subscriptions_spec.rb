@@ -7,7 +7,7 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
 
       include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
 
-      let(:user) { create(:user) }
+      let(:user) { create(:user, email: 'user101@example.com') }
       let(:customer) { create(:customer, user:) }
       let(:person_payment) { create(:person_payment, payer: customer) }
       let(:subscription) do
