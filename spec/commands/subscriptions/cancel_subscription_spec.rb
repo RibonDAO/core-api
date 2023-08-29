@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe Subscriptions::CancelSubscription do
   describe '.call' do
-    subject(:command) { described_class.call(args) }
+    subject(:command) { described_class.call(subscription_id:) }
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
@@ -12,7 +12,7 @@ describe Subscriptions::CancelSubscription do
       build(:subscription, external_id: 'sub_1Ne15GAvG66WJy8BS3oZ9VGW', cancel_date: nil, offer:)
     end
 
-    let(:args) { { subscription: } }
+    let(:subscription_id) { subscription.id }
 
     before do
       allow(Subscription).to receive(:find_by).and_return(subscription)
