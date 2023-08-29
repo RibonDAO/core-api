@@ -4,8 +4,8 @@ module Subscriptions
 
     attr_reader :subscription_id
 
-    def initialize(args)
-      @subscription_id = args[:subscription_id]
+    def initialize(subscription_id:)
+      @subscription_id = subscription_id
     end
 
     def call
