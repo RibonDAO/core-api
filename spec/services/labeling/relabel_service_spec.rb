@@ -3,11 +3,30 @@ require 'rails_helper'
 RSpec.describe Labeling::RelabelService, type: :service do
   subject(:service) { described_class.new(from:) }
 
-  let(:from) { Time.zone.now }
+  let(:from) { 1.year.ago }
 
   describe '#initialize' do
     it 'sets the "from" attribute' do
       expect(service.from).to eq(from)
+    end
+  end
+
+  describe '#ordered_records' do
+    let!(:donation1) { create(:donation, created_at: 10.days.ago) }
+    let!(:donation2) { create(:donation, created_at: 5.days.ago) }
+    let!(:donation3) { create(:donation, created_at: 1.day.ago) }
+    let!(:contribution1) { create(:contribution) }
+    let!(:contribution2) { create(:contribution) }
+
+    before do
+      create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 7.days.ago,
+                                             person_payment: contribution1.person_payment)
+      create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 3.days.ago,
+                                             person_payment: contribution2.person_payment)
+    end
+
+    it 'orders all records according to donation created_at and contribution succeeded_at' do
+      expect(service.ordered_records).to eq([donation1, contribution1, donation2, contribution2, donation3])
     end
   end
 

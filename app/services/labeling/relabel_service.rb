@@ -22,7 +22,7 @@ module Labeling
     def setup_records
       ActiveRecord::Base.transaction do
         ContributionBalance.delete_all
-        Contributions.all.each(&:set_contribution_balance)
+        Contribution.all.each(&:set_contribution_balance)
         ContributionFee.delete_all
         DonationContribution.delete_all
       end
