@@ -2,17 +2,10 @@ module Api
   module V1
     class NonProfitsController < ApplicationController
       def index
-        @non_profits = NonProfit.where(status: :active).order(cause_id: :asc)
-        render json: NonProfitBlueprint.render(@non_profits)
-      end
+        @non_profits = NonProfit.where(status: :active)
+        @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
 
-      # we don't use this function anymore but we will remove when the shuffle feature is in production
-      def free_donation_non_profits
-        @non_profits = NonProfit.where(status: :active).order(cause_id: :asc)
-        @non_profits_with_pool_balance = @non_profits.select do |non_profit|
-          non_profit.cause.active && non_profit.cause.with_pool_balance
-        end
-        render json: NonProfitBlueprint.render(@non_profits_with_pool_balance)
+        render json: NonProfitBlueprint.render(@random_non_profits)
       end
 
       def stories
