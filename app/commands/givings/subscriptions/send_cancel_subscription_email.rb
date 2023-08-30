@@ -26,7 +26,7 @@ module Givings
                            receiver_name: subscription.receiver.name,
                            subscription_id: subscription.id,
                            user: subscription.payer.user,
-                           amount: subscription.person_payments.last.formatted_amount,
+                           amount: subscription.formatted_amount,
                            url:,
                            status: subscription.status
                          }

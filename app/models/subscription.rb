@@ -30,4 +30,8 @@ class Subscription < ApplicationRecord
     inactive: 1,
     canceled: 2
   }
+
+  def formatted_amount
+    person_payments&.last&.formatted_amount
+  end
 end

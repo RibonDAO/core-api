@@ -9,14 +9,8 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
 
       let(:user) { create(:user) }
       let(:customer) { create(:customer, user:) }
-      let(:person_payment) { create(:person_payment, payer: customer) }
-      let(:subscription) do
-        create(:subscription, person_payments: [person_payment], status: :active, payer: customer)
-      end
-
-      before do
-        subscription
-      end
+      let!(:subscription) { create(:subscription, status: :active, payer: customer) }
+      let(:person_payment) { create(:person_payment, payer: customer, subscription:) }
 
       it 'returns all user subscriptions' do
         request
@@ -35,17 +29,13 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
 
       include_context('when mocking a request') do
         let(:cassette_name) do
-          'send_event_customer_cancel_subscription'
+          'send_event_customer'
         end
       end
-      let(:user) { create(:user, email: 'user151@example.com') }
+      let(:user) { create(:user, email: 'user100@example.com') }
       let(:customer) { create(:customer, user:) }
+      let!(:subscription) { create(:subscription, payer: customer) }
       let(:person_payment) { create(:person_payment, payer: customer, subscription:) }
-      let(:subscription) { create(:subscription, payer: customer) }
-
-      before do
-        person_payment
-      end
 
       it 'send request successfully' do
         request
