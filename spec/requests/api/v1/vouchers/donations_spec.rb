@@ -15,7 +15,10 @@ RSpec.describe 'Api::V1::Vouchers::Donations', type: :request do
         integration_id: integration.id,
         non_profit_id: non_profit.id,
         email: user.email,
-        external_id:
+        external_id:,
+        utm_source: 'utm source',
+        utm_medium: 'utm medium',
+        utm_campaign: 'utm campaign'
       }
     end
 
@@ -25,6 +28,10 @@ RSpec.describe 'Api::V1::Vouchers::Donations', type: :request do
     end
 
     context 'when the donate command succeeds' do
+      before do
+        allow(Tracking::AddUtm).to receive(:call)
+      end
+
       it 'returns http status created' do
         request
 
@@ -35,6 +42,11 @@ RSpec.describe 'Api::V1::Vouchers::Donations', type: :request do
         request
         expect(response_body.external_id).to eq external_id
         expect(response_body.donation).to be_present
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 

@@ -18,6 +18,7 @@ class Cause < ApplicationRecord
   has_many :non_profits
   has_many :pools
   has_many :person_payments, as: :receiver
+  has_many :subscriptions, as: :receiver
 
   has_one_attached :main_image
   has_one_attached :cover_image
@@ -28,6 +29,10 @@ class Cause < ApplicationRecord
 
   def default_pool
     pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
+  end
+
+  def with_pool_balance
+    default_pool.respond_to?(:pool_balance) && default_pool.pool_balance.balance.positive?
   end
 
   def blueprint
