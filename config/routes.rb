@@ -26,7 +26,6 @@ Rails.application.routes.draw do
       delete 'stories/:id' => 'stories#destroy'
       
       get 'non_profits' => 'non_profits#index'
-      get 'free_donation_non_profits' => 'non_profits#free_donation_non_profits'
       get 'non_profits/:id/stories' => 'non_profits#stories'
       post 'non_profits' => 'non_profits#create'
       get 'non_profits/:id' => 'non_profits#show'
