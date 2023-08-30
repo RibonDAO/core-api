@@ -23,9 +23,15 @@ class Subscription < ApplicationRecord
   belongs_to :offer, optional: true
   belongs_to :integration
 
+  has_many :person_payments
+
   enum status: {
     active: 0,
     inactive: 1,
     canceled: 2
   }
+
+  def formatted_amount
+    person_payments&.last&.formatted_amount
+  end
 end

@@ -58,7 +58,9 @@ Rails.application.routes.draw do
       get 'users/statistics' => 'users/statistics#index'
       post 'users/send_delete_account_email' => 'users#send_delete_account_email'
       delete 'users' => 'users#destroy'
-      
+      post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
+      get 'users/subscriptions' => 'users/subscriptions#index'
+
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
       get 'free_donation_causes' => 'causes#free_donation_causes'
@@ -103,6 +105,7 @@ Rails.application.routes.draw do
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
+        
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -124,8 +127,7 @@ Rails.application.routes.draw do
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
-        post 'pix'   => 'pix#create'
-        put 'cancel_subscription/:id' => 'subscriptions#unsubscribe'
+        post 'pix'   => 'pix#create'        
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -149,6 +151,10 @@ Rails.application.routes.draw do
         get 'total_impacted_lives' => 'site#total_impacted_lives'
       end
 
+      namespace :subscriptions do
+        get 'subscription/:id' => 'subscriptions#show'
+        put 'cancel_subscription' => 'subscriptions#unsubscribe'
+      end
     end
   end
 

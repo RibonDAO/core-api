@@ -1,12 +1,12 @@
 module Givings
-  module Payment
+  module Subscriptions
     class CancelSubscription < ApplicationCommand
       prepend SimpleCommand
 
       attr_reader :subscription_id
 
-      def initialize(args)
-        @subscription_id = args[:subscription_id]
+      def initialize(subscription_id:)
+        @subscription_id = subscription_id
       end
 
       def call
@@ -26,6 +26,8 @@ module Givings
         return unless unsubscribe[:status] == 'canceled'
 
         subscription.update!(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
+        send_email(subscription)
+        subscription
       end
 
       def failure_callback(err)
@@ -38,6 +40,10 @@ module Givings
 
       def gateway
         subscription.offer.gateway
+      end
+
+      def send_email(subscription)
+        SendCancelSubscriptionEmail.new(subscription:).call
       end
 
       def cancel_params
