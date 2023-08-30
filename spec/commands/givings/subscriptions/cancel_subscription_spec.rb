@@ -42,7 +42,7 @@ describe Givings::Subscriptions::CancelSubscription do
 
       context 'when the cancelation is sucessfull' do
         let(:jwt) { 'jwt.webtoken' }
-        let(:url) { "https://dapp.ribon.io/cancel_subscription_?token=#{jwt}" }
+        let(:url) { "https://dapp.ribon.io/monthly-contribution-canceled?token=#{jwt}" }
         let(:event_service_double) { instance_double(EventServices::SendEvent) }
         let(:event) do
           OpenStruct.new({
