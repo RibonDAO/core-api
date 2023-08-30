@@ -38,7 +38,7 @@ module Givings
       end
 
       def url
-        "https://dapp.ribon.io/cancel_subscription_?token=#{jwt}"
+        "https://dapp.ribon.io/monthly-contribution-canceled?token=#{jwt}"
       end
     end
   end
