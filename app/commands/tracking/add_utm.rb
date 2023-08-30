@@ -12,9 +12,15 @@ module Tracking
     end
 
     def call
-      trackable.create_utm(source: utm_source, medium: utm_medium, campaign: utm_campaign)
+      trackable.create_utm!(source: utm_source, medium: utm_medium, campaign: utm_campaign) if valid_params?
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })
+    end
+
+    private
+
+    def valid_params?
+      utm_source.present? && trackable.present?
     end
   end
 end
