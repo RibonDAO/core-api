@@ -179,11 +179,11 @@ RSpec.describe Contribution, type: :model do
 
     context 'when the receiver is a cause' do
       let(:receiver) { create(:cause) }
-      let(:non_profits) { create_list(:non_profit, 2, cause: receiver) }
+      let!(:non_profits) { create_list(:non_profit, 2, cause: receiver) }
       let(:contribution) { create(:contribution, receiver:) }
 
       it 'returns an array with all the non profits of the cause' do
-        expect(contribution.non_profits).to eq(non_profits)
+        expect(contribution.non_profits.pluck(:id)).to eq(non_profits.pluck(:id))
       end
     end
   end
