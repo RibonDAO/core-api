@@ -41,60 +41,6 @@ RSpec.describe 'Api::V1::NonProfits', type: :request do
     end
   end
 
-  describe 'GET /free_donation_non_profits' do
-    subject(:request) { get '/api/v1/free_donation_non_profits' }
-
-    let!(:cause) { create(:cause) }
-    let!(:pool) { create(:pool, cause:, token:) }
-    let(:chain) { create(:chain) }
-    let(:token) { create(:token, chain:) }
-
-    before do
-      create(:ribon_config, default_chain_id: chain.chain_id)
-      create(:pool_balance, pool:, balance: 1000)
-    end
-
-    describe 'GET /index with 2 non profits available' do
-      before do
-        create_list(:non_profit, 2, cause:)
-      end
-
-      it 'returns a list of non profits' do
-        request
-
-        expect_response_collection_to_have_keys(%w[created_at id impact_description name updated_at
-                                                   wallet_address background_image logo main_image
-                                                   logo_description main_image_description
-                                                   background_image_description confirmation_image_description
-                                                   impact_by_ticket stories cause status non_profit_impacts
-                                                   confirmation_image])
-      end
-
-      it 'returns 2 non profits' do
-        request
-
-        expect(response_json.count).to eq(2)
-      end
-    end
-
-    describe 'GET /index with 1 non profit available because of pool balance' do
-      let!(:cause) { create(:cause) }
-      let!(:pool) { create(:pool, cause:, token:) }
-
-      before do
-        create(:pool_balance, pool:, balance: 1000)
-        create(:non_profit, cause:, status: :active)
-        create(:non_profit)
-      end
-
-      it 'returns 1 non profit' do
-        request
-
-        expect(response_json.count).to eq(1)
-      end
-    end
-  end
-
   describe 'GET /stories' do
     subject(:request) { get "/api/v1/non_profits/#{non_profit.id}/stories" }
 
