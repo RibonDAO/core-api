@@ -11,7 +11,7 @@ http_interactions:
       User-Agent:
       - Customer.io Ruby Client/5.1.0
       Authorization:
-      - Basic ZWY0MTAzNjA0YmQxNjNmZDQ0OTM6YzdjNWNjZDQ0M2FmYzk4ZGU3YzY=
+      - Basic token=
       Content-Type:
       - application/json
   response:
