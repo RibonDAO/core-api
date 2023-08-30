@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Subscriptions::SendCancelSubscriptionEmail do
+describe Givings::Subscriptions::SendCancelSubscriptionEmail do
   describe '.call' do
     include ActiveStorage::Blob::Analyzable
     subject(:command) { described_class.call(args) }
@@ -11,6 +11,7 @@ describe Subscriptions::SendCancelSubscriptionEmail do
     let!(:person_payment) { create(:person_payment, subscription:, payer: customer) }
     let(:args) { { subscription: } }
     let(:jwt) { 'jwt.webtoken' }
+    let(:url) { "https://dapp.ribon.io/cancel_subscription_?token=#{jwt}" }
 
     let(:event_service_double) { instance_double(EventServices::SendEvent) }
     let(:event) do
@@ -21,7 +22,7 @@ describe Subscriptions::SendCancelSubscriptionEmail do
                          subscription_id: subscription.id,
                          user: subscription.payer.user,
                          amount: person_payment.formatted_amount,
-                         token: jwt,
+                         url:,
                          status: subscription.status
                        }
                      })

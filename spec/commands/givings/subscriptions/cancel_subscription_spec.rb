@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Subscriptions::CancelSubscription do
+describe Givings::Subscriptions::CancelSubscription do
   describe '.call' do
     subject(:command) { described_class.call(subscription_id:) }
 
@@ -42,6 +42,7 @@ describe Subscriptions::CancelSubscription do
 
       context 'when the cancelation is sucessfull' do
         let(:jwt) { 'jwt.webtoken' }
+        let(:url) { "https://dapp.ribon.io/cancel_subscription_?token=#{jwt}" }
         let(:event_service_double) { instance_double(EventServices::SendEvent) }
         let(:event) do
           OpenStruct.new({
@@ -51,7 +52,7 @@ describe Subscriptions::CancelSubscription do
                              subscription_id: subscription.id,
                              user: subscription.payer.user,
                              amount: person_payment.formatted_amount,
-                             token: jwt,
+                             url:,
                              status: subscription.status
                            }
                          })
