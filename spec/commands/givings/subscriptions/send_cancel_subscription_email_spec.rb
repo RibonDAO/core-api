@@ -11,7 +11,7 @@ describe Givings::Subscriptions::SendCancelSubscriptionEmail do
     let!(:person_payment) { create(:person_payment, subscription:, payer: customer) }
     let(:args) { { subscription: } }
     let(:jwt) { 'jwt.webtoken' }
-    let(:url) { "https://dapp.ribon.io/monthly-contribution-canceled?token=#{jwt}" }
+    let(:url) { "#{RibonCoreApi.config[:dapp][:url]}/monthly-contribution-canceled?token=#{jwt}" }
 
     let(:event_service_double) { instance_double(EventServices::SendEvent) }
     let(:event) do

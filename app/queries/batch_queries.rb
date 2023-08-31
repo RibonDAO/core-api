@@ -15,8 +15,8 @@ class BatchQueries
             and dba is null
             and donations.integration_id = #{integration.id}
             and donations.non_profit_id = #{non_profit.id}
-            and donations.created_at > '#{period}'
-            and donations.created_at < '#{period.at_end_of_month}')
+            and donations.created_at > '#{period.beginning_of_day}'
+            and donations.created_at < '#{period.at_end_of_month.end_of_day}')
     ActiveRecord::Base.connection.execute(sql).map do |t|
       t['id']
     end
