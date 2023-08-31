@@ -38,7 +38,7 @@ module Givings
       end
 
       def url
-        "https://dapp.ribon.io/monthly-contribution-canceled?token=#{jwt}"
+        "#{RibonCoreApi.config[:dapp][:url]}/monthly-contribution-canceled?token=#{jwt}"
       end
     end
   end
