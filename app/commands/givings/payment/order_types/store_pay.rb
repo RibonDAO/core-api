@@ -44,7 +44,13 @@ module Givings
         private
 
         def find_or_create_customer
-          Customer.find_by(user_id: user.id) || Customer.create!(email:, tax_id:, name:, user:)
+          customer = Customer.find_by(user_id: user.id)
+          if customer
+            customer.update!(tax_id:)
+            customer
+          else
+            Customer.create!(email:, tax_id:, name:, user:)
+          end
         end
 
         def create_subscription(payer)
