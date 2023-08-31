@@ -11,9 +11,10 @@ module Api
           if command.success?
             render json: SubscriptionBlueprint.render(command.result.subscription), status: :ok
           else
-
             render_errors(command.errors)
           end
+        rescue StandardError
+          head :unauthorized
         end
 
         def show
