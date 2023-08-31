@@ -183,7 +183,7 @@ RSpec.describe Contribution, type: :model do
       let(:contribution) { create(:contribution, receiver:) }
 
       it 'returns an array with all the non profits of the cause' do
-        expect(contribution.non_profits.pluck(:id)).to eq(non_profits.pluck(:id))
+        expect(contribution.non_profits.pluck(:id).sort).to eq(non_profits.pluck(:id).sort)
       end
     end
   end
