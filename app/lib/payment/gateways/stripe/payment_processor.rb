@@ -47,7 +47,8 @@ module Payment
         end
 
         def unsubscribe(subscription)
-          Billing::Subscription.cancel(subscription:)
+          result = Billing::Subscription.cancel(subscription:)
+          return Billing::Subscription.find(id: subscription.external_id) unless result
         end
 
         def refund(payment)
