@@ -40,7 +40,8 @@ describe Donations::CreateDonationsBatch do
 
     it 'creates a donation_batch for donation from period month' do
       command.call
-      expect(DonationBatch.last.donation.created_at).to be_between(period, period.end_of_month)
+      expect(DonationBatch.last.donation.created_at).to be_between(period.at_beginning_of_day,
+                                                                   period.end_of_month.at_end_of_day)
     end
 
     it 'does not create a donation_batch for donation from last month' do

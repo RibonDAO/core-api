@@ -32,7 +32,7 @@ class Cause < ApplicationRecord
   end
 
   def with_pool_balance
-    default_pool.respond_to?(:pool_balance) && default_pool.pool_balance.balance.positive?
+    default_pool.respond_to?(:pool_balance) && default_pool&.pool_balance&.balance&.positive?
   end
 
   def blueprint

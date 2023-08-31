@@ -46,8 +46,13 @@ module Payment
           }
         end
 
-        def unsubscribe(subscription)
-          Billing::Subscription.cancel(subscription:)
+        def unsubscribe(subscription_params)
+          subscription = Billing::Subscription.find(id: subscription_params.external_identifier)
+          if subscription[:status] == 'active'
+            return Billing::Subscription.cancel(subscription: subscription_params)
+          end
+
+          subscription
         end
 
         def refund(payment)
