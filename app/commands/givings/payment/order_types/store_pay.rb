@@ -46,7 +46,7 @@ module Givings
         def find_or_create_customer
           customer = Customer.find_by(user_id: user.id)
           if customer
-            customer.update!(tax_id:)
+            customer.update!(tax_id:) if tax_id.present?
             customer
           else
             Customer.create!(email:, tax_id:, name:, user:)
