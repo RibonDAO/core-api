@@ -17,6 +17,10 @@ module Payment
           def self.cancel(subscription:)
             ::Stripe::Subscription.cancel(subscription.external_identifier)
           end
+
+          def self.find(id:)
+            ::Stripe::Subscription.retrieve(id)
+          end
         end
       end
     end
