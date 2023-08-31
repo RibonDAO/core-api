@@ -7,9 +7,8 @@ module Api
           return head :unauthorized unless subscription_id
 
           command = ::Givings::Subscriptions::CancelSubscription.call(subscription_id:)
-
           if command.success?
-            render json: SubscriptionBlueprint.render(command.result.subscription), status: :ok
+            render json: SubscriptionBlueprint.render(command.result), status: :ok
           else
             render_errors(command.errors)
           end

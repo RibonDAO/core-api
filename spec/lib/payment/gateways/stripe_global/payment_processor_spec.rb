@@ -89,6 +89,7 @@ RSpec.describe Payment::Gateways::StripeGlobal::PaymentProcessor do
 
     before do
       allow(Stripe::Subscription).to receive(:cancel)
+      allow(Stripe::Subscription).to receive(:retrieve).and_return(OpenStruct.new({ status: 'active' }))
     end
 
     it 'calls Stripe::Subscription api' do
