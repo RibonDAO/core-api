@@ -3,8 +3,9 @@ module Contributions
     queue_as :contributions
 
     def perform(contribution_balance:, big_donor:)
-      statistics = Service::Contributions::StatisticsService.new(contribution: contribution_balance.contribution)
-                                                            .formatted_email_statistics
+      statistics = ContributionServices::Statistics.new(contribution: contribution_balance.contribution)
+                                                   .formatted_email_statistics
+
       return if statistics[:usage_percentage] < 5
 
       percentage = find_closest_email_percentage(statistics[:usage_percentage])

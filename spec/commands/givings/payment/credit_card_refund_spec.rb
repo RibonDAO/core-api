@@ -22,20 +22,20 @@ describe Givings::Payment::CreditCardRefund do
       let(:offer) { create(:offer) }
       let(:gateway) { offer.gateway }
 
-      it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
-        allow(Service::Givings::Payment::Orchestrator).to receive(:new)
+      it 'calls GivingServices::Payment::Orchestrator with correct payload' do
+        allow(GivingServices::Payment::Orchestrator).to receive(:new)
         command
 
-        expect(Service::Givings::Payment::Orchestrator)
+        expect(GivingServices::Payment::Orchestrator)
           .to have_received(:new).with(payload: an_object_containing(
             external_id: person_payment.external_id, gateway:,
             operation: 'refund'
           ))
       end
 
-      it 'calls Service::Givings::Payment::Orchestrator process' do
-        orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
-        allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
+      it 'calls GivingServices::Payment::Orchestrator process' do
+        orchestrator_double = instance_double(GivingServices::Payment::Orchestrator, { call: nil })
+        allow(GivingServices::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         command
 
         expect(orchestrator_double).to have_received(:call)
@@ -54,19 +54,19 @@ describe Givings::Payment::CreditCardRefund do
       let(:offer) { create(:offer, :with_stripe_global) }
       let(:gateway) { offer.gateway }
 
-      it 'calls Service::Givings::Payment::Orchestrator with correct payload' do
-        allow(Service::Givings::Payment::Orchestrator).to receive(:new)
+      it 'calls GivingServices::Payment::Orchestrator with correct payload' do
+        allow(GivingServices::Payment::Orchestrator).to receive(:new)
         command
-        expect(Service::Givings::Payment::Orchestrator)
+        expect(GivingServices::Payment::Orchestrator)
           .to have_received(:new).with(payload: an_object_containing(
             external_id: person_payment.external_id, gateway:,
             operation: 'refund'
           ))
       end
 
-      it 'calls Service::Givings::Payment::Orchestrator process' do
-        orchestrator_double = instance_double(Service::Givings::Payment::Orchestrator, { call: nil })
-        allow(Service::Givings::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
+      it 'calls GivingServices::Payment::Orchestrator process' do
+        orchestrator_double = instance_double(GivingServices::Payment::Orchestrator, { call: nil })
+        allow(GivingServices::Payment::Orchestrator).to receive(:new).and_return(orchestrator_double)
         command
 
         expect(orchestrator_double).to have_received(:call)

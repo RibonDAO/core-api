@@ -9,11 +9,11 @@ describe Contributions::CreateContribution do
   let(:receiver) { create(:cause) }
   let(:payment) { create(:person_payment, receiver:, liquid_value_cents: 1000) }
   let(:command) { described_class.call(payment:) }
-  let(:contribution_fee_service_instance) { instance_double(Service::Contributions::FeesLabelingService) }
+  let(:contribution_fee_service_instance) { instance_double(ContributionServices::FeesLabeling) }
 
   describe '#call' do
     before do
-      allow(Service::Contributions::FeesLabelingService).to receive(:new)
+      allow(ContributionServices::FeesLabeling).to receive(:new)
         .and_return(contribution_fee_service_instance)
       allow(contribution_fee_service_instance).to receive(:spread_fee_to_payers)
       allow(Reporter).to receive(:log)

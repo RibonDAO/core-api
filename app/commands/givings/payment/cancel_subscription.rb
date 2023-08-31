@@ -11,7 +11,7 @@ module Givings
 
       def call
         if subscription&.external_id?
-          unsubscribe = Service::Givings::Payment::Orchestrator.new(payload: cancel_params).call
+          unsubscribe = GivingServices::Payment::Orchestrator.new(payload: cancel_params).call
         end
 
         success_unsubscribe(subscription, unsubscribe)

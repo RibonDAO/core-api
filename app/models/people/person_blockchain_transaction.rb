@@ -43,14 +43,14 @@ class PersonBlockchainTransaction < ApplicationRecord
     return unless person_payment.receiver_type == 'Cause'
 
     pool = person_payment.receiver.default_pool
-    Service::Donations::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
+    DonationServices::PoolBalances.new(pool:).increase_balance(person_payment.crypto_amount)
   end
 
   def charge_contribution_fees
     return unless success?
     return if person_payment&.contribution&.generated_fee_cents&.zero?
 
-    Service::Contributions::FeesLabelingService.new(contribution: person_payment.contribution).spread_fee_to_payers
+    ContributionServices::FeesLabeling.new(contribution: person_payment.contribution).spread_fee_to_payers
   end
 
   def set_succeeded_at
