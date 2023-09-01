@@ -18,7 +18,7 @@ module Givings
 
         success_callback(order, payment_process_result)
 
-        order.payment
+        RecursiveOpenStruct.new(payment_process_result.merge({ payment: order.payment }))
       rescue StandardError => e
         failure_callback(order, e)
         Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
