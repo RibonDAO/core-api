@@ -81,8 +81,8 @@ describe Givings::Payment::CreateOrder do
 
           expect(person_payment.status).to eq('paid')
           expect(subscription.status).to eq('active')
-          expect(subscription.external_id).to eq(command.result.subscription.external_id)
-          expect(person_payment.external_id).to eq(command.result.external_id)
+          expect(subscription.external_id).to eq(command.result[:payment].subscription.external_id)
+          expect(person_payment.external_id).to eq(command.result[:payment].external_id)
         end
       end
     end
