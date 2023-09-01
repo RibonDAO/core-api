@@ -10,66 +10,69 @@ module Labeling
       setup_records
 
       ordered_records.each do |record|
-        case record.class.to_s
+        case record["record_type"]
         when 'Donation'
-          deal_with_donation(record)
-        when 'Contribution'
-          deal_with_contribution(record)
+          donation = Donation.find(record["id"])
+          deal_with_donation(donation)
+        when 'PersonBlockchainTransaction'
+          contribution = PersonBlockchainTransaction.find(record["id"]).person_payment&.contribution
+          deal_with_contribution(contribution) if contribution
         end
       end
     end
 
     def setup_records
       ActiveRecord::Base.transaction do
-        ContributionBalance.delete_all
-        Contribution.all.each(&:set_contribution_balance)
-        ContributionFee.delete_all
-        DonationContribution.delete_all
+        ContributionBalance.where('created_at >= ?', from).delete_all
+        Contribution.where('created_at >= ?', from).each(&:set_contribution_balance)
+        ContributionFee.where('created_at >= ?', from).delete_all
+        DonationContribution.where('created_at >= ?', from).delete_all
       end
     end
 
     def ordered_records
-      @ordered_records ||= combined_records.sort_by do |record|
-        if record.class.to_s == 'Donation'
-          record.created_at
-        else
-          record.person_payment&.person_blockchain_transaction&.succeeded_at || record.created_at
-        end
-      end
+      @ordered_records ||= begin
+                             donation_records = Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
+                                                        .where('donations.created_at >= ?', from)
+
+                             successful_transaction_records = PersonBlockchainTransaction.select("person_blockchain_transactions.id, COALESCE(person_blockchain_transactions.succeeded_at, person_blockchain_transactions.created_at) AS order_date, 'PersonBlockchainTransaction' AS record_type")
+                                                                                         .where('person_blockchain_transactions.succeeded_at >= ?', from)
+
+                             combined_query = <<~SQL
+          #{donation_records.to_sql}
+          UNION
+          #{successful_transaction_records.to_sql}
+                             SQL
+
+                             ordered_query = <<~SQL
+          SELECT * FROM (#{combined_query}) AS combined_records
+          ORDER BY order_date
+                             SQL
+
+                             ActiveRecord::Base.connection.execute(ordered_query)
+                           end
     end
 
     private
 
     def deal_with_donation(donation)
-      donation_contribution = donation.donation_contribution
-
-      ActiveRecord::Base.transaction do
-        if donation_contribution
-          Service::Contributions::DonationContributionDeleteService.new(donation_contribution:).delete
-        end
-        Service::Contributions::TicketLabelingService.new(donation:).label_donation
-      end
+      Service::Contributions::TicketLabelingService.new(donation:).label_donation
     end
 
     def deal_with_contribution(contribution)
-      ActiveRecord::Base.transaction do
-        contribution.contribution_fees.each do |contribution_fee|
-          Service::Contributions::ContributionFeeDeleteService.new(contribution_fee:).handle_fee_delete
-        end
-        Service::Contributions::FeesLabelingService.new(contribution:).spread_fee_to_payers
-      end
+      Service::Contributions::FeesLabelingService.new(contribution:).spread_fee_to_payers
     end
 
     def combined_records
-      @combined_records ||= donations.to_a.concat(contributions.to_a)
+      @combined_records ||= donations.to_a.concat(person_blockchain_transactions.to_a)
     end
 
     def donations
       @donations ||= Donation.all.where('created_at >= ?', from)
     end
 
-    def contributions
-      @contributions ||= Contribution.where('contributions.created_at >= ?', from).with_payment_in_blockchain
+    def person_blockchain_transactions
+      @person_blockchain_transactions ||= PersonBlockchainTransaction.where('succeeded_at >= ?', from)
     end
   end
 end
