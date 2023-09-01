@@ -8,7 +8,7 @@ module Api
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::StorePay, order_params)
 
           if command.success?
-            Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            Tracking::AddUtm.call(utm_params:, trackable: command.result[:payment])
             render json: command.result, status: :created
           else
             render_errors(command.errors)
