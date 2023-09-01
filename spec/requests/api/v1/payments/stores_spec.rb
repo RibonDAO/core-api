@@ -17,7 +17,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
   let(:payment_method_id) { 'pm_123' }
   let(:payment_method_type) { 'google_pay' }
   let(:create_order_command_double) do
-    command_double(klass: ::Givings::Payment::CreateOrder)
+    command_double(klass: ::Givings::Payment::CreateOrder, result: { payment: nil })
   end
 
   let(:user_double) { build(:user, email: 'user@test.com') }
@@ -35,7 +35,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
 
     context 'when the command is successful' do
       let(:create_order_command_double) do
-        command_double(klass: ::Givings::Payment::CreateOrder, success: true)
+        command_double(klass: ::Givings::Payment::CreateOrder, success: true, result: { payment: nil })
       end
 
       before do

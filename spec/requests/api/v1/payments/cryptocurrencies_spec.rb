@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Payments::Cryptocurrency', type: :request do
   let(:create_order_command_double) do
-    command_double(klass: ::Givings::Payment::CreateOrder)
+    command_double(klass: ::Givings::Payment::CreateOrder, result: { payment: nil })
   end
 
   before do
@@ -25,7 +25,7 @@ RSpec.describe 'Api::V1::Payments::Cryptocurrency', type: :request do
 
     context 'when the command is successful' do
       let(:create_order_command_double) do
-        command_double(klass: ::Givings::Payment::CreateOrder, success: true)
+        command_double(klass: ::Givings::Payment::CreateOrder, success: true, result: { payment: nil })
       end
 
       before do
