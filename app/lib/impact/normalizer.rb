@@ -1,7 +1,7 @@
 module Impact
   class Normalizer
     MAX_AMOUNT_PER_DONOR_RECIPIENT = 200
-    MAX_DAYS_PER_DONOR_RECIPIENT = 730
+    MAX_DAYS_PER_DONOR_RECIPIENT = 733
 
     attr_reader :non_profit_impact, :measurement_unit, :donor_recipient, :impact_description, :rounded_impact
 
