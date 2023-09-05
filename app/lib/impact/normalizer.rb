@@ -57,13 +57,13 @@ module Impact
     end
 
     def split_days_into_periods(days)
-      days_on_each_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30]
+      days_in_each_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
       years = days / 365
       days -= years * 365
 
       months = 0
-      days_on_each_month.each_with_index do |days_on_month, _index|
+      days_in_each_month.each_with_index do |days_on_month, _index|
         break if days < days_on_month
 
         months += 1
