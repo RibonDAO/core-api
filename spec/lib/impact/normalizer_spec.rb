@@ -16,7 +16,7 @@ RSpec.describe Impact::Normalizer do
         let(:rounded_impact) { 540 }
 
         it 'returns the correct impact amount' do
-          expect(method_call[0]).to eq '1 year, 5 months and 25 days'
+          expect(method_call[0]).to eq '1 year, 5 months and 24 days'
         end
 
         it 'returns the correct impact description' do
@@ -32,7 +32,7 @@ RSpec.describe Impact::Normalizer do
         let(:rounded_impact) { 800 }
 
         it 'returns the correct impact amount' do
-          expect(method_call[0]).to eq '1 year, 1 month and 5 days'
+          expect(method_call[0]).to eq '1 year, 1 month and 4 days'
         end
 
         it 'returns the correct impact description' do
@@ -61,7 +61,7 @@ RSpec.describe Impact::Normalizer do
       end
 
       context 'when period is 1 month' do
-        let(:rounded_impact) { 30 }
+        let(:rounded_impact) { 31 }
 
         it 'returns the correct impact amount' do
           expect(method_call[0]).to eq '1 month'
@@ -73,6 +73,22 @@ RSpec.describe Impact::Normalizer do
 
         it 'returns the correct donor recipient' do
           expect(method_call[2]).to eq '1 person'
+        end
+      end
+
+      context 'when rounded impact is 40000' do
+        let(:rounded_impact) { 40_000 }
+
+        it 'returns the correct impact amount' do
+          expect(method_call[0]).to eq '1 year, 11 months and 28 days'
+        end
+
+        it 'returns the correct impact description' do
+          expect(method_call[1]).to eq 'of impacts for'
+        end
+
+        it 'returns the correct donor recipient' do
+          expect(method_call[2]).to eq '55 people'
         end
       end
 
