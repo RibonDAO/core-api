@@ -34,7 +34,7 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
     allow(::Givings::Payment::CreateOrder)
       .to receive(:call).and_return(create_order_command_double)
     allow(CreditCard).to receive(:new).and_return(credit_card_double)
-    allow(User).to receive(:find_or_create_by).and_return(user_double)
+    allow(User).to receive(:find_by).and_return(user_double)
   end
 
   describe 'POST /credit_cards_refund' do
