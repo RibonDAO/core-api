@@ -3,7 +3,7 @@ module Api
     module Users
       class SubscriptionsController < ApplicationController
         def index
-          return unless current_user
+          return [] unless current_user
 
           ids = current_user.customers.pluck(:id)
           @subscriptions = Subscription.where(payer_id: ids, status: :active)
