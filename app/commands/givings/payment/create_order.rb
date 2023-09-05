@@ -72,7 +72,7 @@ module Givings
         external_invoice_id = result[:external_invoice_id]
 
         order.payment.update(external_id:) if external_id
-        order.payment.update(external_id: external_invoice_id) if external_invoice_id
+        order.payment.update(external_invoice_id:) if external_invoice_id
         order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
       end
     end

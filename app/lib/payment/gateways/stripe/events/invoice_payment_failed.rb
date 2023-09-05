@@ -13,9 +13,9 @@ module Payment
 
               subscription.update(status: :inactive)
 
-              external_id = data['id']
+              external_invoice_id = data['id']
 
-              @payment = PersonPayment.where(subscription:, external_id:).first_or_initialize
+              @payment = PersonPayment.where(subscription:, external_invoice_id:).first_or_initialize
               set_payment_attributes
               payment.save!
             end

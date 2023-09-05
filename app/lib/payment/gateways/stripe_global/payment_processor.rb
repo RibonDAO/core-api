@@ -18,17 +18,33 @@ module Payment
           }
         end
 
+        # rubocop:disable Metrics/MethodLength
+        # rubocop:disable Metrics/AbcSize
         def subscribe(order)
           setup_customer(order)
           subscription = Billing::Subscription.create(stripe_customer:, offer: order&.offer)
-
-          {
-            external_customer_id: stripe_customer.id,
-            external_payment_method_id: stripe_payment_method.id,
-            external_subscription_id: subscription.id,
-            external_invoice_id: subscription.latest_invoice
-          }
+          invoice = Entities::Invoice.find(id: subscription.latest_invoice)
+          payment_intent = Entities::PaymentIntent.find(id: invoice.payment_intent)
+          if payment_intent.status == 'paid'
+            {
+              external_customer_id: stripe_customer.id,
+              external_payment_method_id: stripe_payment_method.id,
+              external_subscription_id: subscription.id,
+              external_invoice_id: subscription.latest_invoice,
+              external_id: payment_intent.id
+            }
+          else
+            charge = ::Stripe::Charge.retrieve(payment_intent.latest_charge)
+            raise Stripe::CardErrors.new(
+              external_id: charge.payment_intent,
+              code: e.code,
+              message: e.message,
+              outcome: charge.outcome
+            )
+          end
         end
+        # rubocop:enable Metrics/MethodLength
+        # rubocop:enable Metrics/AbcSize
 
         def unsubscribe(subscription_params)
           subscription = Billing::Subscription.find(id: subscription_params.external_identifier)
