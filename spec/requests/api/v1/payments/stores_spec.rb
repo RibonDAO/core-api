@@ -27,7 +27,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
   before do
     allow(::Givings::Payment::CreateOrder)
       .to receive(:call).and_return(create_order_command_double)
-    allow(User).to receive(:find_or_create_by).and_return(user_double)
+    allow(User).to receive(:find_by).and_return(user_double)
   end
 
   describe 'POST /store_pay' do
