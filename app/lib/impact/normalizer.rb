@@ -63,11 +63,11 @@ module Impact
       days -= years * 365
 
       months = 0
-      days_in_each_month.each do |days_on_month|
-        break if days < days_on_month
+      days_in_each_month.each do |days_in_month|
+        break if days < days_in_month
 
         months += 1
-        days -= days_on_month
+        days -= days_in_month
       end
 
       [years, months, days]
