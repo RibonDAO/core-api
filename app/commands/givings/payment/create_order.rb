@@ -39,7 +39,7 @@ module Givings
       end
 
       def failure_callback(order, err)
-        if err.error.type == 'blocked'
+        if err&.type == 'blocked'
           update_blocked(order:, err:)
         else
           update_failed(order:, err:)
@@ -58,8 +58,10 @@ module Givings
 
       def update_failed(order:, err:)
         order.payment.update(status: :failed, error_code: err.code)
-        order.payment&.subscription&.update(status: :inactive)
-        order.payment.update(external_id: err.error.request_log_url) if err&.error&.request_log_url
+        if err.subscription_id
+          order.payment&.subscription&.update(external_id: err.subscription_id, status: :inactive)
+        end
+        order.payment.update(external_id: err.external_id) if err.external_id
       end
 
       def handle_contribution_creation(payment)
@@ -72,7 +74,7 @@ module Givings
         external_invoice_id = result[:external_invoice_id]
 
         order.payment.update(external_id:) if external_id
-        order.payment.update(external_id: external_invoice_id) if external_invoice_id
+        order.payment.update(external_invoice_id:) if external_invoice_id
         order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
       end
     end
