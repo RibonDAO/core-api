@@ -20,7 +20,7 @@ module Payment
           invoice = Entities::Invoice.find(id: subscription.latest_invoice)
           payment_intent = Entities::PaymentIntent.find(id: invoice.payment_intent)
 
-          return subscribe_failed(payment_intent, subscription) unless payment_intent.status == 'succeeded'
+          return subscribe_incomplete(payment_intent, subscription) unless payment_intent.status == 'succeeded'
 
           subscribe_success(payment_intent, subscription)
         end
@@ -71,13 +71,14 @@ module Payment
           Entities::PaymentIntent.find(id: invoice.payment_intent)
         end
 
-        def subscribe_failed(payment_intent, subscription)
+        def subscribe_incomplete(payment_intent, subscription)
           charge = Entities::Charge.find(id: payment_intent.latest_charge)
           raise Stripe::CardErrors.new(
             external_id: charge.payment_intent,
             subscription_id: subscription.id,
             code: charge.failure_code,
-            message: charge.failure_message
+            message: charge.failure_message,
+            type: 'subscription_incomplete'
           )
         end
       end
