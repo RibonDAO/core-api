@@ -21,8 +21,8 @@ module Payment
         def self.raise_card_error(stripe_error)
           if stripe_error.error.charge
             charge = Entities::Charge.find(id: stripe_error.error.charge)
-            external_id = charge.payment_intent,
-                          type = charge.outcome.type
+            external_id = charge.payment_intent
+            type = charge.outcome.type
           else
             external_id = stripe_error.error.request_log_url
             type = stripe_error.error.type
