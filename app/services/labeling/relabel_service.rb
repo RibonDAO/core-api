@@ -10,12 +10,12 @@ module Labeling
       setup_records
 
       ordered_records.each do |record|
-        case record["record_type"]
+        case record['record_type']
         when 'Donation'
-          donation = Donation.find(record["id"])
+          donation = Donation.find(record['id'])
           deal_with_donation(donation)
         when 'PersonBlockchainTransaction'
-          contribution = PersonBlockchainTransaction.find(record["id"]).person_payment&.contribution
+          contribution = PersonBlockchainTransaction.find(record['id']).person_payment&.contribution
           deal_with_contribution(contribution) if contribution
         end
       end
@@ -32,25 +32,19 @@ module Labeling
 
     def ordered_records
       @ordered_records ||= begin
-                             donation_records = Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
-                                                        .where('donations.created_at >= ?', from)
-
-                             successful_transaction_records = PersonBlockchainTransaction.select("person_blockchain_transactions.id, COALESCE(person_blockchain_transactions.succeeded_at, person_blockchain_transactions.created_at) AS order_date, 'PersonBlockchainTransaction' AS record_type")
-                                                                                         .where('person_blockchain_transactions.succeeded_at >= ?', from)
-
-                             combined_query = <<~SQL
-          #{donation_records.to_sql}
+        combined_query = <<~SQL.squish
+          #{donations.to_sql}
           UNION
-          #{successful_transaction_records.to_sql}
-                             SQL
+          #{person_blockchain_transactions.to_sql}
+        SQL
 
-                             ordered_query = <<~SQL
+        ordered_query = <<~SQL.squish
           SELECT * FROM (#{combined_query}) AS combined_records
           ORDER BY order_date
-                             SQL
+        SQL
 
-                             ActiveRecord::Base.connection.execute(ordered_query)
-                           end
+        ActiveRecord::Base.connection.execute(ordered_query)
+      end
     end
 
     private
@@ -63,16 +57,18 @@ module Labeling
       Service::Contributions::FeesLabelingService.new(contribution:).spread_fee_to_payers
     end
 
-    def combined_records
-      @combined_records ||= donations.to_a.concat(person_blockchain_transactions.to_a)
-    end
-
     def donations
-      @donations ||= Donation.all.where('created_at >= ?', from)
+      @donations ||= Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
+                             .where('donations.created_at >= ?', from)
     end
 
     def person_blockchain_transactions
-      @person_blockchain_transactions ||= PersonBlockchainTransaction.where('succeeded_at >= ?', from)
+      @person_blockchain_transactions ||= PersonBlockchainTransaction
+                                          .select("person_blockchain_transactions.id,
+       COALESCE(person_blockchain_transactions.succeeded_at,
+           person_blockchain_transactions.created_at) AS order_date,
+    'PersonBlockchainTransaction' AS record_type")
+                                          .where('person_blockchain_transactions.succeeded_at >= ?', from)
     end
   end
 end
