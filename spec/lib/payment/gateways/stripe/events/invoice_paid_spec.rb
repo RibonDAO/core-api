@@ -7,7 +7,8 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
     include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
 
     let(:event) do
-      RecursiveOpenStruct.new({ data: { object: { id: 'external_id', subscription: 'external_subscription_id',
+      RecursiveOpenStruct.new({ data: { object: { id: 'external_invoice_id',
+                                                  subscription: 'external_subscription_id',
                                                   created: 1_691_697_994 } } })
     end
 
@@ -33,7 +34,7 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
 
       describe 'and a person_payment' do
         before do
-          create(:person_payment, external_id: 'external_id', subscription:, status: :processing)
+          create(:person_payment, external_invoice_id: 'external_invoice_id', subscription:, status: :processing)
         end
 
         it 'does not create a new person_payment' do
@@ -53,7 +54,7 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
 
       describe 'and a person_payment and a person_blockchain_transaction succeed' do
         let!(:person_payment) do
-          create(:person_payment, external_id: 'external_id', subscription:, status: :processing)
+          create(:person_payment, external_invoice_id: 'external_invoice_id', subscription:, status: :processing)
         end
 
         before do
@@ -69,7 +70,7 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
 
       describe 'and a person_payment and a contribution' do
         let!(:person_payment) do
-          create(:person_payment, external_id: 'external_id', subscription:, status: :processing)
+          create(:person_payment, external_invoice_id: 'external_invoice_id', subscription:, status: :processing)
         end
 
         before do

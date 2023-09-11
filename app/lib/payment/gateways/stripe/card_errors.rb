@@ -13,6 +13,10 @@ module Payment
           stripe_error[:external_id]
         end
 
+        def subscription_id
+          stripe_error[:subscription_id]
+        end
+
         def code
           stripe_error[:code]
         end
@@ -21,8 +25,8 @@ module Payment
           stripe_error[:message]
         end
 
-        def error
-          stripe_error[:outcome]
+        def type
+          stripe_error[:type]
         end
       end
     end

@@ -2,27 +2,28 @@
 #
 # Table name: person_payments
 #
-#  id                 :bigint           not null, primary key
-#  amount_cents       :integer
-#  currency           :integer
-#  error_code         :string
-#  liquid_value_cents :integer
-#  paid_date          :datetime
-#  payer_type         :string
-#  payment_method     :integer
-#  platform           :string
-#  receiver_type      :string
-#  refund_date        :datetime
-#  status             :integer          default("processing")
-#  usd_value_cents    :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  external_id        :string
-#  integration_id     :bigint
-#  offer_id           :bigint
-#  payer_id           :uuid
-#  receiver_id        :bigint
-#  subscription_id    :bigint
+#  id                  :bigint           not null, primary key
+#  amount_cents        :integer
+#  currency            :integer
+#  error_code          :string
+#  liquid_value_cents  :integer
+#  paid_date           :datetime
+#  payer_type          :string
+#  payment_method      :integer
+#  platform            :string
+#  receiver_type       :string
+#  refund_date         :datetime
+#  status              :integer          default("processing")
+#  usd_value_cents     :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  external_id         :string
+#  external_invoice_id :string
+#  integration_id      :bigint
+#  offer_id            :bigint
+#  payer_id            :uuid
+#  receiver_id         :bigint
+#  subscription_id     :bigint
 #
 require 'rails_helper'
 

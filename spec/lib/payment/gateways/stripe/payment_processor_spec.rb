@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
   let(:payment_processor_call) { described_class.new.send(operation, payload) }
 
+  include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
+
   before do
     allow(Stripe::PaymentMethod).to receive(:create).and_return(OpenStruct.new({ id: 'pay_123' }))
     allow(Stripe::Customer).to receive(:create).and_return(OpenStruct.new({ id: 'cus_123' }))
@@ -44,7 +46,7 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
       allow(Stripe::Subscription)
         .to receive(:create)
         .and_return(OpenStruct.new({ id: 'sub_123',
-                                     latest_invoice: 'in_123' }))
+                                     latest_invoice: 'in_1LL5lOJuOnwQq9QxgwtucIBS' }))
     end
 
     it 'calls Stripe::Subscription api' do

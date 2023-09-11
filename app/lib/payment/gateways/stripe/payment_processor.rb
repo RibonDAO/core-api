@@ -8,13 +8,9 @@ module Payment
           setup_customer(order)
           payment = Billing::UniquePayment.create(stripe_customer:, stripe_payment_method:, offer: order&.offer)
 
-          {
-            external_customer_id: stripe_customer&.id,
-            external_payment_method_id: stripe_payment_method&.id,
-            external_id: payment&.id,
-            status: payment&.status,
-            client_secret: payment&.client_secret
-          }
+          purchase_success(payment)
+        rescue ::Stripe::CardError => e
+          Helpers.raise_card_error(e)
         end
 
         def create_intent(order)
@@ -25,25 +21,18 @@ module Payment
                             payment_method_data: order&.payment_method_data,
                             payment_method_options: order&.payment_method_options)
 
-          {
-            external_customer_id: stripe_customer.id,
-            external_payment_method_id: stripe_payment_method&.id,
-            external_id: payment&.id,
-            status: payment&.status,
-            client_secret: payment&.client_secret
-          }
+          purchase_success(payment)
         end
 
         def subscribe(order)
           setup_customer(order)
           subscription = Billing::Subscription.create(stripe_customer:, offer: order&.offer)
+          invoice = Entities::Invoice.find(id: subscription.latest_invoice)
+          payment_intent = Entities::PaymentIntent.find(id: invoice.payment_intent)
 
-          {
-            external_customer_id: stripe_customer.id,
-            external_payment_method_id: stripe_payment_method.id,
-            external_subscription_id: subscription.id,
-            external_invoice_id: subscription.latest_invoice
-          }
+          return subscribe_incomplete(payment_intent, subscription) unless payment_intent.status == 'succeeded'
+
+          subscribe_success(payment_intent, subscription)
         end
 
         def unsubscribe(subscription_params)
@@ -62,21 +51,40 @@ module Payment
         private
 
         def setup_customer(order)
-          order_payer = order&.payer
-          @stripe_payment_method = payment_method_by_order(order)
-          @stripe_customer       = Entities::Customer.create(customer: order_payer,
-                                                             payment_method: @stripe_payment_method)
-
-          order_payer&.update(customer_keys: { stripe: @stripe_customer.id })
-
-          Entities::TaxId.add_to_customer(stripe_customer: @stripe_customer,
-                                          tax_id: order_payer&.tax_id)
+          result = Customer.new.create(order)
+          @stripe_customer = result[:stripe_customer]
+          @stripe_payment_method = result[:stripe_payment_method]
         end
 
-        def payment_method_by_order(order)
-          return Entities::PaymentMethod.find(id: order&.payment_method_id) if order&.payment_method_id
+        def purchase_success(payment)
+          {
+            external_customer_id: stripe_customer&.id,
+            external_payment_method_id: stripe_payment_method&.id,
+            external_id: payment&.id,
+            status: payment&.status,
+            client_secret: payment&.client_secret
+          }
+        end
 
-          Entities::PaymentMethod.create(card: order&.card) if order&.card
+        def subscribe_success(payment_intent, subscription)
+          {
+            external_customer_id: stripe_customer.id,
+            external_payment_method_id: stripe_payment_method.id,
+            external_subscription_id: subscription.id,
+            external_invoice_id: subscription.latest_invoice,
+            external_id: payment_intent.id
+          }
+        end
+
+        def subscribe_incomplete(payment_intent, subscription)
+          charge = Entities::Charge.find(id: payment_intent.latest_charge)
+          raise Stripe::CardErrors.new(
+            external_id: charge.payment_intent,
+            subscription_id: subscription.id,
+            code: charge.failure_code,
+            message: charge.failure_message,
+            type: 'subscription_incomplete'
+          )
         end
       end
     end
