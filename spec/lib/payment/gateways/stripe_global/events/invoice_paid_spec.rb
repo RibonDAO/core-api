@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
+RSpec.describe Payment::Gateways::StripeGlobal::Events::InvoicePaid do
   describe '.handle' do
     subject(:handle) { described_class.new.handle(event) }
 
