@@ -15,7 +15,8 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
       it 'returns all user subscriptions' do
         request
         expect(response).to have_http_status(:ok)
-        expect_response_collection_to_have_keys(%w[id status cancel_date created_at offer receiver
+        expect_response_collection_to_have_keys(%w[id status cancel_date created_at
+                                                   next_payment_attempt offer receiver
                                                    person_payments])
       end
     end
