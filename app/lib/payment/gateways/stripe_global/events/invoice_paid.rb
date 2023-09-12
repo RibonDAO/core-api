@@ -1,6 +1,6 @@
 module Payment
   module Gateways
-    module Stripe
+    module StripeGlobal
       module Events
         class InvoicePaid < Base
           attr_reader :subscription, :data, :payment

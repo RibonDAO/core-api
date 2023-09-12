@@ -26,7 +26,7 @@ module Webhooks
       when 'payment_intent.succeeded'
         ::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded.handle(event)
       when 'invoice.paid'
-        ::Payment::Gateways::Stripe::Events::InvoicePaid.handle(event)
+        ::Payment::Gateways::Stripe::Events::InvoicePaid.new.handle(event)
       when 'invoice.payment_failed'
         ::Payment::Gateways::Stripe::Events::InvoicePaymentFailed.handle(event)
       when 'charge.refunded'

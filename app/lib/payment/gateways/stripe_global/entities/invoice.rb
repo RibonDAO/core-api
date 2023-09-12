@@ -6,6 +6,10 @@ module Payment
           def self.find(id:)
             ::Stripe::Invoice.retrieve(id)
           end
+
+          def self.upcoming(customer:)
+            ::Stripe::Invoice.upcoming({ customer: })
+          end
         end
       end
     end
