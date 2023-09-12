@@ -24,15 +24,15 @@ module Webhooks
     def event_handler(event)
       case event.type
       when 'payment_intent.succeeded'
-        ::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded.handle(event)
+        ::Payment::Gateways::StripeGlobal::Events::PaymentIntentSucceeded.handle(event)
       when 'invoice.paid'
-        ::Payment::Gateways::Stripe::Events::InvoicePaid.handle(event)
+        ::Payment::Gateways::StripeGlobal::Events::InvoicePaid.new.handle(event)
       when 'invoice.payment_failed'
-        ::Payment::Gateways::Stripe::Events::InvoicePaymentFailed.handle(event)
+        ::Payment::Gateways::StripeGlobal::Events::InvoicePaymentFailed.handle(event)
       when 'charge.refunded'
-        ::Payment::Gateways::Stripe::Events::ChargeRefunded.handle(event)
+        ::Payment::Gateways::StripeGlobal::Events::ChargeRefunded.handle(event)
       when 'charge.refund.updated'
-        ::Payment::Gateways::Stripe::Events::ChargeRefundUpdated.handle(event)
+        ::Payment::Gateways::StripeGlobal::Events::ChargeRefundUpdated.handle(event)
       else
         Rails.logger.info { "Unhandled event type: #{event.type}" }
       end
