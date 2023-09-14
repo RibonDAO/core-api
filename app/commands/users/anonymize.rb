@@ -12,7 +12,7 @@ module Users
 
     def call
       with_exception_handle do
-        user.update!(email: dummy_email)
+        user.update!(email: dummy_email, deleted_at: Time.zone.now)
       end
     end
 
