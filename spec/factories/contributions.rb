@@ -27,5 +27,12 @@ FactoryBot.define do
         contribution.person_payment = create(:person_payment, status: :paid)
       end
     end
+
+    trait(:with_payment_in_blockchain) do
+      after(:create) do |contribution|
+        create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 1.year.ago,
+                                               person_payment: contribution.person_payment)
+      end
+    end
   end
 end
