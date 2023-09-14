@@ -85,6 +85,12 @@ describe Givings::Payment::CreateOrder do
           expect(person_payment.external_id).to eq(command.result[:payment].external_id)
           expect(person_payment.external_invoice_id).to eq(command.result[:payment].external_invoice_id)
         end
+
+        it 'returns all necessary keys' do
+          expect(command.result.to_h.keys).to match_array(%i[external_customer_id external_id
+                                                             external_invoice_id external_payment_method_id
+                                                             external_subscription_id payment])
+        end
       end
     end
 
