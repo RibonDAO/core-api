@@ -2,12 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
   describe '.handle' do
-    subject(:handle) { described_class.handle(event) }
+    subject(:handle) { described_class.new.handle(event) }
 
-    include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
+    include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
     let(:event) do
-      RecursiveOpenStruct.new({ data: { object: { id: 'external_id', subscription: 'external_subscription_id',
+      RecursiveOpenStruct.new({ data: { object: { id: 'external_invoice_id',
+                                                  subscription: 'external_subscription_id',
+                                                  customer: 'cus_9s6XKzkNRiz8i3',
                                                   created: 1_691_697_994 } } })
     end
 
@@ -21,6 +23,11 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
       let!(:payer) { create(:customer) }
       let!(:subscription) { create(:subscription, external_id: 'external_subscription_id', payer:) }
 
+      it 'updates the next payment attempt' do
+        handle
+        expect(subscription.reload.next_payment_attempt).to eq(Time.zone.at(1_697_054_105))
+      end
+
       it 'creates a new person_payment' do
         expect { handle }.to change(PersonPayment, :count).by(1)
       end
@@ -33,7 +40,7 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
 
       describe 'and a person_payment' do
         before do
-          create(:person_payment, external_id: 'external_id', subscription:, status: :processing)
+          create(:person_payment, external_invoice_id: 'external_invoice_id', subscription:, status: :processing)
         end
 
         it 'does not create a new person_payment' do
@@ -53,7 +60,7 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
 
       describe 'and a person_payment and a person_blockchain_transaction succeed' do
         let!(:person_payment) do
-          create(:person_payment, external_id: 'external_id', subscription:, status: :processing)
+          create(:person_payment, external_invoice_id: 'external_invoice_id', subscription:, status: :processing)
         end
 
         before do
@@ -69,7 +76,7 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
 
       describe 'and a person_payment and a contribution' do
         let!(:person_payment) do
-          create(:person_payment, external_id: 'external_id', subscription:, status: :processing)
+          create(:person_payment, external_invoice_id: 'external_invoice_id', subscription:, status: :processing)
         end
 
         before do

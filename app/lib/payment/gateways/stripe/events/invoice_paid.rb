@@ -2,66 +2,75 @@ module Payment
   module Gateways
     module Stripe
       module Events
-        class InvoicePaid
-          class << self
-            attr_reader :subscription, :data, :payment
+        class InvoicePaid < Base
+          attr_reader :subscription, :data, :payment
 
-            def handle(event)
-              @data = event.data.object
-              @subscription = Subscription.find_by(external_id: data['subscription'])
-              return unless subscription
+          def handle(event)
+            @data = event.data.object
+            @subscription = Subscription.find_by(external_id: data['subscription'])
+            return unless subscription
 
-              external_id = data['id']
+            set_next_payment
+            upsert_payment
+            handle_contribution_creation
+            handle_giving_to_blockchain
+          end
 
-              @payment = PersonPayment.where(subscription:, external_id:).first_or_initialize
-              set_payment_attributes
-              payment.save!
+          private
 
-              handle_contribution_creation
-              handle_giving_to_blockchain
-            end
+          def set_next_payment
+            invoice = Entities::Invoice.upcoming(customer: data['customer'])
+            return unless invoice
 
-            private
+            next_payment_attempt = Time.zone.at(invoice.next_payment_attempt)
+            subscription.update(next_payment_attempt:)
+          end
 
-            # rubocop:disable Metrics/AbcSize
-            def set_payment_attributes
-              payment.paid_date = Time.zone.at(data['created'])
-              payment.amount_cents = data['amount_paid']
-              payment.payment_method = subscription.payment_method
-              payment.offer = subscription.offer
-              payment.receiver = subscription.receiver
-              payment.payer = subscription.payer
-              payment.platform = subscription.platform
-              payment.integration = subscription.integration
-              payment.status = :paid
-            end
-            # rubocop:enable Metrics/AbcSize
+          # rubocop:disable Metrics/AbcSize
+          def set_payment_attributes
+            payment.paid_date = Time.zone.at(data['created'])
+            payment.amount_cents = data['amount_paid']
+            payment.payment_method = subscription.payment_method
+            payment.offer = subscription.offer
+            payment.receiver = subscription.receiver
+            payment.payer = subscription.payer
+            payment.platform = subscription.platform
+            payment.integration = subscription.integration
+            payment.status = :paid
+          end
+          # rubocop:enable Metrics/AbcSize
 
-            def handle_giving_to_blockchain
-              return if payment.person_blockchain_transaction&.success?
+          def upsert_payment
+            external_invoice_id = data['id']
+            @payment = PersonPayment.where(subscription:, external_invoice_id:).first_or_initialize
+            set_payment_attributes
+            payment.save!
+          end
 
-              return call_add_cause_giving_blockchain_job if payment.receiver_type == 'Cause'
+          def handle_giving_to_blockchain
+            return if payment.person_blockchain_transaction&.success?
 
-              call_add_non_profit_giving_blockchain_job
-            end
+            return call_add_cause_giving_blockchain_job if payment.receiver_type == 'Cause'
 
-            def handle_contribution_creation
-              return if payment.contribution.present?
+            call_add_non_profit_giving_blockchain_job
+          end
 
-              PersonPayments::CreateContributionJob.perform_later(payment)
-            end
+          def handle_contribution_creation
+            return if payment.contribution.present?
 
-            def call_add_cause_giving_blockchain_job
-              Givings::Payment::AddGivingCauseToBlockchainJob
-                .perform_later(amount: payment.crypto_amount, payment:,
-                               pool: payment.receiver&.default_pool)
-            end
+            PersonPayments::CreateContributionJob.perform_later(payment)
+          end
 
-            def call_add_non_profit_giving_blockchain_job
-              Givings::Payment::AddGivingNonProfitToBlockchainJob
-                .perform_later(non_profit: payment.receiver,
-                               amount: payment.crypto_amount, payment:)
-            end
+          def call_add_cause_giving_blockchain_job
+            Givings::Payment::AddGivingCauseToBlockchainJob
+              .perform_later(amount: payment.crypto_amount, payment:,
+                             pool: payment.receiver&.default_pool)
+          end
+
+          def call_add_non_profit_giving_blockchain_job
+            Givings::Payment::AddGivingNonProfitToBlockchainJob
+              .perform_later(non_profit: payment.receiver,
+                             amount: payment.crypto_amount, payment:)
           end
         end
       end

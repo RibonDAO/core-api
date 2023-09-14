@@ -11,7 +11,7 @@ jobs:
         with:
           ref: develop
       - name: Wait for tests to succeed
-        uses: lewagon/wait-on-check-action@v1.2.0
+        uses: lewagon/wait-on-check-action@v1.3.1
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           check-name: 'Tests (6)'
