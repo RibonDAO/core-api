@@ -25,7 +25,7 @@ module Donations
       create_donation
       set_user_last_donation_at
       set_last_donated_cause
-      # label_donation
+      label_donation
 
       donation
     end
