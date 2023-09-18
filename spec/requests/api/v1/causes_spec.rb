@@ -9,6 +9,7 @@ RSpec.describe 'Api::V1::Causes', type: :request do
     let(:pool_balance) { create(:pool_balance, pool:, balance: 0) }
 
     before do
+      create_list(:non_profit, 2)
       create(:cause)
     end
 
