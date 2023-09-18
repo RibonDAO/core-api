@@ -57,8 +57,3 @@ create_contribution_for_missed_payments:
   cron: "0 2 * * 1" # At 02:00 on monday.
   class: "Contributions::CreateContributionForMissedPaymentsWorker"
   queue: contributions
-
-run_relabel_script:
-  cron: "0 8 * 3 1" # At 08:00 on Monday in March. TODO: Remove this after run
-  class: "Contributions::RelabelWorker"
-  queue: relabel
