@@ -12,7 +12,7 @@ RSpec.describe 'BigDonors', type: :request do
       request
 
       expect(response).to have_http_status(:success)
-      expect_response_collection_to_have_keys(%w[id name email])
+      expect_response_collection_to_have_keys(%w[id name email dashboard_link])
     end
   end
 
@@ -24,7 +24,7 @@ RSpec.describe 'BigDonors', type: :request do
     it 'returns a single big_donor' do
       request
 
-      expect_response_to_have_keys(%w[id name email])
+      expect_response_to_have_keys(%w[id name email dashboard_link])
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe 'BigDonors', type: :request do
       it 'returns a single donor' do
         request
 
-        expect_response_to_have_keys(%w[id name email])
+        expect_response_to_have_keys(%w[id name email dashboard_link])
       end
     end
 
@@ -84,7 +84,7 @@ RSpec.describe 'BigDonors', type: :request do
       it 'returns a single donor' do
         request
 
-        expect_response_to_have_keys(%w[id name email])
+        expect_response_to_have_keys(%w[id name email dashboard_link])
       end
 
       it 'changes the name' do
