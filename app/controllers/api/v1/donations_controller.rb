@@ -15,7 +15,7 @@ module Api
       private
 
       def integration
-        @integration ||= Integration.find donation_params[:integration_id]
+        @integration ||= Integration.find_by_id_or_unique_address donation_params[:integration_id]
       end
 
       def non_profit
