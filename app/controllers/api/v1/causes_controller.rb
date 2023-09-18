@@ -2,7 +2,8 @@ module Api
   module V1
     class CausesController < ApplicationController
       def index
-        @causes = Cause.where(active: true).shuffle
+        @causes = Cause.where(active: true).where(id: Cause.select(:id)
+          .joins(:non_profits).where(non_profits: { status: 1 })).shuffle
 
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
