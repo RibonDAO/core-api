@@ -47,11 +47,11 @@ class PersonBlockchainTransaction < ApplicationRecord
   end
 
   def charge_contribution_fees
-    # return unless success?
-    # return if person_payment&.contribution&.generated_fee_cents&.zero?
+    return unless success?
+    return if person_payment&.contribution&.generated_fee_cents&.zero?
 
-    # Service::Contributions::FeesLabelingService.new(contribution:
-    # person_payment.contribution).spread_fee_to_payers
+    Service::Contributions::FeesLabelingService.new(contribution:
+    person_payment.contribution).spread_fee_to_payers
   end
 
   def set_succeeded_at
