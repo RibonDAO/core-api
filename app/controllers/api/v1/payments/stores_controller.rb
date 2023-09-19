@@ -17,21 +17,18 @@ module Api
 
         private
 
+        # rubocop:disable Metrics/AbcSize
         def order_params
           {
-            payment_method_id:,
-            email: payment_params[:email],
-            offer:,
-            operation:,
-            tax_id: payment_params[:tax_id],
-            user: find_or_create_user,
-            integration_id: payment_params[:integration_id],
-            cause:,
-            non_profit:,
-            name: payment_params[:name],
-            payment_method_type: payment_params[:payment_method_type]
+            payment_method_id:, email: payment_params[:email],
+            offer:, operation:, tax_id: payment_params[:tax_id],
+            user: find_or_create_user, integration_id: payment_params[:integration_id],
+            cause:, non_profit:, name: payment_params[:name],
+            payment_method_type: payment_params[:payment_method_type],
+            platform: payment_params[:platform]
           }
         end
+        # rubocop:enable Metrics/AbcSize
 
         def payment_method_id
           @payment_method_id ||= payment_params[:payment_method_id]
@@ -62,7 +59,7 @@ module Api
 
         def payment_params
           params.permit(:email, :tax_id, :offer_id, :country, :city, :state, :integration_id,
-                        :cause_id, :non_profit_id, :name, :payment_method_id, :payment_method_type)
+                        :cause_id, :non_profit_id, :name, :payment_method_id, :payment_method_type, :platform)
         end
 
         def utm_params
