@@ -9,7 +9,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
     { email: 'user@test.com', tax_id: '111.111.111-11', offer_id: offer.id,
       external_id: 'pi_123', country: 'Brazil', city: 'Brasilia', state: 'DF',
       integration_id: integration.id, cause_id: cause&.id, non_profit_id: non_profit&.id,
-      payment_method_id:, payment_method_type:, name: 'name',
+      payment_method_id:, payment_method_type:, name: 'name', platform: 'web',
       utm_source: 'utm source',
       utm_medium: 'utm medium',
       utm_campaign: 'utm campaign' }
@@ -74,7 +74,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
         request
         expected_payload = { email: 'user@test.com', tax_id: '111.111.111-11', payment_method_type:,
                              payment_method_id:, offer:, operation: :subscribe, non_profit:, name: 'name',
-                             integration_id: integration.id.to_s, user: user_double, cause: }
+                             integration_id: integration.id.to_s, user: user_double, cause:, platform: 'web' }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)
       end
@@ -88,7 +88,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
         request
         expected_payload = { email: 'user@test.com', tax_id: '111.111.111-11', payment_method_id:,
                              offer:, payment_method_type:, operation: :purchase, non_profit:, name: 'name',
-                             integration_id: integration.id.to_s, user: user_double, cause: }
+                             integration_id: integration.id.to_s, user: user_double, cause:, platform: 'web' }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)
       end
