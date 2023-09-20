@@ -11,4 +11,8 @@ class IntegrationBlueprint < Blueprinter::Base
   association :integration_wallet, blueprint: IntegrationWalletBlueprint
 
   association :integration_task, blueprint: IntegrationTaskBlueprint
+
+  view :manager do
+    field :integration_deeplink_address
+  end
 end
