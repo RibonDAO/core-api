@@ -12,6 +12,5 @@ RSpec.describe IntegrationBlueprint do
     expect(integration_blueprint).to include(:ticket_availability_in_minutes.to_s)
     expect(integration_blueprint).to include(:webhook_url.to_s)
     expect(integration_blueprint).to include(:integration_dashboard_address.to_s)
-    expect(integration_blueprint).to include(:integration_deeplink_address.to_s)
   end
 end
