@@ -54,6 +54,15 @@ RSpec.describe Integration, type: :model do
     end
   end
 
+  describe '#integration_deeplink_address' do
+    let(:integration) { create(:integration) }
+    let!(:url) { RibonCoreApi.config[:integration_deeplink_address][:base_url] }
+
+    it 'returns the integration address' do
+      expect(integration.integration_deeplink_address).to eq("#{url}#{integration.unique_address}")
+    end
+  end
+
   describe '#integration_dashboard_address' do
     let(:integration) { create(:integration) }
 
