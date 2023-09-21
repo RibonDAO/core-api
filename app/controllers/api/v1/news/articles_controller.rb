@@ -32,6 +32,13 @@ module Api
           end
         end
 
+        def articles_since_user_creation
+          @articles = articles_list.where('published_at > ?',
+                                          current_user&.created_at).order(sortable).page(page).per(per)
+
+          render json: ArticleBlueprint.render(@articles, total_items:, page:, total_pages:)
+        end
+
         private
 
         def articles_list
