@@ -7,7 +7,10 @@ module Service
 
       def initialize(contribution:)
         @contribution = contribution
-        @initial_contributions_balance = ContributionBalance.sum(:fees_balance_cents)
+        @initial_contributions_balance = ContributionBalance
+                                         .joins(:contribution)
+                                         .where(contributions: { receiver: contribution.receiver })
+                                         .sum(:fees_balance_cents)
       end
 
       def spread_fee_to_payers
