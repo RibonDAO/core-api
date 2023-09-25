@@ -86,6 +86,7 @@ Rails.application.routes.draw do
         get 'articles/:id' => 'articles#show'
         post 'articles' => 'articles#create'
         put 'articles/:id' => 'articles#update'
+        get 'articles_since_user_creation' => 'articles#articles_since_user_creation'
 
         get 'authors' => 'authors#index'
         get 'authors/:id' => 'authors#show'
@@ -99,6 +100,7 @@ Rails.application.routes.draw do
         get 'legacy_contributions' => 'users/legacy_impacts#contributions'
 
         get 'donations_count' => 'users/impacts#donations_count'
+        get 'app/donations_count' => 'users/impacts#app_donations_count'
         put 'track', to: 'users/trackings#track_user'
 
         get 'contributions' => 'users/contributions#index'
