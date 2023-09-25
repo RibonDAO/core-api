@@ -10,7 +10,8 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
       RecursiveOpenStruct.new({ data: { object: { id: 'external_invoice_id',
                                                   subscription: 'external_subscription_id',
                                                   customer: 'cus_9s6XKzkNRiz8i3',
-                                                  created: 1_691_697_994 } } })
+                                                  created: 1_691_697_994,
+                                                  payment_intent: 'external_id' } } })
     end
 
     before do
@@ -49,6 +50,10 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
 
         it 'updates the person_payment status' do
           expect { handle }.to change { PersonPayment.last.status }.to('paid')
+        end
+
+        it 'updates the person_payment external_id' do
+          expect { handle }.to change { PersonPayment.last.external_id }.to('external_id')
         end
 
         it 'calls the PersonPayments::CreateContributionJob' do
