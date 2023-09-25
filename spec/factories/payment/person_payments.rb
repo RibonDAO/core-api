@@ -19,5 +19,11 @@ FactoryBot.define do
                                                person_payment:)
       end
     end
+
+    trait(:with_contribution) do
+      after(:create) do |person_payment|
+        create(:contribution, person_payment:)
+      end
+    end
   end
 end
