@@ -9,7 +9,8 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaymentFailed do
     let(:event) do
       RecursiveOpenStruct.new({ data: { object: { id: 'external_invoice_id',
                                                   subscription: 'external_subscription_id',
-                                                  created: 1_691_697_994 } } })
+                                                  created: 1_691_697_994,
+                                                  payment_intent: 'external_id' } } })
     end
 
     context 'when there is a subscription' do
@@ -32,6 +33,10 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaymentFailed do
 
         it 'updates the person_payment status' do
           expect { handle }.to change { PersonPayment.last.status }.to('failed')
+        end
+
+        it 'updates the person_payment external_id' do
+          expect { handle }.to change { PersonPayment.last.external_id }.to('external_id')
         end
       end
     end
