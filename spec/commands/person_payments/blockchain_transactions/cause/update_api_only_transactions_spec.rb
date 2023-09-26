@@ -13,8 +13,14 @@ describe PersonPayments::BlockchainTransactions::Cause::UpdateApiOnlyTransaction
     let(:chain) { create(:chain) }
     let(:token) { create(:token, chain:) }
     let(:pool) { create(:pool, token:, cause:) }
-    let!(:api_only_person) do
-      create(:person_payment, receiver: cause, payment_method: :credit_card, status: :paid)
+    let(:valid_payment_methods) { %i[credit_card pix google_pay apple_pay] }
+
+    let!(:api_only_payments) do
+      result = []
+      valid_payment_methods.each do |payment_method|
+        result.push(create(:person_payment, receiver: cause, payment_method:, status: :paid))
+      end
+      result
     end
 
     let(:person_payment_with_blockchain_transaction) do
@@ -31,11 +37,13 @@ describe PersonPayments::BlockchainTransactions::Cause::UpdateApiOnlyTransaction
 
     it 'calls the AddGivingCauseToBlockchainJob with failed transactions PersonPayments' do
       command
-      expect(Givings::Payment::AddGivingCauseToBlockchainJob).to have_received(:perform_later).with(
-        amount: api_only_person.crypto_amount,
-        payment: api_only_person,
-        pool: api_only_person.receiver&.default_pool
-      )
+      api_only_payments.each do |payment|
+        expect(Givings::Payment::AddGivingCauseToBlockchainJob).to have_received(:perform_later).with(
+          amount: payment.crypto_amount,
+          payment:,
+          pool: payment.receiver&.default_pool
+        )
+      end
     end
 
     it 'doesnt call the AddGivingCauseToBlockchainJob with successfull transactions PersonPayments' do

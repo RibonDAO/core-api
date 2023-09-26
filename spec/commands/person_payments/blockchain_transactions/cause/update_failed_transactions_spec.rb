@@ -13,52 +13,42 @@ describe PersonPayments::BlockchainTransactions::Cause::UpdateFailedTransactions
     let(:chain) { create(:chain) }
     let(:token) { create(:token, chain:) }
     let(:pool) { create(:pool, token:, cause:) }
-
-    let(:retry_transactions_before) do
-      [create(:person_blockchain_transaction,
-              treasure_entry_status: :failed,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :dropped,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :pix,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :replaced,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :google_pay,
-                                                      status: :paid))]
-    end
+    let(:valid_payment_methods) { %i[credit_card pix google_pay apple_pay] }
+    let(:failed_status) { %i[failed dropped replaced] }
+    let(:not_failed_status) { %i[success processing] }
 
     let(:retry_transactions) do
-      [create(:person_blockchain_transaction,
-              treasure_entry_status: :failed,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :dropped,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :pix,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :replaced,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :google_pay,
-                                                      status: :paid))]
+      result = []
+      valid_payment_methods.each do |payment_method|
+        failed_status.each do |treasure_entry_status|
+          result.push(create(:person_blockchain_transaction,
+                             treasure_entry_status:,
+                             person_payment: create(:person_payment, receiver: cause,
+                                                                     payment_method:,
+                                                                     status: :paid)))
+        end
+      end
+      result
     end
 
     let(:not_retry_transactions) do
-      [create(:person_blockchain_transaction,
-              treasure_entry_status: :success,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :processing,
-              person_payment: create(:person_payment, receiver: cause, payment_method: :pix,
-                                                      status: :paid))]
+      result = []
+      valid_payment_methods.each do |payment_method|
+        not_failed_status.each do |treasure_entry_status|
+          result.push(create(:person_blockchain_transaction,
+                             treasure_entry_status:,
+                             person_payment: create(:person_payment, receiver: cause,
+                                                                     payment_method:,
+                                                                     status: :paid)))
+        end
+      end
+      result
     end
 
     before do
       create(:ribon_config, default_chain_id: chain.chain_id)
-      retry_transactions_before
       retry_transactions
+      not_retry_transactions
       allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
     end
 
@@ -77,7 +67,6 @@ describe PersonPayments::BlockchainTransactions::Cause::UpdateFailedTransactions
     it 'doesnt call the AddGivingCauseToBlockchainJob with successfull transactions PersonPayments' do
       command
 
-      not_retry_transactions
       not_retry_transactions.each do |transaction|
         expect(Givings::Payment::AddGivingCauseToBlockchainJob)
           .not_to have_received(:perform_later).with(
