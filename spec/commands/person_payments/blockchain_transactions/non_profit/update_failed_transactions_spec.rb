@@ -18,11 +18,11 @@ describe PersonPayments::BlockchainTransactions::NonProfit::UpdateFailedTransact
                                                       status: :paid)),
        create(:person_blockchain_transaction,
               treasure_entry_status: :dropped,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
+              person_payment: create(:person_payment, receiver: non_profit, payment_method: :pix,
                                                       status: :paid)),
        create(:person_blockchain_transaction,
               treasure_entry_status: :replaced,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
+              person_payment: create(:person_payment, receiver: non_profit, payment_method: :google_pay,
                                                       status: :paid))]
     end
 
@@ -33,11 +33,11 @@ describe PersonPayments::BlockchainTransactions::NonProfit::UpdateFailedTransact
                                                       status: :paid)),
        create(:person_blockchain_transaction,
               treasure_entry_status: :dropped,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
+              person_payment: create(:person_payment, receiver: non_profit, payment_method: :pix,
                                                       status: :paid)),
        create(:person_blockchain_transaction,
               treasure_entry_status: :replaced,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
+              person_payment: create(:person_payment, receiver: non_profit, payment_method: :google_pay,
                                                       status: :paid))]
     end
 
@@ -48,7 +48,7 @@ describe PersonPayments::BlockchainTransactions::NonProfit::UpdateFailedTransact
                                                       status: :paid)),
        create(:person_blockchain_transaction,
               treasure_entry_status: :processing,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
+              person_payment: create(:person_payment, receiver: non_profit, payment_method: :pix,
                                                       status: :paid))]
     end
 
