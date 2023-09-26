@@ -18,6 +18,7 @@ module Service
 
         deal_with_fees_balances_empty
         create_fees_for_feeable_contributions
+        contribution.set_contribution_balance
       rescue StandardError => e
         Reporter.log(error: e)
       end
