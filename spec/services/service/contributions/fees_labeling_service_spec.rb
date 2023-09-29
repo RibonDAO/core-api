@@ -125,4 +125,30 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
       expect { fee_service.spread_fee_to_payers }.not_to change(ContributionFee, :count)
     end
   end
+
+  context "when there is more than one cause" do
+    
+    let(:health){ create(:cause)}
+    let(:water){ create(:cause)}
+
+    let!(:health_contribution1) { create(:contribution, :feeable, receiver: health) }
+
+    let!(:water_contribution1) { create(:contribution, :feeable, receiver: water) }
+
+    let(:new_contribution) { create(:contribution, receiver: health) }
+
+    it "doesn't spread the fees to different causes" do
+      fee_service = described_class.new(contribution: new_contribution)
+
+      expect { fee_service.spread_fee_to_payers }.not_to change{water_contribution1.contribution_balance.reload.fees_balance_cents}
+    end
+
+    it "spread the fees to the same cause" do
+      fee_service = described_class.new(contribution: new_contribution)
+
+      expect { fee_service.spread_fee_to_payers }.to change{health_contribution1.contribution_balance.reload.fees_balance_cents}
+    end
+
+    #testar tambem contribuição que zera o fee da causa
+  end
 end

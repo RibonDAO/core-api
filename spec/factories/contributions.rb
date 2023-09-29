@@ -34,5 +34,17 @@ FactoryBot.define do
                                                person_payment: contribution.person_payment)
       end
     end
+
+    trait(:feeable) do
+      before(:create) do |contribution|
+        contribution.person_payment = create(:person_payment,
+                                            :with_payment_in_blockchain,
+                                            status: :paid)
+      end
+
+      after(:create) do |contribution|
+        create(:contribution_balance, contribution:)
+      end
+    end
   end
 end
