@@ -20,7 +20,7 @@ describe Givings::Payment::CreateOrder do
       let(:user) { create(:user) }
       let(:customer) { create(:customer, user:) }
       let(:card) { build(:credit_card) }
-      let(:offer) { create(:offer) }
+      let(:offer) { create(:offer, :subscription) }
       let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
       let(:args) do
         { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
@@ -214,7 +214,7 @@ describe Givings::Payment::CreateOrder do
     end
   end
 
-  describe '.call returns error' do
+  describe '.call returns error with purchase' do
     subject(:command) { described_class.call(order_type_class, args) }
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_error' } }
@@ -225,7 +225,7 @@ describe Givings::Payment::CreateOrder do
       let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
       let(:user) { create(:user) }
       let(:customer) { create(:customer, user:) }
-      let(:card) { build(:credit_card) }
+      let(:card) { build(:credit_card, :invalid) }
       let(:offer) { create(:offer) }
       let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
       let(:args) do
@@ -243,7 +243,7 @@ describe Givings::Payment::CreateOrder do
     end
   end
 
-  describe '.call returns blocked' do
+  describe '.call returns blocked with purchase' do
     subject(:command) { described_class.call(order_type_class, args) }
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_blocked' } }
@@ -273,7 +273,7 @@ describe Givings::Payment::CreateOrder do
     end
   end
 
-  describe '.call returns pending' do
+  describe '.call returns pending with purchase' do
     subject(:command) { described_class.call(order_type_class, args) }
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_pending' } }
@@ -284,8 +284,8 @@ describe Givings::Payment::CreateOrder do
       let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
       let(:user) { create(:user) }
       let(:customer) { create(:customer, user:) }
-      let(:card) { build(:credit_card) }
-      let(:offer) { create(:offer) }
+      let(:card) { build(:credit_card, :requires_action) }
+      let(:offer) { create(:offer, price_cents: 10_000) }
       let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
       let(:args) do
         { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
@@ -304,6 +304,114 @@ describe Givings::Payment::CreateOrder do
         person_payment = PersonPayment.where(offer:).last
         expect(person_payment.external_id).to eq(order.result[:external_id])
         expect(person_payment.status).to eq('requires_action')
+      end
+    end
+  end
+
+  describe '.call returns blocked with subscribe' do
+    subject(:command) { described_class.call(order_type_class, args) }
+
+    include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_blocked' } }
+
+    let(:integration) { create(:integration) }
+
+    context 'when the payment is blocked' do
+      let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:card) { build(:credit_card, :blocked) }
+      let(:offer) { create(:offer, :subscription) }
+      let(:args) do
+        { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
+          payment_method: :credit_card, user: customer.user, gateway: 'stripe', operation: :subscribe }
+      end
+
+      it 'does not call the success callback' do
+        allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
+        command
+
+        expect(Givings::Payment::AddGivingCauseToBlockchainJob).not_to have_received(:perform_later)
+      end
+
+      it 'calls the failure callback' do
+        command
+        person_payment = PersonPayment.where(offer:).last
+
+        expect(person_payment.error_code).to eq('card_declined')
+        expect(person_payment.status).to eq('blocked')
+        expect(person_payment.subscription.status).to eq('inactive')
+        expect(person_payment.subscription.external_id).not_to be_nil
+      end
+    end
+  end
+
+  describe '.call returns pending with subscribe' do
+    subject(:command) { described_class.call(order_type_class, args) }
+
+    include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_pending' } }
+
+    let(:integration) { create(:integration) }
+
+    context 'when the payment returns requires_action' do
+      let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:card) { build(:credit_card, :requires_action) }
+      let(:offer) { create(:offer, :subscription) }
+      let(:args) do
+        { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
+          payment_method: :credit_card, user: customer.user, operation: :subscribe }
+      end
+
+      it 'does not call the success callback' do
+        allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
+        command
+
+        expect(Givings::Payment::AddGivingCauseToBlockchainJob).not_to have_received(:perform_later)
+      end
+
+      it 'update the status and external_id of payment_person' do
+        command
+        person_payment = PersonPayment.where(offer:).last
+        expect(person_payment.external_id).not_to be_nil
+        expect(person_payment.status).to eq('requires_action')
+        expect(person_payment.subscription.status).to eq('inactive')
+        expect(person_payment.subscription.external_id).not_to be_nil
+      end
+    end
+  end
+
+  describe '.call returns failed with subscribe' do
+    subject(:command) { described_class.call(order_type_class, args) }
+
+    include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method_error' } }
+
+    let(:integration) { create(:integration) }
+
+    context 'when the payment returns failed' do
+      let(:order_type_class) { Givings::Payment::OrderTypes::CreditCard }
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:card) { build(:credit_card, :invalid) }
+      let(:offer) { create(:offer, :subscription) }
+      let(:args) do
+        { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
+          payment_method: :credit_card, user: customer.user, operation: :subscribe }
+      end
+
+      it 'does not call the success callback' do
+        allow(Givings::Payment::AddGivingCauseToBlockchainJob).to receive(:perform_later)
+        command
+
+        expect(Givings::Payment::AddGivingCauseToBlockchainJob).not_to have_received(:perform_later)
+      end
+
+      it 'update the status and external_id of payment_person' do
+        command
+        person_payment = PersonPayment.where(offer:).last
+        expect(person_payment.external_id).not_to be_nil
+        expect(person_payment.status).to eq('failed')
+        expect(person_payment.subscription.status).to eq('inactive')
       end
     end
   end
