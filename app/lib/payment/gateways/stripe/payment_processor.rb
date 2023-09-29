@@ -30,7 +30,7 @@ module Payment
           invoice = Entities::Invoice.find(id: subscription.latest_invoice)
           payment_intent = Entities::PaymentIntent.find(id: invoice.payment_intent)
 
-          return subscribe_incomplete(payment_intent, subscription) unless payment_intent.status == 'succeeded'
+          return subscribe_incomplete(payment_intent, subscription.id) unless payment_intent.status == 'succeeded'
 
           subscribe_success(payment_intent, subscription)
         end
@@ -76,16 +76,26 @@ module Payment
           }
         end
 
-        def subscribe_incomplete(payment_intent, subscription)
-          charge = Entities::Charge.find(id: payment_intent.latest_charge)
+        # rubocop:disable Metrics/MethodLength
+        def subscribe_incomplete(payment_intent, subscription_id)
+          code = payment_intent.status
+          message = payment_intent.status
+          type = payment_intent.status
+          if payment_intent.latest_charge
+            charge = Entities::Charge.find(id: payment_intent.latest_charge)
+            code = charge.failure_code
+            message = charge.failure_message
+            type = charge.outcome&.type
+          end
           raise Stripe::CardErrors.new(
-            external_id: charge.payment_intent,
-            subscription_id: subscription.id,
-            code: charge.failure_code,
-            message: charge.failure_message,
-            type: 'subscription_incomplete'
+            external_id: payment_intent.id,
+            subscription_id:,
+            code:,
+            message:,
+            type:
           )
         end
+        # rubocop:enable Metrics/MethodLength
       end
     end
   end

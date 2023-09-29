@@ -39,11 +39,15 @@ module Givings
       end
 
       def failure_callback(order, err)
-        if err&.type == 'blocked'
-          update_blocked(order:, err:)
-        else
-          update_failed(order:, err:)
-        end
+        status = case err.type
+                 when 'requires_action'
+                   :requires_action
+                 when 'blocked'
+                   :blocked
+                 else
+                   :failed
+                 end
+        update_failed(order:, err:, status:)
       end
 
       def update_success(order:, status:, result:)
@@ -51,16 +55,10 @@ module Givings
         update_external_ids(order:, result:)
       end
 
-      def update_blocked(order:, err:)
-        order.payment.update(status: :blocked, error_code: err.code)
-        order.payment.update(external_id: err.external_id) if err&.external_id
-      end
-
-      def update_failed(order:, err:)
-        order.payment.update(status: :failed, error_code: err.code)
-        if err.subscription_id
-          order.payment&.subscription&.update(external_id: err.subscription_id, status: :inactive)
-        end
+      def update_failed(order:, err:, status:)
+        order.payment.update(status:, error_code: err.code)
+        order.payment&.subscription&.update(status: :inactive)
+        order.payment&.subscription&.update(external_id: err.subscription_id) if err.subscription_id
         order.payment.update(external_id: err.external_id) if err.external_id
       end
 
