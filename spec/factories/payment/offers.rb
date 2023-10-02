@@ -11,5 +11,9 @@ FactoryBot.define do
     trait :with_stripe_global do
       offer_gateway { build(:offer_gateway, gateway: 'stripe_global') }
     end
+
+    trait :subscription do
+      offer_gateway { build(:offer_gateway, external_id: 'price_1NVEIqJuOnwQq9QxBMaE2yul') }
+    end
   end
 end
