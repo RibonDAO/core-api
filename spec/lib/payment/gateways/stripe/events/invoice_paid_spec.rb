@@ -29,6 +29,11 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
         expect(subscription.reload.next_payment_attempt).to eq(Time.zone.at(1_697_054_105))
       end
 
+      it 'updates the status' do
+        handle
+        expect(subscription.reload.status).to eq('active')
+      end
+
       it 'creates a new person_payment' do
         expect { handle }.to change(PersonPayment, :count).by(1)
       end
