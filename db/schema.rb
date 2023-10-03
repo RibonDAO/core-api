@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_11_184848) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_03_163930) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -416,8 +416,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_184848) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -612,6 +612,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_184848) do
     t.index ["user_id"], name: "index_user_completed_tasks_on_user_id"
   end
 
+  create_table "user_configs", force: :cascade do |t|
+    t.boolean "allowed_email_marketing"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_configs_on_user_id"
+  end
+
   create_table "user_donation_stats", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "last_donation_at"
@@ -744,6 +752,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_184848) do
   add_foreign_key "subscriptions", "integrations"
   add_foreign_key "subscriptions", "offers"
   add_foreign_key "user_completed_tasks", "users"
+  add_foreign_key "user_configs", "users"
   add_foreign_key "user_donation_stats", "users"
   add_foreign_key "user_tasks_statistics", "users"
   add_foreign_key "vouchers", "donations"
