@@ -50,7 +50,7 @@ RSpec.describe Cause, type: :model do
 
   describe '#status' do
     context 'when the cause has non_profits but its inactive' do
-      let(:cause) { create(:cause, non_profits: [create(:non_profit)], status: :inactive) }
+      let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :active)], status: :inactive) }
 
       it 'returns false' do
         expect(cause.status).to eq 'inactive'
