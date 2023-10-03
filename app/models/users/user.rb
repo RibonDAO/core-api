@@ -35,6 +35,7 @@ class User < ApplicationRecord
   has_one :utm, as: :trackable
   has_one :legacy_user
   has_one :customer
+  has_one :user_config
 
   has_many :legacy_user_impacts, through: :legacy_user
   has_many :legacy_contributions, through: :legacy_user
