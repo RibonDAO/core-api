@@ -16,7 +16,7 @@ RSpec.describe 'Managers::V1::Causes', type: :request do
       request
 
       expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image pools
-                                                 active non_profits default_pool cover_image_description
+                                                 status non_profits default_pool cover_image_description
                                                  main_image_description with_pool_balance])
     end
 
@@ -35,7 +35,7 @@ RSpec.describe 'Managers::V1::Causes', type: :request do
     it 'returns a single causes' do
       request
 
-      expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools active
+      expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools status
                                       non_profits default_pool cover_image_description
                                       main_image_description with_pool_balance])
     end
@@ -61,7 +61,7 @@ RSpec.describe 'Managers::V1::Causes', type: :request do
       it 'returns a single causes' do
         request
 
-        expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools active
+        expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools status
                                         non_profits default_pool cover_image_description
                                         main_image_description with_pool_balance])
       end
