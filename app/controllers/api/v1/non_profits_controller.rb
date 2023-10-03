@@ -10,7 +10,7 @@ module Api
 
       def stories
         @non_profit = NonProfit.find(params[:id])
-        @stories = @non_profit.stories.where(status: :active).order(position: :asc)
+        @stories = @non_profit.stories.where(active: true).order(position: :asc)
 
         render json: StoryBlueprint.render(@stories, view: :minimal)
       end
