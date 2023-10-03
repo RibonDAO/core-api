@@ -2,14 +2,22 @@ module Api
   module V1
     class CausesController < ApplicationController
       def index
-        @causes = Cause.where(status: :active).where(id: Cause.select(:id)
-          .joins(:non_profits).where(non_profits: { status: 1 })).shuffle
+        @causes = if current_user&.email&.include?('@ribon.io')
+                    Cause.where(status: %i[active test]).shuffle
+                  else
+                    Cause.where(status: :active).where(id: Cause.select(:id)
+                      .joins(:non_profits).where(non_profits: { status: 1 })).shuffle
+                  end
 
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
 
       def free_donation_causes
-        @causes = Cause.where(status: :active).shuffle
+        @causes = if current_user&.email&.include?('@ribon.io')
+                    Cause.where(status: %i[active test]).shuffle
+                  else
+                    Cause.where(status: :active).shuffle
+                  end
 
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
