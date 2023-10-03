@@ -37,5 +37,23 @@ RSpec.describe 'Api::V1::Users::Configs', type: :request do
         expect(user.user_config.reload.allowed_email_marketing).to be_truthy
       end
     end
+
+    context 'when the params are invalid' do
+      let(:params) do
+        { allowed_email_marketing: nil }
+      end
+
+      it 'returns http status unprocessable_entity' do
+        request
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns the errors' do
+        request
+
+        expect(response_json).to eq({ 'allowed_email_marketing' => ['is not included in the list'] })
+      end
+    end
   end
 end
