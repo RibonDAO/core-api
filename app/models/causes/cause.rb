@@ -50,6 +50,6 @@ class Cause < ApplicationRecord
   end
 
   def active
-    status == :active
+    status == 'active'
   end
 end
