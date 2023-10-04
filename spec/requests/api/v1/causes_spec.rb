@@ -28,35 +28,6 @@ RSpec.describe 'Api::V1::Causes', type: :request do
     end
   end
 
-  describe 'GET /free_donation_causes' do
-    subject(:request) { get '/api/v1/free_donation_causes' }
-
-    let(:cause) { create(:cause) }
-    let(:pool)  { create(:pool, cause:) }
-    let(:pool_balance) { create(:pool_balance, pool:, balance: 0) }
-
-    before do
-      create(:chain)
-      create(:ribon_config)
-
-      create(:cause)
-    end
-
-    it 'returns a list of available causes for free donations' do
-      request
-
-      expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image
-                                                 status active default_pool cover_image_description
-                                                 main_image_description pools with_pool_balance])
-    end
-
-    it 'returns 1 cause' do
-      request
-
-      expect(response_json.count).to eq(1)
-    end
-  end
-
   describe 'GET /show' do
     subject(:request) { get "/api/v1/causes/#{cause.id}" }
 

@@ -11,16 +11,6 @@ module Api
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
 
-      def free_donation_causes
-        @causes = if current_user&.email&.include?('@ribon.io')
-                    Cause.where(status: %i[active test]).shuffle
-                  else
-                    Cause.where(status: :active).shuffle
-                  end
-
-        render json: CauseBlueprint.render(@causes, view: :data_and_images)
-      end
-
       def create
         command = Causes::UpsertCause.call(cause_params)
         if command.success?
