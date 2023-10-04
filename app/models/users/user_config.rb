@@ -10,4 +10,6 @@
 #
 class UserConfig < ApplicationRecord
   belongs_to :user
+
+  validates :allowed_email_marketing, inclusion: { in: [true, false] }
 end
