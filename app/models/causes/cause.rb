@@ -3,10 +3,10 @@
 # Table name: causes
 #
 #  id                      :bigint           not null, primary key
-#  active                  :boolean          default(TRUE)
 #  cover_image_description :string
 #  main_image_description  :string
 #  name                    :string
+#  status                  :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #
@@ -25,7 +25,13 @@ class Cause < ApplicationRecord
 
   validates :name, presence: true
 
-  before_save :deactivate_non_profits, if: :will_save_change_to_active?
+  before_save :deactivate_non_profits, if: :will_save_change_to_status?
+
+  enum status: {
+    inactive: 0,
+    active: 1,
+    test: 2
+  }
 
   def default_pool
     pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
@@ -40,6 +46,6 @@ class Cause < ApplicationRecord
   end
 
   def deactivate_non_profits
-    non_profits.where(status: :active).find_each { |n| n.update(status: :inactive) } unless active
+    non_profits.where(status: :active).find_each { |n| n.update(status: :inactive) } unless status == :active
   end
 end

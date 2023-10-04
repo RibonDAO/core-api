@@ -7,7 +7,7 @@ RSpec.describe CauseBlueprint, type: :blueprint do
 
   it 'has the correct fields' do
     expect(cause_blueprint).to include(:name.to_s)
-    expect(cause_blueprint).to include(:active.to_s)
+    expect(cause_blueprint).to include(:status.to_s)
   end
 
   it 'has the correct associations' do

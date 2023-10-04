@@ -3,10 +3,10 @@
 # Table name: causes
 #
 #  id                      :bigint           not null, primary key
-#  active                  :boolean          default(TRUE)
 #  cover_image_description :string
 #  main_image_description  :string
 #  name                    :string
+#  status                  :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #
@@ -48,12 +48,12 @@ RSpec.describe Cause, type: :model do
     end
   end
 
-  describe '#active' do
+  describe '#status' do
     context 'when the cause has non_profits but its inactive' do
-      let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :inactive)]) }
+      let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :active)], status: :inactive) }
 
       it 'returns false' do
-        expect(cause.active).to be_truthy
+        expect(cause.status).to eq 'inactive'
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe Cause, type: :model do
       let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :active)]) }
 
       it 'returns true' do
-        expect(cause.active).to be_truthy
+        expect(cause.status).to eq 'active'
       end
     end
   end
