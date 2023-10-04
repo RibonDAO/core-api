@@ -10,6 +10,8 @@ module Payment
             @subscription = Subscription.find_by(external_id: data['subscription'])
             return unless subscription
 
+            subscription.update(status: :active)
+
             set_next_payment
             upsert_payment
             handle_contribution_creation

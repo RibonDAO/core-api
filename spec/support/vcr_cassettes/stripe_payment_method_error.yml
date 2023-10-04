@@ -1,75 +1,438 @@
+---
 http_interactions:
-  - request:
-      method: post
-      uri: https://api.stripe.com/v1/payment_methods
-      body:
-        encoding: UTF-8
-        string: type=card&card[number]=4111111111111111&card[exp_month]=08&card[exp_year]=22&card[cvc]=411
-      headers:
-        User-Agent:
-          - Stripe/v1 RubyBindings/6.3.0
-        Authorization:
-          - Bearer STRIPE_SECRET_KEY
-        Content-Type:
-          - application/x-www-form-urlencoded
-        X-Stripe-Client-User-Agent:
-          - '{"bindings_version":"6.3.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"x86_64-linux","engine":"ruby","publisher":"stripe","uname":"Linux
-            version 5.13.0-52-generic (buildd@lcy02-amd64-067) (gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1)
-            9.4.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #59~20.04.1-Ubuntu SMP Thu Jun
-            16 21:21:28 UTC 2022","hostname":"nicknish-machine"}'
-        Accept-Encoding:
-          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-        Accept:
-          - "*/*"
-    response:
-      status:
-        code: 402
-        message: OK
-      headers:
-        Server:
-          - nginx
-        Date:
-          - Wed, 13 Jul 2022 13:37:57 GMT
-        Content-Type:
-          - application/json
-        Content-Length:
-          - "934"
-        Connection:
-          - keep-alive
-        Access-Control-Allow-Credentials:
-          - "true"
-        Access-Control-Allow-Methods:
-          - GET, POST, HEAD, OPTIONS, DELETE
-        Access-Control-Allow-Origin:
-          - "*"
-        Access-Control-Expose-Headers:
-          - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
-        Access-Control-Max-Age:
-          - "300"
-        Cache-Control:
-          - no-cache, no-store
-        Idempotency-Key:
-          - 36ba1db3-7991-46a2-8a52-0909965cdbaa
-        Original-Request:
-          - req_1gVOxIEbZOPAD9
-        Request-Id:
-          - req_1gVOxIEbZOPAD9
-        Stripe-Should-Retry:
-          - "false"
-        Stripe-Version:
-          - "2020-08-27"
-        Strict-Transport-Security:
-          - max-age=31556926; includeSubDomains; preload
-      body:
-        encoding: UTF-8
-        string: |
-          {
-           "error": {
+- request:
+    method: get
+    uri: https://owlracle.info/poly/gas
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Date:
+      - Fri, 29 Sep 2023 14:10:24 GMT
+      Content-Type:
+      - text/plain; charset=utf-8
+      Content-Length:
+      - '60'
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Express
+      Location:
+      - https://api.owlracle.info/v2/poly/gas?
+      Vary:
+      - Accept
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=PEj0Sxh1vEywCfKKW%2BAYsBCmBBp9CigEQfU0gvsnucplD4F0xynIqHoPuOtlVziKph2VNLnm3fTEZ0gzsQcoVB%2BIa3Gbr1%2Fsycgnhx2O%2B2QXeAqk%2FMlDMYdrfRsgtQoy"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 80e4cf3279bb275e-GIG
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: Found. Redirecting to https://api.owlracle.info/v2/poly/gas?
+  recorded_at: Fri, 29 Sep 2023 14:10:23 GMT
+- request:
+    method: get
+    uri: https://api.owlracle.info/v2/poly/gas
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Fri, 29 Sep 2023 14:10:24 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '73'
+      Connection:
+      - keep-alive
+      X-Powered-By:
+      - Express
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - W/"49-Ygzk9LBrkZvIffTMFEI+u/Bm05s"
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=JnKQAVJ8w977Ct0DQG7bm3TZAc2ZN7LjpQEvjCywumJhQKzX83aK%2BapJEojnVqBxAyqr%2FHlXeKhM7SgRjqibqZ323cXp44Na%2BGJlgzaIVKExYwKD8URH0PXeI9PQUwl%2BUtf%2Faw%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 80e4cf35d9c4117a-GIG
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"error":{"status":400,"type":"Bad Request","message":"Missing API
+        key"}}'
+  recorded_at: Fri, 29 Sep 2023 14:10:24 GMT
+- request:
+    method: get
+    uri: http://economia.awesomeapi.com.br/json/last/brl-usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 308
+      message: Permanent Redirect
+    headers:
+      Date:
+      - Fri, 29 Sep 2023 14:10:24 GMT
+      Content-Type:
+      - text/html
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Location:
+      - https://economia.awesomeapi.com.br/json/last/brl-usd
+      Cf-Cache-Status:
+      - BYPASS
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=V08rg85wNN8VSnGW64xR9B4LmeRk1kFqgH9vJaly8Mbsod9WRLRN9J%2BGxh6%2Btw9Nsa7c9Bdlcfu6UluvwNF%2FNZKlC6uf93Xxf%2Bjjtd32tK0PgqvGigeMq0a0YJDA29fMhISoqaavS2m5Xkpl"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 80e4cf38bc3b2590-GIG
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
+        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n<script
+        defer src=\"https://static.cloudflareinsights.com/beacon.min.js/v8b253dfea2ab4077af8c6f58422dfbfd1689876627854\"
+        integrity=\"sha512-bjgnUKX4azu3dLTVtie9u6TKqgx29RBwfj3QXYt5EKfWM/9hPSAI/4qcV5NACjwAo8UtTeWefx6Zq5PHcMm7Tg==\"
+        data-cf-beacon='{\"rayId\":\"80e4cf38bc3b2590\",\"version\":\"2023.8.0\",\"b\":1,\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"si\":100}'
+        crossorigin=\"anonymous\"></script>\n</body>\r\n</html>\r\n"
+  recorded_at: Fri, 29 Sep 2023 14:10:24 GMT
+- request:
+    method: get
+    uri: https://economia.awesomeapi.com.br/json/last/brl-usd
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 29 Sep 2023 14:10:24 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - HEAD,OPTIONS,GET,POST
+      Access-Control-Allow-Headers:
+      - Authorization,Content-Type,X-Worker-Token
+      Content-Security-Policy:
+      - 'img-src ''self'' *.awesomeapi.com.br;default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src
+        ''self'' https: data:;form-action ''self'';frame-ancestors ''self'';object-src
+        ''none'';script-src ''self'';script-src-attr ''none'';style-src ''self'' https:
+        ''unsafe-inline'';upgrade-insecure-requests'
+      Cross-Origin-Opener-Policy:
+      - unsafe-none
+      Cross-Origin-Resource-Policy:
+      - cross-origin
+      X-Dns-Prefetch-Control:
+      - 'off'
+      Expect-Ct:
+      - max-age=0
+      X-Frame-Options:
+      - SAMEORIGIN
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains
+      X-Download-Options:
+      - noopen
+      X-Content-Type-Options:
+      - nosniff
+      Origin-Agent-Cluster:
+      - "?1"
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - no-referrer
+      X-Xss-Protection:
+      - '0'
+      Cache-Control:
+      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
+      Pragma:
+      - cache
+      Etag:
+      - W/"f1-sUCzt3EaU+Bd//vzyV45UsJ+w0w"
+      X-Cache-Status:
+      - HIT
+      Cf-Cache-Status:
+      - EXPIRED
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=Exk50kKCNCO8NAS2sw%2Bd53FtNb0un1FbWmj8laCEfZgCHskQdCCd53a5TFSSOZFJEvTGwW%2BgEZGB30%2Bu6iOnAzvROAazWWr2ctKRaSKKT9HiHbrnhhev2vy044lRTNV0LNVhyxBQbPv%2FEK8w"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Vary:
+      - Accept-Encoding
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 80e4cf395c9e1d56-GIG
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"BRLUSD":{"code":"BRL","codein":"USD","name":"Real Brasileiro/Dólar
+        Americano","high":"0.2003","low":"0.1984","varBid":"0.0007","pctChange":"0.35","bid":"0.1993","ask":"0.1994","timestamp":"1695996604","create_date":"2023-09-29
+        11:10:04"}}'
+  recorded_at: Fri, 29 Sep 2023 14:10:24 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/payment_methods
+    body:
+      encoding: UTF-8
+      string: type=card&card[number]=4000000000000002&card[exp_month]=12&card[exp_year]=24&card[cvc]=123
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/7.1.0
+      Authorization:
+      - Bearer STRIPE_SECRET_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics":{"request_id":"req_zrgSE1slE2EGm1","request_duration_ms":0}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"7.1.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"arm64-darwin22","engine":"ruby","publisher":"stripe","uname":"Darwin
+        MacBook-Pro-de-Thais.local 22.6.0 Darwin Kernel Version 22.6.0: Wed Jul  5
+        22:22:05 PDT 2023; root:xnu-8796.141.3~6/RELEASE_ARM64_T6000 arm64","hostname":"MacBook-Pro-de-Thais.local"}'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 29 Sep 2023 14:10:25 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '931'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET,HEAD,PUT,PATCH,POST,DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Idempotency-Key:
+      - 1bac04a0-81c6-4836-8fd3-a9f0b3bb783b
+      Original-Request:
+      - req_KYbaPsVJxxRYxW
+      Request-Id:
+      - req_KYbaPsVJxxRYxW
+      Stripe-Should-Retry:
+      - 'false'
+      Stripe-Version:
+      - '2020-08-27'
+      Vary:
+      - Origin
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "pm_1NvhOfJuOnwQq9QxOlgXqwtJ",
+          "object": "payment_method",
+          "billing_details": {
+            "address": {
+              "city": null,
+              "country": null,
+              "line1": null,
+              "line2": null,
+              "postal_code": null,
+              "state": null
+            },
+            "email": null,
+            "name": null,
+            "phone": null
+          },
+          "card": {
+            "brand": "visa",
+            "checks": {
+              "address_line1_check": null,
+              "address_postal_code_check": null,
+              "cvc_check": "unchecked"
+            },
+            "country": "US",
+            "exp_month": 12,
+            "exp_year": 2024,
+            "fingerprint": "J86sIAm6HrVJKFlv",
+            "funding": "credit",
+            "generated_from": null,
+            "last4": "0002",
+            "networks": {
+              "available": [
+                "visa"
+              ],
+              "preferred": null
+            },
+            "three_d_secure_usage": {
+              "supported": true
+            },
+            "wallet": null
+          },
+          "created": 1695996625,
+          "customer": null,
+          "livemode": false,
+          "metadata": {},
+          "type": "card"
+        }
+  recorded_at: Fri, 29 Sep 2023 14:10:25 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/customers
+    body:
+      encoding: UTF-8
+      string: email=customer116%40customer.com&name=a+customer&payment_method=pm_1NvhOfJuOnwQq9QxOlgXqwtJ&invoice_settings[default_payment_method]=pm_1NvhOfJuOnwQq9QxOlgXqwtJ&address[country]=BR&address[city]=Bras%C3%ADlia&address[state]=DF
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/7.1.0
+      Authorization:
+      - Bearer STRIPE_SECRET_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics":{"request_id":"req_KYbaPsVJxxRYxW","request_duration_ms":848}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"7.1.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"arm64-darwin22","engine":"ruby","publisher":"stripe","uname":"Darwin
+        MacBook-Pro-de-Thais.local 22.6.0 Darwin Kernel Version 22.6.0: Wed Jul  5
+        22:22:05 PDT 2023; root:xnu-8796.141.3~6/RELEASE_ARM64_T6000 arm64","hostname":"MacBook-Pro-de-Thais.local"}'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 402
+      message: Payment Required
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 29 Sep 2023 14:10:26 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '338'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET,HEAD,PUT,PATCH,POST,DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Idempotency-Key:
+      - 858243f7-325e-402c-bf11-048a090616e6
+      Original-Request:
+      - req_3YaNjR47b3V84i
+      Request-Id:
+      - req_3YaNjR47b3V84i
+      Stripe-Should-Retry:
+      - 'false'
+      Stripe-Version:
+      - '2020-08-27'
+      Vary:
+      - Origin
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
             "code": "card_declined",
-            "message": "error",
-            "type": "card",
-            "request_log_url": "http"
-           }
+            "decline_code": "generic_decline",
+            "doc_url": "https://stripe.com/docs/error-codes/card-declined",
+            "message": "Your card was declined.",
+            "param": "",
+            "request_log_url": "https://dashboard.stripe.com/test/logs/req_3YaNjR47b3V84i?t=1695996625",
+            "type": "card_error"
           }
-    recorded_at: Wed, 13 Jul 2022 13:37:57 GMT
+        }
+  recorded_at: Fri, 29 Sep 2023 14:10:26 GMT
 recorded_with: VCR 6.1.0
