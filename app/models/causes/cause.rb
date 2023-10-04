@@ -48,4 +48,8 @@ class Cause < ApplicationRecord
   def deactivate_non_profits
     non_profits.where(status: :active).find_each { |n| n.update(status: :inactive) } unless status == :active
   end
+
+  def active
+    status == 'active'
+  end
 end
