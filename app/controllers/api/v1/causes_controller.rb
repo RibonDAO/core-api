@@ -2,14 +2,11 @@ module Api
   module V1
     class CausesController < ApplicationController
       def index
-        @causes = Cause.where(active: true).where(id: Cause.select(:id)
-          .joins(:non_profits).where(non_profits: { status: 1 })).shuffle
-
-        render json: CauseBlueprint.render(@causes, view: :data_and_images)
-      end
-
-      def free_donation_causes
-        @causes = Cause.where(active: true).shuffle
+        @causes = if current_user&.email&.include?('@ribon.io')
+                    active_and_test_causes
+                  else
+                    active_causes
+                  end
 
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
@@ -40,6 +37,16 @@ module Api
 
       private
 
+      def active_causes
+        Cause.where(status: :active).where(id: Cause.select(:id)
+                      .joins(:non_profits).where(non_profits: { status: 1 })).shuffle
+      end
+
+      def active_and_test_causes
+        Cause.where(status: %i[active test]).where(id: Cause.select(:id)
+                         .joins(:non_profits).where(non_profits: { status: %i[active test] })).shuffle
+      end
+
       def cause_params
         params.permit(
           :id,
@@ -48,7 +55,7 @@ module Api
           :main_image,
           :cover_image_description,
           :main_image_description,
-          :active
+          :status
         )
       end
     end
