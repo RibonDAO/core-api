@@ -59,7 +59,8 @@ module Labeling
 
     def donations
       @donations ||= Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
-                             .where('donations.created_at >= ?', from)
+      .where('donations.created_at >= ?', from).joins(:non_profit)
+      .where('non_profits.cause_id = ?', 5)
     end
 
     def person_blockchain_transactions
@@ -69,6 +70,9 @@ module Labeling
            person_blockchain_transactions.created_at) AS order_date,
     'PersonBlockchainTransaction' AS record_type")
                                           .where('person_blockchain_transactions.succeeded_at >= ?', from)
+                                          .joins(:person_payment)
+                                          .where('person_payments.receiver_id = ?', 5)
+                                          .where('person_payments.receiver_type = ?', 'Cause')
     end
   end
 end

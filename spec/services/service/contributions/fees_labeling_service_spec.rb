@@ -127,28 +127,143 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
   end
 
   context "when there is more than one cause" do
-    
     let(:health){ create(:cause)}
     let(:water){ create(:cause)}
-
     let!(:health_contribution1) { create(:contribution, :feeable, receiver: health) }
-
+    let!(:health_contribution2) { create(:contribution, :feeable, receiver: health) }
+    let!(:health_contribution3) { create(:contribution, :feeable, receiver: health) }
     let!(:water_contribution1) { create(:contribution, :feeable, receiver: water) }
+    let!(:water_contribution2) { create(:contribution, :feeable, receiver: water) }
+    let!(:water_contribution3) { create(:contribution, :feeable, receiver: water) }
+    
 
-    let(:new_contribution) { create(:contribution, receiver: health) }
+    context "when the contribution dont cut out all fee balances avaiable" do
 
-    it "doesn't spread the fees to different causes" do
-      fee_service = described_class.new(contribution: new_contribution)
+      let(:new_contribution) { create(:contribution, receiver: health, generated_fee_cents: 30) }
 
-      expect { fee_service.spread_fee_to_payers }.not_to change{water_contribution1.contribution_balance.reload.fees_balance_cents}
+      it "doesn't change fee balance of different causes" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+        water_contribution1.contribution_balance.reload.fees_balance_cents}.by(0)
+        .and change{water_contribution2.contribution_balance.reload.fees_balance_cents}.by(0)
+        .and change{water_contribution3.contribution_balance.reload.fees_balance_cents}.by(0)
+      end
+
+      it "doesn't change ticket balance of different causes" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+        water_contribution1.contribution_balance.reload.tickets_balance_cents}.by(0)
+        .and change{water_contribution2.contribution_balance.reload.tickets_balance_cents}.by(0)
+        .and change{water_contribution3.contribution_balance.reload.tickets_balance_cents}.by(0)
+      end
+
+      it "change the fee balance cents proportionaly" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+          health_contribution1.contribution_balance.reload.fees_balance_cents}.by(-10)
+          .and change{health_contribution2.contribution_balance.reload.fees_balance_cents}.by(-10)
+          .and change{health_contribution3.contribution_balance.reload.fees_balance_cents}.by(-10)
+      end
+
+      it "does not change the ticket balance cents" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+          health_contribution1.contribution_balance.reload.tickets_balance_cents}.by(0)
+          .and change{health_contribution2.contribution_balance.reload.tickets_balance_cents}.by(0)
+          .and change{health_contribution3.contribution_balance.reload.tickets_balance_cents}.by(0)
+      end
     end
 
-    it "spread the fees to the same cause" do
-      fee_service = described_class.new(contribution: new_contribution)
+    context "when the contribution cut out all cause balance avaiable" do
+      let(:new_contribution) { create(:contribution, receiver: health, generated_fee_cents: 100000000) }
 
-      expect { fee_service.spread_fee_to_payers }.to change{health_contribution1.contribution_balance.reload.fees_balance_cents}
+      it "doesn't spread the fees to different causes" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+        water_contribution1.contribution_balance.reload.fees_balance_cents}.by(0)
+        .and change{water_contribution2.contribution_balance.reload.fees_balance_cents}.by(0)
+        .and change{water_contribution3.contribution_balance.reload.fees_balance_cents}.by(0)
+      end
+
+      it "doesn't change ticket balance of different causes" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+        water_contribution1.contribution_balance.reload.tickets_balance_cents}.by(0)
+        .and change{water_contribution2.contribution_balance.reload.tickets_balance_cents}.by(0)
+        .and change{water_contribution3.contribution_balance.reload.tickets_balance_cents}.by(0)
+      end
+
+      it "cut out all contribution's fee balance" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+          health_contribution1.contribution_balance.reload.fees_balance_cents}.to(0)
+          .and change{health_contribution2.contribution_balance.reload.fees_balance_cents}.to(0)
+          .and change{health_contribution3.contribution_balance.reload.fees_balance_cents}.to(0)
+      end
+
+      it "cut out all contribution's tickets balance" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+          health_contribution1.contribution_balance.reload.tickets_balance_cents}.to(0)
+          .and change{health_contribution2.contribution_balance.reload.tickets_balance_cents}.to(0)
+          .and change{health_contribution3.contribution_balance.reload.tickets_balance_cents}.to(0)
+      end
     end
 
-    #testar tambem contribuição que zera o fee da causa
+    context "when the contribution cut out all cause fee avaiable and some of tickets" do
+      let(:new_contribution) { create(:contribution, receiver: health, generated_fee_cents: 330) }
+      
+      it "cut out all contribution's fee balance" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+          health_contribution1.contribution_balance.reload.fees_balance_cents}.to(0)
+          .and change{health_contribution2.contribution_balance.reload.fees_balance_cents}.to(0)
+          .and change{health_contribution3.contribution_balance.reload.fees_balance_cents}.to(0)
+      end
+
+      it "change proportionally contribution's tickets balance" do
+        fee_service = described_class.new(contribution: new_contribution)
+
+        expect { fee_service.spread_fee_to_payers }.to change{
+          health_contribution1.contribution_balance.reload.tickets_balance_cents}.by(-10)
+          .and change{health_contribution2.contribution_balance.reload.tickets_balance_cents}.by(-10)
+          .and change{health_contribution3.contribution_balance.reload.tickets_balance_cents}.by(-10)
+      end
+    end
+  end
+
+  context "when contributions have different fee balances" do
+    let(:health){ create(:cause)}
+    let(:water){ create(:cause)}
+    let!(:health_contribution1) { create(:contribution, :feeable, receiver: health, contribution_balance: create(:contribution_balance, fees_balance_cents: 50)) }
+    let!(:health_contribution2) { create(:contribution, :feeable, receiver: health, contribution_balance: create(:contribution_balance, fees_balance_cents: 150)) }
+    let!(:health_contribution3) { create(:contribution, :feeable, receiver: health, contribution_balance: create(:contribution_balance, fees_balance_cents: 250)) }
+    let!(:water_contribution1) { create(:contribution, :feeable, receiver: water) }
+    let!(:water_contribution2) { create(:contribution, :feeable, receiver: water) }
+    let!(:water_contribution3) { create(:contribution, :feeable, receiver: water) }
+
+    let(:new_contribution) { create(:contribution, receiver: health, generated_fee_cents: 500) }
+
+    it "cut out all contribution's fee balance" do
+      fee_service = described_class.new(contribution: new_contribution)
+
+      expect { fee_service.spread_fee_to_payers }.to change{
+        byebug
+        health_contribution1.contribution_balance.reload.fees_balance_cents}.to(0)
+        .and change{health_contribution2.contribution_balance.reload.fees_balance_cents}.to(0)
+        .and change{health_contribution3.contribution_balance.reload.fees_balance_cents}.to(0)
+    end
   end
 end
+
+#TODO: testar tambem contribuição com proporções diferentes
+#TODO: testar o incresead amount

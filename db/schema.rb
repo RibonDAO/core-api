@@ -416,8 +416,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_184848) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 

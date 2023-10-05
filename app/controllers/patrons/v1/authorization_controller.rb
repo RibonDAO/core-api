@@ -19,7 +19,7 @@ module Patrons
       def authorize_from_auth_token
         authenticatable = BigDonor.find(params[:id])
         command = Auth::AuthorizeAuthToken.call(auth_token: params[:auth_token], authenticatable:)
-
+        
         if command.success?
           create_headers(command.result)
 
