@@ -30,7 +30,8 @@ FactoryBot.define do
 
     trait(:with_payment_in_blockchain) do
       after(:create) do |contribution|
-        create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 1.year.ago,
+        create(:person_blockchain_transaction, treasure_entry_status: :success,
+                                               succeeded_at: contribution.created_at,
                                                person_payment: contribution.person_payment)
       end
     end
@@ -38,8 +39,8 @@ FactoryBot.define do
     trait(:feeable) do
       before(:create) do |contribution|
         contribution.person_payment = create(:person_payment,
-                                            :with_payment_in_blockchain,
-                                            status: :paid)
+                                             :with_payment_in_blockchain,
+                                             status: :paid)
       end
 
       after(:create) do |contribution|
