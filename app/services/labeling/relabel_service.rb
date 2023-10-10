@@ -71,7 +71,6 @@ module Labeling
     'PersonBlockchainTransaction' AS record_type")
                                           .where('person_blockchain_transactions.succeeded_at >= ?', from)
                                           .joins(:person_payment)
-                                          .where('person_payments.receiver_id = ?', 5)
                                           .where('person_payments.receiver_type = ?', 'Cause')
     end
   end

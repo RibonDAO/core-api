@@ -138,20 +138,12 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     let!(:water_contribution1) { create(:contribution, :feeable, receiver: water) }
     let!(:water_contribution2) { create(:contribution, :feeable, receiver: water) }
     let!(:water_contribution3) { create(:contribution, :feeable, receiver: water) }
-<<<<<<< HEAD
-
-
-    context "when the contribution dont cut out all fee balances avaiable" do
-
-      let(:new_contribution) { create(:contribution, :with_payment_in_blockchain, receiver: health, generated_fee_cents: 30) }
-=======
 
     context 'when the contribution dont cut out all fee balances avaiable' do
       let(:new_contribution) do
         create(:contribution, :with_payment_in_blockchain,
                receiver: health, generated_fee_cents: 30, created_at: 1.day.from_now)
       end
->>>>>>> 72d424c0889476de0eaafbe12b8efb897218676e
 
       it "doesn't change fee balance of different causes" do
         fee_service = described_class.new(contribution: new_contribution)
@@ -261,18 +253,12 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
       end
     end
 
-<<<<<<< HEAD
-    context "when the contribution cut out all cause fee avaiable and some of tickets" do
-      let(:new_contribution) { create(:contribution, :with_payment_in_blockchain, receiver: health, generated_fee_cents: 330) }
-      
-=======
     context 'when the contribution cut out all cause fee avaiable and some of tickets' do
       let(:new_contribution) do
         create(:contribution, :with_payment_in_blockchain, created_at: 1.day.from_now,
                                                            receiver: health, generated_fee_cents: 330)
       end
 
->>>>>>> 72d424c0889476de0eaafbe12b8efb897218676e
       it "cut out all contribution's fee balance" do
         fee_service = described_class.new(contribution: new_contribution)
 
@@ -297,17 +283,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     end
   end
 
-<<<<<<< HEAD
-  context "when contributions have different fee balances" do
-    let!(:health){ create(:cause)}
-    let!(:water){ create(:cause)}
-    let!(:health_contribution1) { create(:contribution, :feeable, receiver: health, contribution_balance: create(:contribution_balance, fees_balance_cents: 50)) }
-    let!(:health_contribution2) { create(:contribution, :feeable, receiver: health, contribution_balance: create(:contribution_balance, fees_balance_cents: 150)) }
-    let!(:health_contribution3) { create(:contribution, :feeable, receiver: health, contribution_balance: create(:contribution_balance, fees_balance_cents: 250)) }
-    let!(:water_contribution1) { create(:contribution, :feeable, receiver: water) }
-    let!(:water_contribution2) { create(:contribution, :feeable, receiver: water) }
-    let!(:water_contribution3) { create(:contribution, :feeable, receiver: water) }
-=======
   context 'when contributions have different fee balances' do
     let(:health) { create(:cause) }
     let(:water) { create(:cause) }
@@ -350,7 +325,6 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
                                     :with_payment_in_blockchain,
                                     status: :paid), receiver: water)
     end
->>>>>>> 72d424c0889476de0eaafbe12b8efb897218676e
 
     let(:new_contribution) do
       create(:contribution, :with_payment_in_blockchain, created_at: 1.day.from_now,
@@ -360,19 +334,12 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     it "cut out all contribution's fee balance" do
       fee_service = described_class.new(contribution: new_contribution)
 
-<<<<<<< HEAD
-      expect { fee_service.spread_fee_to_payers }.to change{
-        health_contribution1.contribution_balance.reload.fees_balance_cents}.to(0)
-        .and change{health_contribution2.contribution_balance.reload.fees_balance_cents}.to(0)
-        .and change{health_contribution3.contribution_balance.reload.fees_balance_cents}.to(0)
-=======
       expect { fee_service.spread_fee_to_payers }
         .to change {
           health_contribution1.contribution_balance.reload.fees_balance_cents
         }.to(0)
         .and change { health_contribution2.contribution_balance.reload.fees_balance_cents }.to(0)
         .and change { health_contribution3.contribution_balance.reload.fees_balance_cents }.to(0)
->>>>>>> 72d424c0889476de0eaafbe12b8efb897218676e
     end
   end
 end
