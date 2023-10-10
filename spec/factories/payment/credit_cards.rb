@@ -20,5 +20,27 @@ FactoryBot.define do
         )
       end
     end
+    trait(:requires_action) do
+      initialize_with do
+        new(
+          cvv: '123',
+          number: '4000002760003184',
+          name: 'User Test',
+          expiration_month: '12',
+          expiration_year: '24'
+        )
+      end
+    end
+    trait(:invalid) do
+      initialize_with do
+        new(
+          cvv: '123',
+          number: '4000000000000002',
+          name: 'User Test',
+          expiration_month: '12',
+          expiration_year: '24'
+        )
+      end
+    end
   end
 end

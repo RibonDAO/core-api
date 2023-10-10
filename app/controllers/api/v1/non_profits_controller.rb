@@ -2,7 +2,11 @@ module Api
   module V1
     class NonProfitsController < ApplicationController
       def index
-        @non_profits = NonProfit.joins(:cause).where(causes: { active: true }).where(status: :active)
+        @non_profits = if current_user&.email&.include?('@ribon.io')
+                         active_and_test_non_profits
+                       else
+                         active_non_profits
+                       end
         @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
 
         render json: NonProfitBlueprint.render(@random_non_profits)
@@ -57,6 +61,14 @@ module Api
         return { unique_address: non_profit_params[:id] } if uuid_regex.match?(non_profit_params[:id])
 
         { id: non_profit_params[:id] }
+      end
+
+      def active_non_profits
+        NonProfit.joins(:cause).where(causes: { status: :active }).where(status: :active)
+      end
+
+      def active_and_test_non_profits
+        NonProfit.joins(:cause).where(causes: { status: %i[active test] }).where(status: %i[active test])
       end
     end
   end

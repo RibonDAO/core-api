@@ -46,7 +46,8 @@ class NonProfit < ApplicationRecord
 
   enum status: {
     inactive: 0,
-    active: 1
+    active: 1,
+    test: 2
   }
 
   def impact_for(date: Time.zone.now)

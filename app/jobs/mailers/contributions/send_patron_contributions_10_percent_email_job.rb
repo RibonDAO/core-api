@@ -2,25 +2,28 @@ module Mailers
   module Contributions
     class SendPatronContributions10PercentEmailJob < ApplicationJob
       queue_as :mailers
+      attr_reader :statistics
 
       def perform(big_donor:, statistics:)
         I18n.locale = language
-        send_email(big_donor, statistics)
+        @statistics = statistics
+        send_email(big_donor)
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message })
       end
 
       private
 
-      def send_email(big_donor, statistics)
-        return unless statistics[:top_donations_non_profit_name]
+      # rubocop:disable Metrics/AbcSize
+      def send_email(big_donor)
+        return unless top_donations_non_profit_impact
 
         SendgridWebMailer.send_email(receiver: big_donor[:email],
                                      dynamic_template_data: {
                                        first_name: big_donor[:name],
                                        total_engaged_people: statistics[:total_donors],
-                                       top_NGO_name: statistics[:top_donations_non_profit_name],
-                                       top_NGO_impact: statistics[:top_donations_non_profit_impact],
+                                       top_NGO_name: top_donations_non_profit&.name,
+                                       top_NGO_impact: top_donations_non_profit_impact,
                                        cause_name: statistics[:contribution_receiver].name,
                                        donation_date: statistics[:contribution_date],
                                        dash_link: dash_link(big_donor)
@@ -28,6 +31,24 @@ module Mailers
                                      template_name: 'patron_contributions_10_percent_email_template_id',
                                      language:).deliver_later
         create_log(big_donor)
+      end
+      # rubocop:enable Metrics/AbcSize
+
+      def contribution
+        statistics[:contribution]
+      end
+
+      def top_donations_non_profit
+        statistics[:top_donations_non_profit]
+      end
+
+      def top_donations_non_profit_impact
+        impact = Service::Contributions::DirectImpactService.new(contribution:)
+                                                            .direct_impact_for(top_donations_non_profit)
+
+        return unless impact
+
+        impact[:formatted_impact].join(' ')
       end
 
       def dash_link(big_donor)

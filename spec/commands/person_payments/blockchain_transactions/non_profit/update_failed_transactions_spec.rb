@@ -10,51 +10,41 @@ describe PersonPayments::BlockchainTransactions::NonProfit::UpdateFailedTransact
     include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
 
     let(:non_profit) { create(:non_profit) }
-
-    let(:retry_transactions_before) do
-      [create(:person_blockchain_transaction,
-              treasure_entry_status: :failed,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :dropped,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :replaced,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid))]
-    end
+    let(:valid_payment_methods) { %i[credit_card pix google_pay apple_pay] }
+    let(:failed_status) { %i[failed dropped replaced] }
+    let(:not_failed_status) { %i[success processing] }
 
     let(:retry_transactions) do
-      [create(:person_blockchain_transaction,
-              treasure_entry_status: :failed,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :dropped,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :replaced,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid))]
+      result = []
+      valid_payment_methods.each do |payment_method|
+        failed_status.each do |treasure_entry_status|
+          result.push(create(:person_blockchain_transaction,
+                             treasure_entry_status:,
+                             person_payment: create(:person_payment, receiver: non_profit,
+                                                                     payment_method:,
+                                                                     status: :paid)))
+        end
+      end
+      result
     end
 
     let(:not_retry_transactions) do
-      [create(:person_blockchain_transaction,
-              treasure_entry_status: :success,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid)),
-       create(:person_blockchain_transaction,
-              treasure_entry_status: :processing,
-              person_payment: create(:person_payment, receiver: non_profit, payment_method: :credit_card,
-                                                      status: :paid))]
+      result = []
+      valid_payment_methods.each do |payment_method|
+        not_failed_status.each do |treasure_entry_status|
+          result.push(create(:person_blockchain_transaction,
+                             treasure_entry_status:,
+                             person_payment: create(:person_payment, receiver: non_profit,
+                                                                     payment_method:,
+                                                                     status: :paid)))
+        end
+      end
+      result
     end
 
     before do
-      retry_transactions_before
       retry_transactions
+      not_retry_transactions
       allow(Givings::Payment::AddGivingNonProfitToBlockchainJob).to receive(:perform_later)
     end
 
@@ -73,7 +63,6 @@ describe PersonPayments::BlockchainTransactions::NonProfit::UpdateFailedTransact
     it 'doesnt call the AddGivingNonProfitToBlockchainJob with successfull transactions PersonPayments' do
       command
 
-      not_retry_transactions
       not_retry_transactions.each do |transaction|
         expect(Givings::Payment::AddGivingNonProfitToBlockchainJob)
           .not_to have_received(:perform_later).with(

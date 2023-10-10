@@ -22,13 +22,14 @@ module PersonPayments
           Reporter.log(error: e)
         end
 
+        def valid_person_payments
+          PersonPayment.where(receiver_type: 'Cause', status: :paid).where.not(payment_method: :crypto)
+        end
+
         def person_payments_without_blockchain_transaction
           query = %(LEFT OUTER JOIN person_blockchain_transactions
                     ON person_blockchain_transactions.person_payment_id = person_payments.id)
-          @person_payments_without_blockchain_transaction ||= PersonPayment
-                                                              .where(receiver_type: 'Cause',
-                                                                     payment_method: :credit_card,
-                                                                     status: :paid)
+          @person_payments_without_blockchain_transaction ||= valid_person_payments
                                                               .joins(query)
                                                               .where(person_blockchain_transactions: { id: nil })
         end

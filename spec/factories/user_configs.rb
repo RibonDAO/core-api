@@ -1,18 +1,16 @@
 # == Schema Information
 #
-# Table name: causes
+# Table name: user_configs
 #
 #  id                      :bigint           not null, primary key
-#  cover_image_description :string
-#  main_image_description  :string
-#  name                    :string
-#  status                  :integer
+#  allowed_email_marketing :boolean
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  user_id                 :bigint           not null
 #
 FactoryBot.define do
-  factory :cause do
-    name { 'Cause' }
-    status { :active }
+  factory :user_config do
+    allowed_email_marketing { false }
+    user { build(:user) }
   end
 end

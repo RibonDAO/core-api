@@ -63,7 +63,6 @@ Rails.application.routes.draw do
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
-      get 'free_donation_causes' => 'causes#free_donation_causes'
       post 'causes' => 'causes#create'
       get 'causes/:id' => 'causes#show'
       put 'causes/:id' => 'causes#update'
@@ -107,7 +106,7 @@ Rails.application.routes.draw do
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
-        
+        post 'configs' => 'users/configs#update'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
