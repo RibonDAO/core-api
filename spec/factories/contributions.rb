@@ -30,12 +30,8 @@ FactoryBot.define do
 
     trait(:with_payment_in_blockchain) do
       after(:create) do |contribution|
-<<<<<<< HEAD
-        create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: contribution.created_at,
-=======
         create(:person_blockchain_transaction, treasure_entry_status: :success,
                                                succeeded_at: contribution.created_at,
->>>>>>> 72d424c0889476de0eaafbe12b8efb897218676e
                                                person_payment: contribution.person_payment)
       end
     end
