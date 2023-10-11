@@ -5,7 +5,7 @@ RSpec.describe ContributionQueries, type: :model do
     let(:receiver) { create(:cause) }
     let(:contribution) do
       create(:contribution, :with_payment_in_blockchain, created_at: 1.day.from_now,
-                                                           receiver:, generated_fee_cents: 1000)
+                                                         receiver:, generated_fee_cents: 1000)
     end
 
     context 'when the receiver is different' do

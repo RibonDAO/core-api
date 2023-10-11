@@ -13,7 +13,7 @@ module Service
         return if contribution.already_spread_fees?
 
         @initial_contributions_balance = feeable_contribution_balances.sum(&:fees_balance_cents)
-  
+
         deal_with_fees_balances_empty
         create_fees_for_feeable_contributions
         contribution.set_contribution_balance
