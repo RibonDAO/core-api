@@ -20,7 +20,7 @@ RSpec.describe PersonPaymentServices::BlockchainTransaction, type: :service do
     end
 
     context 'when is a crypto payment' do
-      let(:person_payment) { create(:person_payment, payment_method: :crypto) }
+      let(:person_payment) { create(:person_payment, :with_contribution, payment_method: :crypto) }
 
       context 'when the status is success (0x1)' do
         let(:status) { '0x1' }
@@ -56,7 +56,10 @@ RSpec.describe PersonPaymentServices::BlockchainTransaction, type: :service do
     end
 
     context 'when is a credit card payment' do
-      let(:person_payment) { create(:person_payment, payment_method: :credit_card, status: :paid) }
+      let(:person_payment) do
+        create(:person_payment, :with_contribution,
+               payment_method: :credit_card, status: :paid)
+      end
 
       context 'when the status is success (0x1)' do
         let(:status) { '0x1' }

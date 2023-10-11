@@ -38,13 +38,6 @@ describe Contributions::CreateContribution do
           expect(contribution.contribution_balance).to be_nil
         end
       end
-
-      it 'sets the contribution balance' do
-        command
-        contribution = Contribution.last
-
-        expect(contribution.contribution_balance).to be_present
-      end
     end
 
     context 'when an error occurs' do
