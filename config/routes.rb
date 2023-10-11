@@ -13,8 +13,12 @@ Rails.application.routes.draw do
   Rails.application.routes.draw do
     post '/graphql', to: 'graphql#execute'
   end
-  
-  mount Sidekiq::Web => '/sidekiq'
+
+  devise_for :admins
+
+  authenticate :admin do
+    mount Sidekiq::Web => '/sidekiq'
+  end
   
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
