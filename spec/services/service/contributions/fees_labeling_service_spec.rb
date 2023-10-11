@@ -68,7 +68,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     end
     let(:contribution) { create(:contribution, person_payment:) }
 
-    # 4.5454
+    # 4.545
     let!(:contribution_balance1) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
@@ -77,7 +77,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
                                                                         status: :paid)),
              fees_balance_cents: 5)
     end
-    # 13.6363
+    # 13.636
     let!(:contribution_balance2) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
@@ -86,7 +86,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
                                                                         status: :paid)),
              fees_balance_cents: 15)
     end
-    # 27.2727
+    # 27.272
     let!(:contribution_balance3) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
@@ -95,7 +95,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
                                                                         status: :paid)),
              fees_balance_cents: 30)
     end
-    # 54.5454
+    # 54.545
     let!(:contribution_balance4) do
       create(:contribution_balance,
              contribution: create(:contribution, receiver: contribution.receiver,
