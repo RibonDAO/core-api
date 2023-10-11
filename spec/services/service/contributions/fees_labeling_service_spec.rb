@@ -175,7 +175,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
 
       it 'change the fee balance cents proportionaly' do
         fee_service = described_class.new(contribution: new_contribution)
-        byebug
+        
         expect { fee_service.spread_fee_to_payers }
           .to change {
             health_contribution1.contribution_balance.reload.fees_balance_cents
