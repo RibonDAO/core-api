@@ -38,10 +38,10 @@ module Service
             handle_last_contribution_fee(accumulated_fees_result:, contribution_balance:)
             break 0
           end
-          
+
           fee_cents, contribution_increased_amount_cents = fee_and_increased_value_for(contribution_balance:)
           handle_fee_creation_for(contribution_balance:, fee_cents:, contribution_increased_amount_cents:)
-          
+
           accumulated_fees_result -= fee_cents
         end
       end

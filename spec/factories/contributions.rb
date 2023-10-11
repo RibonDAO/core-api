@@ -15,7 +15,7 @@ FactoryBot.define do
     person_payment { build(:person_payment) }
     receiver { build(:non_profit) }
     generated_fee_cents { 100 }
-    
+
     trait(:with_contribution_balance) do
       after(:create) do |contribution|
         create(:contribution_balance, contribution:)
