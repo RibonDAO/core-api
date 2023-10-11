@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     post '/graphql', to: 'graphql#execute'
   end
 
-  devise_for :admins
+  devise_for :admins, only: [:sessions]
 
   authenticate :admin do
     mount Sidekiq::Web => '/sidekiq'
