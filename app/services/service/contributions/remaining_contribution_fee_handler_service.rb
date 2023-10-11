@@ -8,15 +8,12 @@ module Service
       def initialize(contribution:, remaining_fee:)
         @contribution = contribution
         @remaining_fee = remaining_fee
-        @initial_contributions_balance = ContributionBalance
-                                         .joins(:contribution)
-                                         .where(contributions: { receiver: contribution.receiver })
-                                         .sum(:tickets_balance_cents)
       end
 
       def spread_remaining_fee
         return if not_enough_tickets_balance?
 
+        @initial_contributions_balance = feeable_contribution_balances.sum(&:tickets_balance_cents)
         create_fees_for_feeable_contributions
       end
 

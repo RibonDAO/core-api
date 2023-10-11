@@ -99,3 +99,6 @@ Metrics/AbcSize:
 
 Rails/DynamicFindBy:
   Enabled: false
+
+RSpec/ChangeByZero:
+  Enabled: false
