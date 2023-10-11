@@ -4,9 +4,8 @@ RSpec.describe ContributionQueries, type: :model do
   describe '#ordered_feeable_contribution_balances' do
     let(:receiver) { create(:cause) }
     let(:contribution) do
-      create(:contribution, receiver:, person_payment: create(:person_payment,
-                                                              :with_payment_in_blockchain,
-                                                              status: :paid))
+      create(:contribution, :with_payment_in_blockchain, created_at: 1.day.from_now,
+                                                           receiver:, generated_fee_cents: 1000)
     end
 
     context 'when the receiver is different' do
@@ -37,9 +36,7 @@ RSpec.describe ContributionQueries, type: :model do
       end
     end
 
-    # Adicionar condicão de tempo, as transações só serão validas quando acontecerem antes
-    # succeeded at na blockchain
-    xit context 'when the receiver is the same' do
+    context 'when the receiver is the same' do
       let!(:contribution_balance1) do
         create(:contribution_balance,
                contribution: create(:contribution,

@@ -49,7 +49,6 @@ RSpec.describe Labeling::RelabelService, type: :service do
     end
 
     it 'orders all records according to donation created_at and contribution succeeded_at' do
-      byebug
       expect(service.ordered_records.map { |record| record['id'] })
         .to eq([donation1, contribution1.person_payment.person_blockchain_transaction,
                 donation2, contribution2.person_payment.person_blockchain_transaction, donation3].map(&:id))

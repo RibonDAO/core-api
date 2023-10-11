@@ -31,7 +31,6 @@ module Labeling
     end
 
     def ordered_records
-      byebug
       @ordered_records ||= begin
         combined_query = <<~SQL.squish
           #{donations.to_sql}
