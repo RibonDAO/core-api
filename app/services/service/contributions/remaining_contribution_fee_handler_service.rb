@@ -13,7 +13,7 @@ module Service
       def spread_remaining_fee
         return if not_enough_tickets_balance?
 
-        @initial_contributions_balance = feeable_contribution_balances.sum(:tickets_balance_cents)
+        @initial_contributions_balance = feeable_contribution_balances.sum(&:tickets_balance_cents)
         create_fees_for_feeable_contributions
       end
 
