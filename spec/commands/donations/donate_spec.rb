@@ -44,11 +44,11 @@ describe Donations::Donate do
           .to have_received(:call).with(user:, cause: non_profit.cause)
       end
 
-      # it 'calls the ticket_labeling_instance label donation function' do
-      #   command
-      #
-      #   expect(ticket_labeling_instance).to have_received(:label_donation)
-      # end
+      it 'calls the ticket_labeling_instance label donation function' do
+        command
+
+        expect(ticket_labeling_instance).to have_received(:label_donation)
+      end
 
       it 'returns the donation created' do
         expect(command.result).to eq user.donations.last
