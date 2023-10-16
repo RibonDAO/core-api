@@ -33,6 +33,8 @@ class UserManager < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable
 
+  has_one :account
+
   def self.create_user_for_google(data)
     where(email: data['email']).first_or_initialize.tap do |user|
       user.provider = 'google_oauth2'
