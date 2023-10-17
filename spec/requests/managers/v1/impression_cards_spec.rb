@@ -14,7 +14,7 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
   end
 
   describe 'POST /create' do
-    subject(:request) { post '/managers/v1/impression_cards', params: params }
+    subject(:request) { post '/managers/v1/impression_cards', params: }
 
     context 'with the right params' do
       let(:params) do
@@ -61,7 +61,7 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
   end
 
   describe 'PUT /update' do
-    subject(:request) { put "/managers/v1/impression_cards/#{impression_card.id}", params: params }
+    subject(:request) { put "/managers/v1/impression_cards/#{impression_card.id}", params: }
 
     let(:impression_card) { create(:impression_card) }
 
