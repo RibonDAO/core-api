@@ -26,5 +26,8 @@ class Account < ApplicationRecord
 
   validates :uid, uniqueness: { case_sensitive: true }
 
+  include AuthenticatableModel
   include DeviseTokenAuth::Concerns::User
+
+  delegate :email, to: :user
 end
