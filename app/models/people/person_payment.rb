@@ -2,25 +2,28 @@
 #
 # Table name: person_payments
 #
-#  id                 :bigint           not null, primary key
-#  amount_cents       :integer
-#  currency           :integer
-#  error_code         :string
-#  liquid_value_cents :integer
-#  paid_date          :datetime
-#  payer_type         :string
-#  payment_method     :integer
-#  receiver_type      :string
-#  refund_date        :datetime
-#  status             :integer          default("processing")
-#  usd_value_cents    :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  external_id        :string
-#  integration_id     :bigint
-#  offer_id           :bigint
-#  payer_id           :uuid
-#  receiver_id        :bigint
+#  id                  :bigint           not null, primary key
+#  amount_cents        :integer
+#  currency            :integer
+#  error_code          :string
+#  liquid_value_cents  :integer
+#  paid_date           :datetime
+#  payer_type          :string
+#  payment_method      :integer
+#  platform            :string
+#  receiver_type       :string
+#  refund_date         :datetime
+#  status              :integer          default("processing")
+#  usd_value_cents     :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  external_id         :string
+#  external_invoice_id :string
+#  integration_id      :bigint
+#  offer_id            :bigint
+#  payer_id            :uuid
+#  receiver_id         :bigint
+#  subscription_id     :bigint
 #
 class PersonPayment < ApplicationRecord
   include UuidHelper
@@ -34,23 +37,21 @@ class PersonPayment < ApplicationRecord
   belongs_to :offer, optional: true
   belongs_to :receiver, polymorphic: true, optional: true
   belongs_to :payer, polymorphic: true
+  belongs_to :subscription, optional: true
 
   has_many :person_blockchain_transactions
   has_one :person_payment_fee
   has_one :contribution
+  has_one :utm, as: :trackable
 
   validates :paid_date, :status, :payment_method, presence: true
 
   scope :without_contribution, -> { where.missing(:contribution) }
 
   enum status: {
-    processing: 0,
-    paid: 1,
-    failed: 2,
-    refunded: 3,
-    refund_failed: 4,
-    requires_action: 5,
-    blocked: 6
+    processing: 0, paid: 1, failed: 2, refunded: 3,
+    refund_failed: 4, requires_action: 5, blocked: 6,
+    requires_confirmation: 7
   }
 
   enum payment_method: {
@@ -66,13 +67,9 @@ class PersonPayment < ApplicationRecord
     usd: 1
   }
 
-  def from_big_donor?
-    payer_type == 'BigDonor'
-  end
+  def from_big_donor? = payer_type == 'BigDonor'
 
-  def from_customer?
-    payer_type == 'Customer'
-  end
+  def from_customer? = payer_type == 'Customer'
 
   def crypto_amount
     amount_without_fees = amount - service_fees
@@ -91,11 +88,16 @@ class PersonPayment < ApplicationRecord
     amount_cents / 100.0
   end
 
-  def set_fees
-    fees = Givings::Card::CalculateCardGiving.call(value: amount_value, currency: currency&.to_sym).result
-    crypto_fee_cents = crypto? ? 0 : fees[:crypto_fee].cents
+  def formatted_amount
+    Money.from_cents(amount_cents, currency).format
+  end
 
-    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents:)
+  def set_fees
+    return create_person_payment_fee!(card_fee_cents: 0, crypto_fee_cents: 0) if crypto?
+
+    fees = Givings::Card::CalculateCardGiving
+           .call(value: amount_value, currency: currency&.to_sym, gateway:).result
+    create_person_payment_fee!(card_fee_cents: fees[:card_fee].cents, crypto_fee_cents: fees[:crypto_fee].cents)
   rescue StandardError => e
     Reporter.log(error: e)
   end
@@ -143,5 +145,9 @@ class PersonPayment < ApplicationRecord
 
   def set_currency
     self.currency = offer&.currency || :usd
+  end
+
+  def gateway
+    @gateway ||= offer&.gateway&.downcase&.to_sym || :stripe
   end
 end

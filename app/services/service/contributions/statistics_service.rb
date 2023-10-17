@@ -10,12 +10,27 @@ module Service
       # rubocop:disable Metrics/AbcSize
       def formatted_statistics
         {
-          initial_amount: format_money(initial_amount), used_amount: format_money(used_amount),
+          initial_amount: payment.formatted_amount, used_amount: format_money(used_amount),
           usage_percentage:, remaining_amount: format_money(remaining_amount),
           total_tickets:, avg_donations_per_person:, boost_amount: format_money(boost_amount),
           total_increase_percentage:, total_amount_to_cause: format_money(total_amount_to_cause),
           ribon_fee: format_money(ribon_fee), boost_new_contributors:, boost_new_patrons:,
           total_donors:, total_contributors:
+        }
+      end
+
+      def formatted_email_statistics
+        {
+          contribution:,
+          boost_amount:,
+          boost_new_contributors:,
+          boost_new_patrons:,
+          contribution_receiver: contribution.receiver,
+          contribution_date: contribution.created_at.strftime('%b/%Y'),
+          top_donations_non_profit:,
+          total_donors:,
+          total_increase_percentage:,
+          usage_percentage:
         }
       end
       # rubocop:enable Metrics/AbcSize
@@ -46,6 +61,10 @@ module Service
 
       def total_donors
         contribution.users.distinct.count
+      end
+
+      def top_donations_non_profit
+        @top_donations_non_profit ||= ContributionQueries.new(contribution:).top_donations_non_profit
       end
 
       def avg_donations_per_person
@@ -99,7 +118,7 @@ module Service
       end
 
       def format_money(amount)
-        Money.from_amount(amount.round(2), :usd).format
+        Currency::Converters.convert(from: :usd, to: payment.currency, value: amount).round.format
       end
     end
   end

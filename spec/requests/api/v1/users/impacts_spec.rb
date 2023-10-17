@@ -40,4 +40,21 @@ RSpec.describe 'Api::V1::Users::Impacts', type: :request do
       expect(response_body.donations_count).to eq 2
     end
   end
+
+  describe 'GET app/donations_count' do
+    subject(:request) { get "/api/v1/users/#{user.id}/app/donations_count" }
+
+    let!(:user) { create(:user) }
+
+    before do
+      create(:donation, platform: :web, user:)
+      create(:donation, platform: :app, user:)
+    end
+
+    it 'returns the total amount of donations from the user' do
+      request
+
+      expect(response_body.app_donations_count).to eq 1
+    end
+  end
 end

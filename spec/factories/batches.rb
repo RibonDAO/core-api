@@ -2,16 +2,18 @@
 #
 # Table name: batches
 #
-#  id         :bigint           not null, primary key
-#  amount     :decimal(, )
-#  cid        :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id               :bigint           not null, primary key
+#  amount           :decimal(, )
+#  cid              :string
+#  reference_period :date
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 FactoryBot.define do
   factory :batch do
     cid { 'cid' }
     amount { 100 }
+    reference_period { Time.zone.today }
 
     trait(:with_integration_and_non_profit) do
       after(:create) do |batch|

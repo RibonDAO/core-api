@@ -18,4 +18,16 @@ RSpec.describe BigDonor, type: :model do
     it { is_expected.to validate_uniqueness_of(:email).ignoring_case_sensitivity }
     it { is_expected.to have_many(:person_payments) }
   end
+
+  describe '#dashboard_link' do
+    subject(:big_donor) { create(:big_donor) }
+
+    let(:email_link_mock) { instance_double(Auth::EmailLinkService, find_or_create_auth_link: 'link') }
+
+    it 'returns the email link service link' do
+      allow(Auth::EmailLinkService).to receive(:new).with(authenticatable: big_donor).and_return(email_link_mock)
+
+      expect(big_donor.dashboard_link).to eq 'link'
+    end
+  end
 end

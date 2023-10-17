@@ -4,7 +4,7 @@ module Managers
       def index
         @integrations = Integration.order(created_at: :desc)
 
-        render json: IntegrationBlueprint.render(@integrations)
+        render json: IntegrationBlueprint.render(@integrations, view: :manager)
       end
 
       def mobility_attributes
@@ -23,7 +23,7 @@ module Managers
       def show
         @integration = Integration.find_by fetch_integration_query
 
-        render json: IntegrationBlueprint.render(@integration)
+        render json: IntegrationBlueprint.render(@integration, view: :manager)
       end
 
       def update

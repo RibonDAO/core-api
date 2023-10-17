@@ -33,6 +33,7 @@ class NonProfit < ApplicationRecord
   has_many :pools, through: :non_profit_pools
   has_many :stories, dependent: :delete_all
   has_many :person_payments, as: :receiver
+  has_many :subscriptions, as: :receiver
 
   accepts_nested_attributes_for :stories
   accepts_nested_attributes_for :non_profit_impacts
@@ -45,7 +46,8 @@ class NonProfit < ApplicationRecord
 
   enum status: {
     inactive: 0,
-    active: 1
+    active: 1,
+    test: 2
   }
 
   def impact_for(date: Time.zone.now)

@@ -10,6 +10,10 @@ module Api
           render json: { donations_count: donations.count }
         end
 
+        def app_donations_count
+          render json: { app_donations_count: app_donations.count }
+        end
+
         private
 
         def user
@@ -18,6 +22,10 @@ module Api
 
         def donations
           @donations ||= user.donations
+        end
+
+        def app_donations
+          @app_donations ||= donations.where(platform: 'app')
         end
       end
     end

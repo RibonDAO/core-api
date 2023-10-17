@@ -10,11 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_11_181000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "accounts", force: :cascade do |t|
+    t.boolean "allow_password_change"
+    t.datetime "confirmation_sent_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.string "encrypted_password"
+    t.string "image"
+    t.string "name"
+    t.string "nickname"
+    t.string "provider"
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.json "tokens"
+    t.string "uid"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -110,6 +131,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "amount"
+    t.date "reference_period"
   end
 
   create_table "big_donors", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -148,6 +170,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.datetime "updated_at", null: false
     t.string "cover_image_description"
     t.string "main_image_description"
+    t.integer "status"
   end
 
   create_table "chains", force: :cascade do |t|
@@ -215,6 +238,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.index ["user_id"], name: "index_customers_on_user_id", unique: true
   end
 
+  create_table "devices", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "device_id"
+    t.string "device_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_devices_on_user_id"
+  end
+
   create_table "donation_batches", force: :cascade do |t|
     t.bigint "donation_id", null: false
     t.bigint "batch_id", null: false
@@ -255,6 +287,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.index ["integration_id"], name: "index_donations_on_integration_id"
     t.index ["non_profit_id"], name: "index_donations_on_non_profit_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
+  end
+
+  create_table "email_logs", force: :cascade do |t|
+    t.string "email_template_name"
+    t.integer "email_type"
+    t.integer "status"
+    t.string "receiver_type", null: false
+    t.string "receiver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_type", "receiver_id"], name: "index_email_logs_on_receiver"
   end
 
   create_table "histories", force: :cascade do |t|
@@ -394,8 +437,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -448,6 +491,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "person_payment_id"
+    t.datetime "succeeded_at"
     t.index ["person_payment_id"], name: "index_person_blockchain_transactions_on_person_payment_id"
   end
 
@@ -479,10 +523,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.integer "liquid_value_cents"
     t.string "payer_type"
     t.uuid "payer_id"
+    t.string "platform"
+    t.bigint "subscription_id"
+    t.string "external_invoice_id"
     t.index ["integration_id"], name: "index_person_payments_on_integration_id"
     t.index ["offer_id"], name: "index_person_payments_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_person_payments_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_person_payments_on_receiver"
+    t.index ["subscription_id"], name: "index_person_payments_on_subscription_id"
   end
 
   create_table "pool_balances", force: :cascade do |t|
@@ -544,6 +592,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.index ["non_profit_id"], name: "index_stories_on_non_profit_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.string "payment_method"
+    t.string "payer_type"
+    t.uuid "payer_id"
+    t.string "external_id"
+    t.datetime "cancel_date"
+    t.string "platform"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "integration_id"
+    t.string "receiver_type"
+    t.bigint "receiver_id"
+    t.integer "status"
+    t.bigint "offer_id"
+    t.datetime "next_payment_attempt"
+    t.index ["integration_id"], name: "index_subscriptions_on_integration_id"
+    t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
+    t.index ["payer_type", "payer_id"], name: "index_subscriptions_on_payer"
+    t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
+  end
+
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -562,6 +631,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_completed_tasks_on_user_id"
+  end
+
+  create_table "user_configs", force: :cascade do |t|
+    t.boolean "allowed_email_marketing"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_configs_on_user_id"
   end
 
   create_table "user_donation_stats", force: :cascade do |t|
@@ -651,6 +728,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
     t.index ["owner_type", "owner_id"], name: "index_wallets_on_owner"
   end
 
+  add_foreign_key "accounts", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "authors"
@@ -661,6 +739,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
   add_foreign_key "contribution_fees", "contributions"
   add_foreign_key "contribution_fees", "contributions", column: "payer_contribution_id"
   add_foreign_key "contributions", "person_payments"
+  add_foreign_key "devices", "users"
   add_foreign_key "donation_batches", "batches"
   add_foreign_key "donation_batches", "donations"
   add_foreign_key "donation_blockchain_transactions", "chains"
@@ -692,7 +771,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_213814) do
   add_foreign_key "pools", "causes"
   add_foreign_key "pools", "tokens"
   add_foreign_key "stories", "non_profits"
+  add_foreign_key "subscriptions", "integrations"
+  add_foreign_key "subscriptions", "offers"
   add_foreign_key "user_completed_tasks", "users"
+  add_foreign_key "user_configs", "users"
   add_foreign_key "user_donation_stats", "users"
   add_foreign_key "user_tasks_statistics", "users"
   add_foreign_key "vouchers", "donations"

@@ -3,11 +3,12 @@
 module Donations
   class CreateDonationsBatch < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :integration, :non_profit
+    attr_reader :integration, :non_profit, :period
 
-    def initialize(integration:, non_profit:)
+    def initialize(integration:, non_profit:, period:)
       @integration = integration
       @non_profit = non_profit
+      @period = period
     end
 
     def call
@@ -24,16 +25,7 @@ module Donations
     private
 
     def batch_donations
-      donations_without_batch = "Select distinct(donations.id) from donations
-            left outer join donation_blockchain_transactions dbt on dbt.donation_id = donations.id
-            left outer join donation_batches dba on dba.donation_id = donations.id
-            where dbt is null
-            and dba is null
-            and donations.integration_id = #{@integration.id}
-            and donations.non_profit_id = #{@non_profit.id}"
-      donation_ids = ActiveRecord::Base.connection.execute(donations_without_batch).map do |t|
-        t['id']
-      end
+      donation_ids = BatchQueries.new(integration:, non_profit:, period:).donations_without_batch
       Donation.where(id: donation_ids)
     end
 
@@ -71,7 +63,7 @@ module Donations
     end
 
     def create_batch
-      Batch.create(cid: store_batch, amount: total_amount)
+      Batch.create(cid: store_batch, amount: total_amount, reference_period: period)
     end
 
     def create_donations_batch(batch)

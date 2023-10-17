@@ -3,12 +3,32 @@ require 'rails_helper'
 RSpec.describe ContributionQueries, type: :model do
   describe '#ordered_feeable_contribution_balances' do
     let(:receiver) { create(:cause) }
-    let(:contribution) { create(:contribution, receiver:) }
+    let(:contribution) do
+      create(:contribution, :with_payment_in_blockchain, created_at: 1.day.from_now,
+                                                         receiver:, generated_fee_cents: 1000)
+    end
 
-    context 'when the receiver is differente' do
-      let(:contribution_balance1) { create(:contribution_balance, :with_paid_status, fees_balance_cents: 5) }
-      let(:contribution_balance2) { create(:contribution_balance, :with_paid_status, fees_balance_cents: 15) }
-      let(:contribution_balance3) { create(:contribution_balance, :with_paid_status, fees_balance_cents: 25) }
+    context 'when the receiver is different' do
+      let(:contribution_balance1) do
+        create(:contribution_balance, :with_paid_status, fees_balance_cents: 5,
+                                                         person_payment: create(:person_payment,
+                                                                                :with_payment_in_blockchain,
+                                                                                status: :paid))
+      end
+      let(:contribution_balance2) do
+        create(:contribution_balance, :with_paid_status,
+               fees_balance_cents: 15,
+               person_payment: create(:person_payment,
+                                      :with_payment_in_blockchain,
+                                      status: :paid))
+      end
+      let(:contribution_balance3) do
+        create(:contribution_balance, :with_paid_status,
+               fees_balance_cents: 25,
+               person_payment: create(:person_payment,
+                                      :with_payment_in_blockchain,
+                                      status: :paid))
+      end
 
       it 'returns no contributions' do
         expect(described_class.new(contribution:).ordered_feeable_contribution_balances)
@@ -19,20 +39,27 @@ RSpec.describe ContributionQueries, type: :model do
     context 'when the receiver is the same' do
       let!(:contribution_balance1) do
         create(:contribution_balance,
-               contribution: create(:contribution, receiver: contribution.receiver,
-                                                   person_payment: create(:person_payment, status: :paid)),
+               contribution: create(:contribution,
+                                    receiver: contribution.receiver,
+                                    person_payment: create(:person_payment,
+                                                           :with_payment_in_blockchain,
+                                                           status: :paid)),
                fees_balance_cents: 5)
       end
       let!(:contribution_balance2) do
         create(:contribution_balance,
                contribution: create(:contribution, receiver: contribution.receiver,
-                                                   person_payment: create(:person_payment, status: :paid)),
+                                                   person_payment: create(:person_payment,
+                                                                          :with_payment_in_blockchain,
+                                                                          status: :paid)),
                fees_balance_cents: 15)
       end
       let!(:contribution_balance3) do
         create(:contribution_balance,
                contribution: create(:contribution, receiver: contribution.receiver,
-                                                   person_payment: create(:person_payment, status: :paid)),
+                                                   person_payment: create(:person_payment,
+                                                                          :with_payment_in_blockchain,
+                                                                          status: :paid)),
                fees_balance_cents: 25)
       end
 

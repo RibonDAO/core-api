@@ -56,6 +56,18 @@ class Contribution < ApplicationRecord
   scope :with_paid_status, lambda {
     joins(:person_payment).where(person_payments: { status: :paid })
   }
+  scope :with_payment_in_blockchain, lambda {
+    joins(person_payment: :person_blockchain_transactions)
+      .where(person_blockchain_transactions: { treasure_entry_status: :success })
+  }
+  scope :with_cause_receiver, lambda {
+    where(receiver_type: 'Cause')
+  }
+  scope :created_before, ->(date) { where('contributions.created_at < ?', date) }
+  scope :confirmed_on_blockchain_before, lambda { |date|
+    joins(person_payment: :person_blockchain_transactions)
+      .where(person_blockchain_transactions: { succeeded_at: ..date }).distinct
+  }
 
   def set_contribution_balance
     return unless contribution_balance.nil?
@@ -69,6 +81,10 @@ class Contribution < ApplicationRecord
                                  tickets_balance_cents:, fees_balance_cents:)
   rescue StandardError => e
     Reporter.log(error: e)
+  end
+
+  def already_spread_fees?
+    contribution_fees.any?
   end
 
   def label

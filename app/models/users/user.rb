@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_many :donations
   has_many :customers
   has_many :user_completed_tasks
+  has_many :devices
   has_many :person_payments, through: :customers
 
   has_many :contributions, through: :person_payments
@@ -34,6 +35,8 @@ class User < ApplicationRecord
   has_one :utm, as: :trackable
   has_one :legacy_user
   has_one :customer
+  has_one :user_config
+  has_one :account
 
   has_many :legacy_user_impacts, through: :legacy_user
   has_many :legacy_contributions, through: :legacy_user

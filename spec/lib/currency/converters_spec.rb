@@ -4,8 +4,8 @@ RSpec.describe Currency::Converters do
   subject(:service) { described_class.new(value:, from:, to:) }
 
   let(:value) { 10 }
-  let(:from) { 'USD' }
-  let(:to) { 'BRL' }
+  let(:from) { 'usd' }
+  let(:to) { 'brl' }
   let(:add_rate) { Money.add_rate(from, to, 5) }
 
   before do

@@ -11,6 +11,7 @@ class ContributionQueries
     ContributionBalance
       .with_fees_balance
       .with_paid_status
+      .confirmed_on_blockchain_before(contribution.person_payment.person_blockchain_transaction.succeeded_at)
       .where.not(contribution_id: contribution.id)
       .joins(:contribution).where(contributions: { receiver: contribution.receiver })
       .order(fees_balance_cents: :asc)
@@ -20,7 +21,9 @@ class ContributionQueries
     ContributionBalance
       .with_tickets_balance
       .with_paid_status
+      .confirmed_on_blockchain_before(contribution.person_payment.person_blockchain_transaction.succeeded_at)
       .where.not(contribution_id: contribution.id)
+      .joins(:contribution).where(contributions: { receiver: contribution.receiver })
       .order(tickets_balance_cents: :asc)
   end
 
@@ -50,5 +53,20 @@ class ContributionQueries
       AND person_payments.status = 1)
 
     ActiveRecord::Base.connection.execute(sql).first['count'] || 0
+  end
+
+  def top_donations_non_profit
+    sql = %(
+      SELECT donations.non_profit_id, sum(donations.value) as total_amount
+      FROM contributions
+      LEFT JOIN donation_contributions on donation_contributions.contribution_id = contributions.id
+      LEFT JOIN donations on donations.id = donation_contributions.donation_id
+      WHERE contributions.id = #{contribution.id}
+      GROUP BY donations.non_profit_id
+      ORDER BY total_amount DESC
+      LIMIT 1)
+
+    id = ActiveRecord::Base.connection.execute(sql).first['non_profit_id']
+    NonProfit.find_by(id:)
   end
 end

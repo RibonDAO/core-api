@@ -8,6 +8,7 @@ module Api
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::CreditCard, order_params)
 
           if command.success?
+            Tracking::AddUtm.call(utm_params:, trackable: command.result[:payment])
             head :created
           else
             render_errors(command.errors)
@@ -37,7 +38,8 @@ module Api
             user: find_or_create_user,
             integration_id: payment_params[:integration_id],
             cause:,
-            non_profit:
+            non_profit:,
+            platform: payment_params[:platform]
           }
         end
 
@@ -46,7 +48,8 @@ module Api
         end
 
         def find_or_create_user
-          current_user || User.find_or_create_by(email: payment_params[:email], language: I18n.locale)
+          current_user || User.find_by(email: payment_params[:email]) || User.create(email: payment_params[:email],
+                                                                                     language: I18n.locale)
         end
 
         def offer
@@ -69,7 +72,14 @@ module Api
 
         def payment_params
           params.permit(:email, :tax_id, :offer_id, :country, :city, :state, :integration_id,
-                        :cause_id, :non_profit_id, card: %i[cvv number name expiration_month expiration_year])
+                        :cause_id, :non_profit_id,
+                        :platform, card: %i[cvv number name expiration_month expiration_year])
+        end
+
+        def utm_params
+          params.permit(:utm_source,
+                        :utm_medium,
+                        :utm_campaign)
         end
       end
     end

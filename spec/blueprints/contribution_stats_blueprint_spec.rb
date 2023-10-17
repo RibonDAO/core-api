@@ -5,6 +5,8 @@ RSpec.describe ContributionStatsBlueprint, type: :blueprint do
   let(:contribution_stats) { Service::Contributions::StatisticsService.new(contribution:).formatted_statistics }
   let(:contribution_blueprint) { described_class.render_as_json(contribution_stats) }
 
+  include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
+
   it 'has the correct fields' do
     expect(contribution_blueprint.keys)
       .to match_array(%w[

@@ -7,8 +7,10 @@ RSpec.describe Donations::SendDonationBatchWorker, type: :worker do
   describe '#perform' do
     subject(:worker) { described_class.new }
 
-    let(:integration) { create(:integration) }
-    let(:non_profit) { create(:non_profit) }
+    let!(:integration) { create(:integration) }
+    let!(:non_profit) { create(:non_profit) }
+    let!(:actual_month) { Time.zone.today.at_beginning_of_month }
+    let!(:previous_month) { 1.month.ago.to_date.at_beginning_of_month }
     let(:result) do
       OpenStruct.new({
                        result: create(:batch)
@@ -21,11 +23,11 @@ RSpec.describe Donations::SendDonationBatchWorker, type: :worker do
     end
 
     it 'calls the CreateDonationsBatch command' do
-      Donations::CreateDonationsBatch.call(non_profit:, integration:)
-
-      expect(Donations::CreateDonationsBatch).to have_received(:call)
-
       worker.perform
+
+      [actual_month, previous_month].each do |period|
+        expect(Donations::CreateDonationsBatch).to have_received(:call).with(integration:, non_profit:, period:)
+      end
     end
   end
 

@@ -17,6 +17,7 @@ class BigDonor < ApplicationRecord
 
   has_many :person_payments, as: :payer
   has_many :contributions, through: :person_payments
+  has_many :email_logs, as: :receiver
 
   def blueprint
     BigDonorBlueprint
@@ -24,5 +25,9 @@ class BigDonor < ApplicationRecord
 
   def identification
     email
+  end
+
+  def dashboard_link
+    Auth::EmailLinkService.new(authenticatable: self).find_or_create_auth_link
   end
 end

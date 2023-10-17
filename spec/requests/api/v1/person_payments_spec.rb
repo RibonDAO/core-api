@@ -17,7 +17,7 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
       expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                  offer page paid_date payment_method
                                                  payer payer_identification service_fees
-                                                 status total_items total_pages])
+                                                 status total_items total_pages platform subscription_id])
     end
   end
 
@@ -47,7 +47,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
                                                      payer payer_identification receiver
-                                                     service_fees status total_items total_pages])
+                                                     service_fees status total_items total_pages platform
+                                                     subscription_id])
         end
       end
 
@@ -67,7 +68,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
                                                      payer payer_identification receiver
-                                                     service_fees status total_items total_pages])
+                                                     service_fees status total_items total_pages platform
+                                                     subscription_id])
         end
       end
 
@@ -96,7 +98,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
                                                      payer payer_identification receiver
-                                                     service_fees status total_items total_pages])
+                                                     service_fees status total_items total_pages platform
+                                                     subscription_id])
         end
       end
     end
@@ -120,7 +123,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
                                                      payer payer_identification receiver
-                                                     service_fees status total_items total_pages])
+                                                     service_fees status total_items total_pages platform
+                                                     subscription_id])
         end
       end
 
@@ -140,7 +144,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
                                                      payer payer_identification receiver
-                                                     service_fees status total_items total_pages])
+                                                     service_fees status total_items total_pages platform
+                                                     subscription_id])
         end
       end
 
@@ -169,7 +174,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
           expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                      offer page paid_date payment_method
                                                      payer payer_identification receiver
-                                                     service_fees status total_items total_pages])
+                                                     service_fees status total_items total_pages platform
+                                                     subscription_id])
         end
       end
     end
@@ -191,7 +197,8 @@ RSpec.describe 'Api::V1::PersonPayments', type: :request do
         expect_response_collection_to_have_keys(%w[amount_cents crypto_amount external_id id
                                                    offer page paid_date payment_method
                                                    payer payer_identification receiver
-                                                   service_fees status total_items total_pages])
+                                                   service_fees status total_items total_pages platform
+                                                   subscription_id])
       end
     end
   end

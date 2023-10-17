@@ -38,21 +38,6 @@ describe Contributions::CreateContribution do
           expect(contribution.contribution_balance).to be_nil
         end
       end
-
-      it 'sets the contribution balance' do
-        command
-        contribution = Contribution.last
-
-        expect(contribution.contribution_balance).to be_present
-      end
-
-      it 'handles the contribution fees' do
-        command
-        contribution = Contribution.last
-
-        expect(Service::Contributions::FeesLabelingService).to have_received(:new).with(contribution:)
-        expect(contribution_fee_service_instance).to have_received(:spread_fee_to_payers)
-      end
     end
 
     context 'when an error occurs' do

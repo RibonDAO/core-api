@@ -9,12 +9,15 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
     { email: 'user@test.com', tax_id: '111.111.111-11', offer_id: offer.id,
       external_id: 'pi_123', country: 'Brazil', city: 'Brasilia', state: 'DF',
       integration_id: integration.id, cause_id: cause&.id, non_profit_id: non_profit&.id,
-      payment_method_id:, payment_method_type:, name: 'name' }
+      payment_method_id:, payment_method_type:, name: 'name', platform: 'web',
+      utm_source: 'utm source',
+      utm_medium: 'utm medium',
+      utm_campaign: 'utm campaign' }
   end
   let(:payment_method_id) { 'pm_123' }
   let(:payment_method_type) { 'google_pay' }
   let(:create_order_command_double) do
-    command_double(klass: ::Givings::Payment::CreateOrder)
+    command_double(klass: ::Givings::Payment::CreateOrder, result: { payment: nil })
   end
 
   let(:user_double) { build(:user, email: 'user@test.com') }
@@ -24,7 +27,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
   before do
     allow(::Givings::Payment::CreateOrder)
       .to receive(:call).and_return(create_order_command_double)
-    allow(User).to receive(:find_or_create_by).and_return(user_double)
+    allow(User).to receive(:find_by).and_return(user_double)
   end
 
   describe 'POST /store_pay' do
@@ -32,13 +35,22 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
 
     context 'when the command is successful' do
       let(:create_order_command_double) do
-        command_double(klass: ::Givings::Payment::CreateOrder, success: true)
+        command_double(klass: ::Givings::Payment::CreateOrder, success: true, result: { payment: nil })
+      end
+
+      before do
+        allow(Tracking::AddUtm).to receive(:call)
       end
 
       it 'returns http status created' do
         request
 
         expect(response).to have_http_status :created
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtm).to have_received(:call)
       end
     end
 
@@ -62,7 +74,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
         request
         expected_payload = { email: 'user@test.com', tax_id: '111.111.111-11', payment_method_type:,
                              payment_method_id:, offer:, operation: :subscribe, non_profit:, name: 'name',
-                             integration_id: integration.id.to_s, user: user_double, cause: }
+                             integration_id: integration.id.to_s, user: user_double, cause:, platform: 'web' }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)
       end
@@ -76,7 +88,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
         request
         expected_payload = { email: 'user@test.com', tax_id: '111.111.111-11', payment_method_id:,
                              offer:, payment_method_type:, operation: :purchase, non_profit:, name: 'name',
-                             integration_id: integration.id.to_s, user: user_double, cause: }
+                             integration_id: integration.id.to_s, user: user_double, cause:, platform: 'web' }
 
         expect(::Givings::Payment::CreateOrder).to have_received(:call).with(order_type, expected_payload)
       end
