@@ -237,7 +237,6 @@ Rails.application.routes.draw do
   namespace :users do
     namespace :v1 do
       post 'auth/refresh_token', to: 'authentication#refresh_token'
-      #temporary route
       get 'causes' => 'causes#index'
     end
   end
