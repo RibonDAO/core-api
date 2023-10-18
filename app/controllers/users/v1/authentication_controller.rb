@@ -1,8 +1,8 @@
 module Users
   module V1
     class AuthenticationController < Users::AuthorizationController
-      skip_before_action :authenticate, only: %i[refresh_token]
-      skip_before_action :require_user, only: %i[refresh_token]
+      skip_before_action :authenticate, only: %i[refresh_token google_authorization]
+      skip_before_action :require_user, only: %i[refresh_token google_authorization]
 
       def google_authorization
         command = Auth::Account::SetAccountTokens.call(id_token: params[:data]['id_token'])
