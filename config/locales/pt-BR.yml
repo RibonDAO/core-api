@@ -266,3 +266,5 @@ pt-BR:
     not_found: "Patrono não encontrado."
     email_sent: "Email enviado com sucesso."
     login_success: "Autenticado com sucesso."
+  users:
+    not_found: "Usuário não encontrado."
