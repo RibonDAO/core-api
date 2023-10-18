@@ -22,25 +22,32 @@
 #  user_id                :bigint           not null
 #
 class Account < ApplicationRecord
-  belongs_to :user
-
-  before_validation { email.downcase! }
-
-  validates :uid, uniqueness: { case_sensitive: true }
-
   include AuthenticatableModel
   include DeviseTokenAuth::Concerns::User
+
+  belongs_to :user
+
+  before_validation :downcase_email
+
+  validates :uid, uniqueness: { case_sensitive: true }
 
   delegate :email, to: :user
 
   def self.create_user_for_google(data)
-    where(email: data['email']).first_or_initialize.tap do |user|
-      user.provider = 'google_oauth2'
-      user.uid = data['email']
-      user.email = data['email']
-      user.password = Devise.friendly_token[0, 20]
-      user.password_confirmation = user.password
+    find_or_initialize_by(email: data['email']).tap do |user|
+      user.assign_attributes(
+        provider: 'google_oauth2',
+        uid: data['email'],
+        password: Devise.friendly_token[0, 20],
+        password_confirmation: user.password
+      )
       user.save!
     end
+  end
+
+  private
+
+  def downcase_email
+    email.downcase!
   end
 end
