@@ -2,6 +2,7 @@ module Users
   module V1
     class AuthenticationController < Users::AuthorizationController
       skip_before_action :authenticate, only: %i[refresh_token]
+      skip_before_action :require_user
 
       def refresh_token
         access_token = request.headers['Authorization']&.split('Bearer ')&.last
