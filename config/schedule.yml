@@ -24,7 +24,7 @@ update_pool_balance:
   queue: donations
 
 retry_person_transactions:
-  cron: "0 2 1 * *" # At 02:00 on day-of-month 1.
+  cron: "*/30 * * * *" # Every 30 minutes.
   class: "PersonPayments::RetryBlockchainTransactionsWorker"
   queue: person_payments
   

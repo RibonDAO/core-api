@@ -5,7 +5,7 @@ module Givings
     module OrderTypes
       class StorePay
         attr_reader :payment_method_id, :email, :tax_id, :offer, :user, :payment_method,
-                    :operation, :integration_id, :cause, :non_profit, :name
+                    :operation, :integration_id, :cause, :non_profit, :name, :platform
 
         def initialize(args)
           @payment_method_id = args[:payment_method_id]
@@ -19,11 +19,13 @@ module Givings
           @non_profit     = args[:non_profit]
           @name           = args[:name]
           @payment_method = args[:payment_method_type]
+          @platform       = args[:platform]
         end
 
         def generate_order
           customer = find_or_create_customer
-          payment  = create_payment(customer)
+          subscription = create_subscription(customer) if operation == :subscribe
+          payment = create_payment(customer, subscription)
 
           Order.from(payment, nil, operation, payment_method_id)
         end
@@ -43,12 +45,23 @@ module Givings
         private
 
         def find_or_create_customer
-          Customer.find_by(user_id: user.id) || Customer.create!(email:, tax_id:, name:, user:)
+          customer = Customer.find_by(user_id: user.id)
+          if customer
+            customer.update!(tax_id:) if tax_id.present?
+            customer
+          else
+            Customer.create!(email:, tax_id:, name:, user:)
+          end
         end
 
-        def create_payment(payer)
-          PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:,
-                                  amount_cents:, status: :processing, receiver: })
+        def create_subscription(payer)
+          Subscription.create!({ payer:, offer:, payment_method:, receiver:, status: :active, integration:,
+                                 platform: })
+        end
+
+        def create_payment(payer, subscription)
+          PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:, platform:,
+                                  amount_cents:, status: :processing, receiver:, subscription: })
         end
 
         def call_add_cause_giving_blockchain_job(order)

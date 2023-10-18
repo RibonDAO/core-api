@@ -2,26 +2,28 @@
 #
 # Table name: person_payments
 #
-#  id                 :bigint           not null, primary key
-#  amount_cents       :integer
-#  currency           :integer
-#  error_code         :string
-#  liquid_value_cents :integer
-#  paid_date          :datetime
-#  payer_type         :string
-#  payment_method     :integer
-#  platform           :string
-#  receiver_type      :string
-#  refund_date        :datetime
-#  status             :integer          default("processing")
-#  usd_value_cents    :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  external_id        :string
-#  integration_id     :bigint
-#  offer_id           :bigint
-#  payer_id           :uuid
-#  receiver_id        :bigint
+#  id                  :bigint           not null, primary key
+#  amount_cents        :integer
+#  currency            :integer
+#  error_code          :string
+#  liquid_value_cents  :integer
+#  paid_date           :datetime
+#  payer_type          :string
+#  payment_method      :integer
+#  platform            :string
+#  receiver_type       :string
+#  refund_date         :datetime
+#  status              :integer          default("processing")
+#  usd_value_cents     :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  external_id         :string
+#  external_invoice_id :string
+#  integration_id      :bigint
+#  offer_id            :bigint
+#  payer_id            :uuid
+#  receiver_id         :bigint
+#  subscription_id     :bigint
 #
 require 'rails_helper'
 
@@ -82,9 +84,10 @@ RSpec.describe PersonPayment, type: :model do
   end
 
   describe '#set_fees' do
-    subject(:person_payment) { create(:person_payment, amount_cents:, offer:) }
+    subject(:person_payment) { create(:person_payment, amount_cents:, offer:, payment_method:) }
 
     let(:amount_cents) { 1500 }
+    let(:payment_method) { :credit_card }
 
     before do
       command = command_double(klass: Givings::Card::CalculateCardGiving,
@@ -99,6 +102,18 @@ RSpec.describe PersonPayment, type: :model do
 
       expect(fee.card_fee_cents).to eq 67
       expect(fee.crypto_fee_cents).to eq 3
+    end
+
+    context 'when the payment is crypto' do
+      let(:payment_method) { :crypto }
+
+      it 'sets the fees as 0' do
+        person_payment.set_fees
+        fee = person_payment.reload.person_payment_fee
+
+        expect(fee.card_fee_cents).to eq 0
+        expect(fee.crypto_fee_cents).to eq 0
+      end
     end
   end
 

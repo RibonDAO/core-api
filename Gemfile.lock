@@ -113,6 +113,9 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    customerio (5.1.0)
+      addressable (~> 2.8.0)
+      multi_json (~> 1.0)
     debug (1.6.2)
       irb (>= 1.3.6)
       reline (>= 0.3.1)
@@ -508,6 +511,7 @@ DEPENDENCIES
   blueprinter
   bootsnap
   byebug
+  customerio
   debug
   devise
   devise_token_auth

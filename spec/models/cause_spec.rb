@@ -6,6 +6,7 @@
 #  cover_image_description :string
 #  main_image_description  :string
 #  name                    :string
+#  status                  :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #
@@ -16,6 +17,8 @@ RSpec.describe Cause, type: :model do
     subject { build(:cause) }
 
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to have_many(:person_payments) }
+    it { is_expected.to have_many(:subscriptions) }
   end
 
   describe '.associations' do
@@ -45,20 +48,12 @@ RSpec.describe Cause, type: :model do
     end
   end
 
-  describe '#active' do
-    context 'when the non_profits is empty' do
-      let(:cause) { create(:cause, non_profits: []) }
-
-      it 'returns false' do
-        expect(cause.active).to be_falsey
-      end
-    end
-
+  describe '#status' do
     context 'when the cause has non_profits but its inactive' do
-      let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :inactive)]) }
+      let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :active)], status: :inactive) }
 
       it 'returns false' do
-        expect(cause.active).to be_falsey
+        expect(cause.status).to eq 'inactive'
       end
     end
 
@@ -66,7 +61,7 @@ RSpec.describe Cause, type: :model do
       let(:cause) { create(:cause, non_profits: [create(:non_profit, status: :active)]) }
 
       it 'returns true' do
-        expect(cause.active).to be_truthy
+        expect(cause.status).to eq 'active'
       end
     end
   end

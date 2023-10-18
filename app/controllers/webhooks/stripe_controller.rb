@@ -22,26 +22,21 @@ module Webhooks
     end
 
     def event_handler(event)
-      result = event.data.object
-      external_id = result['payment_intent']
       case event.type
+      when 'payment_intent.succeeded'
+        ::Payment::Gateways::Stripe::Events::PaymentIntentSucceeded.handle(event)
+      when 'invoice.paid'
+        ::Payment::Gateways::Stripe::Events::InvoicePaid.new.handle(event)
+      when 'invoice.payment_failed'
+        ::Payment::Gateways::Stripe::Events::InvoicePaymentFailed.handle(event)
       when 'charge.refunded'
-        update_status(external_id, 'refunded') if external_id
-        update_date(external_id, Time.zone.at(result[:created])) if external_id
+        ::Payment::Gateways::Stripe::Events::ChargeRefunded.handle(event)
       when 'charge.refund.updated'
-        update_status(external_id, 'refund_failed') if external_id
+        ::Payment::Gateways::Stripe::Events::ChargeRefundUpdated.handle(event)
       else
         Rails.logger.info { "Unhandled event type: #{event.type}" }
       end
       nil
-    end
-
-    def update_status(external_id, status)
-      PersonPayment.where(external_id:).last&.update(status:)
-    end
-
-    def update_date(external_id, refund_date)
-      PersonPayment.where(external_id:).last&.update(refund_date:)
     end
   end
 end

@@ -13,8 +13,12 @@ Rails.application.routes.draw do
   Rails.application.routes.draw do
     post '/graphql', to: 'graphql#execute'
   end
-  
-  mount Sidekiq::Web => '/sidekiq'
+
+  devise_for :admins, only: [:sessions]
+
+  authenticate :admin do
+    mount Sidekiq::Web => '/sidekiq'
+  end
   
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
@@ -26,7 +30,6 @@ Rails.application.routes.draw do
       delete 'stories/:id' => 'stories#destroy'
       
       get 'non_profits' => 'non_profits#index'
-      get 'free_donation_non_profits' => 'non_profits#free_donation_non_profits'
       get 'non_profits/:id/stories' => 'non_profits#stories'
       post 'non_profits' => 'non_profits#create'
       get 'non_profits/:id' => 'non_profits#show'
@@ -59,10 +62,11 @@ Rails.application.routes.draw do
       get 'users/statistics' => 'users/statistics#index'
       post 'users/send_delete_account_email' => 'users#send_delete_account_email'
       delete 'users' => 'users#destroy'
-      
+      post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
+      get 'users/subscriptions' => 'users/subscriptions#index'
+
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
-      get 'free_donation_causes' => 'causes#free_donation_causes'
       post 'causes' => 'causes#create'
       get 'causes/:id' => 'causes#show'
       put 'causes/:id' => 'causes#update'
@@ -85,6 +89,7 @@ Rails.application.routes.draw do
         get 'articles/:id' => 'articles#show'
         post 'articles' => 'articles#create'
         put 'articles/:id' => 'articles#update'
+        get 'articles_since_user_creation' => 'articles#articles_since_user_creation'
 
         get 'authors' => 'authors#index'
         get 'authors/:id' => 'authors#show'
@@ -98,11 +103,14 @@ Rails.application.routes.draw do
         get 'legacy_contributions' => 'users/legacy_impacts#contributions'
 
         get 'donations_count' => 'users/impacts#donations_count'
+        get 'app/donations_count' => 'users/impacts#app_donations_count'
         put 'track', to: 'users/trackings#track_user'
 
         get 'contributions' => 'users/contributions#index'
         get 'labelable_contributions' => 'users/contributions#labelable'
         get 'contributions/:id' => 'users/contributions#show'
+        post 'devices' => 'users/devices#create'
+        post 'configs' => 'users/configs#update'
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -124,6 +132,7 @@ Rails.application.routes.draw do
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
+        post 'pix'   => 'pix#create'        
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -147,6 +156,10 @@ Rails.application.routes.draw do
         get 'total_impacted_lives' => 'site#total_impacted_lives'
       end
 
+      namespace :subscriptions do
+        get 'subscription/:id' => 'subscriptions#show'
+        put 'cancel_subscription' => 'subscriptions#unsubscribe'
+      end
     end
   end
 
@@ -162,6 +175,7 @@ Rails.application.routes.draw do
 
   namespace :webhooks do
     post 'stripe' => 'stripe#events'
+    post 'stripe_global' => 'stripe_global#events'
     post 'alchemy' => 'alchemy#events'
   end
 

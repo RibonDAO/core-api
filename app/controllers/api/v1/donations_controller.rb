@@ -5,6 +5,7 @@ module Api
         command = Donations::Donate.call(integration:, non_profit:, user:, platform:)
 
         if command.success?
+          Tracking::AddUtm.call(utm_params:, trackable: command.result)
           render json: { donation: command.result }, status: :ok
         else
           render_errors(command.errors)
@@ -14,7 +15,7 @@ module Api
       private
 
       def integration
-        @integration ||= Integration.find donation_params[:integration_id]
+        @integration ||= Integration.find_by_id_or_unique_address donation_params[:integration_id]
       end
 
       def non_profit
@@ -32,6 +33,12 @@ module Api
       def donation_params
         params.permit(:integration_id,
                       :non_profit_id, :email, :platform)
+      end
+
+      def utm_params
+        params.permit(:utm_source,
+                      :utm_medium,
+                      :utm_campaign)
       end
     end
   end

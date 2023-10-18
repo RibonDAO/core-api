@@ -1,7 +1,7 @@
 module Impact
   class Normalizer
     MAX_AMOUNT_PER_DONOR_RECIPIENT = 200
-    MAX_DAYS_PER_DONOR_RECIPIENT = 730
+    MAX_DAYS_PER_DONOR_RECIPIENT = 735
 
     attr_reader :non_profit_impact, :measurement_unit, :donor_recipient, :impact_description, :rounded_impact
 
@@ -34,7 +34,9 @@ module Impact
     end
 
     def formatted_impact_description
-      impact = impact_description.split(',').map(&:strip).then do |descriptions|
+      return '' unless impact_description
+
+      impact = impact_description&.split(',')&.map(&:strip).then do |descriptions|
         rounded_impact == 1 ? descriptions.first : descriptions.last
       end
 
@@ -45,6 +47,8 @@ module Impact
     end
 
     def formatted_donor_recipient
+      return '' unless donor_recipient
+
       suffix = donor_recipient.split(',').map(&:strip).then do |descriptions|
         recipients_count == 1 ? descriptions.first : descriptions.last
       end

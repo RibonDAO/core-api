@@ -13,7 +13,7 @@ RSpec.describe 'Managers::V1::Payments::CreditCards', type: :request do
               expiration_month: '05', expiration_year: '25' } }
   end
   let(:create_order_command_double) do
-    command_double(klass: ::Givings::Payment::CreateOrder)
+    command_double(klass: ::Givings::Payment::CreateOrder, result: { payment: nil })
   end
 
   let(:credit_card_double) do

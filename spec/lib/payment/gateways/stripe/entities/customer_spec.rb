@@ -16,7 +16,8 @@ RSpec.describe Payment::Gateways::Stripe::Entities::Customer do
         payment_method: payment_method.id,
         invoice_settings: {
           default_payment_method: payment_method.id
-        }
+        },
+        address: described_class.default_address
       }
     end
 

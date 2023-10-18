@@ -26,4 +26,8 @@ class BigDonor < ApplicationRecord
   def identification
     email
   end
+
+  def dashboard_link
+    Auth::EmailLinkService.new(authenticatable: self).find_or_create_auth_link
+  end
 end

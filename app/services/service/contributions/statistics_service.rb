@@ -21,13 +21,13 @@ module Service
 
       def formatted_email_statistics
         {
+          contribution:,
           boost_amount:,
           boost_new_contributors:,
           boost_new_patrons:,
-          contribution_receiver_name: contribution.receiver[:name],
+          contribution_receiver: contribution.receiver,
           contribution_date: contribution.created_at.strftime('%b/%Y'),
-          top_donations_non_profit_impact:,
-          top_donations_non_profit_name:,
+          top_donations_non_profit:,
           total_donors:,
           total_increase_percentage:,
           usage_percentage:
@@ -65,18 +65,6 @@ module Service
 
       def top_donations_non_profit
         @top_donations_non_profit ||= ContributionQueries.new(contribution:).top_donations_non_profit
-      end
-
-      def top_donations_non_profit_impact
-        return unless top_donations_non_profit
-
-        impact = DirectImpactService.new(contribution:)
-                                    .direct_impact_for(top_donations_non_profit)[:formatted_impact]
-        impact&.join(' ')
-      end
-
-      def top_donations_non_profit_name
-        top_donations_non_profit&.name
       end
 
       def avg_donations_per_person

@@ -32,12 +32,19 @@ module Api
           end
         end
 
+        def articles_since_user_creation
+          @articles = articles_list.where('published_at > ?',
+                                          current_user&.created_at).order(sortable).page(page).per(per)
+
+          render json: ArticleBlueprint.render(@articles, total_items:, page:, total_pages:)
+        end
+
         private
 
         def articles_list
           return Article if params[:show_hidden_articles].present?
 
-          Article.where(visible: true, published_at: ..Time.zone.now)
+          Article.where(visible: true, published_at: ..Time.zone.now, language:)
         end
 
         def sortable
@@ -62,6 +69,12 @@ module Api
 
         def per
           @per = params[:per] || 100
+        end
+
+        def language
+          return 'pt-BR' if I18n.locale == :'pt-BR'
+
+          'en-US'
         end
 
         def article_params

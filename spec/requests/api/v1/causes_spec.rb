@@ -9,6 +9,7 @@ RSpec.describe 'Api::V1::Causes', type: :request do
     let(:pool_balance) { create(:pool_balance, pool:, balance: 0) }
 
     before do
+      create_list(:non_profit, 2)
       create(:cause)
     end
 
@@ -16,43 +17,14 @@ RSpec.describe 'Api::V1::Causes', type: :request do
       request
 
       expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image
-                                                 active default_pool cover_image_description
-                                                 main_image_description])
+                                                 status active default_pool cover_image_description
+                                                 main_image_description pools with_pool_balance])
     end
 
     it 'returns 2 causes' do
       request
 
       expect(response_json.count).to eq(2)
-    end
-  end
-
-  describe 'GET /free_donation_causes' do
-    subject(:request) { get '/api/v1/free_donation_causes' }
-
-    let(:cause) { create(:cause) }
-    let(:pool)  { create(:pool, cause:) }
-    let(:pool_balance) { create(:pool_balance, pool:, balance: 0) }
-
-    before do
-      create(:chain)
-      create(:ribon_config)
-
-      create(:cause)
-    end
-
-    it 'returns a list of available causes for free donations' do
-      request
-
-      expect_response_collection_to_have_keys(%w[created_at id updated_at name main_image cover_image
-                                                 active default_pool cover_image_description
-                                                 main_image_description])
-    end
-
-    it 'returns 1 cause' do
-      request
-
-      expect(response_json.count).to eq(1)
     end
   end
 
@@ -64,8 +36,9 @@ RSpec.describe 'Api::V1::Causes', type: :request do
     it 'returns a single causes' do
       request
 
-      expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools active
-                                      non_profits default_pool main_image_description cover_image_description])
+      expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools status active
+                                      non_profits default_pool main_image_description cover_image_description
+                                      with_pool_balance])
     end
   end
 
@@ -89,8 +62,9 @@ RSpec.describe 'Api::V1::Causes', type: :request do
       it 'returns a single causes' do
         request
 
-        expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools active
-                                        non_profits default_pool cover_image_description main_image_description])
+        expect_response_to_have_keys(%w[created_at id updated_at name cover_image main_image pools active status
+                                        non_profits default_pool cover_image_description main_image_description
+                                        with_pool_balance])
       end
     end
 
