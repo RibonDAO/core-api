@@ -4,6 +4,18 @@ module Users
       skip_before_action :authenticate, only: %i[refresh_token]
       skip_before_action :require_user, only: %i[refresh_token]
 
+      def google_authorization
+        command = Auth::Account::SetAccountTokens.call(id_token: params[:data]['id_token'])
+
+        if command.success?
+          create_headers(command.result)
+
+          render json: { message: I18n.t('user.login_success') }, status: :created
+        else
+          render_errors(command.errors)
+        end
+      end
+
       def refresh_token
         access_token = request.headers['Authorization']&.split('Bearer ')&.last
         command = Auth::RenewRefreshToken.call(refresh_token: params[:refresh_token], access_token:)
