@@ -1,7 +1,7 @@
 module Impact
   class Normalizer
     MAX_AMOUNT_PER_DONOR_RECIPIENT = 200
-    MAX_DAYS_PER_DONOR_RECIPIENT = 735
+    MAX_DAYS_PER_DONOR_RECIPIENT = 731
 
     attr_reader :non_profit_impact, :measurement_unit, :donor_recipient, :impact_description, :rounded_impact
 
@@ -57,10 +57,19 @@ module Impact
     end
 
     def split_days_into_periods(days)
+      days_in_each_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
       years = days / 365
-      days %= 365
-      months = days / 30
-      days %= 30
+      days -= years * 365
+
+      months = 0
+      days_in_each_month.each do |days_in_month|
+        break if days < days_in_month
+
+        months += 1
+        days -= days_in_month
+      end
+
       [years, months, days]
     end
 
