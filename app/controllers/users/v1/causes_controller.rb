@@ -11,28 +11,10 @@ module Users
         render json: CauseBlueprint.render(@causes, view: :data_and_images)
       end
 
-      def create
-        command = Causes::UpsertCause.call(cause_params)
-        if command.success?
-          render json: CauseBlueprint.render(command.result), status: :created
-        else
-          render_errors(command.errors)
-        end
-      end
-
       def show
         @cause = Cause.find cause_params[:id]
 
         render json: CauseBlueprint.render(@cause)
-      end
-
-      def update
-        command = Causes::UpsertCause.call(cause_params)
-        if command.success?
-          render json: CauseBlueprint.render(command.result), status: :ok
-        else
-          render_errors(command.errors)
-        end
       end
 
       private
