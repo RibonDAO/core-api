@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_03_163930) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -286,6 +286,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_163930) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "impression_cards", force: :cascade do |t|
+    t.string "title", default: "", null: false
+    t.string "headline", default: "", null: false
+    t.string "description", default: "", null: false
+    t.string "video_url"
+    t.string "cta_text", default: "", null: false
+    t.string "cta_url", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "integration_tasks", force: :cascade do |t|
     t.string "description"
     t.string "link"
@@ -416,8 +427,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_03_163930) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "measurement_unit"
     t.string "donor_recipient"
+    t.string "measurement_unit"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
