@@ -5,7 +5,7 @@ module Users
       skip_before_action :require_user, only: %i[refresh_token google_authorization]
 
       def google_authorization
-        command = Auth::Account::SetAccountTokens.call(id_token: params[:data]['id_token'])
+        command = Auth::Accounts::SetAccountTokens.call(id_token: params[:data]['id_token'])
 
         if command.success?
           create_headers(command.result)
