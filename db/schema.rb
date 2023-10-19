@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_11_181000) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_18_165918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -307,6 +307,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_181000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "impression_cards", force: :cascade do |t|
+    t.string "title", default: "", null: false
+    t.string "headline", default: "", null: false
+    t.string "description", default: "", null: false
+    t.string "video_url"
+    t.string "cta_text", default: "", null: false
+    t.string "cta_url", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "integration_tasks", force: :cascade do |t|
     t.string "description"
     t.string "link"
@@ -569,6 +580,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_11_181000) do
     t.integer "default_chain_id"
     t.decimal "contribution_fee_percentage"
     t.integer "minimum_contribution_chargeable_fee_cents"
+    t.boolean "disable_labeling", default: false
   end
 
   create_table "sources", force: :cascade do |t|
