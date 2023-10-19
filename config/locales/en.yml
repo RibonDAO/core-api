@@ -48,3 +48,4 @@ en:
     login_success: "Signed in successfully"
   users:
     not_found: "User not found."
+    login_success: "Signed in successfully."
