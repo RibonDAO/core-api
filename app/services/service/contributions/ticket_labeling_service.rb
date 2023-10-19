@@ -8,8 +8,6 @@ module Service
       end
 
       def label_donation
-        return if RibonConfig.disable_labeling
-
         payer_contribution = next_contribution_to_label_the_donation
         return unless payer_contribution
 

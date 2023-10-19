@@ -73,6 +73,8 @@ module Donations
     end
 
     def label_donation
+      return if RibonConfig.disable_labeling
+
       Service::Contributions::TicketLabelingService.new(donation:).label_donation
     end
 
