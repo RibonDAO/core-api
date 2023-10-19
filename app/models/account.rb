@@ -21,6 +21,7 @@
 #  updated_at             :datetime         not null
 #  user_id                :bigint           not null
 #
+
 class Account < ApplicationRecord
   include AuthenticatableModel
   include DeviseTokenAuth::Concerns::User
@@ -34,20 +35,24 @@ class Account < ApplicationRecord
   delegate :email, to: :user
 
   def self.create_user_for_google(data)
-    find_or_initialize_by(email: data['email']).tap do |user|
-      user.assign_attributes(
-        provider: 'google_oauth2',
-        uid: data['email'],
-        password: Devise.friendly_token[0, 20],
-        password_confirmation: user.password
-      )
-      user.save!
-    end
+    user = User.find_or_initialize_by(email: data['email'])
+    user ||= User.create!(
+      email: data['email']
+    )
+    account = find_or_initialize_by(user:)
+    account.assign_attributes(
+      provider: 'google_oauth2',
+      uid: data['email'],
+      password: Devise.friendly_token[0, 20],
+      password_confirmation: account.password
+    )
+    account.save!
+    account
   end
 
   private
 
   def downcase_email
-    email.downcase!
+    email&.downcase!
   end
 end
