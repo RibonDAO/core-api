@@ -53,6 +53,6 @@ class Account < ApplicationRecord
   private
 
   def downcase_email
-    email&.downcase!
+    self.email = user&.email&.downcase if user.present?
   end
 end
