@@ -13,7 +13,7 @@ class ContributionQueries
       .with_paid_status
       .confirmed_on_blockchain_before(contribution.person_payment.person_blockchain_transaction.succeeded_at)
       .where.not(contribution_id: contribution.id)
-      .joins(:contribution).where(contributions: { receiver: contribution.receiver })
+      .joins(:contribution).where(contributions: { receiver: contribution.cause })
       .order(fees_balance_cents: :asc)
   end
 
@@ -23,7 +23,7 @@ class ContributionQueries
       .with_paid_status
       .confirmed_on_blockchain_before(contribution.person_payment.person_blockchain_transaction.succeeded_at)
       .where.not(contribution_id: contribution.id)
-      .joins(:contribution).where(contributions: { receiver: contribution.receiver })
+      .joins(:contribution).where(contributions: { receiver: contribution.cause })
       .order(tickets_balance_cents: :asc)
   end
 
