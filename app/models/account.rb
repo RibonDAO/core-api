@@ -28,17 +28,12 @@ class Account < ApplicationRecord
 
   belongs_to :user
 
-  before_validation :downcase_email
-
   validates :uid, uniqueness: { case_sensitive: true }
 
   delegate :email, to: :user
 
   def self.create_user_for_google(data)
-    user = User.find_or_initialize_by(email: data['email'].downcase)
-    user ||= User.create!(
-      email: data['email']
-    )
+    user = User.find_or_create_by(email: data['email'])
     account = find_or_initialize_by(user:)
     account.assign_attributes(
       provider: 'google_oauth2',
@@ -48,11 +43,5 @@ class Account < ApplicationRecord
     )
     account.save!
     account
-  end
-
-  private
-
-  def downcase_email
-    self.email = user&.email&.downcase if user.present?
   end
 end
