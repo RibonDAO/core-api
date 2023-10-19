@@ -31,6 +31,7 @@ class Account < ApplicationRecord
   validates :uid, uniqueness: { case_sensitive: true }
 
   delegate :email, to: :user
+  delegate :unconfirmed_email, to: :user
 
   def self.create_user_for_google(data)
     user = User.find_or_create_by(email: data['email'])

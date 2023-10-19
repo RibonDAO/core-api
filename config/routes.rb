@@ -237,6 +237,7 @@ Rails.application.routes.draw do
     
   namespace :users do
     namespace :v1 do
+      mount_devise_token_auth_for 'Account', at: 'auth', skip: [:omniauth_callbacks]
       post 'auth/refresh_token', to: 'authentication#refresh_token'
       post 'auth/google', to: 'authentication#google_authorization'
       get  'causes' => 'causes#index'

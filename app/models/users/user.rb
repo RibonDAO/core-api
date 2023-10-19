@@ -78,6 +78,10 @@ class User < ApplicationRecord
     false
   end
 
+  def unconfirmed_email
+    email
+  end
+
   private
 
   def set_user_donation_stats
