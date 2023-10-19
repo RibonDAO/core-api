@@ -35,7 +35,7 @@ class Account < ApplicationRecord
   delegate :email, to: :user
 
   def self.create_user_for_google(data)
-    user = User.find_or_initialize_by(email: data['email'])
+    user = User.find_or_initialize_by(email: data['email'].downcase)
     user ||= User.create!(
       email: data['email']
     )
