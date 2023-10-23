@@ -3,6 +3,8 @@
 # Table name: impression_cards
 #
 #  id          :bigint           not null, primary key
+#  active      :boolean          default(FALSE)
+#  client      :string
 #  cta_text    :string           default(""), not null
 #  cta_url     :string           default(""), not null
 #  description :string           default(""), not null
@@ -23,5 +25,7 @@ RSpec.describe ImpressionCard, type: :model do
     it { is_expected.to validate_presence_of(:description) }
     it { is_expected.to validate_presence_of(:cta_text) }
     it { is_expected.to validate_presence_of(:cta_url) }
+    it { is_expected.to validate_presence_of(:client) }
+    it { is_expected.to validate_presence_of(:active) }
   end
 end
