@@ -46,7 +46,7 @@ module Managers
       private
 
       def impression_card_params
-        params.permit(:id, :title, :headline, :description, :video_url, :cta_text, :cta_url, :image)
+        params.permit(:id, :title, :headline, :description, :video_url, :cta_text, :cta_url, :image, :client, :active)
       end
     end
   end

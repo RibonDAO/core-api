@@ -3,6 +3,8 @@
 # Table name: impression_cards
 #
 #  id          :bigint           not null, primary key
+#  active      :boolean          default(FALSE)
+#  client      :string
 #  cta_text    :string           default(""), not null
 #  cta_url     :string           default(""), not null
 #  description :string           default(""), not null
