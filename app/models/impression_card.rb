@@ -22,4 +22,6 @@ class ImpressionCard < ApplicationRecord
   has_one_attached :image
 
   validates :title, :headline, :description, :cta_text, :cta_url, :client, :active, presence: true
+
+  validates :client, inclusion: { in: %w[web app] }
 end

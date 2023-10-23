@@ -22,5 +22,7 @@ FactoryBot.define do
     video_url { nil }
     cta_text { 'Doe agora' }
     cta_url { '/donate' }
+    client { 'web' }
+    active { true }
   end
 end
