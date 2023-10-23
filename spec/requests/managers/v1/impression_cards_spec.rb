@@ -36,7 +36,8 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
       it 'returns a single impression card' do
         request
 
-        expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video])
+        expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video
+                                        client active])
       end
     end
 
@@ -58,7 +59,8 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
     it 'returns a single impression card' do
       request
 
-      expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video])
+      expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video
+                                      client active])
     end
   end
 
