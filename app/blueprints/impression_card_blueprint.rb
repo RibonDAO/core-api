@@ -1,7 +1,7 @@
 class ImpressionCardBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :headline, :title, :description, :cta_text, :cta_url, :video_url
+  fields :headline, :title, :description, :cta_text, :cta_url, :video_url, :client, :active
 
   field(:image) do |object|
     ImagesHelper.image_url_for(object.image)
