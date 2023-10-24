@@ -34,4 +34,26 @@ RSpec.describe Account, type: :model do
 
     it { is_expected.to validate_presence_of(:uid) }
   end
+
+  describe '#create_user_for_google' do
+    let(:data) do
+      OpenStruct.new(email: 'user1@ribon.io', provider: 'google_oauth2')
+    end
+
+    it 'creates the UserManager from google' do
+      expect { described_class.create_user_for_google(data) }.to change(described_class, :count).by(1)
+    end
+
+    context 'when creating a new user with the correct params' do
+      let(:account) { described_class.create_user_for_google(data) }
+
+      it 'sets the email correctly' do
+        expect(account.email).to eq('user1@ribon.io')
+      end
+
+      it 'sets the provider correctly' do
+        expect(account.provider).to eq('google_oauth2')
+      end
+    end
+  end
 end
