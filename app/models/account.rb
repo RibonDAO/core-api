@@ -27,7 +27,7 @@ class Account < ApplicationRecord
 
   belongs_to :user
 
-  validates :uid, uniqueness: { case_sensitive: true }
+  validates :uid, uniqueness: { case_sensitive: true }, presence: true
 
   delegate :email, to: :user
 
