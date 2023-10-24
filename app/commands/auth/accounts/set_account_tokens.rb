@@ -16,8 +16,8 @@ module Auth
           response = Request::ApiRequest.get(google_api_url)
 
           @account = Account.create_user_for_google(response)
+          @account.save!
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
-          @account.save
 
           { access_token:, refresh_token: }
         end
