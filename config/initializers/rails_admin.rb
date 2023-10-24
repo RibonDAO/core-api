@@ -55,6 +55,10 @@ RailsAdmin.config do |config|
     field :minimum_contribution_chargeable_fee_cents do
       label{ "minimum_contribution_chargeable_fee_cents (minimum fee to charge from a contribution in usdc cents (100 = one dollar))" }
     end
+
+    field :disable_labeling do
+      label{ "disable labeling of new contributions and donations" }
+    end
   end
 
   config.model DonationBlockchainTransaction do

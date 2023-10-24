@@ -5,6 +5,7 @@
 #  id                                        :bigint           not null, primary key
 #  contribution_fee_percentage               :decimal(, )
 #  default_ticket_value                      :decimal(, )
+#  disable_labeling                          :boolean          default(FALSE)
 #  minimum_contribution_chargeable_fee_cents :integer
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
@@ -32,6 +33,10 @@ class RibonConfig < ApplicationRecord
 
   def self.default_chain_id
     first&.default_chain_id
+  end
+
+  def self.disable_labeling
+    first&.disable_labeling
   end
 
   private
