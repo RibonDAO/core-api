@@ -1,0 +1,53 @@
+---
+http_interactions:
+  - request:
+      method: get
+      uri: https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=eyJhbGciOiJSUzI1NiIsIm
+      body:
+        encoding: US-ASCII
+        string: ""
+      headers:
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        Accept:
+          - "*/*"
+        User-Agent:
+          - Ruby
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Pragma:
+          - no-cache
+        Expires:
+          - Mon, 01 Jan 1990 00:00:00 GMT
+        Date:
+          - Mon, 19 Sep 2022 18:04:57 GMT
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Origin
+          - Referer
+          - X-Origin
+        Server:
+          - ESF
+        X-Xss-Protection:
+          - "0"
+        X-Frame-Options:
+          - SAMEORIGIN
+        X-Content-Type-Options:
+          - nosniff
+        Alt-Svc:
+          - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
+            ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+        Transfer-Encoding:
+          - chunked
+      body:
+        encoding: UTF-8
+        string: |
+          {"iss":"accounts.google.com","azp":"333733292312-9q828nskvs3puhkqj735rgokpipgnrrb.apps.googleusercontent.com","aud":"333733292312-9q828nskvs3puhkqj735rgokpipgnrrb.apps.googleusercontent.com","sub":"101954592748327821574","hd":"ribon.io","email":"joseph@ribon.io","email_verified":"true","at_hash":"llunIRlqUPwYvpCvIIJCpw","name":"joseph Galli","picture":"https://lh3.googleusercontent.com/a-/ACNPEu8V3ZlyJ2Rn_x0NQTN04EskK5oR4p3-bP0SJBTG=s96-c","given_name":"joseph","family_name":"Galli","locale":"en","iat":"1663610986","exp":"1663614586","jti":"cb78ab46d688bcca0ff684cfbbe2edf05188c396","alg":"RS256","kid":"209c057d3bdd8c08f2d5739788632673f7c6240f","typ":"JWT"}
+    recorded_at: Mon, 19 Sep 2022 18:04:57 GMT
+recorded_with: VCR 6.1.0
