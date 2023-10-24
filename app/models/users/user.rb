@@ -5,7 +5,7 @@
 #  id         :bigint           not null, primary key
 #  deleted_at :datetime
 #  email      :string
-#  language   :integer          default("en")
+#  language   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  legacy_id  :integer
@@ -76,10 +76,6 @@ class User < ApplicationRecord
     return true if donations.where(platform: 'app').count.positive?
 
     false
-  end
-
-  def unconfirmed_email
-    email
   end
 
   private

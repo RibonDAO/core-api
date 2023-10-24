@@ -24,7 +24,6 @@
 
 class Account < ApplicationRecord
   include AuthenticatableModel
-  include DeviseTokenAuth::Concerns::User
 
   belongs_to :user
 
@@ -38,9 +37,7 @@ class Account < ApplicationRecord
     account = find_or_initialize_by(user:)
     account.assign_attributes(
       provider: 'google_oauth2',
-      uid: data['email'],
-      password: Devise.friendly_token[0, 20],
-      password_confirmation: account.password
+      uid: data['email']
     )
     account.save!
     account
