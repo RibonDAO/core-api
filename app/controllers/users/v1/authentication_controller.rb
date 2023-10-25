@@ -1,8 +1,20 @@
 module Users
   module V1
     class AuthenticationController < Users::AuthorizationController
-      skip_before_action :authenticate, only: %i[refresh_token]
-      skip_before_action :require_user, only: %i[refresh_token]
+      skip_before_action :authenticate, only: %i[refresh_token google_authorization]
+      skip_before_action :require_user, only: %i[refresh_token google_authorization]
+
+      def google_authorization
+        command = Auth::Accounts::SetAccountTokens.call(id_token: params[:data]['id_token'])
+
+        if command.success?
+          create_headers(command.result)
+
+          render json: { message: I18n.t('users.login_success') }, status: :created
+        else
+          render_errors(command.errors)
+        end
+      end
 
       def refresh_token
         access_token = request.headers['Authorization']&.split('Bearer ')&.last
@@ -12,7 +24,7 @@ module Users
           access_token, refresh_token = command.result
           create_headers({ access_token:, refresh_token: })
 
-          render json: { message: I18n.t('user.login_success') }, status: :ok
+          render json: { message: I18n.t('users.login_success') }, status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end

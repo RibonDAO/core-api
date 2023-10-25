@@ -268,3 +268,5 @@ pt-BR:
     login_success: "Autenticado com sucesso."
   users:
     not_found: "Usuário não encontrado."
+    login_success: "Autenticado com sucesso."
+
