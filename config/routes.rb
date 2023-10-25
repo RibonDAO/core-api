@@ -239,7 +239,19 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'auth/refresh_token', to: 'authentication#refresh_token'
       post 'auth/google', to: 'authentication#google_authorization'
-      get  'causes' => 'causes#index'
+      
+      get 'impacts' => 'impacts#index'
+      get 'legacy_impacts' => 'legacy_impacts#index'
+      get 'legacy_contributions' => 'legacy_impacts#contributions'
+
+      get 'donations_count' => 'impacts#donations_count'
+      get 'app/donations_count' => 'impacts#app_donations_count'
+      put 'track', to: 'trackings#track_user'
+
+      get 'contributions' => 'contributions#index'
+      get 'labelable_contributions' => 'contributions#labelable'
+      get 'contributions/:id' => 'contributions#show'
+      post 'configs' => 'configs#update'
     end
   end
 end
