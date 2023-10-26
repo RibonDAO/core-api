@@ -4,7 +4,7 @@ module Api
       def show
         @impression_card = ImpressionCard.find_by(id: params[:id], active: true)
 
-        if(@impression_card)
+        if @impression_card
           render json: ImpressionCardBlueprint.render(@impression_card)
         else
           render json: { error: 'Impression card not found' }, status: :not_found
