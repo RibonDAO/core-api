@@ -10,25 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_18_165918) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "accounts", force: :cascade do |t|
-    t.boolean "allow_password_change"
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.string "encrypted_password"
     t.string "image"
     t.string "name"
     t.string "nickname"
     t.string "provider"
     t.datetime "remember_created_at"
-    t.datetime "reset_password_sent_at"
-    t.string "reset_password_token"
     t.json "tokens"
     t.string "uid"
     t.bigint "user_id", null: false
