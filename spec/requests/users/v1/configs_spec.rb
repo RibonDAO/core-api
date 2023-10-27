@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Users::V1::Configs', type: :request do
   describe 'PUT /users/v1/configs without headers' do
-    subject(:request) { post '/users/v1/configs' }
+    let(:request) { post '/users/v1/configs' }
 
     it 'returns http status unauthorized' do
       request
@@ -13,7 +13,7 @@ RSpec.describe 'Users::V1::Configs', type: :request do
 
   describe 'PUT /users/v1/configs' do
     include_context 'when making a user request' do
-      subject(:request) { post '/users/v1/configs', headers:, params: }
+      let(:request) { post '/users/v1/configs', headers:, params: }
     end
 
     let(:user) { account.user }
