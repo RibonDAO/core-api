@@ -27,12 +27,14 @@ class Account < ApplicationRecord
 
   delegate :email, to: :user
 
-  def self.create_user_for_google(data)
-    user = User.find_or_create_by(email: data['email'])
-    account = find_or_initialize_by(user:)
+  def self.create_user_for_provider(data, provider)
+    email = data['email'] || data
+    user = User.find_or_create_by(email:)
+
+    account = find_or_initialize_by(user:, provider:)
     account.assign_attributes(
-      provider: 'google_oauth2',
-      uid: data['email']
+      provider:,
+      uid: email
     )
     account.save!
     account

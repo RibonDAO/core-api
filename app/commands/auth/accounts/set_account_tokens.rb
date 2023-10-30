@@ -15,7 +15,7 @@ module Auth
         with_exception_handle do
           response = Request::ApiRequest.get(google_api_url)
 
-          @account = Account.create_user_for_google(response)
+          @account = Account.create_user_for_provider(response, 'google_oauth2')
           @account.save!
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
 

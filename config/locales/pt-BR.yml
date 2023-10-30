@@ -269,4 +269,4 @@ pt-BR:
   users:
     not_found: "Usuário não encontrado."
     login_success: "Autenticado com sucesso."
-
+    email_sent: "Email enviado com sucesso."
