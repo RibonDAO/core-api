@@ -238,9 +238,8 @@ Rails.application.routes.draw do
   namespace :users do
     namespace :v1 do
       post 'auth/refresh_token', to: 'authentication#refresh_token'
-      post 'auth/google', to: 'authentication#google_authorization'
+      post 'auth/authenticate', to: 'authentication#authenticate'
       get  'causes' => 'causes#index'
-      post 'authenticate/apple', to: 'authentication#apple_authorization'
     end
   end
 end

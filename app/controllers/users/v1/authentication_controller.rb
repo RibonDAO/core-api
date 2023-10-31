@@ -1,25 +1,12 @@
 module Users
   module V1
     class AuthenticationController < Users::AuthorizationController
-      skip_before_action :authenticate, only: %i[refresh_token google_authorization apple_authorization]
-      skip_before_action :require_user, only: %i[refresh_token google_authorization apple_authorization]
+      skip_before_action :authenticate, only: %i[refresh_token authenticate]
+      skip_before_action :require_user, only: %i[refresh_token authenticate]
 
-      def google_authorization
-        command = Auth::Accounts::SetAccountTokens.call(id_token: params[:data]['id_token'],
-                                                        provider: 'google_oauth2')
-
-        if command.success?
-          create_headers(command.result)
-
-          render json: { message: I18n.t('users.login_success') }, status: :created
-        else
-          render_errors(command.errors)
-        end
-      end
-
-      def apple_authorization
+      def authenticate
         command = Auth::Accounts::SetAccountTokens.call(id_token: params['id_token'],
-                                                        provider: 'apple')
+                                                        provider: params['provider'])
 
         if command.success?
           create_headers(command.result)
