@@ -13,7 +13,7 @@ module Auth
 
       def call
         with_exception_handle do
-          unless MagicLinkService.new(authenticatable:).valid_auth_token?(auth_token)
+          unless Auth::EmailLinkService.new(authenticatable:).valid_auth_token?(auth_token)
             raise Jwt::Errors::Unauthorized
           end
 

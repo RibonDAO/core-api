@@ -39,7 +39,7 @@ module Auth
       end
 
       def url(account)
-        MagicLinkService.new(authenticatable: account).find_or_create_auth_link
+        Auth::EmailLinkService.new(authenticatable: account).find_or_create_auth_link
       end
 
       def build_event(account)
