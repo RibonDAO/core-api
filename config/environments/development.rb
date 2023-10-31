@@ -6,6 +6,8 @@ Rails.application.configure do
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
+  config.hosts << "2817-2804-14c-658b-4e68-6dfa-7e3a-9b8a-d8a.ngrok-free.app"
+
   config.cache_classes = false
 
   # Do not eager load code on boot.
