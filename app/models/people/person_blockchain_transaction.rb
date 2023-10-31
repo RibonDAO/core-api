@@ -47,6 +47,7 @@ class PersonBlockchainTransaction < ApplicationRecord
   end
 
   def charge_contribution_fees
+    return if RibonConfig.disable_labeling
     return unless success?
     return if person_payment&.contribution&.generated_fee_cents&.zero?
 
