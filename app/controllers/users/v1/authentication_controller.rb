@@ -4,7 +4,7 @@ module Users
       skip_before_action :authenticate,
                          only: %i[send_authentication_email authorize_from_auth_token refresh_token
                                   google_authorization]
-      skip_before_action :require_user,
+      skip_before_action :require_account,
                          only: %i[send_authentication_email authorize_from_auth_token refresh_token
                                   google_authorization]
 
