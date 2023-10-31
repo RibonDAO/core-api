@@ -1,11 +1,11 @@
 module Users
   class AuthorizationController < ActionController::API
     include JwtAuthenticatable
-    attr_reader :current_user, :decoded_token
+    attr_reader :current_account, :decoded_token, :current_user
 
     before_action :set_language
     before_action :authenticate
-    before_action :require_user
+    before_action :require_account
 
     rescue_from ActiveRecord::RecordNotFound do |_e|
       render json: { message: 'Not found.' }, status: :not_found
@@ -30,17 +30,22 @@ module Users
     protected
 
     def authenticate
-      current_user, decoded_token = Jwt::Auth::Authenticator.call(
+      current_account, decoded_token = Jwt::Auth::Authenticator.call(
         headers: request.headers,
         access_token: params[:access_token]
       )
 
-      @current_user = current_user
+      @current_account = current_account
       @decoded_token = decoded_token
+      set_current_user
     end
 
-    def require_user
-      render json: { message: I18n.t('users.not_found') }, status: :not_found unless @current_user
+    def require_account
+      render json: { message: I18n.t('accounts.not_found') }, status: :not_found unless @current_account
+    end
+
+    def set_current_user
+      @current_user = @current_account.user
     end
 
     def render_errors(errors, status = :unprocessable_entity)

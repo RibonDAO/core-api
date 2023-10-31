@@ -242,6 +242,35 @@ Rails.application.routes.draw do
       post 'auth/refresh_token', to: 'authentication#refresh_token'
       post 'auth/authenticate', to: 'authentication#authenticate'
       get  'causes' => 'causes#index'
+      
+      namespace :impacts do
+        get 'impacts' => 'impacts#index'
+        get 'donations_count' => 'impacts#donations_count'
+        get 'app/donations_count' => 'impacts#app_donations_count'
+        get 'legacy_impacts' => 'legacy_impacts#index'
+        get 'legacy_contributions' => 'legacy_impacts#contributions'
+      end
+
+      get 'contributions' => 'contributions#index'
+      get 'labelable_contributions' => 'contributions#labelable'
+      get 'contributions/:id' => 'contributions#show'
+
+      post 'configs' => 'configs#update'
+
+      get 'statistics' => 'statistics#index'
+
+      namespace :tasks do
+        get 'statistics' => 'statistics#index'
+        get 'statistics/streak' => 'statistics#streak'
+        get 'statistics/completed_tasks' => 'statistics#completed_tasks'
+
+        post 'upsert/completed_all_tasks' => 'upsert#first_completed_all_tasks_at'
+        post 'upsert/complete_task' => 'upsert#complete_task'
+        post 'upsert/reset_streak' => 'upsert#reset_streak'
+      end
+
+      post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
+      get 'subscriptions' => 'subscriptions#index'
     end
   end
 end
