@@ -47,6 +47,8 @@ Rails.application.routes.draw do
       get 'person_payments/:receiver_type' => 'person_payments#payments_for_receiver_by_person'
       
       post 'donations' => 'donations#create'
+
+      get 'impression_cards/:id' => 'impression_cards#show'
       
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'

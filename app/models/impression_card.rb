@@ -3,6 +3,8 @@
 # Table name: impression_cards
 #
 #  id          :bigint           not null, primary key
+#  active      :boolean          default(FALSE)
+#  client      :string
 #  cta_text    :string           default(""), not null
 #  cta_url     :string           default(""), not null
 #  description :string           default(""), not null
@@ -19,5 +21,8 @@ class ImpressionCard < ApplicationRecord
 
   has_one_attached :image
 
-  validates :title, :headline, :description, :cta_text, :cta_url, presence: true
+  validates :title, :headline, :description, :cta_text, :cta_url, :client, presence: true
+
+  validates :active, inclusion: { in: [true, false] }
+  validates :client, inclusion: { in: %w[web app] }
 end
