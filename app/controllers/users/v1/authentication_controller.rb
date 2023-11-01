@@ -2,7 +2,7 @@ module Users
   module V1
     class AuthenticationController < Users::AuthorizationController
       skip_before_action :authenticate, only: %i[refresh_token authenticate]
-      skip_before_action :require_user, only: %i[refresh_token authenticate]
+      skip_before_action :require_account, only: %i[refresh_token authenticate]
 
       def authenticate
         command = Auth::Accounts::SetAccountTokens.call(id_token: params['id_token'],
