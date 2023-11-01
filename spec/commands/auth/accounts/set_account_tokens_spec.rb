@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe Auth::Accounts::SetAccountTokens do
-  let(:command) { described_class.call(id_token: 'eyJhbGciOiJSUzI1NiIsIm') }
+  let(:command) { described_class.call(id_token: 'eyJhbGciOiJSUzI1NiIsIm', provider: 'google_oauth2') }
 
   describe '.call' do
     include_context('when mocking a request') { let(:cassette_name) { 'google_api_url' } }
