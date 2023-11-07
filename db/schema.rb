@@ -10,25 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_23_144113) do
+
+ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "accounts", force: :cascade do |t|
-    t.boolean "allow_password_change"
     t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.string "encrypted_password"
     t.string "image"
     t.string "name"
     t.string "nickname"
     t.string "provider"
     t.datetime "remember_created_at"
-    t.datetime "reset_password_sent_at"
-    t.string "reset_password_token"
     t.json "tokens"
     t.string "uid"
     t.bigint "user_id", null: false
@@ -453,8 +451,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_144113) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "measurement_unit"
     t.string "donor_recipient"
+    t.string "measurement_unit"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -753,7 +751,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_144113) do
     t.index ["owner_type", "owner_id"], name: "index_wallets_on_owner"
   end
 
-  add_foreign_key "accounts", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "authors"
