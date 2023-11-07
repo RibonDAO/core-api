@@ -14,7 +14,7 @@ module Givings
       def call
         if person_payment&.external_id?
           payment = Service::Givings::Payment::Orchestrator.new(payload: PaymentIntent.from(external_id, gateway,
-                                                                                           'generate_pix')).call
+                                                                                            'generate_pix')).call
         end
         payment
       rescue StandardError => e
