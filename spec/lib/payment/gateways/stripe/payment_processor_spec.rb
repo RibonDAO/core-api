@@ -109,7 +109,7 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
     let(:gateway) { :stripe }
 
     let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
-    let(:payment) { build(:person_payment, payment_method: :pix, offer:, external_id: 'pi_123') }
+    let(:payment) { build(:person_payment, payment_method: :pix, offer:, external_id: 'pi_3JVG0oJuOnwQq9Qx118cDmEr') }
     let(:offer) { create(:offer, price_cents: 100, subscription: false) }
 
     before do
@@ -128,23 +128,23 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
   end
 
     describe '#find_payment_intent' do
-    let(:operation) { :generate_pix }
+    let(:operation) { :find_payment_intent }
     let(:gateway) { :stripe }
 
     let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
-    let(:payment) { build(:person_payment, payment_method: :pix, offer:, external_id: 'pi_123') }
+    let(:payment) { build(:person_payment, payment_method: :pix, offer:, external_id: 'in_1LL5lOJuOnwQq9QxgwtucIBS') }
     let(:offer) { create(:offer, price_cents: 100, subscription: false) }
 
     before do
       allow(Stripe::PaymentIntent)
-        .to receive(:find)
+        .to receive(:retrieve)
     end
 
     it 'calls Stripe::PaymentIntent api' do
       payment_processor_call
 
       expect(Stripe::PaymentIntent)
-        .to have_received(:find).with(
+        .to have_received(:retrieve).with(
           payment.external_id
         )
     end
