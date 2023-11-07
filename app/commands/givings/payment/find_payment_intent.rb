@@ -13,7 +13,7 @@ module Givings
 
       def call
         if person_payment&.external_id?
-          refund = Service::Givings::Payment::Orchestrator.new(payload: Refund.from(external_id, gateway,
+          refund = Service::Givings::Payment::Orchestrator.new(payload: PaymentIntent.from(external_id, gateway,
                                                                                     'verify_payment_intent')).call
         end
         refund

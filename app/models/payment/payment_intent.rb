@@ -1,4 +1,4 @@
-class Refund
+class PaymentIntent
   attr_accessor :external_id, :gateway, :operation
 
   def initialize(params = {})

@@ -39,7 +39,7 @@ module Givings
       end
 
       def refund_params
-        Refund.from(external_id, gateway, 'refund')
+        PaymentIntent.from(external_id, gateway, 'refund')
       end
     end
   end
