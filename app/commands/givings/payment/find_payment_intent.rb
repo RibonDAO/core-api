@@ -13,8 +13,9 @@ module Givings
 
       def call
         if person_payment&.external_id?
-          refund = Service::Givings::Payment::Orchestrator.new(payload: PaymentIntent.from(external_id, gateway,
-                                                                                    'find_payment_intent')).call
+          refund = Service::Givings::Payment::Orchestrator.new(payload:
+          PaymentIntent.from(external_id, gateway,
+                             'find_payment_intent')).call
         end
         refund
       rescue StandardError => e

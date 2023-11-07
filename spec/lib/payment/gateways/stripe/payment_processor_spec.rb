@@ -109,7 +109,9 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
     let(:gateway) { :stripe }
 
     let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
-    let(:payment) { build(:person_payment, payment_method: :pix, offer:, external_id: 'pi_3JVG0oJuOnwQq9Qx118cDmEr') }
+    let(:payment) do
+      build(:person_payment, payment_method: :pix, offer:, external_id: 'pi_3JVG0oJuOnwQq9Qx118cDmEr')
+    end
     let(:offer) { create(:offer, price_cents: 100, subscription: false) }
 
     before do
@@ -127,12 +129,14 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
     end
   end
 
-    describe '#find_payment_intent' do
+  describe '#find_payment_intent' do
     let(:operation) { :find_payment_intent }
     let(:gateway) { :stripe }
 
     let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
-    let(:payment) { build(:person_payment, payment_method: :pix, offer:, external_id: 'in_1LL5lOJuOnwQq9QxgwtucIBS') }
+    let(:payment) do
+      build(:person_payment, payment_method: :pix, offer:, external_id: 'in_1LL5lOJuOnwQq9QxgwtucIBS')
+    end
     let(:offer) { create(:offer, price_cents: 100, subscription: false) }
 
     before do
