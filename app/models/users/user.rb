@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_many :customers
   has_many :user_completed_tasks
   has_many :devices
+  has_many :accounts
   has_many :person_payments, through: :customers
 
   has_many :contributions, through: :person_payments

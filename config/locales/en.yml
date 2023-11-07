@@ -49,3 +49,4 @@ en:
   users:
     not_found: "User not found."
     login_success: "Signed in successfully."
+    email_sent: "Email sent successfully."
