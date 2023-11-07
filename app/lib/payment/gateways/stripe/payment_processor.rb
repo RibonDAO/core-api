@@ -52,7 +52,7 @@ module Payment
           Entities::PaymentIntent.confirm(id: payment.external_id)
         end
 
-        def verify_payment_intent(payment)
+        def find_payment_intent(payment)
           Entities::PaymentIntent.find(id: payment.external_id)
         end
 

@@ -22,17 +22,6 @@ module Givings
         errors.add(:message, e.message)
       end
 
-      def verify
-        if person_payment&.external_id?
-          refund = Service::Givings::Payment::Orchestrator.new(payload: PaymentIntent.from(external_id, gateway,
-                                                                                    'verify_payment_intent')).call
-        end
-        refund
-      rescue StandardError => e
-        Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
-        errors.add(:message, e.message)
-      end
-
       private
 
       def person_payment
