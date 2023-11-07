@@ -13,10 +13,10 @@ module Givings
 
       def call
         if person_payment&.external_id?
-          refund = Service::Givings::Payment::Orchestrator.new(payload: PaymentIntent.from(external_id, gateway,
+          payment = Service::Givings::Payment::Orchestrator.new(payload: PaymentIntent.from(external_id, gateway,
                                                                                            'generate_pix')).call
         end
-        refund
+        payment
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
         errors.add(:message, e.message)
