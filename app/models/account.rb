@@ -17,7 +17,6 @@
 #  updated_at           :datetime         not null
 #  user_id              :bigint           not null
 #
-
 class Account < ApplicationRecord
   include AuthenticatableModel
 

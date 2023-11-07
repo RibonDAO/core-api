@@ -240,7 +240,7 @@ Rails.application.routes.draw do
   namespace :users do
     namespace :v1 do
       post 'auth/refresh_token', to: 'authentication#refresh_token'
-      post 'auth/google', to: 'authentication#google_authorization'
+      post 'auth/authenticate', to: 'authentication#authenticate'
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
       

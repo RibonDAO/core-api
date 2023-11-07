@@ -3,13 +3,14 @@ module Users
     class AuthenticationController < Users::AuthorizationController
       skip_before_action :authenticate,
                          only: %i[send_authentication_email authorize_from_auth_token refresh_token
-                                  google_authorization]
+                                  authenticate]
       skip_before_action :require_account,
                          only: %i[send_authentication_email authorize_from_auth_token refresh_token
-                                  google_authorization]
+                                  authenticate]
 
-      def google_authorization
-        command = Auth::Accounts::SetAccountTokens.call(id_token: params[:data]['id_token'])
+      def authenticate
+        command = Auth::Accounts::SetAccountTokens.call(id_token: params['id_token'],
+                                                        provider: params['provider'])
 
         if command.success?
           create_headers(command.result)
