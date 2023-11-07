@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -312,6 +313,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
     t.string "cta_url", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: false
+    t.string "client"
   end
 
   create_table "integration_tasks", force: :cascade do |t|
@@ -447,8 +450,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "measurement_unit"
     t.string "donor_recipient"
+    t.string "measurement_unit"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -747,7 +750,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
     t.index ["owner_type", "owner_id"], name: "index_wallets_on_owner"
   end
 
-  add_foreign_key "accounts", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "authors"

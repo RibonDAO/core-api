@@ -10,7 +10,6 @@ module Service
       end
 
       def spread_fee_to_payers
-        return if RibonConfig.disable_labeling
         return if contribution.already_spread_fees?
 
         @initial_contributions_balance = feeable_contribution_balances.sum(&:fees_balance_cents)
