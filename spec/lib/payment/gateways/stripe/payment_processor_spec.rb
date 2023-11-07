@@ -103,4 +103,27 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
         .with(payload.external_identifier)
     end
   end
+
+  describe '#generate_pix' do
+    let(:operation) { :generate_pix }
+    let(:gateway) { :stripe }
+
+    let(:payload) { Refund.from(payment.external_id, gateway, operation) }
+    let(:payment) { build(:person_payment, payment_method: :pix, offer:, external_id: 'pi_123') }
+    let(:offer) { create(:offer, price_cents: 100, subscription: false) }
+
+    before do
+      allow(Stripe::PaymentIntent)
+        .to receive(:confirm)
+    end
+
+    it 'calls Stripe::PaymentIntent api' do
+      payment_processor_call
+
+      expect(Stripe::PaymentIntent)
+        .to have_received(:confirm).with(
+          payment.external_id
+        )
+    end
+  end
 end

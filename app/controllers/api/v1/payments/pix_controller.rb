@@ -15,6 +15,26 @@ module Api
           end
         end
 
+        def generate
+          command = ::Givings::Payment::GeneratePix.call(external_id: params[:id])
+
+          if command.success?
+            render json: command.result
+          else
+            render_errors(command.errors)
+          end
+        end
+
+        def find
+          command = ::Givings::Payment::FindPaymentIntent.call(external_id: params[:id])
+
+          if command.success?
+            render json: command.result
+          else
+            render_errors(command.errors)
+          end
+        end
+
         private
 
         def order_params
