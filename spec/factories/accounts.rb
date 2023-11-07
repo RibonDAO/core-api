@@ -24,7 +24,6 @@
 FactoryBot.define do
   factory :account do
     user { build(:user, email: 'user1@ribon.io') }
-    allow_password_change { false }
     confirmation_sent_at { '2023-10-11 15:10:00' }
     confirmed_at { '2023-10-11 15:10:00' }
     uid { 'user1@ribon.io' }
