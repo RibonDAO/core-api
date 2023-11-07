@@ -599,6 +599,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_144113) do
     t.bigint "receiver_id"
     t.integer "status"
     t.bigint "offer_id"
+    t.datetime "next_contribution_at", precision: nil
     t.datetime "next_payment_attempt"
     t.index ["integration_id"], name: "index_subscriptions_on_integration_id"
     t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
