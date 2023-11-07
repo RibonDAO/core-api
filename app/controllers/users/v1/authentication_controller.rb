@@ -9,7 +9,7 @@ module Users
                                   authenticate]
 
       def authenticate
-        command = Auth::Accounts::SetAccountTokens.call(id_token: params['id_token'],
+        command = Auth::Accounts::SetAccountTokens.call(token: params['id_token'] || params['token'],
                                                         provider: params['provider'])
 
         if command.success?

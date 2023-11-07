@@ -5,10 +5,10 @@ module Auth
     class SetAccountTokens < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :id_token, :provider
+      attr_reader :token, :provider
 
-      def initialize(id_token:, provider:)
-        @id_token = id_token
+      def initialize(token:, provider:)
+        @token = token
         @provider = provider
       end
 
@@ -17,6 +17,8 @@ module Auth
           case provider
           when 'google_oauth2'
             google_authenticate
+          when 'google_oauth2_access'
+            google_access_authenticate
           when 'apple'
             apple_authenticate
           else
@@ -32,12 +34,13 @@ module Auth
         create_account_and_issue_tokens(data)
       end
 
-      def google_api_url
-        "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{id_token}"
+      def google_access_authenticate
+        data = Request::ApiRequest.get(google_access_api_url)
+        create_account_and_issue_tokens(data)
       end
 
       def apple_authenticate
-        data = JWT.decode(id_token, nil, false).first
+        data = JWT.decode(token, nil, false).first
         create_account_and_issue_tokens(data)
       end
 
@@ -48,6 +51,14 @@ module Auth
         access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
 
         { access_token:, refresh_token: }
+      end
+
+      def google_api_url
+        "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{token}"
+      end
+
+      def google_access_api_url
+        "https://www.googleapis.com/oauth2/v3/userinfo?access_token=#{token}"
       end
     end
   end

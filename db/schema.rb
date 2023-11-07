@@ -451,8 +451,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -751,6 +751,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_192531) do
     t.index ["owner_type", "owner_id"], name: "index_wallets_on_owner"
   end
 
+  add_foreign_key "accounts", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "articles", "authors"
