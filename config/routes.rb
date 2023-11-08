@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       post 'donations' => 'donations#create'
 
       get 'impression_cards/:id' => 'impression_cards#show'
+      get 'tasks' => 'tasks#index'
       
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
