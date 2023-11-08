@@ -14,11 +14,11 @@
 #
 FactoryBot.define do
   factory :task do
-    title { "My Task" }
-    actions { "causes_page_view" }
-    kind { "daily" }
-    navigation_callback { "/causes" }
-    visibility { "visible" }
-    client { "web" }
+    title { 'My Task' }
+    actions { 'causes_page_view' }
+    kind { 'daily' }
+    navigation_callback { '/causes' }
+    visibility { 'visible' }
+    client { 'web' }
   end
 end
