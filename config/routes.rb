@@ -244,6 +244,11 @@ Rails.application.routes.draw do
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
       
+      post 'donations' => 'donations#create'
+      namespace :vouchers do
+        post 'donations' => 'donations#create'
+      end
+
       namespace :impacts do
         get 'impacts' => 'impacts#index'
         get 'donations_count' => 'impacts#donations_count'
