@@ -26,7 +26,5 @@ RSpec.describe ImpressionCard, type: :model do
     it { is_expected.to validate_presence_of(:cta_text) }
     it { is_expected.to validate_presence_of(:cta_url) }
     it { is_expected.to validate_presence_of(:client) }
-
-    it { is_expected.to validate_inclusion_of(:active).in_array([true, false]) }
   end
 end

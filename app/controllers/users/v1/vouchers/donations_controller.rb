@@ -1,7 +1,7 @@
-module Api
+module Users
   module V1
     module Vouchers
-      class DonationsController < ApplicationController
+      class DonationsController < AuthorizationController
         def create
           command = ::Vouchers::Donate.call(donation_command:, integration:, external_id:)
 
