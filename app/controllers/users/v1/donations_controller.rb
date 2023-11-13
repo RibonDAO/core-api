@@ -12,6 +12,17 @@ module Users
         end
       end
 
+      def can_donate
+        if voucher?
+          render json: { can_donate: voucher&.valid? }
+        elsif current_user
+          render json: { can_donate: current_user.can_donate?(integration, platform),
+                         donate_app: current_user.donate_app }
+        else
+          render json: { can_donate: true }
+        end
+      end
+
       private
 
       def integration
@@ -39,6 +50,10 @@ module Users
         params.permit(:utm_source,
                       :utm_medium,
                       :utm_campaign)
+      end
+
+      def voucher?
+        params[:voucher_id].present?
       end
     end
   end

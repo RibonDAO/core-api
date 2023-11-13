@@ -88,4 +88,21 @@ RSpec.describe 'Users::V1::Donations', type: :request do
       end
     end
   end
+
+  describe 'POST /can_donate' do
+    include_context 'when making a user request' do
+      let(:request) do
+        post '/users/v1/can_donate', headers:, params: { integration_id: integration.id }
+      end
+    end
+
+    let(:integration) { create(:integration) }
+    let(:user) { account.user }
+
+    it 'returns the can_donate attribute' do
+      request
+
+      expect_response_to_have_keys %w[can_donate donate_app]
+    end
+  end
 end
