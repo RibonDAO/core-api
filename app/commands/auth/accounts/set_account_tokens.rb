@@ -46,11 +46,10 @@ module Auth
 
       def create_account_and_issue_tokens(data)
         @account = Account.create_user_for_provider(data, provider)
-        @account.save!
 
         access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
 
-        { access_token:, refresh_token: }
+        [access_token, refresh_token, @account.user]
       end
 
       def google_api_url

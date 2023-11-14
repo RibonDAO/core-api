@@ -12,8 +12,11 @@ describe Auth::Accounts::SetAccountTokens do
       expect(command).to be_success
     end
 
-    it 'returns the access and refresh tokens' do
-      expect(command.result).to include(:access_token, :refresh_token)
+    it 'returns the access and refresh tokens and the user' do
+      access_token, refresh_token, user = command.result
+      expect(access_token).to be_an_instance_of(String)
+      expect(refresh_token).to be_a RefreshToken
+      expect(user).to be_a User
     end
   end
 
@@ -24,8 +27,11 @@ describe Auth::Accounts::SetAccountTokens do
       expect(command).to be_success
     end
 
-    it 'returns the access and refresh tokens' do
-      expect(command.result).to include(:access_token, :refresh_token)
+    it 'returns the access and refresh tokens and the user' do
+      access_token, refresh_token, user = command.result
+      expect(access_token).to be_an_instance_of(String)
+      expect(refresh_token).to be_a RefreshToken
+      expect(user).to be_a User
     end
   end
 
@@ -40,8 +46,11 @@ describe Auth::Accounts::SetAccountTokens do
       expect(command).to be_success
     end
 
-    it 'returns the access and refresh tokens' do
-      expect(command.result).to include(:access_token, :refresh_token)
+    it 'returns the access and refresh tokens and the user' do
+      access_token, refresh_token, user = command.result
+      expect(access_token).to be_an_instance_of(String)
+      expect(refresh_token).to be_a RefreshToken
+      expect(user).to be_a User
     end
   end
 end
