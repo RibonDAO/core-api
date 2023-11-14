@@ -13,9 +13,10 @@ module Users
                                                         provider: params['provider'])
 
         if command.success?
-          create_headers(command.result)
+          access_token, refresh_token, user = command.result
+          create_headers({ access_token:, refresh_token: })
 
-          render json: { message: I18n.t('users.login_success') }, status: :created
+          render json: { message: I18n.t('users.login_success'), user: }, status: :created
         else
           render_errors(command.errors)
         end
@@ -41,7 +42,7 @@ module Users
           access_token, refresh_token = command.result
           create_headers({ access_token:, refresh_token: })
 
-          render json: { message: I18n.t('users.login_success') }, status: :ok
+          render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end
