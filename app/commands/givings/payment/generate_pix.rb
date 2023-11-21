@@ -2,7 +2,7 @@
 
 module Givings
   module Payment
-    class CreditCardRefund < ApplicationCommand
+    class GeneratePix < ApplicationCommand
       prepend SimpleCommand
 
       attr_reader :external_id
@@ -13,9 +13,10 @@ module Givings
 
       def call
         if person_payment&.external_id?
-          refund = Service::Givings::Payment::Orchestrator.new(payload: refund_params).call
+          payment = Service::Givings::Payment::Orchestrator.new(payload: PaymentIntent.from(external_id, gateway,
+                                                                                            'generate_pix')).call
         end
-        success_refund(person_payment, refund)
+        payment
       rescue StandardError => e
         Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
         errors.add(:message, e.message)
@@ -23,23 +24,12 @@ module Givings
 
       private
 
-      def success_refund(person_payment, refund)
-        return unless refund[:status] == 'succeeded'
-
-        person_payment.update(status: :refunded,
-                              refund_date: Time.zone.at(refund[:created]))
-      end
-
       def person_payment
         PersonPayment.find_by({ external_id: })
       end
 
       def gateway
         person_payment.offer.gateway
-      end
-
-      def refund_params
-        PaymentIntent.from(external_id, gateway, 'refund')
       end
     end
   end
