@@ -23,11 +23,11 @@ module Users
       end
 
       def send_authentication_email
-        command = Auth::Accounts::SendAuthenticationEmail.call(email: params[:email])
+        command = Auth::Accounts::SendAuthenticationEmail.call(email: params[:email], id: params[:account_id])
 
         if command.success?
-
-          render json: { message: I18n.t('users.email_sent') }, status: :ok
+          user = command.result
+          render json: { message: I18n.t('users.email_sent'), user: }, status: :ok
         else
 
           render_errors(command.errors, :unprocessable_entity)

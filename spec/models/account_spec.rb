@@ -6,6 +6,7 @@
 #  confirmation_sent_at :datetime
 #  confirmation_token   :string
 #  confirmed_at         :datetime
+#  deleted_at           :datetime
 #  image                :string
 #  name                 :string
 #  nickname             :string
@@ -17,7 +18,6 @@
 #  updated_at           :datetime         not null
 #  user_id              :bigint           not null
 #
-# spec/models/account_spec.rb
 require 'rails_helper'
 
 RSpec.describe Account, type: :model do
