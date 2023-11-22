@@ -5,14 +5,16 @@ module Auth
     class SendAuthenticationEmail < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :email
+      attr_reader :email, :current_email
 
-      def initialize(email:)
+      def initialize(email:, current_email:)
         @email = email
+        @current_email = current_email
       end
 
       def call
         with_exception_handle do
+          check_if_user_email_matches
           @account = Account.create_user_for_provider(email, 'magic_link')
 
           @account.save!
@@ -25,6 +27,12 @@ module Auth
       end
 
       private
+
+      def check_if_user_email_matches
+        return if current_email.blank?
+
+        raise 'Email does not match' if current_email != email
+      end
 
       def send_event
         EventServices::SendEvent.new(user: @account.user,
