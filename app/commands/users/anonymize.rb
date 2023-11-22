@@ -13,6 +13,7 @@ module Users
     def call
       with_exception_handle do
         user.update!(email: dummy_email, deleted_at: Time.zone.now)
+        user.user_profile.destroy if user.user_profile.present?
       end
     end
 

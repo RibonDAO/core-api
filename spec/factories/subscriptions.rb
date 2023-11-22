@@ -4,7 +4,6 @@
 #
 #  id                   :bigint           not null, primary key
 #  cancel_date          :datetime
-#  next_contribution_at :datetime
 #  next_payment_attempt :datetime
 #  payer_type           :string
 #  payment_method       :string
