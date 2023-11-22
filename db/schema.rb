@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_08_173257) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_22_122853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -599,7 +599,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_173257) do
     t.bigint "receiver_id"
     t.integer "status"
     t.bigint "offer_id"
-    t.datetime "next_contribution_at", precision: nil
     t.datetime "next_payment_attempt"
     t.index ["integration_id"], name: "index_subscriptions_on_integration_id"
     t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
@@ -678,6 +677,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_173257) do
     t.index ["email"], name: "index_user_managers_on_email", unique: true
     t.index ["reset_password_token"], name: "index_user_managers_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_user_managers_on_uid_and_provider", unique: true
+  end
+
+  create_table "user_profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_profiles_on_user_id"
   end
 
   create_table "user_tasks_statistics", force: :cascade do |t|
@@ -780,6 +787,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_08_173257) do
   add_foreign_key "user_completed_tasks", "users"
   add_foreign_key "user_configs", "users"
   add_foreign_key "user_donation_stats", "users"
+  add_foreign_key "user_profiles", "users"
   add_foreign_key "user_tasks_statistics", "users"
   add_foreign_key "vouchers", "donations"
   add_foreign_key "vouchers", "integrations"
