@@ -248,8 +248,6 @@ Rails.application.routes.draw do
       post 'auth/authenticate', to: 'authentication#authenticate'
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
-      post 'send_delete_account_email' => 'configs#send_delete_account_email'
-      delete 'users' => 'configs#destroy'
       post 'can_donate' => 'donations#can_donate'
       post 'donations' => 'donations#create'
       namespace :vouchers do
