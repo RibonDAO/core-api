@@ -13,9 +13,8 @@ module Auth
 
       def call
         with_exception_handle do
-          @account = Account.create_user_for_provider(email, 'magic_link')
+          @account = Users::CreateAccount.call(data: email, provider: 'magic_link').result
 
-          @account.save!
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
 
           send_event

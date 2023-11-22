@@ -45,7 +45,7 @@ module Auth
       end
 
       def create_account_and_issue_tokens(data)
-        @account = Account.create_user_for_provider(data, provider)
+        @account = Users::CreateAccount.call(data:, provider:).result
 
         access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
 

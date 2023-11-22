@@ -12,7 +12,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
   def processing_to_paid?(person_payment)
     person_payment.previous_changes[:status] == %w[processing paid] &&
       person_payment.paid? &&
-      person_payment.credit_card? &&
+      !person_payment.crypto? &&
       person_payment.subscription.nil?
   end
 

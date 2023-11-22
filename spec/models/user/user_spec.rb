@@ -19,6 +19,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_uniqueness_of(:email).ignoring_case_sensitivity }
     it { is_expected.to have_many(:donations) }
     it { is_expected.to have_one(:user_config) }
+    it { is_expected.to have_one(:user_profile) }
   end
 
   describe '.create' do
