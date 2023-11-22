@@ -23,6 +23,9 @@ module Auth
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
           send_event
           { access_token:, refresh_token:, email: @account.email }
+
+        rescue StandardError => e
+          errors.add(:message, e.message)
         end
       end
 
