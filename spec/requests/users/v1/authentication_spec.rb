@@ -2,17 +2,16 @@ require 'rails_helper'
 
 RSpec.describe 'Users::V1::Authentication', type: :request do
   describe 'POST /send_authentication_email' do
-    
     subject(:request) { post '/users/v1/auth/send_authentication_email', params: }
 
     let(:user) { create(:user) }
     let(:params) { { email: user.email } }
     let(:command) { command_double(klass: Auth::Accounts::SendAuthenticationEmail, success: true, result:) }
 
-        let(:result) do
+    let(:result) do
       { access_token: 'access_token',
         refresh_token: OpenStruct.new({ token: 'refresh_token' }),
-    email: user.email }
+        email: user.email }
     end
 
     before do
@@ -46,11 +45,10 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
   end
 
   describe 'POST /authorize_from_auth_token' do
-     include_context 'when making a user request' do
-    subject(:request) { post '/users/v1/auth/authorize_from_auth_token', params: }
+    include_context 'when making a user request' do
+      subject(:request) { post '/users/v1/auth/authorize_from_auth_token', params: }
+    end
 
-     end
-    
     let(:params) { { auth_token: 'auth_token', id: account.id } }
     let(:command) do
       command_double(klass: Auth::Accounts::AuthorizeAuthToken,
