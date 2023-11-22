@@ -16,17 +16,12 @@ module Auth
         with_exception_handle do
           @account = if email.present?
                        Account.create_user_for_provider(email, 'magic_link')
-
                      else
                        Account.find(id)
-
                      end
-
           @account.save!
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
-
           send_event
-
           { access_token:, refresh_token:, email: @account.email }
         end
       end
