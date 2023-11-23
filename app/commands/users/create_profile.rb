@@ -33,7 +33,7 @@ module Users
       data['name'] || ''
     end
 
-    def grab_image(url)
+    def grab_image
       uri = URI.parse(url)
       raise StandardError, 'Invalid url format' unless uri.scheme && uri.host
 
@@ -41,8 +41,8 @@ module Users
     end
 
     def set_attributes
-      profile.name = name if profile.name.blank?
-      io = grab_image(url)
+      profile.name = name unless profile.name
+      io = grab_image
       filename = "photo#{user.id}.jpg"
       profile.photo.attach(io:, filename:) unless profile.photo.attached?
     end
