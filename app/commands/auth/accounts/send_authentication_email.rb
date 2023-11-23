@@ -16,10 +16,12 @@ module Auth
         with_exception_handle do
           @account = if email.present?
                        Account.create_user_for_provider(email, 'magic_link')
-                     else
+                     elsif id.present?
                        Account.find(id)
+                     else
+                       raise 'Email or id must be present'
                      end
-          @account.save!
+
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
           send_event
           { access_token:, refresh_token:, email: @account.email }
