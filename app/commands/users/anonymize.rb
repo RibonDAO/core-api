@@ -13,6 +13,7 @@ module Users
     def call
       with_exception_handle do
         user.update!(email: dummy_email, deleted_at: Time.zone.now)
+        user.account.update!(uid: dummy_email, deleted_at: Time.zone.now) if user.account&.present?
       end
     end
 

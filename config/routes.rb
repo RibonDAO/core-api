@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       post 'donations' => 'donations#create'
 
       get 'impression_cards/:id' => 'impression_cards#show'
+      get 'tasks' => 'tasks#index'
       
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
@@ -113,6 +114,7 @@ Rails.application.routes.draw do
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
         post 'configs' => 'users/configs#update'
+
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -134,7 +136,9 @@ Rails.application.routes.draw do
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
-        post 'pix'   => 'pix#create'        
+        post 'pix'   => 'pix#create'      
+         post 'pix/generate'   => 'pix#generate'   
+         get 'pix/:id'   => 'pix#find'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -209,6 +213,7 @@ Rails.application.routes.draw do
       resources :pools, only: [:index]
       resources :stories, only: %i[index show create update destroy]
       resources :impression_cards, only: %i[index show create update destroy]
+      resources :tasks, only: %i[index show create update destroy]
 
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
@@ -243,7 +248,6 @@ Rails.application.routes.draw do
       post 'auth/authenticate', to: 'authentication#authenticate'
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
-      
       post 'can_donate' => 'donations#can_donate'
       post 'donations' => 'donations#create'
       namespace :vouchers do

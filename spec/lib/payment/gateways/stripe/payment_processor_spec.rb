@@ -66,7 +66,7 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
     let(:operation) { :refund }
     let(:gateway) { :stripe }
 
-    let(:payload) { Refund.from(payment.external_id, gateway, operation) }
+    let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
     let(:payment) { build(:person_payment, payment_method: :credit_card, offer:) }
     let(:offer) { create(:offer, price_cents: 100, subscription: false) }
 
@@ -101,6 +101,56 @@ RSpec.describe Payment::Gateways::Stripe::PaymentProcessor do
       expect(Stripe::Subscription)
         .to have_received(:cancel)
         .with(payload.external_identifier)
+    end
+  end
+
+  describe '#generate_pix' do
+    let(:operation) { :generate_pix }
+    let(:gateway) { :stripe }
+
+    let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
+    let(:payment) do
+      build(:person_payment, payment_method: :pix, offer:, external_id: 'pi_3JVG0oJuOnwQq9Qx118cDmEr')
+    end
+    let(:offer) { create(:offer, price_cents: 100, subscription: false) }
+
+    before do
+      allow(Stripe::PaymentIntent)
+        .to receive(:confirm)
+    end
+
+    it 'calls Stripe::PaymentIntent api' do
+      payment_processor_call
+
+      expect(Stripe::PaymentIntent)
+        .to have_received(:confirm).with(
+          payment.external_id
+        )
+    end
+  end
+
+  describe '#find_payment_intent' do
+    let(:operation) { :find_payment_intent }
+    let(:gateway) { :stripe }
+
+    let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
+    let(:payment) do
+      build(:person_payment, payment_method: :pix, offer:, external_id: 'in_1LL5lOJuOnwQq9QxgwtucIBS')
+    end
+    let(:offer) { create(:offer, price_cents: 100, subscription: false) }
+
+    before do
+      allow(Stripe::PaymentIntent)
+        .to receive(:retrieve)
+    end
+
+    it 'calls Stripe::PaymentIntent api' do
+      payment_processor_call
+
+      expect(Stripe::PaymentIntent)
+        .to have_received(:retrieve).with(
+          payment.external_id
+        )
     end
   end
 end

@@ -6,6 +6,7 @@
 #  confirmation_sent_at :datetime
 #  confirmation_token   :string
 #  confirmed_at         :datetime
+#  deleted_at           :datetime
 #  image                :string
 #  name                 :string
 #  nickname             :string
