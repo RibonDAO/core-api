@@ -65,7 +65,7 @@ module Users
         Auth::Accounts::SetAccountTokens.call(
           token: params['id_token'] || params['token'],
           provider: params['provider'],
-          email: request.headers['Email']
+          current_email: request.headers['Email']
         )
       end
 
