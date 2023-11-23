@@ -18,12 +18,16 @@
 #  updated_at           :datetime         not null
 #  user_id              :bigint           not null
 #
-class Account < ApplicationRecord
-  include AuthenticatableModel
+require 'rails_helper'
 
-  belongs_to :user
+RSpec.describe Account, type: :model do
+  describe 'associations' do
+    it { is_expected.to belong_to(:user) }
+  end
 
-  validates :uid, presence: true
+  describe '.validations' do
+    subject { build(:account) }
 
-  delegate :email, to: :user
+    it { is_expected.to validate_presence_of(:uid) }
+  end
 end
