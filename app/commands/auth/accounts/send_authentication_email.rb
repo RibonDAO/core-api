@@ -5,25 +5,33 @@ module Auth
     class SendAuthenticationEmail < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :email
+      attr_reader :email, :id
 
-      def initialize(email:)
+      def initialize(email:, id:)
         @email = email
+        @id = id
       end
 
       def call
         with_exception_handle do
-          @account = Users::CreateAccount.call(data: email, provider: 'magic_link').result
+          raise 'Email or id must be present' unless email.present? || id.present?
 
+          @account = create_or_find_account
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
-
           send_event
-
-          { access_token:, refresh_token: }
+          { access_token:, refresh_token:, email: @account.email }
+        rescue StandardError => e
+          errors.add(:message, e.message)
         end
       end
 
       private
+
+      def create_or_find_account
+        return Users::CreateAccount.call(data: email, provider: 'magic_link').result if email.present?
+
+        Account.find(id)
+      end
 
       def send_event
         EventServices::SendEvent.new(user: @account.user,
