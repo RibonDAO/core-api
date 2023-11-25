@@ -263,6 +263,7 @@ Rails.application.routes.draw do
       get 'contributions/:id' => 'contributions#show'
 
       post 'configs' => 'configs#update'
+      get 'configs' => 'configs#show'
 
       get 'statistics' => 'statistics#index'
 
