@@ -114,6 +114,7 @@ Rails.application.routes.draw do
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
         post 'configs' => 'users/configs#update'
+
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -247,7 +248,6 @@ Rails.application.routes.draw do
       post 'auth/authenticate', to: 'authentication#authenticate'
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
-      
       post 'can_donate' => 'donations#can_donate'
       post 'donations' => 'donations#create'
       namespace :vouchers do

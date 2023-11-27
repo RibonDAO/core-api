@@ -6,7 +6,14 @@ describe Auth::Accounts::SetAccountTokens do
   include_context('when mocking a request') { let(:cassette_name) { 'google_api_url' } }
 
   describe 'google_oauth2' do
-    let(:command) { described_class.call(token: 'eyJhbGciOiJSUzI1NiIsIm', provider: 'google_oauth2') }
+    let(:command) do
+      described_class.call(
+        token: 'eyJhbGciOiJSUzI1NiIsIm',
+        provider: 'google_oauth2',
+        current_email: authenticatable.email
+      )
+    end
+    let(:authenticatable) { create(:account) }
 
     it 'returns successs' do
       expect(command).to be_success
@@ -21,7 +28,14 @@ describe Auth::Accounts::SetAccountTokens do
   end
 
   describe 'google_oauth2_access' do
-    let(:command) { described_class.call(token: 'eyJhbGciOiJSUzI1NiIsIm', provider: 'google_oauth2_access') }
+    let(:command) do
+      described_class.call(
+        token: 'eyJhbGciOiJSUzI1NiIsIm',
+        provider: 'google_oauth2_access',
+        current_email: authenticatable.email
+      )
+    end
+    let(:authenticatable) { create(:account) }
 
     it 'returns successs' do
       expect(command).to be_success
@@ -36,10 +50,17 @@ describe Auth::Accounts::SetAccountTokens do
   end
 
   describe 'apple' do
-    let(:command) { described_class.call(token: 'eyJhbGciOiJSUzI1NiIsIm', provider: 'apple') }
+    let(:command) do
+      described_class.call(
+        token: 'eyJhbGciOiJSUzI1NiIsIm',
+        provider: 'apple',
+        current_email: authenticatable.email
+      )
+    end
+    let(:authenticatable) { create(:account) }
 
     before do
-      allow(JWT).to receive(:decode).and_return([OpenStruct.new({ email: 'test@ribon.io' })])
+      allow(JWT).to receive(:decode).and_return([OpenStruct.new({ email: 'user1@ribon.io' })])
     end
 
     it 'returns successs' do

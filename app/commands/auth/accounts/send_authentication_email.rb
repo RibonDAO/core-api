@@ -5,24 +5,25 @@ module Auth
     class SendAuthenticationEmail < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :email, :current_email
+      attr_reader :email, :current_email, :id
 
-      def initialize(email:, current_email:)
+      def initialize(email:, current_email:, id:)
         @email = email
         @current_email = current_email
+        @id = id
       end
 
       def call
         with_exception_handle do
           check_if_user_email_matches
-          @account = Account.create_user_for_provider(email, 'magic_link')
+          create_or_find_account
 
-          @account.save!
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
-
           send_event
+          { access_token:, refresh_token:, email: @account.email }
 
-          { access_token:, refresh_token: }
+        rescue StandardError => e
+          errors.add(:message, e.message)
         end
       end
 
@@ -32,6 +33,16 @@ module Auth
         return if current_email.blank?
 
         raise 'Email does not match' if current_email != email
+      end
+
+      def create_or_find_account
+        @account = if email.present?
+                     Account.create_user_for_provider(email, 'magic_link')
+                   elsif id.present?
+                     Account.find(id)
+                   else
+                     raise 'Email or id must be present'
+                   end
       end
 
       def send_event
