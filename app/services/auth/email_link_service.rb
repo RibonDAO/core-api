@@ -2,12 +2,18 @@ module Auth
   class EmailLinkService
     attr_reader :authenticatable
 
+    SCOPE_MAPPING = {
+      BigDonor => %i[patrons app],
+      Account => [:dapp]
+    }.freeze
+
     def initialize(authenticatable:)
       @authenticatable = authenticatable
     end
 
     def find_or_create_auth_link
-      URI.join(RibonCoreApi.config[:patrons][:app][:url],
+      scope = determine_scope
+      URI.join(RibonCoreApi.config.dig(*scope)[:url],
                "/auth?authToken=#{auth_token}&id=#{authenticatable.id}").to_s
     end
 
@@ -26,8 +32,22 @@ module Auth
     end
 
     def generate_new_auth_token
+      scope = determine_scope
       RedisStore::HStore.set(key: "auth_token_#{authenticatable.class.name}_#{authenticatable.id}",
-                             value: SecureRandom.uuid, expires_in: 1.month)
+                             value: SecureRandom.uuid, expires_in: token_expiration(scope))
+    end
+
+    def determine_scope
+      SCOPE_MAPPING[authenticatable.class]
+    end
+
+    def token_expiration(scope)
+      case scope
+      when %i[patrons app]
+        1.month
+      else
+        30.minutes
+      end
     end
   end
 end

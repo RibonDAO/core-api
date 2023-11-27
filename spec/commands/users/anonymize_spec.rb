@@ -20,5 +20,18 @@ describe Users::Anonymize do
         expect { command }.to change(UserProfile, :count).by(0)
       end
     end
+
+    context 'when the user has an account' do
+      let(:account) { create(:account, user:) }
+
+      before do
+        account
+      end
+
+      it 'updates the account uid' do
+        command
+        expect(account.reload.uid).to eq('deleted_user+12@ribon.io')
+      end
+    end
   end
 end
