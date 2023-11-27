@@ -6,7 +6,6 @@
 #  confirmation_sent_at :datetime
 #  confirmation_token   :string
 #  confirmed_at         :datetime
-#  deleted_at           :datetime
 #  image                :string
 #  name                 :string
 #  nickname             :string
@@ -18,25 +17,17 @@
 #  updated_at           :datetime         not null
 #  user_id              :bigint           not null
 #
-class Account < ApplicationRecord
-  include AuthenticatableModel
+# spec/models/account_spec.rb
+require 'rails_helper'
 
-  belongs_to :user
+RSpec.describe Account, type: :model do
+  describe 'associations' do
+    it { is_expected.to belong_to(:user) }
+  end
 
-  validates :uid, presence: true
+  describe '.validations' do
+    subject { build(:account) }
 
-  delegate :email, to: :user
-
-  def self.create_user_for_provider(data, provider)
-    email = data['email'] || data
-    user = User.find_or_create_by(email:)
-
-    account = find_or_initialize_by(user:, provider:)
-    account.assign_attributes(
-      provider:,
-      uid: email
-    )
-    account.save!
-    account
+    it { is_expected.to validate_presence_of(:uid) }
   end
 end

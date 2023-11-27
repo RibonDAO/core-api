@@ -18,10 +18,12 @@ module Auth
           check_if_user_email_matches
           create_or_find_account
 
+          raise 'Email or id must be present' unless email.present? || id.present?
+
+          @account = create_or_find_account
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
           send_event
           { access_token:, refresh_token:, email: @account.email }
-
         rescue StandardError => e
           errors.add(:message, e.message)
         end
@@ -36,13 +38,9 @@ module Auth
       end
 
       def create_or_find_account
-        @account = if email.present?
-                     Account.create_user_for_provider(email, 'magic_link')
-                   elsif id.present?
-                     Account.find(id)
-                   else
-                     raise 'Email or id must be present'
-                   end
+        return Users::CreateAccount.call(data: email, provider: 'magic_link').result if email.present?
+
+        Account.find(id)
       end
 
       def send_event

@@ -11,6 +11,10 @@ module Users
         end
       end
 
+      def show
+        render json: { allowed_email_marketing: current_user.user_config&.allowed_email_marketing || false }
+      end
+
       private
 
       def user_config_params
