@@ -50,7 +50,7 @@ describe Auth::Accounts::SendAuthenticationEmail do
       end
 
       it 'returns a error message' do
-        expect(command.errors[:message]).to eq(['Email or id must be present'])
+        expect(command.errors[:message]).to eq(["Couldn't find Account without an ID"])
       end
     end
   end
