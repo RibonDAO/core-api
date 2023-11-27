@@ -12,8 +12,10 @@ module Users
 
     def call
       with_exception_handle do
-        user.update!(email: dummy_email, deleted_at: Time.zone.now)
-        user.account.update!(uid: dummy_email, deleted_at: Time.zone.now) if user.account&.present?
+        user.update!(email: dummy_email, deleted_at:)
+
+        user.user_profile&.destroy
+        user.account&.update!(uid: dummy_email, deleted_at:)
       end
     end
 
@@ -21,6 +23,10 @@ module Users
 
     def dummy_email
       "deleted_user+#{user.id}@ribon.io"
+    end
+
+    def deleted_at
+      Time.zone.now
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_21_193809) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_22_122853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -697,6 +697,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_21_193809) do
     t.index ["uid", "provider"], name: "index_user_managers_on_uid_and_provider", unique: true
   end
 
+  create_table "user_profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_profiles_on_user_id"
+  end
+
   create_table "user_tasks_statistics", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "first_completed_all_tasks_at"
@@ -798,6 +806,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_21_193809) do
   add_foreign_key "user_completed_tasks", "users"
   add_foreign_key "user_configs", "users"
   add_foreign_key "user_donation_stats", "users"
+  add_foreign_key "user_profiles", "users"
   add_foreign_key "user_tasks_statistics", "users"
   add_foreign_key "vouchers", "donations"
   add_foreign_key "vouchers", "integrations"

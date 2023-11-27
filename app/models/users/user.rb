@@ -38,6 +38,7 @@ class User < ApplicationRecord
   has_one :customer
   has_one :user_config
   has_one :account
+  has_one :user_profile
 
   has_many :legacy_user_impacts, through: :legacy_user
   has_many :legacy_contributions, through: :legacy_user
