@@ -25,6 +25,18 @@ describe Auth::Accounts::SetAccountTokens do
         expect(refresh_token).to be_a RefreshToken
         expect(user).to be_a User
       end
+
+      context 'when email and current email dont match' do
+        let(:command_wrong_email) do
+          described_class.call(token:, provider:, current_email: 'test1@email.com')
+        end
+
+        it 'returns a error message' do
+          unless provider == 'google_oauth2'
+            expect(command_wrong_email.errors[:message]).to eq(['Email does not match'])
+          end
+        end
+      end
     end
   end
 end
