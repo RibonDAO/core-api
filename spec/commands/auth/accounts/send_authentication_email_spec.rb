@@ -53,5 +53,15 @@ describe Auth::Accounts::SendAuthenticationEmail do
         expect(command.errors[:message]).to eq(["Couldn't find Account without an ID"])
       end
     end
+
+    context 'when email and current email dont match' do
+      let(:command) do
+        described_class.call(email: authenticatable.email, id: nil, current_email: 'test1@email.com')
+      end
+
+      it 'returns a error message' do
+        expect(command.errors[:message]).to eq(['Email does not match'])
+      end
+    end
   end
 end
