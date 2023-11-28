@@ -5,11 +5,12 @@ module Auth
     class SetAccountTokens < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :token, :provider
+      attr_reader :token, :provider, :current_email
 
-      def initialize(token:, provider:)
+      def initialize(token:, provider:, current_email:)
         @token = token
         @provider = provider
+        @current_email = current_email
       end
 
       def call
@@ -29,6 +30,12 @@ module Auth
 
       private
 
+      def check_if_user_email_matches(new_email)
+        return if current_email.blank?
+
+        raise 'Email does not match' if current_email != new_email
+      end
+
       def google_authenticate
         data = Request::ApiRequest.get(google_api_url)
         create_account_and_issue_tokens(data)
@@ -36,11 +43,13 @@ module Auth
 
       def google_access_authenticate
         data = Request::ApiRequest.get(google_access_api_url)
+        check_if_user_email_matches(data['email'])
         create_account_and_issue_tokens(data)
       end
 
       def apple_authenticate
         data = JWT.decode(token, nil, false).first
+        check_if_user_email_matches(data['email'])
         create_account_and_issue_tokens(data)
       end
 
