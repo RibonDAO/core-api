@@ -251,6 +251,7 @@ Rails.application.routes.draw do
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
       post 'can_donate' => 'donations#can_donate'
       post 'donations' => 'donations#create'
+      get 'profile' => 'profile#show'
       namespace :vouchers do
         post 'donations' => 'donations#create'
       end
