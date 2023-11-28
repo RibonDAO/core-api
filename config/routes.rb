@@ -67,6 +67,7 @@ Rails.application.routes.draw do
       delete 'users' => 'users#destroy'
       post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
       get 'users/subscriptions' => 'users/subscriptions#index'
+      get 'users/configs' => 'users/configs#show'
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
