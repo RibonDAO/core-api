@@ -9,21 +9,19 @@ module Users
                                   authenticate]
 
       def authenticate
-        command = Auth::Accounts::SetAccountTokens.call(token: params['id_token'] || params['token'],
-                                                        provider: params['provider'])
+        command = set_account_tokens
 
         if command.success?
-          access_token, refresh_token, user = command.result
-          create_headers({ access_token:, refresh_token: })
-
-          render json: { message: I18n.t('users.login_success'), user: }, status: :created
+          handle_successful_authentication(command)
         else
-          render_errors(command.errors)
+          handle_failed_authentication(command)
         end
       end
 
       def send_authentication_email
-        command = Auth::Accounts::SendAuthenticationEmail.call(email: params[:email], id: params[:account_id])
+        command = Auth::Accounts::SendAuthenticationEmail.call(email: params[:email],
+                                                               current_email: request.headers['Email'],
+                                                               id: params[:account_id])
 
         if command.success?
           render json: { message: I18n.t('users.email_sent'), email: command.result[:email] }, status: :ok
@@ -62,6 +60,25 @@ module Users
       end
 
       private
+
+      def set_account_tokens
+        Auth::Accounts::SetAccountTokens.call(
+          token: params['id_token'] || params['token'],
+          provider: params['provider'],
+          current_email: request.headers['Email']
+        )
+      end
+
+      def handle_successful_authentication(command)
+        access_token, refresh_token, user = command.result
+        create_headers(access_token:, refresh_token:)
+
+        render json: { message: I18n.t('users.login_success'), user: }, status: :created
+      end
+
+      def handle_failed_authentication(command)
+        render_errors(command.errors)
+      end
 
       def create_headers(tokens)
         set_header('access-token', tokens[:access_token])

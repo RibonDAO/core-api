@@ -5,15 +5,19 @@ module Auth
     class SendAuthenticationEmail < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :email, :id
+      attr_reader :email, :current_email, :id
 
-      def initialize(email:, id:)
+      def initialize(email:, current_email:, id:)
         @email = email
+        @current_email = current_email
         @id = id
       end
 
       def call
         with_exception_handle do
+          check_if_user_email_matches
+          create_or_find_account
+
           raise 'Email or id must be present' unless email.present? || id.present?
 
           @account = create_or_find_account
@@ -26,6 +30,12 @@ module Auth
       end
 
       private
+
+      def check_if_user_email_matches
+        return if current_email.blank?
+
+        raise 'Email does not match' if current_email != email
+      end
 
       def create_or_find_account
         return Users::CreateAccount.call(data: email, provider: 'magic_link').result if email.present?

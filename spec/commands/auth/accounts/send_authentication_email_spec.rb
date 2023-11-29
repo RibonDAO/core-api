@@ -4,7 +4,9 @@ require 'rails_helper'
 
 describe Auth::Accounts::SendAuthenticationEmail do
   describe '.call' do
-    let(:command) { described_class.call(email: authenticatable.email, id: nil) }
+    let(:command) do
+      described_class.call(email: authenticatable.email, id: nil, current_email: authenticatable.email)
+    end
     let(:event_service_double) { instance_double(EventServices::SendEvent) }
     let(:url) { 'https://auth.ribon.io/link' }
     let(:event) do
@@ -40,7 +42,7 @@ describe Auth::Accounts::SendAuthenticationEmail do
     end
 
     context 'when email and id is not present' do
-      let(:command) { described_class.call(email: nil, id: nil) }
+      let(:command) { described_class.call(email: nil, id: nil, current_email: nil) }
 
       it 'does not call EventServices::SendEvent call' do
         command
@@ -48,7 +50,17 @@ describe Auth::Accounts::SendAuthenticationEmail do
       end
 
       it 'returns a error message' do
-        expect(command.errors[:message]).to eq(['Email or id must be present'])
+        expect(command.errors[:message]).to eq(["Couldn't find Account without an ID"])
+      end
+    end
+
+    context 'when email and current email dont match' do
+      let(:command) do
+        described_class.call(email: authenticatable.email, id: nil, current_email: 'test1@email.com')
+      end
+
+      it 'returns a error message' do
+        expect(command.errors[:message]).to eq(['Email does not match'])
       end
     end
   end
