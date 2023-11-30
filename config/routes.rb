@@ -252,6 +252,7 @@ Rails.application.routes.draw do
       post 'can_donate' => 'donations#can_donate'
       post 'donations' => 'donations#create'
       get 'profile' => 'profile#show'
+      post 'account/send_validated_email' => 'account#send_validated_email'
       namespace :vouchers do
         post 'donations' => 'donations#create'
       end
