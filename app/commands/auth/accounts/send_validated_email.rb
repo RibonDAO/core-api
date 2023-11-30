@@ -5,10 +5,10 @@ module Auth
     class SendValidatedEmail < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :email
+      attr_reader :user
 
-      def initialize(email:)
-        @email = email
+      def initialize(user:)
+        @user = user
       end
 
       def call
@@ -22,15 +22,15 @@ module Auth
       private
 
       def send_event
-        EventServices::SendEvent.new(user: @account.user,
-                                     event: build_event(@account)).call
+        EventServices::SendEvent.new(user:,
+                                     event: build_event).call
       rescue StandardError => e
         errors.add(:message, e.message)
         Reporter.log(error: e, extra: { message: e.message })
       end
 
       def token
-        ::Jwt::Encoder.encode({ email: })
+        ::Jwt::Encoder.encode({ email: user.email })
       end
 
       def url
@@ -38,11 +38,11 @@ module Auth
                  "/validate-extra-ticket?token=#{token}").to_s
       end
 
-      def build_event(account)
+      def build_event
         OpenStruct.new({
-                         name: 'validate_email',
+                         name: 'validate_account',
                          data: {
-                           email: account.email,
+                           user:,
                            url:
                          }
                        })
