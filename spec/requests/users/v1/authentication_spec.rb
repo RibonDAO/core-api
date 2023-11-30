@@ -21,7 +21,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
 
     it 'calls the send authentication link command with right params' do
       expect(Auth::Accounts::SendAuthenticationEmail).to have_received(:call).with(
-        email: user.email, id: nil, current_email: nil
+        email: user.email, id: nil, current_email: nil, integration_id: nil
       )
     end
 
