@@ -2,10 +2,10 @@ module Users
   module V1
     class AccountController < AuthorizationController
       def send_validated_email
-        command = Auth::Accounts::SendValidatedEmail.call(email: current_user.email)
+        command = Auth::Accounts::SendValidatedEmail.call(user: current_user)
 
         if command.success?
-          render json: { message: I18n.t('users.email_sent'), email: command.result[:email] }, status: :ok
+          render json: { message: I18n.t('users.email_sent') }, status: :ok
         else
           render_errors(command.errors, :unprocessable_entity)
         end
