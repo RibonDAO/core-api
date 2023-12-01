@@ -5,18 +5,18 @@ module Auth
     class SendAuthenticationEmail < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :email, :current_email, :id
+      attr_reader :email, :current_email, :id, :integration_id
 
-      def initialize(email:, current_email:, id:)
+      def initialize(email:, current_email:, id:, integration_id:)
         @email = email
         @current_email = current_email
         @id = id
+        @integration_id = integration_id
       end
 
       def call
         with_exception_handle do
           check_if_user_email_matches
-          create_or_find_account
 
           raise 'Email or id must be present' unless email.present? || id.present?
 
@@ -43,6 +43,13 @@ module Auth
         Account.find(id)
       end
 
+      def first_access_to_integration?
+        return if integration_id.blank?
+
+        integration = Integration.find_by_id_or_unique_address(integration_id)
+        @account.user.user_last_donation_to(integration).nil?
+      end
+
       def send_event
         EventServices::SendEvent.new(user: @account.user,
                                      event: build_event(@account)).call
@@ -51,12 +58,11 @@ module Auth
         Reporter.log(error: e, extra: { message: e.message })
       end
 
-      def first_account_for_user?
-        @account.user.accounts.count == 1
-      end
-
       def url(account)
-        Auth::EmailLinkService.new(authenticatable: account).find_or_create_auth_link
+        url = Auth::EmailLinkService.new(authenticatable: account).find_or_create_auth_link
+        return "#{url}&extra_ticket=true" if first_access_to_integration?
+
+        url
       end
 
       def build_event(account)
@@ -64,7 +70,7 @@ module Auth
                          name: 'authorize_email',
                          data: {
                            email: account.email,
-                           new_user: first_account_for_user?,
+                           new_user: first_access_to_integration?,
                            url: url(account)
                          }
                        })
