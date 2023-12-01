@@ -19,9 +19,7 @@ module Users
       end
 
       def send_authentication_email
-        command = Auth::Accounts::SendAuthenticationEmail.call(email: params[:email],
-                                                               current_email: request.headers['Email'],
-                                                               id: params[:account_id])
+        command = Auth::Accounts::SendAuthenticationEmail.call(send_email_params)
 
         if command.success?
           render json: { message: I18n.t('users.email_sent'), email: command.result[:email] }, status: :ok
@@ -87,6 +85,15 @@ module Users
 
       def set_header(name, value)
         headers[name] = value.to_s
+      end
+
+      def send_email_params
+        {
+          email: params[:email],
+          current_email: request.headers['Email'],
+          id: params[:account_id],
+          integration_id: params[:integration_id]
+        }
       end
     end
   end
