@@ -40,7 +40,7 @@ module Users
 
         if command.success?
           access_token, refresh_token = command.result
-          create_headers({ access_token:, refresh_token: })
+          create_headers(access_token:, refresh_token:)
 
           render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :ok
         else
@@ -54,7 +54,7 @@ module Users
 
         if command.success?
           access_token, refresh_token = command.result
-          create_headers({ access_token:, refresh_token: })
+          create_headers(access_token:, refresh_token:)
 
           render json: { message: I18n.t('users.login_success') }, status: :ok
         else

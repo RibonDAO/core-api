@@ -18,7 +18,7 @@ module Auth
           end
 
           access_token, refresh_token = Jwt::Auth::Issuer.call(authenticatable)
-          { access_token:, refresh_token: }
+          [access_token, refresh_token]
         end
       end
     end
