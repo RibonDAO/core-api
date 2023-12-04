@@ -34,6 +34,8 @@ module Auth
       def check_if_user_email_matches
         return if current_email.blank?
 
+        email = email.presence || Account.find(id).email
+
         raise 'Email does not match' if current_email != email
       end
 
