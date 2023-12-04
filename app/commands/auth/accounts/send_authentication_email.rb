@@ -16,10 +16,9 @@ module Auth
 
       def call
         with_exception_handle do
-          check_if_user_email_matches
-
           raise 'Email or id must be present' unless email.present? || id.present?
 
+          check_if_user_email_matches
           @account = create_or_find_account
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
           send_event
@@ -34,9 +33,9 @@ module Auth
       def check_if_user_email_matches
         return if current_email.blank?
 
-        email = email.presence || Account.find(id).email
+        new_email = email || Account.find(id)&.email
 
-        raise 'Email does not match' if current_email != email
+        raise 'Email does not match' if current_email != new_email
       end
 
       def create_or_find_account
