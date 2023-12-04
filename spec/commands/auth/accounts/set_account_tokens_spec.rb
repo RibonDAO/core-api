@@ -26,6 +26,10 @@ describe Auth::Accounts::SetAccountTokens do
         expect(user).to be_a User
       end
 
+      it 'creates a profile' do
+        expect { command }.to change(UserProfile, :count).by(1)
+      end
+
       context 'when email and current email dont match' do
         let(:command_wrong_email) do
           described_class.call(token:, provider:, current_email: 'test1@email.com')

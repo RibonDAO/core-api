@@ -21,6 +21,7 @@ module Auth
           check_if_user_email_matches
           @account = create_or_find_account
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
+          Users::CreateProfile.call(data: {}, user: @account.user)
           send_event
           { access_token:, refresh_token:, user: @account.user }
         rescue StandardError => e
