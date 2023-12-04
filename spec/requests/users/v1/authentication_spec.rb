@@ -11,7 +11,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
     let(:result) do
       { access_token: 'access_token',
         refresh_token: OpenStruct.new({ token: 'refresh_token' }),
-        email: user.email }
+        user: }
     end
 
     before do
@@ -31,7 +31,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       end
 
       it 'returns the user' do
-        expect(response_body.email).to eq(user.email)
+        expect(response_body.user.id).to eq(user.id)
       end
     end
 

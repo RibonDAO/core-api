@@ -23,7 +23,7 @@ module Auth
           @account = create_or_find_account
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
           send_event
-          { access_token:, refresh_token:, email: @account.email }
+          { access_token:, refresh_token:, user: @account.user }
         rescue StandardError => e
           errors.add(:message, e.message)
         end

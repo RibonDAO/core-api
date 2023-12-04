@@ -18,16 +18,21 @@ module Users
         end
       end
 
+      # rubocop:disable Metrics/AbcSize
       def send_authentication_email
-        command = Auth::Accounts::SendAuthenticationEmail.call(send_email_params)
+        command = Auth::Accounts::SendAuthenticationEmail.call(email: params[:email],
+                                                               current_email: request.headers['Email'],
+                                                               id: params[:account_id],
+                                                               integration_id: params[:integration_id])
 
         if command.success?
-          render json: { message: I18n.t('users.email_sent'), email: command.result[:email] }, status: :ok
+          render json: { message: I18n.t('users.email_sent'), user: command.result[:user] }, status: :ok
         else
 
           render_errors(command.errors, :unprocessable_entity)
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       def authorize_from_auth_token
         authenticatable = Account.find(params[:id])
@@ -85,15 +90,6 @@ module Users
 
       def set_header(name, value)
         headers[name] = value.to_s
-      end
-
-      def send_email_params
-        {
-          email: params[:email],
-          current_email: request.headers['Email'],
-          id: params[:account_id],
-          integration_id: params[:integration_id]
-        }
       end
     end
   end
