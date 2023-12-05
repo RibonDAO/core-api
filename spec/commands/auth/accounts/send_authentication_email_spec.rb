@@ -45,6 +45,10 @@ describe Auth::Accounts::SendAuthenticationEmail do
       expect(event_service_double).to have_received(:call)
     end
 
+    it 'creates a profile' do
+      expect { command }.to change(UserProfile, :count).by(1)
+    end
+
     context 'when email and id is not present' do
       let(:command) { described_class.call(email: nil, id: nil, current_email: nil, integration_id: nil) }
 

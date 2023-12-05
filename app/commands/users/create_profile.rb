@@ -17,6 +17,7 @@ module Users
     def call
       with_exception_handle do
         @profile = UserProfile.find_or_initialize_by(user:)
+
         set_attributes
         @profile.save!
         @profile
@@ -42,6 +43,8 @@ module Users
 
     def set_attributes
       profile.name = name unless profile.name
+      return if url.blank?
+
       io = download_image
       filename = "photo#{user.id}.jpg"
       profile.photo.attach(io:, filename:) unless profile.photo.attached?
