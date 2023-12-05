@@ -2,14 +2,11 @@ module Users
   module V1
     class ProfileController < AuthorizationController
       def show
-        @profile = user.user_profile
-        render json: UserProfileBlueprint.render(@profile)
-      end
+        profile = current_user.user_profile
 
-      private
+        return if profile.nil?
 
-      def user
-        current_user
+        render json: UserProfileBlueprint.render(profile)
       end
     end
   end
