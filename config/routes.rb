@@ -67,6 +67,7 @@ Rails.application.routes.draw do
       delete 'users' => 'users#destroy'
       post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
       get 'users/subscriptions' => 'users/subscriptions#index'
+      get 'users/configs' => 'users/configs#show'
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -114,6 +115,7 @@ Rails.application.routes.draw do
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
         post 'configs' => 'users/configs#update'
+
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -238,6 +240,51 @@ Rails.application.routes.draw do
       resources :contributions, only: %i[] do
         get 'impacts' => 'contributions/impacts#index'
       end
+    end
+  end
+    
+  namespace :users do
+    namespace :v1 do
+      post 'auth/refresh_token', to: 'authentication#refresh_token'
+      post 'auth/authenticate', to: 'authentication#authenticate'
+      post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
+      post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
+      post 'can_donate' => 'donations#can_donate'
+      post 'donations' => 'donations#create'
+      get 'profile' => 'profile#show'
+      namespace :vouchers do
+        post 'donations' => 'donations#create'
+      end
+
+      namespace :impacts do
+        get 'impacts' => 'impacts#index'
+        get 'donations_count' => 'impacts#donations_count'
+        get 'app/donations_count' => 'impacts#app_donations_count'
+        get 'legacy_impacts' => 'legacy_impacts#index'
+        get 'legacy_contributions' => 'legacy_impacts#contributions'
+      end
+
+      get 'contributions' => 'contributions#index'
+      get 'labelable_contributions' => 'contributions#labelable'
+      get 'contributions/:id' => 'contributions#show'
+
+      post 'configs' => 'configs#update'
+      get 'configs' => 'configs#show'
+
+      get 'statistics' => 'statistics#index'
+
+      namespace :tasks do
+        get 'statistics' => 'statistics#index'
+        get 'statistics/streak' => 'statistics#streak'
+        get 'statistics/completed_tasks' => 'statistics#completed_tasks'
+
+        post 'upsert/completed_all_tasks' => 'upsert#first_completed_all_tasks_at'
+        post 'upsert/complete_task' => 'upsert#complete_task'
+        post 'upsert/reset_streak' => 'upsert#reset_streak'
+      end
+
+      post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
+      get 'subscriptions' => 'subscriptions#index'
     end
   end
 end
