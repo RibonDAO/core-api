@@ -12,5 +12,12 @@ FactoryBot.define do
   factory :user_profile do
     user { build(:user) }
     name { 'MyString' }
+
+    trait :with_image do
+      after(:build) do |user_profile|
+        user_profile.photo.attach(io: Rails.root.join('vendor', 'assets', 'ribon_logo.png').open,
+                                  filename: 'ribon_logo.png', content_type: 'image/png')
+      end
+    end
   end
 end
