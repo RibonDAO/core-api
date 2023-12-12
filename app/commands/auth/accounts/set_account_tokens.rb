@@ -32,6 +32,7 @@ module Auth
 
       def check_if_user_email_matches(new_email)
         return if current_email.blank?
+        return if new_email.blank?
 
         raise 'Email does not match' if current_email != new_email
       end
