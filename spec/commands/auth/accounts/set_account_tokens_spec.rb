@@ -12,8 +12,7 @@ describe Auth::Accounts::SetAccountTokens do
   %w[google_oauth2 google_oauth2_access apple].each do |provider|
     context "when #{provider}" do
       let(:token) { 'eyJhbGciOiJSUzI1NiIsIm' }
-      let(:command) { described_class.call(token:, provider:, current_email: authenticatable.email) }
-      let(:authenticatable) { create(:account) }
+      let(:command) { described_class.call(token:, provider:, current_email: 'user1@ribon.io') }
 
       it 'returns successs' do
         expect(command).to be_success
@@ -30,15 +29,23 @@ describe Auth::Accounts::SetAccountTokens do
         expect { command }.to change(UserProfile, :count).by(1)
       end
 
+      it 'creates a account' do
+        expect { command }.to change(Account, :count).by(1)
+      end
+
+      it 'updates confirmed_at' do
+        user = command.result[2]
+        account = user.accounts.last
+        expect(account.confirmed_at).not_to be_nil
+      end
+
       context 'when email and current email dont match' do
         let(:command_wrong_email) do
           described_class.call(token:, provider:, current_email: 'test1@email.com')
         end
 
         it 'returns a error message' do
-          unless provider == 'google_oauth2'
-            expect(command_wrong_email.errors[:message]).to eq(['Email does not match'])
-          end
+          expect(command_wrong_email.errors[:message]).to eq(['Email does not match'])
         end
       end
     end

@@ -15,7 +15,7 @@ module Users
         user.update!(email: dummy_email, deleted_at:)
 
         user.user_profile&.destroy
-        user.account&.update!(uid: dummy_email, deleted_at:)
+        user.accounts.update!(uid: dummy_email, deleted_at:)
       end
     end
 

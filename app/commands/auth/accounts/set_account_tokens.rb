@@ -32,13 +32,14 @@ module Auth
 
       def check_if_user_email_matches(new_email)
         return if current_email.blank?
-        return if new_email.blank?
+        return if new_email.blank? || new_email == 'undefined'
 
         raise 'Email does not match' if current_email != new_email
       end
 
       def google_authenticate
         data = Request::ApiRequest.get(google_api_url)
+        check_if_user_email_matches(data['email'])
         create_account_and_issue_tokens(data)
       end
 
@@ -56,6 +57,7 @@ module Auth
 
       def create_account_and_issue_tokens(data)
         account = Users::CreateAccount.call(data:, provider:).result
+        account.update(confirmed_at: Time.zone.now)
         Users::CreateProfile.call(data:, user: account.user)
 
         access_token, refresh_token = Jwt::Auth::Issuer.call(account)

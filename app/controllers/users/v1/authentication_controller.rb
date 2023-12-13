@@ -34,19 +34,21 @@ module Users
       end
       # rubocop:enable Metrics/AbcSize
 
+      # rubocop:disable Metrics/AbcSize
       def authorize_from_auth_token
         authenticatable = Account.find(params[:id])
         command = Auth::Accounts::AuthorizeAuthToken.call(auth_token: params[:auth_token], authenticatable:)
 
         if command.success?
+          authenticatable.update(confirmed_at: Time.zone.now)
           access_token, refresh_token = command.result
           create_headers(access_token:, refresh_token:)
-
           render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       def refresh_token
         access_token = request.headers['Authorization']&.split('Bearer ')&.last
