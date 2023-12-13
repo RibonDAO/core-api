@@ -70,6 +70,10 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       )
     end
 
+    it 'updates account confirmed_at' do
+      expect(account.reload.confirmed_at).not_to be_nil
+    end
+
     context 'when the send authentication link command succeeds' do
       it 'returns status ok' do
         expect(response).to have_http_status(:ok)
