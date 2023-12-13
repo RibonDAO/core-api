@@ -20,6 +20,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:donations) }
     it { is_expected.to have_one(:user_config) }
     it { is_expected.to have_one(:user_profile) }
+    it { is_expected.to have_many(:accounts) }
   end
 
   describe '.create' do
