@@ -56,7 +56,7 @@ module Auth
       end
 
       def create_account_and_issue_tokens(data)
-        account = Users::CreateAccount.call(data:, provider:).result
+        account = Users::CreateAccount.call(data:, provider: provider.split(/_/, 2)[0]).result
         account.update(confirmed_at: Time.zone.now)
         Users::CreateProfile.call(data:, user: account.user)
 

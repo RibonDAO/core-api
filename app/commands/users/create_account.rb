@@ -8,7 +8,7 @@ module Users
 
     def initialize(data:, provider:)
       @data = data
-      @provider = provider.split(/_/, 2)[0]
+      @provider = provider
     end
 
     def call
