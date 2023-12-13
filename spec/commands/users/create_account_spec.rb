@@ -23,7 +23,7 @@ describe Users::CreateAccount do
 
           it 'sets the provider correctly' do
             account = command.result
-            expect(account.provider).to eq(provider.split(/_/, 2)[0])
+            expect(account.provider).to eq(provider)
           end
         end
       end
