@@ -4,7 +4,7 @@ module Auth
 
     SCOPE_MAPPING = {
       BigDonor => %i[patrons app],
-      Account => [:dapp]
+      Account => %i[deeplink auth]
     }.freeze
 
     def initialize(authenticatable:)
@@ -13,8 +13,8 @@ module Auth
 
     def find_or_create_auth_link
       scope = determine_scope
-      URI.join(RibonCoreApi.config.dig(*scope)[:url],
-               "/auth?authToken=#{auth_token}&id=#{authenticatable.id}").to_s
+      URI.join(url(scope),
+               "?authToken=#{auth_token}&id=#{authenticatable.id}").to_s
     end
 
     def valid_auth_token?(token)
@@ -47,6 +47,15 @@ module Auth
         1.month
       else
         30.minutes
+      end
+    end
+
+    def url(scope)
+      case scope
+      when %i[patrons app]
+        URI.join(RibonCoreApi.config.dig(*scope)[:url], '/auth').to_s
+      else
+        RibonCoreApi.config.dig(*scope)[:url]
       end
     end
   end
