@@ -3,5 +3,5 @@ class ContributionStatsBlueprint < Blueprinter::Base
          :total_tickets, :avg_donations_per_person, :boost_amount,
          :total_increase_percentage, :total_amount_to_cause, :ribon_fee,
          :boost_new_contributors, :boost_new_patrons, :total_donors,
-         :total_contributors
+         :total_contributors, :current_increase_percentage
 end

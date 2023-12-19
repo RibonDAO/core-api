@@ -83,6 +83,10 @@ module Service
         ((boost_amount / initial_amount) * 100.0).round(2)
       end
 
+      def current_increase_percentage
+        ((boost_amount / used_amount) * 100.0).round(2)
+      end
+
       def total_amount_to_cause
         initial_amount + boost_amount - ribon_fee
       end
