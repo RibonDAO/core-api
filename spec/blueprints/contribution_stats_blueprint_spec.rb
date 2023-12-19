@@ -12,7 +12,7 @@ RSpec.describe ContributionStatsBlueprint, type: :blueprint do
       .to match_array(%w[
                         initial_amount used_amount usage_percentage remaining_amount total_tickets
                         avg_donations_per_person boost_amount
-                        total_increase_percentage total_amount_to_cause ribon_fee
+                        total_increase_percentage current_increase_percentage total_amount_to_cause ribon_fee
                         boost_new_contributors boost_new_patrons total_donors total_contributors
                       ])
   end
