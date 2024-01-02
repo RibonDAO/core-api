@@ -13,7 +13,7 @@ module Service
           initial_amount: payment.formatted_amount, used_amount: format_money(used_amount),
           usage_percentage:, remaining_amount: format_money(remaining_amount),
           total_tickets:, avg_donations_per_person:, boost_amount: format_money(boost_amount),
-          total_increase_percentage:, total_amount_to_cause: format_money(total_amount_to_cause),
+          current_increase_percentage:, total_amount_to_cause: format_money(total_amount_to_cause),
           ribon_fee: format_money(ribon_fee), boost_new_contributors:, boost_new_patrons:,
           total_donors:, total_contributors:
         }
@@ -29,7 +29,7 @@ module Service
           contribution_date: contribution.created_at.strftime('%b/%Y'),
           top_donations_non_profit:,
           total_donors:,
-          total_increase_percentage:,
+          current_increase_percentage:,
           usage_percentage:
         }
       end
@@ -77,10 +77,6 @@ module Service
         return 0 if balance&.contribution_increased_amount_cents.nil?
 
         balance.contribution_increased_amount_cents / 100.0
-      end
-
-      def total_increase_percentage
-        ((boost_amount / initial_amount) * 100.0).round(2)
       end
 
       def current_increase_percentage
