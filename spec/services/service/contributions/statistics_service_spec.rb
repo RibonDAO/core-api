@@ -24,7 +24,7 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
       expect(service.formatted_statistics.keys)
         .to match_array(%i[initial_amount used_amount usage_percentage
                            remaining_amount total_tickets avg_donations_per_person
-                           boost_amount total_increase_percentage total_amount_to_cause ribon_fee
+                           boost_amount current_increase_percentage total_amount_to_cause ribon_fee
                            boost_new_contributors boost_new_patrons total_donors total_contributors])
     end
   end
@@ -77,9 +77,9 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
     end
   end
 
-  describe '#total_increase_percentage' do
-    it 'returns the total increase percentage' do
-      expect(service.total_increase_percentage).to eq(10)
+  describe '#current_increase_percentage' do
+    it 'returns the current increase percentage' do
+      expect(service.current_increase_percentage).to eq(25)
     end
   end
 
