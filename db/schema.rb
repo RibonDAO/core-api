@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_13_115905) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_03_163630) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -638,6 +638,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_115905) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tickets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "external_id"
+    t.bigint "integration_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["integration_id"], name: "index_tickets_on_integration_id"
+    t.index ["user_id"], name: "index_tickets_on_user_id"
+  end
+
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -673,6 +683,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_115905) do
     t.datetime "updated_at", null: false
     t.bigint "last_donated_cause"
     t.index ["user_id"], name: "index_user_donation_stats_on_user_id"
+  end
+
+  create_table "user_integration_collected_tickets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "integration_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["integration_id"], name: "index_user_integration_collected_tickets_on_integration_id"
+    t.index ["user_id"], name: "index_user_integration_collected_tickets_on_user_id"
   end
 
   create_table "user_managers", force: :cascade do |t|
@@ -806,9 +825,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_115905) do
   add_foreign_key "stories", "non_profits"
   add_foreign_key "subscriptions", "integrations"
   add_foreign_key "subscriptions", "offers"
+  add_foreign_key "tickets", "integrations"
+  add_foreign_key "tickets", "users"
   add_foreign_key "user_completed_tasks", "users"
   add_foreign_key "user_configs", "users"
   add_foreign_key "user_donation_stats", "users"
+  add_foreign_key "user_integration_collected_tickets", "integrations"
+  add_foreign_key "user_integration_collected_tickets", "users"
   add_foreign_key "user_profiles", "users"
   add_foreign_key "user_tasks_statistics", "users"
   add_foreign_key "vouchers", "donations"
