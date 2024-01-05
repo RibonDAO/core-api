@@ -19,6 +19,10 @@ en:
     user_not_found: "User not found. Please logout and try again."
     integration_not_found: "Integration not found. Please reload the page and try again."
     non_profit_not_found: "NGO not found. Please reload the page and try again."
+  tickets: 
+    blocked_message: "Unable to collect now."
+    user_not_found: "User not found. Please logout and try again."
+    integration_not_found: "Integration not found. Please reload the page and try again."
   sources:
     has_source_message: "Source already created."
   manager:
