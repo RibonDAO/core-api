@@ -23,6 +23,8 @@ class User < ApplicationRecord
   after_create :set_user_tasks_statistic
 
   has_many :donations
+  has_many :tickets
+  has_many :user_integration_collected_ticket
   has_many :customers
   has_many :user_completed_tasks
   has_many :devices

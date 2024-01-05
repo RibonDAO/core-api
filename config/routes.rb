@@ -167,6 +167,11 @@ Rails.application.routes.draw do
         get 'subscription/:id' => 'subscriptions#show'
         put 'cancel_subscription' => 'subscriptions#unsubscribe'
       end
+
+      namespace :tickets do 
+        post 'can_collect_from_integration' => 'tickets#can_collect_from_integration'
+        post 'collect_from_integration' => 'tickets#collect_from_integration'
+      end
     end
   end
 
