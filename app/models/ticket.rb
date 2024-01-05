@@ -13,4 +13,6 @@
 class Ticket < ApplicationRecord
   belongs_to :user
   belongs_to :integration
+
+  has_one :utm, as: :trackable
 end
