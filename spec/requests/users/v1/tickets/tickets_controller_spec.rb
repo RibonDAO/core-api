@@ -1,16 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
+RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
   describe 'POST /can_collect_by_integration' do
-    subject(:request) { post '/api/v1/tickets/can_collect_by_integration', params: }
+    include_context 'when making a user request' do
+      subject(:request) { post '/users/v1/tickets/can_collect_by_integration', headers:, params: }
+    end
 
     context 'with right params' do
       let(:integration) { create(:integration) }
-      let(:user) { create(:user) }
+      let(:user) { account.user }
       let(:params) do
         {
-          integration_id: integration.id,
-          email: user.email
+          integration_id: integration.id
         }
       end
 
@@ -43,30 +44,30 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
       let(:integration) { create(:integration) }
       let(:params) do
         {
-          integration_id: integration.id,
-          email: 1
+          integration: integration.id
         }
       end
 
       it 'returns an error' do
         request
 
-        expect(response).to have_http_status :unprocessable_entity
+        expect(response).to have_http_status :not_found
       end
     end
   end
 
   describe 'POST /collect_by_integration' do
-    subject(:request) { post '/api/v1/tickets/collect_by_integration', params: }
+    include_context 'when making a user request' do
+      subject(:request) { post '/users/v1/tickets/collect_by_integration', headers:, params: }
+    end
 
     context 'with right params' do
       let(:integration) { create(:integration) }
-      let(:user) { create(:user) }
+      let(:user) { account.user }
       let(:platform) { 'web' }
       let(:params) do
         {
           integration_id: integration.id,
-          email: user.email,
           platform:,
           utm_source: 'utm source',
           utm_medium: 'utm medium',
@@ -115,15 +116,14 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
       let(:integration) { create(:integration) }
       let(:params) do
         {
-          integration_id: integration.id,
-          email: 1
+          integration: integration.id
         }
       end
 
       it 'returns an error' do
         request
 
-        expect(response).to have_http_status :unprocessable_entity
+        expect(response).to have_http_status :not_found
       end
     end
   end

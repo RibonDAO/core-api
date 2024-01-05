@@ -2,24 +2,17 @@
 
 require 'rails_helper'
 
-describe Tickets::CollectFromIntegration do
+describe Tickets::CanCollectByIntegration do
   describe '.call' do
-    subject(:command) { described_class.call(integration:, user:, platform: 'web') }
+    subject(:command) { described_class.call(integration:, user:) }
 
     context 'when no error occurs' do
       let(:integration) { create(:integration) }
       let(:user) { create(:user) }
 
-      it 'creates a ticket in database' do
-        expect { command }.to change(Ticket, :count).by(1)
-      end
-
-      it 'creates a UserIntegrationCollectedTicket in database' do
-        expect { command }.to change(UserIntegrationCollectedTicket, :count).by(1)
-      end
-
-      it 'returns the ticket created' do
-        expect(command.result).to eq user.tickets.last
+      it 'returns the can collect true' do
+        can_collect = command.result
+        expect(can_collect).to be_truthy
       end
     end
 
@@ -31,20 +24,9 @@ describe Tickets::CollectFromIntegration do
         create(:user_integration_collected_ticket, user:, integration:)
       end
 
-      it 'does not create the ticket on the database' do
-        expect { command }.not_to change(Ticket, :count)
-      end
-
-      it 'does not create the UserIntegrationCollectedTicket on the database' do
-        expect { command }.not_to change(UserIntegrationCollectedTicket, :count)
-      end
-
-      it 'returns an error' do
-        expect(command.errors).to be_present
-      end
-
-      it 'returns an error message' do
-        expect(command.errors[:message]).to eq ['Unable to collect now.']
+      it 'returns the can collect false' do
+        can_collect = command.result
+        expect(can_collect).to be_falsey
       end
     end
 

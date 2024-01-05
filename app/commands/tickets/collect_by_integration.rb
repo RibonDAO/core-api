@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tickets
-  class CollectFromIntegration < ApplicationCommand
+  class CollectByIntegration < ApplicationCommand
     prepend SimpleCommand
     attr_reader :integration, :user, :platform, :ticket
 
@@ -29,7 +29,7 @@ module Tickets
     end
 
     def can_collect?
-      command = CanCollectFromIntegration.call(integration:, user:)
+      command = CanCollectByIntegration.call(integration:, user:)
 
       if command.success?
         can_collect = command.result

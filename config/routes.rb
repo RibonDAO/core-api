@@ -169,8 +169,8 @@ Rails.application.routes.draw do
       end
 
       namespace :tickets do 
-        post 'can_collect_from_integration' => 'tickets#can_collect_from_integration'
-        post 'collect_from_integration' => 'tickets#collect_from_integration'
+        post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
+        post 'collect_by_integration' => 'collect#collect_by_integration'
       end
     end
   end
@@ -292,6 +292,11 @@ Rails.application.routes.draw do
 
       post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
       get 'subscriptions' => 'subscriptions#index'
+
+      namespace :tickets do 
+        post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
+        post 'collect_by_integration' => 'collect#collect_by_integration'
+      end
     end
   end
 end
