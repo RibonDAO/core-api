@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tickets
-  class CanCollectFromIntegration < ApplicationCommand
+  class CanCollectByIntegration < ApplicationCommand
     prepend SimpleCommand
     attr_reader :integration, :user
 

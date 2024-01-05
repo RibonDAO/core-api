@@ -1,9 +1,9 @@
 module Api
   module V1
     module Tickets
-      class TicketsController < ApplicationController
-        def collect_from_integration
-          command = ::Tickets::CollectFromIntegration.call(integration:, user:, platform:)
+      class CollectController < ApplicationController
+        def collect_by_integration
+          command = ::Tickets::CollectByIntegration.call(integration:, user:, platform:)
 
           if command.success?
             ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
@@ -13,8 +13,8 @@ module Api
           end
         end
 
-        def can_collect_from_integration
-          command = ::Tickets::CanCollectFromIntegration.call(integration:, user:)
+        def can_collect_by_integration
+          command = ::Tickets::CanCollectByIntegration.call(integration:, user:)
 
           if command.success?
             render json: { can_collect: command.result }, status: :ok
