@@ -1,11 +1,11 @@
 module Users
   class UnsubscribeFromEmails < ApplicationCommand
     prepend SimpleCommand
-    
+
     attr_reader :user
 
     def initialize(email:)
-      @user = User.find_by(email: email)
+      @user = User.find_by(email:)
     end
 
     def call
