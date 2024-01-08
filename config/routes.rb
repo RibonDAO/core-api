@@ -167,6 +167,11 @@ Rails.application.routes.draw do
         get 'subscription/:id' => 'subscriptions#show'
         put 'cancel_subscription' => 'subscriptions#unsubscribe'
       end
+
+      namespace :tickets do 
+        post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
+        post 'collect_by_integration' => 'collect#collect_by_integration'
+      end
     end
   end
 
@@ -287,6 +292,11 @@ Rails.application.routes.draw do
 
       post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
       get 'subscriptions' => 'subscriptions#index'
+
+      namespace :tickets do 
+        post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
+        post 'collect_by_integration' => 'collect#collect_by_integration'
+      end
     end
   end
 end

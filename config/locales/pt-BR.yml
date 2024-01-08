@@ -237,6 +237,10 @@ pt-BR:
     user_not_found: "Usuário não encontrado. Realize o logout e tente novamente."
     integration_not_found: "A Integração de origem não foi encontrada. Recarregue a página e tente novamente."
     non_profit_not_found: "A ONG para qual você tentou doar não existe. Recarregue a página e tente novamente."
+  tickets:
+    blocked_message: "Não foi possível coletar."
+    user_not_found: "Usuário não encontrado. Realize o logout e tente novamente."
+    integration_not_found: "A Integração de origem não foi encontrada. Recarregue a página e tente novamente."
   articles:
     not_published_yet: "Não publicado ainda"
   sources:
