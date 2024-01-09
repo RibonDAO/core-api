@@ -19,10 +19,9 @@ module Crm
 
         computed = mac.digest
 
-        return computed
-
         computed == signature
-      rescue StandardError
+      rescue StandardError => e
+        Rails.logger.error "Error validating signature: #{e}"
         false
       end
     end

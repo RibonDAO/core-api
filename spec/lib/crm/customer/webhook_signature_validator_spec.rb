@@ -6,37 +6,20 @@ RSpec.describe Crm::Customer::WebhookSignatureValidator do
   let(:webhook_signing_secret) { 'secret' }
 
   let(:xcio_signature) do
-    'ab36801eb297377400db0ce6bc95045564f10cd7302fd4740f4cc1d8f81d69e4'
+    'c31b27d93c80cce95c23dc4ec6e7c9e9b755ad0d8c36ab0d0691fb1c3f7b63e3'
   end
 
   let(:xcio_timestamp) { '1704720412' }
 
   let(:request_body) do
-    response = {
-      data: {
-        action_id: 42,
-        campaign_id: 23,
-        content: 'Welcome to Customer.io!',
-        customer_id: 'user-123',
-        delivery_id: 'RAECAAFwnUSneIa0ZXkmq8EdkAM==',
-        identifiers: {
-          id: 'user-123'
-        },
-        recipient: 'test@example.com',
-        subject: 'Welcome to Customer.io!'
-      },
-      event_id: '01E2EMRMM6TZ12TF9WGZN0WJQT',
-      object_type: 'email',
-      metric: 'sent',
-      timestamp: '1704720412'
-    }
+    file = Rails.root.join('spec/support/webhooks/customerio/email_unsubscribed.json').read
 
-    response.to_json
+    JSON.parse(file).to_json
   end
 
   describe '#validate' do
     it 'validates signature' do
-      expect(service.validate).to eq('teste')
+      expect(service.validate).to be_truthy
     end
   end
 end
