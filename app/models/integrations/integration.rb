@@ -25,6 +25,7 @@ class Integration < ApplicationRecord
   has_many :donations
   has_many :vouchers
   has_many :person_payment
+  has_many :user_integration_collected_tickets
 
   has_one :legacy_integration
 
