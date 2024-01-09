@@ -2,24 +2,25 @@ module Webhooks
   class CustomerioController < ApplicationController
     def events
       payload = request.body.read
+      return head :forbidden unless valid_signature?(payload)
 
-      signature = Crm::Customer::WebhookSignatureValidator.new(
+      handle_event(JSON.parse(payload, object_class: OpenStruct))
+
+      head :ok
+    rescue JSON::ParserError
+      head :unprocessable_entity
+    end
+
+    private
+
+    def valid_signature?(payload)
+      Crm::Customer::WebhookSignatureValidator.new(
         endpoint_secret,
         request.headers['X-Cio-Signature'],
         request.headers['X-Cio-Timestamp'],
         payload
       ).validate
-
-      return head :forbidden unless signature
-
-      handle_event(JSON.parse(payload, object_class: OpenStruct))
-
-      head :ok
-    rescue JSON::ParserError => e
-      head :unprocessable_entity
     end
-
-    private
 
     def endpoint_secret
       ENV.fetch('CUSTOMERIO_WEBHOOK_SECRET', nil)
@@ -37,13 +38,7 @@ module Webhooks
 
     def handle_email_event(event)
       case event.metric
-      when 'unsubscribed'
-        Users::UnsubscribeFromEmails.call(email: event.data.recipient)
-      when 'dropped'
-        Users::UnsubscribeFromEmails.call(email: event.data.recipient)
-      when 'spammed'
-        Users::UnsubscribeFromEmails.call(email: event.data.recipient)
-      when 'failed'
+      when 'unsubscribed', 'dropped', 'spammed', 'failed'
         Users::UnsubscribeFromEmails.call(email: event.data.recipient)
       else
         Rails.logger.info { "Unhandled email event: #{event.metric}" }
