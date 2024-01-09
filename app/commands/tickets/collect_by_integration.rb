@@ -24,6 +24,7 @@ module Tickets
         create_ticket
         create_user_integration_collected_ticket
       end
+      delete_user_integration_collected_ticket if integration.ticket_availability_in_minutes.present?
 
       ticket
     end
@@ -47,6 +48,15 @@ module Tickets
 
     def create_user_integration_collected_ticket
       UserIntegrationCollectedTicket.create!(integration:, user:)
+    end
+
+    def delete_user_integration_collected_ticket
+      ClearCollectedByIntegrationJob.set(wait_until:)
+                                    .perform_later(integration, user)
+    end
+
+    def wait_until
+      integration.ticket_availability_in_minutes.minutes.from_now
     end
   end
 end
