@@ -7,8 +7,14 @@ describe Tickets::CollectByIntegration do
     subject(:command) { described_class.call(integration:, user:, platform: 'web') }
 
     context 'when no error occurs' do
-      let(:integration) { create(:integration) }
+      let(:integration) { create(:integration, ticket_availability_in_minutes: nil) }
       let(:user) { create(:user) }
+      let(:command_stubbed) { class_double(Tickets::ClearCollectedByIntegrationJob) }
+
+      before do
+        allow(Tickets::ClearCollectedByIntegrationJob).to receive(:set).and_return(command_stubbed)
+        allow(command_stubbed).to receive(:perform_later)
+      end
 
       it 'creates a ticket in database' do
         expect { command }.to change(Ticket, :count).by(1)
@@ -20,6 +26,54 @@ describe Tickets::CollectByIntegration do
 
       it 'returns the ticket created' do
         expect(command.result).to eq user.tickets.last
+      end
+
+      context 'when integration has not ticket_availability_in_minutes' do
+        it 'does not call the ClearCollectedByIntegrationJob' do
+          command
+          expect(command_stubbed).not_to have_received(:perform_later).with(integration, user)
+        end
+      end
+
+      context 'when integration has ticket_availability_in_minutes' do
+        before do
+          integration.update(ticket_availability_in_minutes: 10)
+        end
+
+        it 'calls the ClearCollectedByIntegrationJob' do
+          command
+          expect(command_stubbed).to have_received(:perform_later).with(integration, user)
+        end
+
+        it 'sets the ClearCollectedByIntegrationJob' do
+          command
+          expect(Tickets::ClearCollectedByIntegrationJob).to have_received(:set)
+        end
+      end
+    end
+
+    context 'when an error occurs during the process' do
+      let(:integration) { create(:integration) }
+      let(:user) { create(:user) }
+
+      before do
+        allow(Ticket).to receive(:create!).and_raise(ActiveRecord::ConnectionNotEstablished)
+      end
+
+      it 'does not create the ticket on the database' do
+        expect { command }.not_to change(Ticket, :count)
+      end
+
+      it 'does not create the UserIntegrationCollectedTicket on the database' do
+        expect { command }.not_to change(UserIntegrationCollectedTicket, :count)
+      end
+
+      it 'returns an error' do
+        expect(command.errors).to be_present
+      end
+
+      it 'returns an error message' do
+        expect(command.errors[:message]).to eq ['ActiveRecord::ConnectionNotEstablished']
       end
     end
 
