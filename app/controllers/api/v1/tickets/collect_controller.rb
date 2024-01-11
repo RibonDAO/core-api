@@ -38,11 +38,7 @@ module Api
         end
 
         def ticket_params
-          params.permit(:integration_id, :email, :platform, :non_profit_id)
-        end
-
-        def non_profit
-          @non_profit ||= NonProfit.find ticket_params[:non_profit_id]
+          params.permit(:integration_id, :email, :platform)
         end
 
         def utm_params
