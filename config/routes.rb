@@ -295,6 +295,7 @@ Rails.application.routes.draw do
       get 'subscriptions' => 'subscriptions#index'
 
       namespace :tickets do 
+        get 'available' => 'tickets#available'
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
       end
