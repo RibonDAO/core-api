@@ -3,10 +3,9 @@
 module Tickets
   class Donate < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :non_profit, :integration, :user, :platform, :quantity
+    attr_reader :non_profit, :user, :platform, :quantity, :donations
 
-    def initialize(integration:, non_profit:, user:, platform:, quantity:)
-      @integration = integration
+    def initialize(non_profit:, user:, platform:, quantity:)
       @non_profit = non_profit
       @user = user
       @platform = platform
@@ -21,42 +20,35 @@ module Tickets
 
     private
 
-    def build_donations
-      donations = []
-      quantity.times do
-        donations << { integration_id: integration.id, non_profit_id: non_profit.id, user_id: user.id,
-                       platform:, value: ticket_value }
+    def build_donations(integrations)
+      donations_array = []
+      quantity.times do |index|
+        donations_array << { integration_id: integrations[index], non_profit_id: non_profit.id, user_id: user.id,
+                             platform:, value: ticket_value }
       end
 
-      donations
+      donations_array
     end
 
     def transact_donation
-      donations = nil
       ActiveRecord::Base.transaction do
-        destroy_tickets
-        donations = create_donations(build_donations)
+        integrations = destroy_tickets
+        @donations = create_donations(build_donations(integrations))
         update_user_donations_info
-        label_donation(donations)
+        label_donations
       end
 
       donations
     end
 
     def valid_dependencies?
-      valid_user? && valid_integration? && valid_non_profit? && allowed?
+      valid_user? && valid_non_profit? && allowed?
     end
 
     def valid_user?
       errors.add(:message, I18n.t('donations.user_not_found')) unless user
 
       user
-    end
-
-    def valid_integration?
-      errors.add(:message, I18n.t('donations.integration_not_found')) unless integration
-
-      integration
     end
 
     def valid_non_profit?
@@ -74,7 +66,8 @@ module Tickets
     end
 
     def destroy_tickets
-      Ticket.where(user:).order(created_at: :asc).limit(quantity).destroy_all
+      tickets = Ticket.where(user:).order(created_at: :asc).limit(quantity).destroy_all
+      tickets.pluck(:integration_id)
     end
 
     def update_user_donations_info
@@ -87,14 +80,14 @@ module Tickets
     end
 
     def set_user_last_donation_at
-      Donations::SetUserLastDonationAt.call(user:, date_to_set: user.donations.last.created_at)
+      Donations::SetUserLastDonationAt.call(user:, date_to_set: donations.last.created_at)
     end
 
     def set_last_donated_cause
       Donations::SetLastDonatedCause.call(user:, cause: non_profit.cause)
     end
 
-    def label_donation(donations)
+    def label_donations
       return if RibonConfig.disable_labeling
 
       donations.each do |donation|
@@ -113,7 +106,7 @@ module Tickets
     def pool_balance?
       return true if pool&.pool_balance.blank?
 
-      pool.pool_balance.balance_for_donation?
+      pool.pool_balance.balance_for_donation?(quantity)
     end
   end
 end
