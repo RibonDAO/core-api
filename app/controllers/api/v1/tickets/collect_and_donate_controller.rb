@@ -1,23 +1,12 @@
 module Api
   module V1
     module Tickets
-      class CollectController < ApplicationController
-        def collect_by_integration
-          command = ::Tickets::CollectByIntegration.call(integration:, user:, platform:)
-
+      class CollectAndDonateController < ApplicationController
+        def collect_and_donate_by_integration
+          command = ::Tickets::CollectAndDonateByIntegration.call(integration:, user:, platform:, non_profit:)
           if command.success?
             ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
-            render json: { ticket: command.result }, status: :ok
-          else
-            render_errors(command.errors)
-          end
-        end
-
-        def can_collect_by_integration
-          command = ::Tickets::CanCollectByIntegration.call(integration:, user:)
-
-          if command.success?
-            render json: { can_collect: command.result }, status: :ok
+            render json: { donation: command.result }, status: :ok
           else
             render_errors(command.errors)
           end

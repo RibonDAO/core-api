@@ -171,7 +171,7 @@ Rails.application.routes.draw do
       namespace :tickets do 
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
-        post 'first_donation' => 'collect#collect_and_donate_by_integration'
+        post 'collect_and_donate_by_integration' => 'collect_and_donate#collect_and_donate_by_integration'
       end
     end
   end
