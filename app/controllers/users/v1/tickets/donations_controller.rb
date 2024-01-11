@@ -13,10 +13,6 @@ module Users
           end
         end
 
-        def available_tickets?
-          current_user.tickets.count >= quantity
-        end
-
         private
 
         def integration

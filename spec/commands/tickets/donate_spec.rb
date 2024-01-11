@@ -48,11 +48,11 @@ describe Tickets::Donate do
       it 'calls the ticket_labeling_instance label donation function' do
         command
 
-        expect(ticket_labeling_instance).to have_received(:label_donation)
+        expect(ticket_labeling_instance).to have_received(:label_donation).twice
       end
 
       it 'returns the donation created' do
-        expect(command.result).to eq user.donations.order(created_at: :desc).limit(2)
+        expect(command.result).to match_array(user.donations.order(created_at: :desc).limit(2))
       end
     end
 

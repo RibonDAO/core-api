@@ -3,7 +3,7 @@
 module Tickets
   class Donate < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :non_profit, :integration, :donation, :user, :platform, :quantity
+    attr_reader :non_profit, :integration, :user, :platform, :quantity
 
     def initialize(integration:, non_profit:, user:, platform:, quantity:)
       @integration = integration
@@ -25,22 +25,22 @@ module Tickets
       donations = []
       quantity.times do
         donations << { integration_id: integration.id, non_profit_id: non_profit.id, user_id: user.id,
-                       platform: }
+                       platform:, value: ticket_value }
       end
 
       donations
     end
 
     def transact_donation
-      donations = build_donations
-
+      donations = nil
       ActiveRecord::Base.transaction do
         destroy_tickets
-        create_donations(donations)
+        donations = create_donations(build_donations)
         update_user_donations_info
+        label_donation(donations)
       end
 
-      Donation.where(user_id: donations.pluck(:user_id))
+      donations
     end
 
     def valid_dependencies?
@@ -80,13 +80,10 @@ module Tickets
     def update_user_donations_info
       set_user_last_donation_at
       set_last_donated_cause
-      label_donation
     end
 
     def create_donations(donations)
-      # rubocop:disable Rails/SkipsModelValidations
-      Donation.insert_all(donations)
-      # rubocop:enable Rails/SkipsModelValidations
+      Donation.create!(donations)
     end
 
     def set_user_last_donation_at
@@ -97,10 +94,12 @@ module Tickets
       Donations::SetLastDonatedCause.call(user:, cause: non_profit.cause)
     end
 
-    def label_donation
+    def label_donation(donations)
       return if RibonConfig.disable_labeling
 
-      Service::Contributions::TicketLabelingService.new(donation:).label_donation
+      donations.each do |donation|
+        Service::Contributions::TicketLabelingService.new(donation:).label_donation
+      end
     end
 
     def ticket_value
