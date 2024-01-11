@@ -4,7 +4,6 @@ module Users
       class DonationsController < AuthorizationController
         def donate
           command = ::Tickets::Donate.call(non_profit:, user:, platform:, quantity:)
-
           if command.success?
             donations = command.result
             donations.each do |donation|

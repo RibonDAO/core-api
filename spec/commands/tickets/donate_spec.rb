@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe Tickets::Donate do
   describe '.call' do
-    subject(:command) { described_class.call(integration:, non_profit:, user:, platform: 'web', quantity: 2) }
+    subject(:command) { described_class.call(non_profit:, user:, platform: 'web', quantity: 2) }
 
     include_context('when mocking a request') { let(:cassette_name) { 'sendgrid_email_api' } }
 
