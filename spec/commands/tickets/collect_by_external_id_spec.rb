@@ -82,8 +82,8 @@ describe Tickets::CollectByExternalId do
         expect { command }.not_to change(Ticket, :count)
       end
 
-      it 'does not create the Voucher on the database' do
-        expect { command }.not_to change(Ticket, :count)
+      it 'does not create the voucher on the database' do
+        expect { command }.not_to change(Voucher, :count)
       end
 
       it 'returns an error' do

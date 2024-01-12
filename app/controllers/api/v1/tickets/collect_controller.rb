@@ -14,7 +14,6 @@ module Api
         end
 
         def collect_by_external_id
-          
           command = ::Tickets::CollectByExternalId.call(integration:, user:, platform:,
                                                         external_ids: ticket_params[:external_ids])
 

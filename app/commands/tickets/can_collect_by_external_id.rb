@@ -18,11 +18,7 @@ module Tickets
     private
 
     def valid_external_id?
-      if Voucher.exists?(external_id: external_id)
-        false
-      else
-        true
-      end
+      !Voucher.exists?(external_id:)
     end
   end
 end

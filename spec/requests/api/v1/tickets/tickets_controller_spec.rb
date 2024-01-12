@@ -141,7 +141,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
           integration_id: integration.id,
           email: user.email,
           platform:,
-          external_ids: external_ids,
+          external_ids:,
           utm_source: 'utm source',
           utm_medium: 'utm medium',
           utm_campaign: 'utm campaign'
@@ -164,7 +164,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
           integration:,
           user:,
           platform:,
-          external_ids: 
+          external_ids:
         )
       end
 
@@ -192,7 +192,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
         {
           integration_id: integration.id,
           email: 1,
-          external_ids: ["13"]
+          external_ids: ['13']
         }
       end
 
