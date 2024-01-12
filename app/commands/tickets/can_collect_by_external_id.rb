@@ -6,7 +6,7 @@ module Tickets
     attr_reader :external_id
 
     def initialize(external_id:)
-      @external_ids = external_id
+      @external_id = external_id
     end
 
     def call

@@ -4,9 +4,9 @@ require 'rails_helper'
 
 describe Tickets::CanCollectByExternalId do
   describe '.call' do
-    subject(:command) { described_class.call(external_ids:) }
+    subject(:command) { described_class.call(external_id:) }
 
-    let(:external_ids) { ['13'] }
+    let(:external_id) { ['13'] }
 
     context 'when no error occurs' do
       it 'returns the can collect true' do
