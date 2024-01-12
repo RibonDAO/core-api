@@ -29,7 +29,7 @@ module Tickets
     end
 
     def valid_dependencies?
-      valid_user? && valid_non_profit? && allowed?
+      valid_user? && valid_non_profit?
     end
 
     def valid_user?
@@ -44,26 +44,13 @@ module Tickets
       non_profit
     end
 
-    def allowed?
-      command = CanCollectByIntegration.call(integration:, user:)
-      if command.success?
-        can_collect = command.result
-        errors.add(:message, I18n.t('tickets.blocked_message')) unless can_collect
-        can_collect
-      else
-        errors.add_multiple_errors(command.errors)
-        false
-      end
-    end
-
     def collect_ticket
       command = CollectByIntegration.call(integration:, user:, platform:)
 
       if command.success?
         donate_ticket
-
       else
-        errors.add_multiple_errors(command.errors)
+        errors.add(:message, I18n.t('tickets.blocked_message'))
       end
     end
 
@@ -72,7 +59,6 @@ module Tickets
 
       if command.success?
         command.result
-
       else
         errors.add_multiple_errors(command.errors)
       end
