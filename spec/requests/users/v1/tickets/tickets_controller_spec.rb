@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
+RSpec.describe 'Users::V1::Tickets', type: :request do
   describe 'POST /can_collect_by_integration' do
     include_context 'when making a user request' do
       subject(:request) { post '/users/v1/tickets/can_collect_by_integration', headers:, params: }
