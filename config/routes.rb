@@ -171,6 +171,8 @@ Rails.application.routes.draw do
       namespace :tickets do 
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
+                post 'can_collect_by_external_id' => 'collect#can_collect_by_external_id'
+        post 'collect_by_external_id' => 'collect#collect_by_external_id'
       end
     end
   end
@@ -296,6 +298,8 @@ Rails.application.routes.draw do
       namespace :tickets do 
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
+         post 'can_collect_by_external_id' => 'collect#can_collect_by_external_id'
+        post 'collect_by_external_id' => 'collect#collect_by_external_id'
       end
     end
   end
