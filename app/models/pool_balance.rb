@@ -13,7 +13,7 @@ class PoolBalance < ApplicationRecord
 
   validates :balance, presence: true
 
-  def balance_for_donation?
-    balance > RibonConfig.default_ticket_value / 100
+  def balance_for_donation?(quantity: 1)
+    balance > (RibonConfig.default_ticket_value * quantity) / 100
   end
 end

@@ -297,6 +297,7 @@ Rails.application.routes.draw do
       namespace :tickets do 
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
+        post 'donate' => 'donations#donate'
       end
     end
   end
