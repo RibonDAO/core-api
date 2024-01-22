@@ -58,7 +58,7 @@ module Tickets
       command = Donate.call(non_profit:, user:, platform:, quantity: 1)
 
       if command.success?
-        command.result
+        command.result.first
       else
         errors.add_multiple_errors(command.errors)
       end

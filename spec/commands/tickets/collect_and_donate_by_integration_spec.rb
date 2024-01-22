@@ -33,7 +33,7 @@ describe Tickets::CollectAndDonateByIntegration do
       end
 
       it 'returns the donation created' do
-        expect(command.result).to match_array(user.donations.order(created_at: :desc).first)
+        expect(command.result).to eq user.donations.last
       end
     end
 
