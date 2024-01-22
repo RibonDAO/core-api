@@ -1,0 +1,19 @@
+{
+  "data": {
+    "action_id": 73,
+    "broadcast_id": 52,
+    "customer_id": "0200102",
+    "identifiers": {
+        "id": "0200102"
+    },
+    "delivery_id": "EFBAXE4xnjV0vtJso_6xdRAas135",
+    "failure_message": "Customer is unsubscribed",
+    "recipient": "test@example.com",
+    "subject": "Book for vacation now!"
+  },
+  "event_id": "31ASDG7SU6JN78DAND9GDC",
+  "trigger_event_id": "21E4C3CT6YDC7Y4N7FE1GWWABC",
+  "object_type": "email",
+  "metric": "failed",
+  "timestamp": 1234567890
+}

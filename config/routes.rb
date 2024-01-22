@@ -190,6 +190,7 @@ Rails.application.routes.draw do
     post 'stripe' => 'stripe#events'
     post 'stripe_global' => 'stripe_global#events'
     post 'alchemy' => 'alchemy#events'
+    post 'customerio' => 'customerio#events'
   end
 
   namespace :managers do
