@@ -34,11 +34,23 @@ module Tickets
       ActiveRecord::Base.transaction do
         integrations = destroy_tickets
         @donations = create_donations(build_donations(integrations))
+        associate_integration_vouchers
         update_user_donations_info
         label_donations
       end
 
       donations
+    end
+
+    def associate_integration_vouchers
+      external_ids = Ticket.where.not(external_id: nil)
+                           .where(user:).order(created_at: :asc)
+                           .limit(quantity).pluck(:external_id)
+
+      external_ids.each_with_index do |external_id, index|
+        external_id && Voucher.where(external_id:)
+                              .first&.update!(donation: donations[index])
+      end
     end
 
     def valid_dependencies?
