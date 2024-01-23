@@ -172,6 +172,7 @@ Rails.application.routes.draw do
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_and_donate_by_integration' => 'collect_and_donate#collect_and_donate_by_integration'
+        post 'collect_by_external_id' => 'collect#collect_by_external_id'
       end
     end
   end
@@ -299,6 +300,7 @@ Rails.application.routes.draw do
         get 'available' => 'tickets#available'
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
+        post 'collect_by_external_id' => 'collect#collect_by_external_id'
         post 'donate' => 'donations#donate'
       end
     end
