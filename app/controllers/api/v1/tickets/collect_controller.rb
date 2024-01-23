@@ -13,8 +13,30 @@ module Api
           end
         end
 
+        def collect_by_external_id
+          command = ::Tickets::CollectByExternalId.call(integration:, user:, platform:,
+                                                        external_ids: ticket_params[:external_ids])
+
+          if command.success?
+            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            render json: { ticket: command.result }, status: :ok
+          else
+            render_errors(command.errors)
+          end
+        end
+
         def can_collect_by_integration
           command = ::Tickets::CanCollectByIntegration.call(integration:, user:)
+
+          if command.success?
+            render json: { can_collect: command.result }, status: :ok
+          else
+            render_errors(command.errors)
+          end
+        end
+
+        def can_collect_by_external_id
+          command = ::Tickets::CanCollectByExternalId.call(external_id: ticket_params[:external_ids])
 
           if command.success?
             render json: { can_collect: command.result }, status: :ok
@@ -38,7 +60,7 @@ module Api
         end
 
         def ticket_params
-          params.permit(:integration_id, :email, :platform)
+          params.permit(:integration_id, :email, :platform, external_ids: [])
         end
 
         def utm_params
