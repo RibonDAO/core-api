@@ -1,74 +1,37 @@
 require 'rails_helper'
 
-RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
-  describe 'POST /can_collect_by_integration' do
+RSpec.describe 'Users::V1::Tickets::Tickets', type: :request do
+  describe 'get /tickets/available' do
     include_context 'when making a user request' do
-      subject(:request) { post '/users/v1/tickets/can_collect_by_integration', headers:, params: }
+      subject(:request) { get '/users/v1/tickets/available', headers: }
     end
 
-    context 'with right params' do
-      let(:integration) { create(:integration) }
-      let(:user) { account.user }
-      let(:params) do
-        {
-          integration_id: integration.id
-        }
-      end
-
-      before do
-        allow(Tickets::CanCollectByIntegration).to receive(:call)
-          .and_return(command_double(klass: Tickets::CanCollectByIntegration))
-        allow(Tickets::CollectByIntegration).to receive(:call)
-          .and_return(command_double(klass: Tickets::CollectByIntegration))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
-      end
-
-      it 'calls the CanCollectByIntegration command with right params' do
-        request
-
-        expect(Tickets::CanCollectByIntegration).to have_received(:call).with(
-          integration:,
-          user:
-        )
-      end
-
-      it 'returns true' do
-        request
-
-        expect(response.body['can_collect']).to be_truthy
-      end
+    before do
+      create_list(:ticket, 10, user: account.user)
     end
 
-    context 'with wrong params' do
-      let(:integration) { create(:integration) }
-      let(:params) do
-        {
-          integration: integration.id
-        }
-      end
+    it 'returns the quantity of tickets available for that user' do
+      request
 
-      it 'returns an error' do
-        request
-
-        expect(response).to have_http_status :not_found
-      end
+      expect(response.body).to eq({ tickets: 10 }.to_json)
     end
   end
 
-  describe 'POST /collect_by_integration' do
+  describe 'POST /collect_by_external_id' do
     include_context 'when making a user request' do
-      subject(:request) { post '/users/v1/tickets/collect_by_integration', headers:, params: }
+      subject(:request) { post '/users/v1/tickets/collect_by_external_id', headers:, params: }
     end
 
     context 'with right params' do
       let(:integration) { create(:integration) }
       let(:user) { account.user }
       let(:platform) { 'web' }
+      let(:external_ids) { ['13'] }
       let(:params) do
         {
           integration_id: integration.id,
           platform:,
+          external_ids:,
           utm_source: 'utm source',
           utm_medium: 'utm medium',
           utm_campaign: 'utm campaign'
@@ -76,21 +39,22 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
       end
 
       before do
-        allow(Tickets::CanCollectByIntegration).to receive(:call)
-          .and_return(command_double(klass: Tickets::CanCollectByIntegration))
-        allow(Tickets::CollectByIntegration).to receive(:call)
-          .and_return(command_double(klass: Tickets::CollectByIntegration))
+        allow(Tickets::CanCollectByExternalId).to receive(:call)
+          .and_return(command_double(klass: Tickets::CanCollectByExternalId))
+        allow(Tickets::CollectByExternalId).to receive(:call)
+          .and_return(command_double(klass: Tickets::CollectByExternalId))
         allow(Tracking::AddUtm).to receive(:call)
           .and_return(command_double(klass: Tracking::AddUtm))
       end
 
-      it 'calls the CollectByIntegration command with right params' do
+      it 'calls the CollectByExternalId command with right params' do
         request
 
-        expect(Tickets::CollectByIntegration).to have_received(:call).with(
+        expect(Tickets::CollectByExternalId).to have_received(:call).with(
           integration:,
           user:,
-          platform:
+          platform:,
+          external_ids:
         )
       end
 
