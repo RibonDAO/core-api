@@ -32,9 +32,11 @@ module Tickets
 
     def transact_donation
       ActiveRecord::Base.transaction do
-        integrations = destroy_tickets
+        integrations = destroy_tickets[:integrations]
+        external_ids = destroy_tickets[:external_ids]
+
         @donations = create_donations(build_donations(integrations))
-        associate_integration_vouchers
+        associate_integration_vouchers(external_ids)
         update_user_donations_info
         label_donations
       end
@@ -42,14 +44,10 @@ module Tickets
       donations
     end
 
-    def associate_integration_vouchers
-      external_ids = Ticket.where.not(external_id: nil)
-                           .where(user:).order(created_at: :asc)
-                           .limit(quantity).pluck(:external_id)
-
+    def associate_integration_vouchers(external_ids)
+      vouchers_with_external_ids = Voucher.where(external_id: external_ids)
       external_ids.each_with_index do |external_id, index|
-        external_id && Voucher.where(external_id:)
-                              .first&.update!(donation: donations[index])
+        external_id && vouchers_with_external_ids[index]&.update!(donation: donations[index])
       end
     end
 
@@ -79,7 +77,10 @@ module Tickets
 
     def destroy_tickets
       tickets = Ticket.where(user:).order(created_at: :asc).limit(quantity).destroy_all
-      tickets.pluck(:integration_id)
+      integrations = tickets.pluck(:integration_id)
+      external_ids = tickets.pluck(:external_id)
+
+      { integrations:, external_ids: external_ids.compact }
     end
 
     def update_user_donations_info
