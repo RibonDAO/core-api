@@ -34,7 +34,7 @@ module Auth
       end
 
       def url
-        URI.join(RibonCoreApi.config[:deeplink][:validate_extra_ticket],
+        URI.join(RibonCoreApi.config[:deeplink][:validate_extra_ticket][:url],
                  "?extra_ticket_token=#{token}").to_s
       end
 
