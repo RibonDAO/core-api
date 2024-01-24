@@ -46,8 +46,8 @@ module Tickets
 
     def associate_integration_vouchers(external_ids)
       vouchers_with_external_ids = Voucher.where(external_id: external_ids)
-      external_ids.each_with_index do |external_id, index|
-        external_id && vouchers_with_external_ids[index]&.update!(donation: donations[index])
+      vouchers_with_external_ids.each_with_index do |voucher, index|
+        voucher&.update!(donation: donations[index])
       end
     end
 
