@@ -32,8 +32,9 @@ module Tickets
 
     def transact_donation
       ActiveRecord::Base.transaction do
-        integrations = destroy_tickets[:integrations]
-        external_ids = destroy_tickets[:external_ids]
+        destroy_result = destroy_tickets
+        integrations = destroy_result[:integrations]
+        external_ids = destroy_result[:external_ids]
 
         @donations = create_donations(build_donations(integrations))
         associate_integration_vouchers(external_ids)
