@@ -10,18 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_05_115034) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_23_170158) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "accounts", force: :cascade do |t|
-    t.datetime "confirmation_sent_at"
-    t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.string "image"
-    t.string "name"
-    t.string "nickname"
     t.string "provider"
     t.datetime "remember_created_at"
     t.json "tokens"
