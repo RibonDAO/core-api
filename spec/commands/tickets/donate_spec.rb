@@ -51,6 +51,15 @@ describe Tickets::Donate do
         expect(ticket_labeling_instance).to have_received(:label_donation).twice
       end
 
+      it 'calls the associate_integration_vouchers method' do
+        command_instance = described_class.new(non_profit:, user:, platform: 'app', quantity: 2)
+        allow(command_instance).to receive(:associate_integration_vouchers)
+
+        command_instance.call
+
+        expect(command_instance).to have_received(:associate_integration_vouchers)
+      end
+
       it 'returns the donation created' do
         expect(command.result).to match_array(user.donations.order(created_at: :desc).limit(2))
       end
