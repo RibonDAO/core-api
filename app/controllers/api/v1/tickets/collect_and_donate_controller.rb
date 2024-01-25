@@ -17,7 +17,7 @@ module Api
                                                                  external_ids:)
           if command.success?
             ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
-            render json: { donations: command.result }, status: :ok
+            render json: { donation: command.result }, status: :ok
           else
             render_errors(command.errors)
           end
@@ -37,8 +37,12 @@ module Api
           @platform ||= ticket_params[:platform]
         end
 
+        def external_ids
+          @external_ids ||= ticket_params[:external_ids]
+        end
+
         def ticket_params
-          params.permit(:integration_id, :email, :platform, :non_profit_id)
+          params.permit(:integration_id, :email, :platform, :non_profit_id, external_ids: [])
         end
 
         def non_profit
