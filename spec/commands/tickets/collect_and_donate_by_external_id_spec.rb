@@ -33,6 +33,44 @@ describe Tickets::CollectAndDonateByExternalId do
         expect { command }.to change(Donation, :count).by(1)
       end
 
+      it 'creates 2 tickets in database but destroy one' do
+        expect { command }.to change(Ticket, :count).by(1)
+      end
+
+      it 'returns the donation created' do
+        expect(command.result).to eq user.donations.last
+      end
+    end
+
+    context 'when an external_id was already used' do
+      let(:integration) { create(:integration) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:user) { create(:user) }
+      let(:command_stubbed) { class_double(Tickets::ClearCollectedByIntegrationJob) }
+      let(:external_ids) { %w[122343 2323232] }
+
+      before do
+        create(:chain)
+        create(:ribon_config, default_ticket_value: 100)
+        allow(Tickets::ClearCollectedByIntegrationJob).to receive(:set).and_return(command_stubbed)
+        allow(command_stubbed).to receive(:perform_later)
+        create(:voucher, external_id: '122343')
+      end
+
+      it 'creates a donation in database' do
+        expect { command }.to change(Donation, :count).by(1)
+      end
+
+      it 'sets the voucher with the donation' do
+        command
+        voucher = Voucher.where(external_id: '2323232').last
+        expect(voucher.donation).to eq(user.donations.last)
+      end
+
+      it 'creates 1 ticket in database but destroy one' do
+        expect { command }.to change(Ticket, :count).by(0)
+      end
+
       it 'returns the donation created' do
         expect(command.result).to eq user.donations.last
       end
