@@ -18,7 +18,15 @@ class RuleGroup
   end
 
   def total_payments_from(contributions)
-    contributions.sum { |contribution| contribution.contribution_balance.tickets_balance_cents }
+    tickets_contributions_balance = contributions.sum do |contribution|
+      contribution.contribution_balance.tickets_balance_cents
+    end
+    fees_contributions_balance = contributions.sum do |contribution|
+      contribution.contribution_balance.fees_balance_cents
+    end
+    return fees_contributions_balance if tickets_contributions_balance < donation.value
+
+    tickets_contributions_balance
   end
 
   protected
