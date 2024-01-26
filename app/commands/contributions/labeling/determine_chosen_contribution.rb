@@ -27,6 +27,7 @@ module Contributions
                                                 .with_paid_status
                                                 .confirmed_on_blockchain_before(donation.created_at)
                                                 .with_tickets_balance_higher_than(donation.value)
+                                                .where(receiver: donation.non_profit.cause)
       end
 
       def contributions_with_fees_balance
@@ -34,6 +35,7 @@ module Contributions
                                              .with_paid_status
                                              .confirmed_on_blockchain_before(donation.created_at)
                                              .with_fees_balance_higher_than(donation.value)
+                                             .where(receiver: donation.non_profit.cause)
       end
 
       def apply_rules(input, rules)
