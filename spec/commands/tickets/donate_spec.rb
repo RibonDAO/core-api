@@ -121,5 +121,29 @@ describe Tickets::Donate do
         expect(command.errors[:message]).to eq ['User not found. Please logout and try again.']
       end
     end
+
+    context 'when tickets have external ids' do
+      let(:user) { create(:user) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:donation) { create(:donation) }
+      let(:integration) { create(:integration) }
+
+      before do
+        create(:ribon_config, default_ticket_value: 100)
+        create(:ticket, user:, integration:, external_id: 'external_id1')
+        create(:ticket, user:, integration:, external_id: 'external_id2')
+        create(:voucher, external_id: 'external_id1', donation: nil)
+        create(:voucher, external_id: 'external_id2', donation: nil)
+      end
+
+      it 'updates vouchers donations' do
+        command
+
+        donations = Donation.last(2)
+        vouchers = Voucher.where(external_id: %w[external_id1 external_id2])
+
+        expect(vouchers.pluck(:donation_id)).to match_array([donations.first.id, donations.second.id])
+      end
+    end
   end
 end
