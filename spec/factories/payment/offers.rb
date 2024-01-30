@@ -7,6 +7,7 @@ FactoryBot.define do
     title { 'Super oferta de fim de ano' }
     position_order { 1 }
     offer_gateway { build(:offer_gateway) }
+    category { 'direct_donation' }
 
     trait :with_stripe_global do
       offer_gateway { build(:offer_gateway, gateway: 'stripe_global') }

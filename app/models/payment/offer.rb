@@ -4,6 +4,7 @@
 #
 #  id             :bigint           not null, primary key
 #  active         :boolean
+#  category       :integer          default("direct_donation")
 #  currency       :integer
 #  position_order :integer
 #  price_cents    :integer
@@ -24,6 +25,11 @@ class Offer < ApplicationRecord
   enum currency: {
     brl: 0,
     usd: 1
+  }
+
+  enum category: {
+    direct_donation: 0,
+    club: 1
   }
 
   def price_value
