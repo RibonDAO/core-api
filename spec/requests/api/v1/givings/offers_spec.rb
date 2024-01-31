@@ -24,7 +24,7 @@ RSpec.describe 'Api::V1::Offers', type: :request do
 
       expect(response_json.first.keys)
         .to match_array %w[active created_at currency id position_order
-                           price price_cents price_value subscription title updated_at gateway]
+                           price price_cents price_value subscription title updated_at gateway category]
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe 'Api::V1::Offers', type: :request do
 
       expect(response_json.first.keys)
         .to match_array %w[active created_at currency id position_order external_id gateway
-                           price price_cents price_value subscription title updated_at]
+                           price price_cents price_value subscription title updated_at category]
     end
   end
 
@@ -60,7 +60,7 @@ RSpec.describe 'Api::V1::Offers', type: :request do
       request
 
       expect_response_to_have_keys(%w[created_at id updated_at currency subscription price price_cents price_value
-                                      active title position_order external_id gateway])
+                                      active title position_order external_id gateway category])
     end
   end
 
@@ -89,7 +89,7 @@ RSpec.describe 'Api::V1::Offers', type: :request do
         request
 
         expect_response_to_have_keys(%w[created_at id updated_at currency subscription price price_cents
-                                        price_value active title position_order external_id gateway])
+                                        price_value active title position_order external_id gateway category])
       end
     end
   end
