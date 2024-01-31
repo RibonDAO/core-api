@@ -4,7 +4,7 @@
 #
 #  id             :bigint           not null, primary key
 #  active         :boolean
-#  category       :integer          default("direct_donation")
+#  category       :integer          default("direct_contribution")
 #  currency       :integer
 #  position_order :integer
 #  price_cents    :integer
@@ -28,7 +28,7 @@ class Offer < ApplicationRecord
   }
 
   enum category: {
-    direct_donation: 0,
+    direct_contribution: 0,
     club: 1
   }
 
