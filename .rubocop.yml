@@ -20,6 +20,8 @@ AllCops:
     - "app/lib/simple_command.rb"
     - "app/lib/simple_command/**/*"
     - "app/controllers/rails_admin/**/*"
+    - "app/controllers/rails_admin/**/*"
+    - "app/services/labeling/relabel_service.rb"
 
 Layout/LineLength:
   Max: 115

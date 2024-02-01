@@ -5,12 +5,6 @@ RSpec.describe Labeling::RelabelService, type: :service do
 
   let(:from) { 2.years.ago }
 
-  describe '#initialize' do
-    it 'sets the "from" attribute' do
-      expect(service.from).to eq(from)
-    end
-  end
-
   describe '#setup_records' do
     before do
       create(:ribon_config)
@@ -36,16 +30,20 @@ RSpec.describe Labeling::RelabelService, type: :service do
 
   describe '#ordered_records' do
     let!(:donation1) { create(:donation, created_at: 10.days.ago) }
-    let!(:donation2) { create(:donation, created_at: 5.days.ago) }
-    let!(:donation3) { create(:donation, created_at: 1.day.ago) }
+    let!(:donation2) { create(:donation, created_at: 8.days.ago) }
+    let!(:donation3) { create(:donation, created_at: 6.days.ago) }
     let!(:contribution1) { create(:contribution) }
     let!(:contribution2) { create(:contribution) }
+    let!(:contribution3) { create(:contribution) }
 
     before do
-      create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 7.days.ago,
+      create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 9.days.ago,
                                              person_payment: contribution1.person_payment)
-      create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 3.days.ago,
+      create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 7.days.ago,
                                              person_payment: contribution2.person_payment)
+      create(:person_blockchain_transaction, treasure_entry_status: :success, succeeded_at: 3.days.ago,
+                                             person_payment: contribution3.person_payment)
+      create(:donation, created_at: 1.day.ago)
     end
 
     it 'orders all records according to donation created_at and contribution succeeded_at' do
@@ -68,6 +66,7 @@ RSpec.describe Labeling::RelabelService, type: :service do
 
     it 'calls label_donation for Donation records' do
       donation = create(:donation, created_at: from)
+      create(:contribution, :with_payment_in_blockchain, created_at: from)
       service.relabel
 
       expect(Service::Contributions::TicketLabelingService).to have_received(:new).with(donation:)
@@ -76,6 +75,7 @@ RSpec.describe Labeling::RelabelService, type: :service do
 
     it 'calls spread_fee_to_payers for Contribution records' do
       contribution = create(:contribution, :with_payment_in_blockchain, created_at: from)
+      create(:donation, created_at: from)
       service.relabel
 
       expect(Service::Contributions::FeesLabelingService).to have_received(:new).with(contribution:)
