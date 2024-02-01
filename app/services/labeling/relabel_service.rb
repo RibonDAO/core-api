@@ -100,7 +100,6 @@ module Labeling
     end
 
     def donations
-      byebug
       @donations ||= Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
                             .left_outer_joins(:donation_contribution)
                              .where('donations.created_at >= ? AND donations.created_at < ? AND donation_contributions.id is NULL', from, from.next_day(5))
