@@ -1,3 +1,4 @@
+# rubocop:disble Metrics/AbcSize
 module Labeling
   class RelabelService
     attr_reader :from
@@ -21,14 +22,6 @@ module Labeling
         DonationContribution.where(donation: Donation.where('created_at >= ?', from)).delete_all
       end
     end
-
-    def last_donation_or_contribution_date
-      return if Donation.last.nil? && Contribution.last.nil?
-      return Donation.last.created_at if Contribution.last.nil?
-      return Contribution.last.created_at if Donation.last.nil?
-
-      [Donation.last&.created_at, Contribution.last&.created_at].max
-    end
     
     def first_donation_or_contribution_date
       return if Donation.first.nil? && Contribution.first.nil?
@@ -38,7 +31,6 @@ module Labeling
       [Donation.first&.created_at, Contribution.first&.created_at].min
     end
 
-    # rubocop:disble Metrics/AbcSize
     def next_unlabelled_date
       return first_donation_or_contribution_date if DonationContribution.last.nil? && ContributionFee.last.nil?
       return DonationContribution.last&.donation&.created_at if ContributionFee.last.nil?
@@ -49,7 +41,7 @@ module Labeling
     end
 
     def label_unlabelled_records
-      from = next_unlabelled_date
+      @from = next_unlabelled_date
       label_next_days
     end
 
@@ -68,7 +60,7 @@ module Labeling
         end
 
         @from = next_unlabelled_date
-        break unless next_unlabelled_date.nil?
+        break if from.nil?
       end
     end
 
@@ -115,3 +107,4 @@ module Labeling
     end
   end
 end
+# rubocop:enable Metrics/AbcSize
