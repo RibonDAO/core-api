@@ -11,11 +11,15 @@ RSpec.describe Service::Contributions::DirectImpactService, type: :service do
   context 'when offer in brl' do
     let(:person_payment) { create(:person_payment, amount_cents: 1_000) }
     let(:contribution) { create(:contribution, receiver: cause, person_payment:) }
-    let(:donation) { create(:donation, value: 10, non_profit:) }
+    let(:donation1) { create(:donation, value: 10, non_profit:) }
+    let(:donation2) { create(:donation, value: 10, non_profit:) }
+    let(:donation3) { create(:donation, value: 10, non_profit:) }
 
     before do
       create(:ribon_config, contribution_fee_percentage: 20, minimum_contribution_chargeable_fee_cents: 10)
-      create_list(:donation_contribution, 3, contribution:, donation:)
+      create(:donation_contribution, contribution:, donation: donation1)
+      create(:donation_contribution, contribution:, donation: donation2)
+      create(:donation_contribution, contribution:, donation: donation3)
     end
 
     describe '#impact' do
@@ -45,11 +49,15 @@ RSpec.describe Service::Contributions::DirectImpactService, type: :service do
     let(:offer) { create(:offer, currency: :usd) }
     let(:person_payment) { create(:person_payment, amount_cents: 1_000, offer:) }
     let(:contribution) { create(:contribution, receiver: cause, person_payment:) }
-    let(:donation) { create(:donation, value: 10, non_profit:) }
+    let(:donation1) { create(:donation, value: 10, non_profit:) }
+    let(:donation2) { create(:donation, value: 10, non_profit:) }
+    let(:donation3) { create(:donation, value: 10, non_profit:) }
 
     before do
       create(:ribon_config, contribution_fee_percentage: 20, minimum_contribution_chargeable_fee_cents: 10)
-      create_list(:donation_contribution, 3, contribution:, donation:)
+      create(:donation_contribution, contribution:, donation: donation1)
+      create(:donation_contribution, contribution:, donation: donation2)
+      create(:donation_contribution, contribution:, donation: donation3)
     end
 
     describe '#direct_impact_for' do
