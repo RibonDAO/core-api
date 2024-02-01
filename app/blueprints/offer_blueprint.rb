@@ -8,6 +8,12 @@ class OfferBlueprint < Blueprinter::Base
     Money.new(object.price_cents, object.currency).format
   end
 
+  view :plan do
+    association :plan, blueprint: PlanBlueprint do |object|
+      object.plan
+    end
+  end
+
   view :minimal do
     excludes :external_id
   end
