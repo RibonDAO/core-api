@@ -100,8 +100,10 @@ module Labeling
     end
 
     def donations
+      byebug
       @donations ||= Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
-                             .where('donations.created_at >= ? AND donations.created_at < ?', from, from.next_day(5))
+                            .left_outer_joins(:donation_contribution)
+                             .where('donations.created_at >= ? AND donations.created_at < ? AND donation_contributions.id is NULL', from, from.next_day(5))
     end
 
     def person_blockchain_transactions
