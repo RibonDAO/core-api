@@ -15,5 +15,4 @@ class ContributionFee < ApplicationRecord
   belongs_to :payer_contribution, class_name: 'Contribution'
 
   validates :fee_cents, numericality: { greater_than_or_equal_to: 0 }
-  validates :contribution_id, uniqueness: { scope: :payer_contribution_id }
 end
