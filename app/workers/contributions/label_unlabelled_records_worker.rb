@@ -1,5 +1,5 @@
 module Contributions
-  class LabelUnLabelledRecordsWorker
+  class LabelUnlabelledRecordsWorker
     include Sidekiq::Worker
     sidekiq_options queue: :label_unlabelled_records
 
