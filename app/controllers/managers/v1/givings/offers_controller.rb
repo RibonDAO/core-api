@@ -11,13 +11,13 @@ module Managers
         def show
           @offer = Offer.find offer_params[:id]
 
-          render json: OfferBlueprint.render(@offer)
+          render json: OfferBlueprint.render(@offer, view: :plan)
         end
 
         def create
           command = ::Offers::UpsertOffer.call(offer_params)
           if command.success?
-            render json: OfferBlueprint.render(command.result), status: :created
+            render json: OfferBlueprint.render(command.result, view: :plan), status: :created
           else
             render_errors(command.errors)
           end
@@ -26,7 +26,7 @@ module Managers
         def update
           command = ::Offers::UpsertOffer.call(offer_params)
           if command.success?
-            render json: OfferBlueprint.render(command.result), status: :created
+            render json: OfferBlueprint.render(command.result, view: :plan), status: :created
           else
             render_errors(command.errors)
           end
@@ -43,8 +43,9 @@ module Managers
         end
 
         def offer_params
-          params.permit(:id, :price_cents, :currency, :active, :subscription,
-                        offer_gateway_attributes: %i[id gateway external_id])
+          params.permit(:id, :price_cents, :currency, :active, :subscription, :category,
+                        offer_gateway_attributes: %i[id gateway external_id],
+                        plans_attributes: %i[id daily_tickets monthly_tickets status])
         end
       end
     end
