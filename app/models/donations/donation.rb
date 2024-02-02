@@ -36,6 +36,10 @@ class Donation < ApplicationRecord
 
   delegate :cause, to: :non_profit
 
+  def next
+    Donation.where('id > ?', id).order('id ASC').first || Donation.first
+  end
+
   def donation_blockchain_transaction
     donation_blockchain_transactions.last
   end
