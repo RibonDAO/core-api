@@ -4,7 +4,7 @@ module Contributions
     sidekiq_options queue: :relabel
 
     def perform
-      ::Labeling::RelabelService.new(from: DonationContribution.last.created_at).relabel
+      ::Labeling::RelabelService.new(from: DonationContribution.last.donation.created_at).relabel
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })
     end
