@@ -15,6 +15,7 @@
 #
 class Offer < ApplicationRecord
   has_one :offer_gateway, dependent: :nullify, inverse_of: :offer
+  has_many :plans
   accepts_nested_attributes_for :offer_gateway, allow_destroy: true
   validates :price_cents, numericality: { greater_than_or_equal_to: 0 }
   validates :currency, presence: true
@@ -34,5 +35,9 @@ class Offer < ApplicationRecord
 
   def price_value
     price_cents / 100.0
+  end
+
+  def plan
+    plans.where(status: :active).last
   end
 end
