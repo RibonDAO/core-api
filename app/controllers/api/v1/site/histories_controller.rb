@@ -42,9 +42,9 @@ module Api
 
         def person_payments_amount
           person_payments_brl = PersonPayment.where(currency: 0, receiver_type: 'NonProft',
-                                                    status: 1).sum(:amount_cents) / 100
+                                                    status: :paid).sum(:amount_cents) / 100
           person_payments_usd = PersonPayment.where(currency: 1, receiver_type: 'NonProft',
-                                                    status: 1).sum(:amount_cents) / 100
+                                                    status: :paid).sum(:amount_cents) / 100
 
           { brl: person_payments_brl + convert_to_brl(person_payments_usd),
             usd: person_payments_usd + convert_to_usd(person_payments_brl) }
