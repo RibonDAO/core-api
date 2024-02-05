@@ -23,10 +23,12 @@ module Labeling
 
     def setup_records
       ActiveRecord::Base.transaction do
-        ContributionBalance.where('created_at >= ?', from).delete_all
-        Contribution.where('created_at >= ?', from).each(&:set_contribution_balance)
-        ContributionFee.where('created_at >= ?', from).delete_all
-        DonationContribution.where('created_at >= ?', from).delete_all
+        @contributions = Contribution.where('created_at >= ?', from)
+        ContributionBalance.where(contribution: @contributions).delete_all
+        @contributions.each(&:set_contribution_balance)
+        ContributionFee.where(contribution: @contributions).delete_all
+
+        DonationContribution.where(donation: Donation.where('created_at >= ?', from)).delete_all
       end
     end
 
