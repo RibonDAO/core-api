@@ -40,7 +40,7 @@ RSpec.describe 'Api::V1::Site::Histories', type: :request do
       allow(Currency::Converters).to receive(:convert_to_brl).and_return(1)
       create_list(:history, 1)
       create_list(:donation, 2)
-      create_list(:person_payment, 2, status: :paid, receiver_type: 'NonProft')
+      create_list(:person_payment, 2, status: :paid, receiver_type: 'NonProfit')
     end
 
     it 'returns a list of total donations' do
@@ -58,7 +58,7 @@ RSpec.describe 'Api::V1::Site::Histories', type: :request do
       allow(Currency::Converters).to receive(:convert_to_brl).and_return(1)
       create_list(:history, 1)
       create_list(:donation, 2)
-      create_list(:person_payment, 2, status: :paid, receiver_type: 'NonProft')
+      create_list(:person_payment, 2, status: :paid, receiver_type: 'NonProfit')
     end
 
     it 'returns a list of total donations' do
