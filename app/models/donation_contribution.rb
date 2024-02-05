@@ -14,6 +14,8 @@ class DonationContribution < ApplicationRecord
 
   delegate :value, to: :donation
 
+  validates :donation_id, uniqueness: true
+
   def self.last_contribution_payer_type
     last.contribution&.person_payment&.payer_type
   end
