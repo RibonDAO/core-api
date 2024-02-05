@@ -32,13 +32,25 @@ module Tickets
 
     def transact_donation
       ActiveRecord::Base.transaction do
-        integrations = destroy_tickets
+        destroy_result = destroy_tickets
+        integrations = destroy_result[:integrations]
+        external_ids = destroy_result[:external_ids]
+
         @donations = create_donations(build_donations(integrations))
+        associate_integration_vouchers(external_ids)
         update_user_donations_info
         label_donations
       end
 
       donations
+    end
+
+    def associate_integration_vouchers(external_ids)
+      vouchers_with_external_ids = Voucher.where(external_id: external_ids)
+      vouchers_with_external_ids.each_with_index do |voucher, index|
+        voucher&.update!(donation: donations[index])
+        call_webhook(voucher)
+      end
     end
 
     def valid_dependencies?
@@ -67,7 +79,10 @@ module Tickets
 
     def destroy_tickets
       tickets = Ticket.where(user:).order(created_at: :asc).limit(quantity).destroy_all
-      tickets.pluck(:integration_id)
+      integrations = tickets.pluck(:integration_id)
+      external_ids = tickets.pluck(:external_id)
+
+      { integrations:, external_ids: external_ids.compact }
     end
 
     def update_user_donations_info
@@ -93,6 +108,10 @@ module Tickets
       donations.each do |donation|
         Service::Contributions::TicketLabelingService.new(donation:).label_donation
       end
+    end
+
+    def call_webhook(voucher)
+      Vouchers::WebhookJob.perform_later(voucher) if voucher.integration.webhook_url
     end
 
     def ticket_value

@@ -10,18 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_05_115034) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_01_123453) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "accounts", force: :cascade do |t|
-    t.datetime "confirmation_sent_at"
-    t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.string "image"
-    t.string "name"
-    t.string "nickname"
     t.string "provider"
     t.datetime "remember_created_at"
     t.json "tokens"
@@ -495,6 +491,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_05_115034) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "category", default: 0
   end
 
   create_table "person_blockchain_transactions", force: :cascade do |t|
@@ -543,6 +540,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_05_115034) do
     t.index ["payer_type", "payer_id"], name: "index_person_payments_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_person_payments_on_receiver"
     t.index ["subscription_id"], name: "index_person_payments_on_subscription_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.integer "daily_tickets"
+    t.integer "monthly_tickets"
+    t.integer "status"
+    t.bigint "offer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["offer_id"], name: "index_plans_on_offer_id"
   end
 
   create_table "pool_balances", force: :cascade do |t|
@@ -819,6 +826,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_05_115034) do
   add_foreign_key "person_payment_fees", "person_payments"
   add_foreign_key "person_payments", "integrations"
   add_foreign_key "person_payments", "offers"
+  add_foreign_key "plans", "offers"
   add_foreign_key "pool_balances", "pools"
   add_foreign_key "pools", "causes"
   add_foreign_key "pools", "tokens"
