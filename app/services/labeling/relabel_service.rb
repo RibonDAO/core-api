@@ -61,7 +61,7 @@ module Labeling
 
     def donations
       @donations ||= Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
-                             .where('donations.created_at >= ?', from)
+                             .where('donations.created_at >= ? AND donations.non_profit_id in (3,4,5,6,8,9)', from)
     end
 
     def person_blockchain_transactions
