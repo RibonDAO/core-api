@@ -27,7 +27,7 @@ retry_person_transactions:
   cron: "*/30 * * * *" # Every 30 minutes.
   class: "PersonPayments::RetryBlockchainTransactionsWorker"
   queue: person_payments
-  
+
 send_bimonthly_email_report_worker:
   cron: "0 18 1 * *" # At 18:00 on day-of-month 1.
   class: "Mailers::SendBimonthlyEmailReportWorker"
@@ -62,3 +62,8 @@ clear_all_collected_by_integration:
   cron: "1 0 * * *" # At 00:01.
   class: "Tickets::ClearAllCollectedByIntegrationWorker"
   queue: tickets
+
+label_donations_and_contributions:
+  cron: "0 8 * 3 1"
+  class: "Contributions::LabelWorker"
+  queue: relabel
