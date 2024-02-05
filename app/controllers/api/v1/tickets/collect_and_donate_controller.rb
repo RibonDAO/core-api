@@ -19,7 +19,7 @@ module Api
         end
 
         def user
-          @user ||= User.find_by(email: ticket_params[:email])
+          @user ||= current_user || User.find_by(email: ticket_params[:email])
         end
 
         def platform
