@@ -49,6 +49,7 @@ module Tickets
       vouchers_with_external_ids = Voucher.where(external_id: external_ids)
       vouchers_with_external_ids.each_with_index do |voucher, index|
         voucher&.update!(donation: donations[index])
+        call_webhook(voucher)
       end
     end
 
@@ -107,6 +108,10 @@ module Tickets
       donations.each do |donation|
         Service::Contributions::TicketLabelingService.new(donation:).label_donation
       end
+    end
+
+    def call_webhook(voucher)
+      Vouchers::WebhookJob.perform_later(voucher) if voucher.integration.webhook_url
     end
 
     def ticket_value

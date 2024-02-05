@@ -9,34 +9,10 @@ module Api
           render json: OfferBlueprint.render(@offers, view: :minimal)
         end
 
-        def index_manager
-          @offers = Offer.order('position_order ASC, price_cents ASC')
-
-          render json: OfferBlueprint.render(@offers)
-        end
-
         def show
           @offer = Offer.find offer_params[:id]
 
           render json: OfferBlueprint.render(@offer)
-        end
-
-        def create
-          command = ::Offers::UpsertOffer.call(offer_params)
-          if command.success?
-            render json: OfferBlueprint.render(command.result), status: :created
-          else
-            render_errors(command.errors)
-          end
-        end
-
-        def update
-          command = ::Offers::UpsertOffer.call(offer_params)
-          if command.success?
-            render json: OfferBlueprint.render(command.result), status: :created
-          else
-            render_errors(command.errors)
-          end
         end
 
         private
