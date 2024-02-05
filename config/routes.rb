@@ -125,9 +125,6 @@ Rails.application.routes.draw do
         get 'offers' => 'offers#index'
         get 'offers/:id' => 'offers#show'
 
-        get 'offers_manager', to: 'offers#index_manager'
-        post 'offers' => 'offers#create'
-        put 'offers/:id' => 'offers#update'
         get 'user_givings' => 'user_givings#index'
         post 'impact_by_non_profit' => 'impacts#impact_by_non_profit'
       end
@@ -172,6 +169,7 @@ Rails.application.routes.draw do
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_and_donate_by_integration' => 'collect_and_donate#collect_and_donate_by_integration'
+        post 'collect_and_donate_by_external_id' => 'collect_and_donate#collect_and_donate_by_external_id'
         post 'collect_by_external_id' => 'collect#collect_by_external_id'
       end
     end

@@ -43,7 +43,8 @@ module Managers
         end
 
         def offer_params
-          params.permit(:id, :price_cents, :currency, :active, :subscription,
+          params.permit(:id, :price_cents, :currency,
+                        :active, :subscription, :category,
                         offer_gateway_attributes: %i[id gateway external_id])
         end
       end
