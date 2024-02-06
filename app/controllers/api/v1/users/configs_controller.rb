@@ -19,7 +19,7 @@ module Api
         private
 
         def user
-          @user ||= User.find params[:user_id]
+          @user ||= current_user || User.find(params[:user_id])
         end
 
         def user_config_params

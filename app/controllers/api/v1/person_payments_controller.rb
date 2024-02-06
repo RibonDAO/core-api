@@ -50,9 +50,10 @@ module Api
       end
 
       def email
-        return unless params[:email]
+        user_email = current_user&.email || params[:email]
+        return unless user_email
 
-        Base64.strict_decode64(params[:email])
+        Base64.strict_decode64(user_email)
       end
 
       def wallet_address
