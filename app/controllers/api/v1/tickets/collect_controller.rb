@@ -27,7 +27,7 @@ module Api
 
         def can_collect_by_integration
           unless user
-            render json: { can_collect: false }, status: :ok
+            render json: { can_collect: true }, status: :ok
             return
           end
           command = ::Tickets::CanCollectByIntegration.call(integration:, user:)
