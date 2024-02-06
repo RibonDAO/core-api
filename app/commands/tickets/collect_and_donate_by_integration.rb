@@ -50,7 +50,7 @@ module Tickets
       if command.success?
         donate_ticket
       else
-        errors.add(:message, I18n.t('tickets.blocked_message'))
+        errors.add(:message, I18n.t('donations.blocked_message'))
       end
     end
 
