@@ -23,10 +23,12 @@ module Labeling
 
     def setup_records
       ActiveRecord::Base.transaction do
-        ContributionBalance.where('created_at >= ?', from).delete_all
-        Contribution.where('created_at >= ?', from).each(&:set_contribution_balance)
-        ContributionFee.where('created_at >= ?', from).delete_all
-        DonationContribution.where('created_at >= ?', from).delete_all
+        @contributions = Contribution.where('created_at >= ?', from)
+        ContributionBalance.where(contribution: @contributions).delete_all
+        @contributions.each(&:set_contribution_balance)
+        ContributionFee.where(contribution: @contributions).delete_all
+
+        DonationContribution.where(donation: Donation.where('created_at >= ?', from)).delete_all
       end
     end
 
@@ -59,7 +61,7 @@ module Labeling
 
     def donations
       @donations ||= Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
-                             .where('donations.created_at >= ?', from)
+                             .where('donations.created_at >= ? AND donations.non_profit_id in (3,4,5,6,8,9)', from)
     end
 
     def person_blockchain_transactions

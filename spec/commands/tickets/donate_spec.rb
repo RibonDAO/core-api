@@ -65,6 +65,39 @@ describe Tickets::Donate do
       end
     end
 
+    context 'when the ticket donated has an external_id' do
+      let(:integration) { create(:integration) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:user) { create(:user) }
+      let!(:voucher1) { create(:voucher, external_id: '28392', integration:) }
+      let!(:voucher2) { create(:voucher, external_id: '28393', integration:) }
+
+      before do
+        create(:chain)
+        create(:ticket, user:, integration:, external_id: '28392')
+        create(:ticket, user:, integration:, external_id: '28393')
+        create(:integration_webhook, integration:)
+        create(:ribon_config, default_ticket_value: 100)
+        allow(Vouchers::WebhookJob).to receive(:perform_later)
+      end
+
+      it 'creates a donation in database' do
+        expect { command }.to change(Donation, :count).by(2)
+      end
+
+      it 'destroy a ticket' do
+        expect { command }.to change(Ticket, :count).by(-2)
+      end
+
+      it 'calls the WebhookJob 2 times' do
+        command
+        expect(Vouchers::WebhookJob)
+          .to have_received(:perform_later).with(voucher1)
+        expect(Vouchers::WebhookJob)
+          .to have_received(:perform_later).with(voucher2)
+      end
+    end
+
     context 'when an error occurs at the validation process' do
       let(:integration) { build(:integration) }
       let(:non_profit) { build(:non_profit) }

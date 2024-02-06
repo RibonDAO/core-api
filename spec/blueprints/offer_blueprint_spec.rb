@@ -4,6 +4,8 @@ RSpec.describe OfferBlueprint, type: :blueprint do
   let(:offer) { create(:offer) }
   let(:offer_blueprint) { described_class.render(offer) }
   let(:offer_blueprint_minimal) { described_class.render(offer, view: :minimal) }
+  let(:offer_blueprint_plan) { described_class.render(offer, view: :plan) }
+  let(:plan) { offer.plan }
 
   it 'has the correct fields' do
     expect(offer_blueprint).to include(:currency.to_s)
@@ -19,5 +21,6 @@ RSpec.describe OfferBlueprint, type: :blueprint do
 
   it 'has the correct view' do
     expect(offer_blueprint_minimal).not_to include(:external_id.to_s)
+    expect(offer_blueprint_plan).to include(:plan.to_s)
   end
 end

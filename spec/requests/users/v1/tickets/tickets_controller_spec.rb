@@ -7,6 +7,7 @@ RSpec.describe 'Users::V1::Tickets::Tickets', type: :request do
     end
 
     before do
+      allow(RibonCoreApi).to receive(:redis).and_return(MockRedis.new)
       create_list(:ticket, 10, user: account.user)
     end
 
