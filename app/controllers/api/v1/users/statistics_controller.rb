@@ -16,7 +16,7 @@ module Api
         def user
           return unless params[:id]
 
-          @user ||= User.find params[:id]
+          @user ||= current_user || User.find(params[:id])
         end
 
         def wallet_address

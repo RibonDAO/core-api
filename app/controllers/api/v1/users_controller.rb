@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       def search
-        @user = User.find_by(email: params[:email])
+        @user = User.find_by(email: current_user&.email || params[:email])
 
         if @user
           render json: UserBlueprint.render(@user, view: :extended)

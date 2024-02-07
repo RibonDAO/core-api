@@ -17,10 +17,9 @@ module Api
 
         private
 
-        # rubocop:disable Metrics/AbcSize
         def order_params
           {
-            payment_method_id:, email: payment_params[:email],
+            payment_method_id:, email:,
             offer:, operation:, tax_id: payment_params[:tax_id],
             user: find_or_create_user, integration_id: payment_params[:integration_id],
             cause:, non_profit:, name: payment_params[:name],
@@ -28,7 +27,6 @@ module Api
             platform: payment_params[:platform]
           }
         end
-        # rubocop:enable Metrics/AbcSize
 
         def payment_method_id
           @payment_method_id ||= payment_params[:payment_method_id]
@@ -49,6 +47,10 @@ module Api
 
         def non_profit
           @non_profit ||= NonProfit.find payment_params[:non_profit_id].to_i if payment_params[:non_profit_id]
+        end
+
+        def email
+          @email ||= current_user&.email || payment_params[:email]
         end
 
         def operation
