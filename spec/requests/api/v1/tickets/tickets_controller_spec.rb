@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Tickets::Tickets', type: :request do
   describe 'get /tickets/available' do
-    subject(:request) { get '/api/v1/tickets/available', params: { email: user.email } }
+    subject(:request) { get '/api/v1/tickets/available', headers: { Email: user.email } }
 
     let(:user) { create(:user) }
 
