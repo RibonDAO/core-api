@@ -19,7 +19,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_123453) do
   create_table "accounts", force: :cascade do |t|
     t.datetime "confirmed_at"
     t.string "provider"
-    t.datetime "remember_created_at"
     t.json "tokens"
     t.string "uid"
     t.bigint "user_id", null: false
@@ -633,13 +632,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_123453) do
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
   end
 
-  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title", null: false
-    t.string "actions", null: false
-    t.string "kind", default: "daily"
-    t.string "navigation_callback"
-    t.string "visibility", default: "visible"
-    t.string "client", default: "web"
+  create_table "tasks", force: :cascade do |t|
+    t.string "title"
+    t.text "actions"
+    t.text "rules"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -13,8 +13,8 @@ module Api
           end
         end
 
-        def collect_by_external_id
-          command = ::Tickets::CollectByExternalId.call(integration:, user:, platform:,
+        def collect_by_external_ids
+          command = ::Tickets::CollectByExternalIds.call(integration:, user:, platform:,
                                                         external_ids: ticket_params[:external_ids])
 
           if command.success?
@@ -35,8 +35,9 @@ module Api
           end
         end
 
-        def can_collect_by_external_id
-          command = ::Tickets::CanCollectByExternalId.call(external_id: ticket_params[:external_ids])
+        def can_collect_by_external_ids
+          
+          command = ::Tickets::CanCollectByExternalIds.call(external_ids: ticket_params[:external_ids])
 
           if command.success?
             render json: { can_collect: command.result }, status: :ok
