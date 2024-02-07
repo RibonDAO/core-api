@@ -166,6 +166,7 @@ Rails.application.routes.draw do
       end
 
       namespace :tickets do 
+        get 'available' => 'tickets#available'
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_and_donate_by_integration' => 'collect_and_donate#collect_and_donate_by_integration'
