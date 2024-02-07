@@ -39,7 +39,7 @@ module Api
 
         def order_params
           {
-            email: payment_params[:email],
+            email:,
             name: payment_params[:name],
             offer:,
             operation:,
@@ -68,6 +68,10 @@ module Api
 
         def non_profit
           @non_profit ||= NonProfit.find payment_params[:non_profit_id].to_i if payment_params[:non_profit_id]
+        end
+
+        def email
+          current_user&.email || payment_params[:email]
         end
 
         def operation
