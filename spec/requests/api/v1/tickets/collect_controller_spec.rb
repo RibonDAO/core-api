@@ -14,28 +14,10 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
         }
       end
 
-      before do
-        allow(Tickets::CanCollectByIntegration).to receive(:call)
-          .and_return(command_double(klass: Tickets::CanCollectByIntegration))
-        allow(Tickets::CollectByIntegration).to receive(:call)
-          .and_return(command_double(klass: Tickets::CollectByIntegration))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
-      end
-
-      it 'calls the CanCollectByIntegration command with right params' do
-        request
-
-        expect(Tickets::CanCollectByIntegration).to have_received(:call).with(
-          integration:,
-          user:
-        )
-      end
-
       it 'returns true' do
         request
 
-        expect(response.body['can_collect']).to be_truthy
+        expect(JSON.parse(response.body)['can_collect']).to be true
       end
     end
 
@@ -50,7 +32,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
       it 'returns true' do
         request
 
-        expect(response.body['can_collect']).to be_truthy
+        expect(JSON.parse(response.body)['can_collect']).to be true
       end
     end
   end
@@ -123,6 +105,40 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
         request
 
         expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+  end
+
+  describe 'POST /can_collect_by_external_ids' do
+    subject(:request) { post '/api/v1/tickets/can_collect_by_external_ids', params: }
+
+    let(:external_ids) { %w[1 2] }
+
+    context 'with right params' do
+      let(:params) do
+        {
+          external_ids:
+        }
+      end
+
+      it 'returns true' do
+        request
+        expect(JSON.parse(response.body)['can_collect']).to be(true)
+      end
+    end
+
+    context 'with external id already used' do
+      let(:params) do
+        {
+          external_ids: ['1']
+        }
+      end
+
+      it 'returns false' do
+        create(:voucher, external_id: '1')
+        request
+
+        expect(JSON.parse(response.body)['can_collect']).to be(false)
       end
     end
   end
