@@ -62,7 +62,7 @@ module Auth
 
         access_token, refresh_token = Jwt::Auth::Issuer.call(account)
 
-        [access_token, refresh_token, account.user]
+        [access_token, refresh_token, account]
       end
 
       def google_api_url
