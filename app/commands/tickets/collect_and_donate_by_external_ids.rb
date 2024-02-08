@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tickets
-  class CollectAndDonateByExternalId < ApplicationCommand
+  class CollectAndDonateByExternalIds < ApplicationCommand
     prepend SimpleCommand
     attr_reader :integration, :user, :platform, :non_profit, :external_ids, :donation
 
@@ -46,7 +46,7 @@ module Tickets
     end
 
     def collect_ticket
-      command = CollectByExternalId.call(integration:, user:, platform:, external_ids:)
+      command = CollectByExternalIds.call(integration:, user:, platform:, external_ids:)
 
       if command.success?
         donate_ticket

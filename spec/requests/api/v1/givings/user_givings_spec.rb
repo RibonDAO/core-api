@@ -27,5 +27,16 @@ RSpec.describe 'Api::V1::UserGivingsController', type: :request do
 
       expect(response_body.first['crypto_amount']).to eq 10.00
     end
+
+    context 'when giving receiver is nil' do
+      before { paid_payment.first.update(receiver: nil) }
+
+      it 'does not return payment' do
+        request
+
+        expect(response_body.length).to eq 1
+        expect(response_body.first['id']).to eq paid_payment.second.id
+      end
+    end
   end
 end

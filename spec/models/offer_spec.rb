@@ -1,14 +1,17 @@
 # == Schema Information
 #
-# Table name: plans
+# Table name: offers
 #
-#  id              :bigint           not null, primary key
-#  daily_tickets   :integer
-#  monthly_tickets :integer
-#  status          :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  offer_id        :bigint           not null
+#  id             :bigint           not null, primary key
+#  active         :boolean
+#  category       :integer          default("direct_contribution")
+#  currency       :integer
+#  position_order :integer
+#  price_cents    :integer
+#  subscription   :boolean
+#  title          :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 require 'rails_helper'
 
