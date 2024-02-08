@@ -170,7 +170,7 @@ Rails.application.routes.draw do
         post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_and_donate_by_integration' => 'collect_and_donate#collect_and_donate_by_integration'
-         post 'can_collect_by_external_ids' => 'collect#can_collect_by_external_ids'
+        post 'can_collect_by_external_ids' => 'collect#can_collect_by_external_ids'
         post 'collect_and_donate_by_external_ids' => 'collect_and_donate#collect_and_donate_by_external_ids'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
       end
