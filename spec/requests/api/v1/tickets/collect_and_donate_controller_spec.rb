@@ -78,8 +78,8 @@ RSpec.describe 'Api::V1::Tickets::CollectAndDonate', type: :request do
     end
   end
 
-  describe 'POST /collect_and_donate_by_external_id' do
-    subject(:request) { post '/api/v1/tickets/collect_and_donate_by_external_id', params: }
+  describe 'POST /collect_and_donate_by_external_ids' do
+    subject(:request) { post '/api/v1/tickets/collect_and_donate_by_external_ids', params: }
 
     context 'with right params' do
       let(:integration) { create(:integration) }
@@ -103,16 +103,16 @@ RSpec.describe 'Api::V1::Tickets::CollectAndDonate', type: :request do
       before do
         allow(Tickets::CanCollectByExternalId).to receive(:call)
           .and_return(command_double(klass: Tickets::CanCollectByExternalId))
-        allow(Tickets::CollectAndDonateByExternalId).to receive(:call)
-          .and_return(command_double(klass: Tickets::CollectAndDonateByExternalId))
+        allow(Tickets::CollectAndDonateByExternalIds).to receive(:call)
+          .and_return(command_double(klass: Tickets::CollectAndDonateByExternalIds))
         allow(Tracking::AddUtm).to receive(:call)
           .and_return(command_double(klass: Tracking::AddUtm))
       end
 
-      it 'calls the CollectAndDonateByExternalId command with right params' do
+      it 'calls the CollectAndDonateByExternalIds command with right params' do
         request
 
-        expect(Tickets::CollectAndDonateByExternalId).to have_received(:call).with(
+        expect(Tickets::CollectAndDonateByExternalIds).to have_received(:call).with(
           integration:,
           user:,
           platform:,

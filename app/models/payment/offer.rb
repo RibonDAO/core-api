@@ -23,6 +23,8 @@ class Offer < ApplicationRecord
   delegate :gateway, to: :offer_gateway
   delegate :external_id, to: :offer_gateway
 
+  accepts_nested_attributes_for :plans
+
   enum currency: {
     brl: 0,
     usd: 1

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tickets
-  class CollectByExternalId < ApplicationCommand
+  class CollectByExternalIds < ApplicationCommand
     prepend SimpleCommand
     attr_reader :integration, :user, :platform, :external_ids, :ticket, :voucher
 
