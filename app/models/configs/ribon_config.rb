@@ -7,6 +7,7 @@
 #  default_ticket_value                      :decimal(, )
 #  disable_labeling                          :boolean          default(FALSE)
 #  minimum_contribution_chargeable_fee_cents :integer
+#  ribon_club_fee_percentage                 :decimal(, )
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
 #  default_chain_id                          :integer
@@ -16,6 +17,7 @@ class RibonConfig < ApplicationRecord
   validates :default_ticket_value, presence: true
   validates :default_chain_id, presence: true
   validates :contribution_fee_percentage, presence: true
+  validates :ribon_club_fee_percentage, presence: true
 
   before_destroy :stop_destroy
 
@@ -37,6 +39,34 @@ class RibonConfig < ApplicationRecord
 
   def self.disable_labeling
     first&.disable_labeling
+  end
+
+  def self.ribon_club_fee_percentage
+    first&.ribon_club_fee_percentage
+  end
+
+  def self.ribon_club_fee_percentage=(value)
+    first.update(ribon_club_fee_percentage: value)
+  end
+
+  def self.disable_labeling=(value)
+    first.update(disable_labeling: value)
+  end
+
+  def self.minimum_contribution_chargeable_fee_cents=(value)
+    first.update(minimum_contribution_chargeable_fee_cents: value)
+  end
+
+  def self.default_chain_id=(value)
+    first.update(default_chain_id: value)
+  end
+
+  def self.default_ticket_value=(value)
+    first.update(default_ticket_value: value)
+  end
+
+  def self.contribution_fee_percentage=(value)
+    first.update(contribution_fee_percentage: value)
   end
 
   private
