@@ -34,7 +34,7 @@ RSpec.describe 'Managers::V1::Offers', type: :request do
       request
 
       expect_response_to_have_keys(%w[created_at id updated_at currency subscription price price_cents price_value
-                                      active title position_order external_id gateway category])
+                                      active title position_order external_id gateway category plan])
     end
   end
 
@@ -63,7 +63,7 @@ RSpec.describe 'Managers::V1::Offers', type: :request do
         request
 
         expect_response_to_have_keys(%w[created_at id updated_at currency subscription price price_cents
-                                        price_value active title position_order external_id gateway category])
+                                        price_value active title position_order external_id gateway category plan])
       end
     end
   end
