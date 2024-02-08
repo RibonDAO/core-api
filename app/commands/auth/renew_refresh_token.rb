@@ -18,7 +18,7 @@ module Auth
         new_access_token, new_refresh_token = Jwt::Auth::Refresher
                                               .refresh!(refresh_token:, decoded_token:, authenticatable:)
 
-        [new_access_token, new_refresh_token]
+        [new_access_token, new_refresh_token, authenticatable]
       end
     end
   end

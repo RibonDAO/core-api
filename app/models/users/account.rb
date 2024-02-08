@@ -5,6 +5,7 @@
 #  id           :bigint           not null, primary key
 #  confirmed_at :datetime
 #  deleted_at   :datetime
+#  platform     :string
 #  provider     :string
 #  tokens       :json
 #  uid          :string
@@ -20,4 +21,9 @@ class Account < ApplicationRecord
   validates :uid, presence: true
 
   delegate :email, to: :user
+
+  enum platform: {
+    web: 'web',
+    app: 'app'
+  }
 end

@@ -43,26 +43,28 @@ module Users
           authenticatable.update(confirmed_at: Time.zone.now)
           access_token, refresh_token = command.result
           create_headers(access_token:, refresh_token:)
+          update_account_platform(authenticatable)
           render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end
       end
-      # rubocop:enable Metrics/AbcSize
 
       def refresh_token
         access_token = request.headers['Authorization']&.split('Bearer ')&.last
         command = Auth::RenewRefreshToken.call(refresh_token: params[:refresh_token], access_token:)
 
         if command.success?
-          access_token, refresh_token = command.result
+          access_token, refresh_token, authenticatable = command.result
           create_headers(access_token:, refresh_token:)
+          update_account_platform(authenticatable)
 
           render json: { message: I18n.t('users.login_success') }, status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
 
@@ -75,10 +77,11 @@ module Users
       end
 
       def handle_successful_authentication(command)
-        access_token, refresh_token, user = command.result
+        access_token, refresh_token, authenticatable = command.result
         create_headers(access_token:, refresh_token:)
+        update_account_platform(authenticatable)
 
-        render json: { message: I18n.t('users.login_success'), user: }, status: :created
+        render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :created
       end
 
       def handle_failed_authentication(command)
@@ -92,6 +95,10 @@ module Users
 
       def set_header(name, value)
         headers[name] = value.to_s
+      end
+
+      def update_account_platform(authenticatable)
+        authenticatable&.update(platform: request.headers['Platform'])
       end
     end
   end
