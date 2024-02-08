@@ -3,7 +3,7 @@ module Api
     module Givings
       class OffersController < ApplicationController
         def index
-          @offers = Offer.where(active: true, currency:, subscription:)
+          @offers = Offer.where(active: true, currency:, subscription:, category:)
                          .order('position_order ASC, price_cents ASC')
 
           render json: OfferBlueprint.render(@offers, view: :minimal)
@@ -25,8 +25,12 @@ module Api
           params[:subscription] || false
         end
 
+        def category
+          params[:category] || 'direct_contribution'
+        end
+
         def offer_params
-          params.permit(:id, :price_cents, :currency, :active, :subscription,
+          params.permit(:id, :price_cents, :currency, :active, :subscription, :category,
                         offer_gateway_attributes: %i[id gateway external_id])
         end
       end
