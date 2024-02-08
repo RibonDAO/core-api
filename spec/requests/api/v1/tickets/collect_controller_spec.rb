@@ -39,19 +39,18 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
       end
     end
 
-    context 'with wrong params' do
+    context 'with no user' do
       let(:integration) { create(:integration) }
       let(:params) do
         {
-          integration_id: integration.id,
-          email: 1
+          integration_id: integration.id
         }
       end
 
-      it 'returns an error' do
+      it 'returns true' do
         request
 
-        expect(response).to have_http_status :unprocessable_entity
+        expect(response.body['can_collect']).to be_truthy
       end
     end
   end

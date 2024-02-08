@@ -26,6 +26,10 @@ module Api
         end
 
         def can_collect_by_integration
+          unless user
+            render json: { can_collect: true }, status: :ok
+            return
+          end
           command = ::Tickets::CanCollectByIntegration.call(integration:, user:)
 
           if command.success?
@@ -53,7 +57,7 @@ module Api
         end
 
         def user
-          @user ||= User.find_by(email: ticket_params[:email])
+          @user ||= current_user || User.find_by(email: ticket_params[:email])
         end
 
         def platform

@@ -24,7 +24,7 @@ module Api
         end
 
         def user
-          @user ||= User.find_by(email: donation_params[:email])
+          @user ||= current_user || User.find_by(email: donation_params[:email])
         end
 
         def external_id
