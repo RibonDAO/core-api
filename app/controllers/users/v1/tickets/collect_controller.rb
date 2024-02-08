@@ -15,7 +15,7 @@ module Users
 
         def collect_by_external_ids
           command = ::Tickets::CollectByExternalIds.call(integration:, user:, platform:,
-                                                        external_ids: ticket_params[:external_ids])
+                                                         external_ids: ticket_params[:external_ids])
           if command.success?
             ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok

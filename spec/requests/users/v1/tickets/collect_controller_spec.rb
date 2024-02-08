@@ -73,7 +73,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
     end
   end
 
-  describe 'POST /collect_by_external_id' do
+  describe 'POST /collect_by_external_ids' do
     include_context 'when making a user request' do
       subject(:request) { post '/users/v1/tickets/collect_by_external_ids', headers:, params: }
     end

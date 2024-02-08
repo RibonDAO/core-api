@@ -14,7 +14,7 @@ module Api
 
         def collect_and_donate_by_external_ids
           command = ::Tickets::CollectAndDonateByExternalIds.call(integration:, non_profit:, user:, platform:,
-                                                                 external_ids:)
+                                                                  external_ids:)
           if command.success?
             ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
             render json: { donation: command.result }, status: :ok
