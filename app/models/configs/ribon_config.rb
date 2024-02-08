@@ -45,8 +45,8 @@ class RibonConfig < ApplicationRecord
     first&.ribon_club_fee_percentage
   end
 
-  def self.ribon_club_fee=(value)
-    first.update(ribon_club_fee: value)
+  def self.ribon_club_fee_percentage=(value)
+    first.update(ribon_club_fee_percentage: value)
   end
 
   def self.disable_labeling=(value)
