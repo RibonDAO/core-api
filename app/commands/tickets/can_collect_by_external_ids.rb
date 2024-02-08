@@ -18,11 +18,10 @@ module Tickets
     private
 
     def valid_external_ids?
- 
-        external_ids.each do |external_id|
-            return true if !Voucher.exists?(external_id: external_id)
-        end
-        return false
+      external_ids.each do |external_id|
+        return true unless Voucher.exists?(external_id:)
+      end
+      false
     end
   end
 end

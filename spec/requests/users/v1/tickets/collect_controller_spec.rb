@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
-
   describe 'POST /collect_by_integration' do
     include_context 'when making a user request' do
       subject(:request) { post '/users/v1/tickets/collect_by_integration', headers:, params: }
@@ -74,9 +73,9 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
     end
   end
 
-  describe 'POST /collect_by_external_id' do
+  describe 'POST /collect_by_external_ids' do
     include_context 'when making a user request' do
-      subject(:request) { post '/users/v1/tickets/collect_by_external_id', headers:, params: }
+      subject(:request) { post '/users/v1/tickets/collect_by_external_ids', headers:, params: }
     end
 
     context 'with right params' do
@@ -98,8 +97,8 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
       before do
         allow(Tickets::CanCollectByExternalId).to receive(:call)
           .and_return(command_double(klass: Tickets::CanCollectByExternalId))
-        allow(Tickets::CollectByExternalId).to receive(:call)
-          .and_return(command_double(klass: Tickets::CollectByExternalId))
+        allow(Tickets::CollectByExternalIds).to receive(:call)
+          .and_return(command_double(klass: Tickets::CollectByExternalIds))
         allow(Tracking::AddUtm).to receive(:call)
           .and_return(command_double(klass: Tracking::AddUtm))
       end
@@ -107,7 +106,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
       it 'calls the CollectByExternalId command with right params' do
         request
 
-        expect(Tickets::CollectByExternalId).to have_received(:call).with(
+        expect(Tickets::CollectByExternalIds).to have_received(:call).with(
           integration:,
           user:,
           platform:,

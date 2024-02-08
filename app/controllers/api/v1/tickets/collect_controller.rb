@@ -15,7 +15,7 @@ module Api
 
         def collect_by_external_ids
           command = ::Tickets::CollectByExternalIds.call(integration:, user:, platform:,
-                                                        external_ids: ticket_params[:external_ids])
+                                                         external_ids: ticket_params[:external_ids])
 
           if command.success?
             ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
@@ -40,7 +40,6 @@ module Api
         end
 
         def can_collect_by_external_ids
-          
           command = ::Tickets::CanCollectByExternalIds.call(external_ids: ticket_params[:external_ids])
 
           if command.success?
