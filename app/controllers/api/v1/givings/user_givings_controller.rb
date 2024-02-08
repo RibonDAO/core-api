@@ -10,7 +10,8 @@ module Api
         private
 
         def givings
-          @givings ||= PersonPayment.where(status: %i[paid refunded refund_failed], payer: @customer)
+          @givings ||= PersonPayment.where(status: %i[paid refunded refund_failed],
+                                           payer: @customer).where.not(receiver: nil)
         end
       end
     end
