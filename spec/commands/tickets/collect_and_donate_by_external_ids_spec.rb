@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Tickets::CollectAndDonateByExternalId do
+describe Tickets::CollectAndDonateByExternalIds do
   describe '.call' do
     subject(:command) { described_class.call(integration:, user:, platform: 'web', non_profit:, external_ids:) }
 
@@ -20,7 +20,7 @@ describe Tickets::CollectAndDonateByExternalId do
         allow(command_stubbed).to receive(:perform_later)
       end
 
-      it 'calls the Tickets::CollectAndDonateByExternalId' do
+      it 'calls the Tickets::CollectAndDonateByExternalIds' do
         allow(described_class).to receive(:call).with(integration:, user:,
                                                       platform: 'web', non_profit:, external_ids:)
         command

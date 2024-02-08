@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Tickets::CollectByExternalId do
+describe Tickets::CollectByExternalIds do
   describe '.call' do
     subject(:command) { described_class.call(integration:, user:, platform: 'web', external_ids:) }
 
