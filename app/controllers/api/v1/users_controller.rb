@@ -36,11 +36,11 @@ module Api
         end
       end
 
-      def has_donated_today
+      def donated_today
         if current_user
-          render json: { has_donated_today: current_user.last_donation_at&.today? }
+          render json: { donated_today: current_user.last_donation_at&.today? }
         else
-          render json: { has_donated_today: false }
+          render json: { donated_today: false }
         end
       end
 
