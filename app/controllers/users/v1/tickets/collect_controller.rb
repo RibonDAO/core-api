@@ -13,32 +13,12 @@ module Users
           end
         end
 
-        def collect_by_external_id
-          command = ::Tickets::CollectByExternalId.call(integration:, user:, platform:,
-                                                        external_ids: ticket_params[:external_ids])
+        def collect_by_external_ids
+          command = ::Tickets::CollectByExternalIds.call(integration:, user:, platform:,
+                                                         external_ids: ticket_params[:external_ids])
           if command.success?
             ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok
-          else
-            render_errors(command.errors)
-          end
-        end
-
-        def can_collect_by_integration
-          command = ::Tickets::CanCollectByIntegration.call(integration:, user:)
-          if command.success?
-            render json: { can_collect: command.result }, status: :ok
-          else
-            render_errors(command.errors)
-          end
-        end
-
-        def can_collect_by_external_id
-          command = ::Tickets::CanCollectByExternalId.call(integration:, user:,
-                                                           external_ids: ticket_params[:external_ids])
-
-          if command.success?
-            render json: { can_collect: command.result }, status: :ok
           else
             render_errors(command.errors)
           end
