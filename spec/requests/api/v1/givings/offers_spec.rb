@@ -5,11 +5,14 @@ RSpec.describe 'Api::V1::Offers', type: :request do
     subject(:request) { get url }
 
     let(:user) { create(:user) }
-    let(:url) { '/api/v1/givings/offers?currency=brl&subscription=true' }
-    let!(:active_offers) { create_list(:offer, 2, active: true, currency: :brl, subscription: true) }
+    let(:url) { '/api/v1/givings/offers/?currency=brl&subscription=true&category=direct_contribution' }
+    let!(:active_offers) do
+      create_list(:offer, 2, active: true, currency: :brl, subscription: true, category: 'direct_contribution')
+    end
 
     before do
-      create_list(:offer, 3, active: false, currency: :brl, subscription: true)
+      create_list(:offer, 3, active: true, currency: :brl, subscription: true, category: 'club')
+      create_list(:offer, 3, active: false, currency: :brl, subscription: true, category: 'direct_contribution')
     end
 
     it 'returns all active offers' do
