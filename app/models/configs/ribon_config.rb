@@ -45,30 +45,6 @@ class RibonConfig < ApplicationRecord
     first&.ribon_club_fee_percentage
   end
 
-  def self.ribon_club_fee_percentage=(value)
-    first.update(ribon_club_fee_percentage: value)
-  end
-
-  def self.disable_labeling=(value)
-    first.update(disable_labeling: value)
-  end
-
-  def self.minimum_contribution_chargeable_fee_cents=(value)
-    first.update(minimum_contribution_chargeable_fee_cents: value)
-  end
-
-  def self.default_chain_id=(value)
-    first.update(default_chain_id: value)
-  end
-
-  def self.default_ticket_value=(value)
-    first.update(default_ticket_value: value)
-  end
-
-  def self.contribution_fee_percentage=(value)
-    first.update(contribution_fee_percentage: value)
-  end
-
   private
 
   def singularity
