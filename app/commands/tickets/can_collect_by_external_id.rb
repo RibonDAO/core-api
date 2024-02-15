@@ -18,6 +18,8 @@ module Tickets
     private
 
     def valid_external_id?
+      return false if external_id.blank?
+
       !Voucher.exists?(external_id:)
     end
   end
