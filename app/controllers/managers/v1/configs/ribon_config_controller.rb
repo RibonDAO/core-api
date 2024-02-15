@@ -25,7 +25,7 @@ module Managers
         private
 
         def ribon_config_params
-          params.permit(:id, :default_ticket_value)
+          params.permit(:id, :default_ticket_value, :ribon_club_fee_percentage)
         end
       end
     end

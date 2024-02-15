@@ -52,6 +52,10 @@ RailsAdmin.config do |config|
       label{ "contribution_fee_percentage (percentage that goes to pay contribution fees (the rest is for tickets pay) (ex: 20% for fees, 80% for tickets pay on each contribution))" }
     end
 
+    field :ribon_club_fee_percentage do
+      label{ "ribon_club_fee_percentage (percentage from ribon club that goes to fee) (ex: 15.0 = 15%)" }
+    end
+
     field :minimum_contribution_chargeable_fee_cents do
       label{ "minimum_contribution_chargeable_fee_cents (minimum fee to charge from a contribution in usdc cents (100 = one dollar))" }
     end

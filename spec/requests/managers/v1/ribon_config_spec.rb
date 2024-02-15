@@ -11,7 +11,7 @@ RSpec.describe 'Managers::V1::Configs::RibonConfig', type: :request do
     it 'returns a list of integrations' do
       request
 
-      expect_response_collection_to_have_keys(%w[id updated_at default_ticket_value])
+      expect_response_collection_to_have_keys(%w[id updated_at default_ticket_value ribon_club_fee_percentage])
     end
   end
 
