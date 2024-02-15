@@ -15,7 +15,12 @@ module Api
         end
 
         def cached_tickets
-          RedisStore::HStore.get(key: "tickets-#{user.id}") || 0
+          tickets = RedisStore::HStore.get(key: "tickets-#{user.id}") || 0
+          if tickets.negative?
+            RedisStore::HStore.set(key: "tickets-#{user.id}", value: 0)
+            return 0
+          end
+          tickets
         end
       end
     end

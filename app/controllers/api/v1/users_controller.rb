@@ -36,6 +36,14 @@ module Api
         end
       end
 
+      def donated_today
+        if current_user
+          render json: { donated_today: current_user.last_donation_at&.today? }
+        else
+          render json: { donated_today: false }
+        end
+      end
+
       def first_access_to_integration
         @integration = Integration.find_by_id_or_unique_address params[:integration_id]
 
