@@ -49,5 +49,15 @@ describe Tickets::CollectByExternalIds do
         expect(command.errors[:message]).to eq ['Unable to collect now.']
       end
     end
+
+    context 'when the param external_ids has more than 5 ids valid' do
+      let(:integration) { create(:integration) }
+      let(:user) { create(:user) }
+      let(:external_ids) { %w[13 14 15 16 17 18] }
+
+      it 'creates only 5 tickets in database' do
+        expect { command }.to change(Ticket, :count).by(5)
+      end
+    end
   end
 end
