@@ -15,12 +15,16 @@ module Api
         end
 
         def cached_tickets
-          tickets = RedisStore::HStore.get(key: "tickets-#{user.id}") || Ticket.where(user:).count
+          tickets = RedisStore::HStore.get(key: "tickets-#{user.id}") || database_tickets
           if tickets.negative?
-            RedisStore::HStore.set(key: "tickets-#{user.id}", value: 0)
-            return 0
+            RedisStore::HStore.set(key: "tickets-#{user.id}", value: database_tickets)
+            return database_tickets
           end
           tickets
+        end
+
+        def database_tickets
+          Ticket.where(user:).count
         end
       end
     end
