@@ -26,6 +26,8 @@ class Subscription < ApplicationRecord
 
   has_many :person_payments
 
+  delegate :category, to: :offer
+
   enum status: {
     active: 0,
     inactive: 1,
