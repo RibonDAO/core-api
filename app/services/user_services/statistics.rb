@@ -41,16 +41,13 @@ module UserServices
       donations.where.not(non_profit_id: nil).order(created_at: :desc).first&.non_profit_id
     end
 
-    delegate :last_donation_at, to: :user
-
     def statistics
       donated = total_donated if customer
       { total_non_profits: (total_non_profits || []).count,
         total_tickets: donations.count,
         total_donated: donated || 0,
         total_causes: (total_causes || []).count,
-        last_donated_non_profit:,
-        last_donation_at: }
+        last_donated_non_profit: }
     end
 
     private
