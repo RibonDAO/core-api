@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 # == Schema Information
 #
 # Table name: person_payments
@@ -143,17 +144,17 @@ class PersonPayment < ApplicationRecord
     payer&.identification
   end
 
-  def club?
-    self.subscription&.active? && self.offer&.category == 'club'
-  end
-
   def set_ribon_club_fee_cents
     return self.ribon_club_fee_cents = 0 unless club?
-    
+
     self.ribon_club_fee_cents = (amount_cents.to_i * (RibonConfig.ribon_club_fee_percentage.to_i / 100.0)).round
   end
 
   private
+
+  def club?
+    subscription&.active? && offer&.category == 'club'
+  end
 
   def set_currency
     self.currency = offer&.currency || :usd
@@ -163,3 +164,5 @@ class PersonPayment < ApplicationRecord
     @gateway ||= offer&.gateway&.downcase&.to_sym || :stripe
   end
 end
+
+# rubocop:enable Metrics/ClassLength
