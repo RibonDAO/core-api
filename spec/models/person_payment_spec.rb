@@ -118,6 +118,35 @@ RSpec.describe PersonPayment, type: :model do
     end
   end
 
+  describe '#set_ribon_club_fees' do
+    subject(:person_payment) do
+      create(:person_payment, amount_cents:, offer:, payment_method:, subscription:)
+    end
+
+    let(:payment_method) { :credit_card }
+    let(:offer) { create(:offer, price_cents: 1200, currency: :usd, category: 'club') }
+    let(:subscription) { create(:subscription, offer:) }
+    let(:amount_cents) { 1500 }
+
+    before do
+      create(:ribon_config)
+      command = command_double(klass: Givings::Card::CalculateCardGiving,
+                               result: { card_fee: OpenStruct.new({ cents: 67 }),
+                                         crypto_fee: OpenStruct.new({ cents: 3 }) })
+      allow(Givings::Card::CalculateCardGiving).to receive(:call).and_return(command)
+    end
+
+    it 'creates a person_payment with correct params' do
+      person_payment.set_ribon_club_fee_cents
+      ribon_club_fee = person_payment.reload.ribon_club_fee_cents
+
+      expect(ribon_club_fee).to eq 225
+      expect(person_payment.person_payment_fee.card_fee_cents).to eq 67
+      expect(person_payment.person_payment_fee.crypto_fee_cents).to eq 3
+      expect(person_payment.liquid_value_cents).to eq 1205
+    end
+  end
+
   describe '#crypto_amount' do
     let(:amount_cents) { 1500 }
 
