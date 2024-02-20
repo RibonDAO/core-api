@@ -30,6 +30,7 @@ class PersonPayment < ApplicationRecord
   include UuidHelper
 
   before_create :set_currency
+  before_create :set_ribon_club_fee_cents
   after_create :set_fees
   after_create :set_liquid_value_cents
   after_create :set_usd_value_cents
@@ -86,7 +87,7 @@ class PersonPayment < ApplicationRecord
   end
 
   def amount_value
-    amount_cents / 100.0
+    (amount_cents - ribon_club_fee_cents.to_i) / 100.0
   end
 
   def formatted_amount
@@ -140,6 +141,16 @@ class PersonPayment < ApplicationRecord
 
   def payer_identification
     payer&.identification
+  end
+
+  def club?
+    self.subscription&.active? && self.offer&.category == 'club'
+  end
+
+  def set_ribon_club_fee_cents
+    return self.ribon_club_fee_cents = 0 unless club?
+    
+    self.ribon_club_fee_cents = (amount_cents.to_i * (RibonConfig.ribon_club_fee_percentage.to_i / 100.0)).round
   end
 
   private
