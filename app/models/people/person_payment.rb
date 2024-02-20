@@ -87,7 +87,7 @@ class PersonPayment < ApplicationRecord
   end
 
   def amount_value
-    (amount_cents - ribon_club_fee_cents.to_i) / 100.0
+    amount_cents / 100.0
   end
 
   def formatted_amount
