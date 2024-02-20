@@ -51,6 +51,22 @@ module Givings
                                   amount_cents:, status: :processing, receiver:, platform: })
         end
 
+        def create_subscription(payer)
+          return if user_already_has_pix_subscription?
+
+          Subscription.create!({ payer:, offer:, payment_method:, status: :active, receiver:, platform:,
+                                 integration: })
+          schedule_revoke_subscription_after_a_month(subscription)
+        end
+
+        def user_already_has_pix_subscription?
+          Subscription.exists?(payer:, offer:, payment_method:)
+        end
+
+        def schedule_revoke_subscription_after_a_month(subscription)
+          #Service::Givings::Payment::Subscription::RevokeScheduler.new(subscription).call
+        end
+
         def amount_cents
           offer.price_cents
         end
