@@ -28,6 +28,7 @@ module Givings
 
         person_payment.update(status: :refunded,
                               refund_date: Time.zone.at(refund[:created]))
+        cancel_subscription(person_payment.subscription) if person_payment.subscription
       end
 
       def person_payment
@@ -40,6 +41,10 @@ module Givings
 
       def refund_params
         PaymentIntent.from(external_id, gateway, 'refund')
+      end
+
+      def cancel_subscription(subscription)
+        subscription.update(status: :canceled, cancel_date: Time.zone.now)
       end
     end
   end
