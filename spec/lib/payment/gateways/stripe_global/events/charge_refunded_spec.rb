@@ -24,5 +24,28 @@ RSpec.describe Payment::Gateways::StripeGlobal::Events::ChargeRefunded do
         expect(PersonPayment.last.refund_date).to eq(Time.zone.at(1_691_697_994))
       end
     end
+
+    context 'when there is a person payment with subscription' do
+      let(:subscription) { create(:subscription) }
+
+      before do
+        create(:person_payment, external_id: 'external_id', subscription:)
+      end
+
+      it 'update the person_payment status' do
+        handle
+        expect(PersonPayment.last.status).to eq('refunded')
+      end
+
+      it 'update the person_payment refund_date' do
+        handle
+        expect(PersonPayment.last.refund_date).to eq(Time.zone.at(1_691_697_994))
+      end
+
+      it 'cancel the subscription' do
+        handle
+        expect(subscription.reload.status).to eq('canceled')
+      end
+    end
   end
 end

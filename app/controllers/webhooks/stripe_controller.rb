@@ -31,8 +31,6 @@ module Webhooks
         ::Payment::Gateways::Stripe::Events::InvoicePaymentFailed.handle(event)
       when 'charge.refunded'
         ::Payment::Gateways::Stripe::Events::ChargeRefunded.handle(event)
-      when 'charge.refund.updated'
-        ::Payment::Gateways::Stripe::Events::ChargeRefundUpdated.handle(event)
       else
         Rails.logger.info { "Unhandled event type: #{event.type}" }
       end
