@@ -99,15 +99,23 @@ describe Givings::Payment::CreditCardRefund do
       end
 
       context 'when there is a subscription associated' do
-        let(:subscription) { create(:subscription) }
+        let!(:subscription) { create(:subscription) }
         let(:person_payment) do
           build(:person_payment, offer:, amount_cents: 1, external_id: 'pi_123',
                                  refund_date: '2022-10-25 12:20:41', subscription:)
         end
 
         before do
+          allow(::Givings::Subscriptions::CancelSubscription).to receive(:call)
+            .and_return(OpenStruct.new({ success?: true }))
           allow(subscription).to receive(:update)
           allow(Time.zone).to receive(:now).and_return(Time.zone.local(2023, 3, 9))
+        end
+
+        it 'calls the command to cancel subscription' do
+          command
+          expect(::Givings::Subscriptions::CancelSubscription).to have_received(:call)
+            .with(subscription_id: subscription.id)
         end
 
         it 'calls cancel_subscription' do
