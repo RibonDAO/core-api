@@ -22,7 +22,10 @@ module Payment
               person_payment&.update(status: :refunded, refund_date:)
               return unless person_payment&.subscription
 
-              person_payment.subscription.update(status: :canceled, cancel_date: Time.zone.now)
+              command = ::Givings::Subscriptions::CancelSubscription.call(
+                subscription_id: person_payment.subscription.id
+              )
+              person_payment.subscription.update(status: :canceled, cancel_date: Time.zone.now) if command.success?
             end
           end
         end

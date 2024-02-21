@@ -29,6 +29,8 @@ RSpec.describe Payment::Gateways::Stripe::Events::ChargeRefunded do
       let(:subscription) { create(:subscription) }
 
       before do
+        allow(::Givings::Subscriptions::CancelSubscription).to receive(:call)
+          .and_return(OpenStruct.new({ success?: true }))
         create(:person_payment, external_id: 'external_id', subscription:)
       end
 
@@ -40,6 +42,12 @@ RSpec.describe Payment::Gateways::Stripe::Events::ChargeRefunded do
       it 'update the person_payment refund_date' do
         handle
         expect(PersonPayment.last.refund_date).to eq(Time.zone.at(1_691_697_994))
+      end
+
+      it 'calls the command to cancel subscription' do
+        handle
+        expect(::Givings::Subscriptions::CancelSubscription).to have_received(:call)
+          .with(subscription_id: subscription.id)
       end
 
       it 'cancel the subscription' do
