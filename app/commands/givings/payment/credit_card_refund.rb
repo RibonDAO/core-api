@@ -44,7 +44,9 @@ module Givings
       end
 
       def cancel_subscription(subscription)
-        subscription.update(status: :canceled, cancel_date: Time.zone.now)
+        command = ::Givings::Subscriptions::CancelSubscription.call(subscription_id: subscription.id)
+
+        subscription.update(status: :canceled, cancel_date: Time.zone.now) if command.success?
       end
     end
   end
