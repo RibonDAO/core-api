@@ -153,5 +153,19 @@ RSpec.describe Payment::Gateways::Stripe::Events::InvoicePaid do
         expect(PersonPayments::CreateContributionJob).not_to have_received(:perform_later)
       end
     end
+
+    context 'when there is a subscription from club' do
+      let!(:cause) { create(:cause, status: :active) }
+      let!(:offer) { create(:offer, category: :club) }
+      let!(:payer) { create(:customer) }
+      let!(:subscription) do
+        create(:subscription, external_id: 'external_subscription_id', payer:, offer:, receiver: nil)
+      end
+
+      it 'saves a sample cause on person payment receiver' do
+        handle
+        expect(subscription.person_payments.last.receiver).to eq(cause)
+      end
+    end
   end
 end
