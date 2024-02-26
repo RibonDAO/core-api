@@ -74,13 +74,6 @@ class PersonPayment < ApplicationRecord
 
   def from_customer? = payer_type == 'Customer'
 
-  def crypto_amount
-    amount_without_fees = amount - service_fees
-    return amount_without_fees if currency&.to_sym == :usd
-
-    Currency::Converters.convert_to_usd(value: amount_without_fees, from: currency&.to_sym).round.to_f
-  end
-
   def amount
     return amount_value if amount_cents
 
@@ -95,6 +88,10 @@ class PersonPayment < ApplicationRecord
     Money.from_cents(amount_cents, currency).format
   end
 
+  def crypto_amount
+    (usd_value_cents.to_i / 100.0).round(2).to_f
+  end
+
   def set_fees
     return create_person_payment_fee!(card_fee_cents: 0, crypto_fee_cents: 0) if crypto?
 
@@ -106,14 +103,19 @@ class PersonPayment < ApplicationRecord
   end
 
   def set_liquid_value_cents
-    self.liquid_value_cents = amount_cents - person_payment_fee&.service_fee_cents - ribon_club_fee_cents.to_i
+    self.liquid_value_cents = amount_cents - person_payment_fee&.service_fee_cents.to_i - ribon_club_fee_cents.to_i
     save!
   rescue StandardError => e
     Reporter.log(error: e)
   end
 
   def set_usd_value_cents
-    self.usd_value_cents = crypto_amount * 100
+    if currency&.to_sym == :usd
+      self.usd_value_cents = liquid_value_cents
+    else
+      self.usd_value_cents = Currency::Converters.convert_to_usd(value: liquid_value_cents,
+                                                                 from: currency&.to_sym).round.to_f
+    end
     save!
   rescue StandardError => e
     Reporter.log(error: e)
