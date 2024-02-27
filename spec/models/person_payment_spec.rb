@@ -147,28 +147,64 @@ RSpec.describe PersonPayment, type: :model do
     end
   end
 
-  describe '#crypto_amount' do
+  describe '#liquid_value_cents' do
     let(:amount_cents) { 1500 }
 
     context 'when the currency is usd' do
+      it 'returns the amount_cents minus the fees' do
+        amount = person_payment.amount
+        fees = person_payment_fee.crypto_fee + person_payment_fee.card_fee
+        expect(person_payment.liquid_value_cents).to eq (amount - fees) * 100
+      end
+    end
+
+    context 'when the currency is brl' do
+      let(:offer) { build(:offer, price_cents: 1500, currency: :brl) }
+
       it 'returns the amount minus the fees' do
         amount = person_payment.amount
         fees = person_payment_fee.crypto_fee + person_payment_fee.card_fee
 
-        expect(person_payment.crypto_amount).to eq amount - fees
+        expect(person_payment.liquid_value_cents).to eq (amount - fees) * 100
+      end
+    end
+  end
+
+  describe '#usd_value_cents' do
+    context 'when the currency is usd' do
+      it 'returns the liquid_value_cents' do
+        expect(person_payment.usd_value_cents).to eq person_payment.liquid_value_cents
       end
     end
 
     context 'when the currency is brl' do
       include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
+      let(:offer) { build(:offer, price_cents: 1500, currency: :brl) }
 
-      it 'returns the amount minus the fees converted to brl' do
-        person_payment.update(currency: :brl)
-        amount = person_payment.amount
-        fees = person_payment_fee.crypto_fee + person_payment_fee.card_fee
+      it 'returns the liquid_value_cents converted to usd' do
         convert_factor_brl_usd = 0.1843 # comes from the conversion_rate_brl_usd request
 
-        expect(person_payment.crypto_amount).to eq ((amount - fees) * convert_factor_brl_usd).round(2)
+        expect(person_payment.usd_value_cents).to eq (
+          person_payment.liquid_value_cents * convert_factor_brl_usd).round(2).to_i
+      end
+    end
+  end
+
+  describe '#crypto_amount' do
+    let(:amount_cents) { 1500 }
+
+    context 'when the currency is usd' do
+      it 'returns the usd_value_cents divided per 100' do
+        expect(person_payment.crypto_amount).to eq person_payment.usd_value_cents / 100.0
+      end
+    end
+
+    context 'when the currency is brl' do
+      include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
+      let(:offer) { build(:offer, price_cents: 1500, currency: :brl) }
+
+      it 'returns the usd_value_cents per 100 too' do
+        expect(person_payment.crypto_amount).to eq (person_payment.usd_value_cents / 100.0).round(2)
       end
     end
   end
