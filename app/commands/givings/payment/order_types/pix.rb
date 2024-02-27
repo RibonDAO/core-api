@@ -34,8 +34,6 @@ module Givings
         end
 
         def success_callback
-          return unless user_already_has_pix_subscription?
-
           return unless existing_subscription
 
           activate_subscription(existing_subscription)
@@ -60,14 +58,10 @@ module Givings
         end
 
         def create_subscription(payer)
-          return if user_already_has_pix_subscription?
+          return if existing_subscription
 
           Subscription.create!({ payer:, offer:, payment_method:, status: :inactive, platform:,
                                  integration: })
-        end
-
-        def user_already_has_pix_subscription?
-          Subscription.exists?(payer:, offer:, payment_method:)
         end
 
         def existing_subscription
