@@ -60,11 +60,10 @@ module Givings
         end
 
         def create_subscription(payer)
-          if user_already_has_pix_subscription? return
-          else
-            Subscription.create!({ payer:, offer:, payment_method:, status: :inactive, platform:,
+          return if user_already_has_pix_subscription?
+
+          Subscription.create!({ payer:, offer:, payment_method:, status: :inactive, platform:,
                                    integration: })
-          end
         end
 
         def user_already_has_pix_subscription?
