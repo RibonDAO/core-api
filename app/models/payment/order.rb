@@ -31,7 +31,7 @@ class Order
     new(params)
   end
 
-  def self.from_pix(payment, operation = nil)
+  def self.from_pix(payment)
     params = {
       id: payment.id,
       gateway: payment&.offer&.gateway&.to_sym,
@@ -39,7 +39,7 @@ class Order
       payment:,
       payment_method: payment&.payment_method,
       offer: payment&.offer,
-      operation:,
+      operation: :purchase,
       payment_method_types: ['pix'],
       payment_method_data: { type: 'pix' },
       payment_method_options: { pix: { expires_at: 30.minutes.from_now.to_i } }
