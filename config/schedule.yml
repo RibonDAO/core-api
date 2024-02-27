@@ -67,3 +67,8 @@ label_donations_and_contributions:
   cron: "0 8 * 3 1"
   class: "Contributions::LabelWorker"
   queue: relabel
+
+relabel_donations_and_contributions:
+  cron: "0 8 * 3 1"
+  class: "Contributions::RelabelWorker"
+  queue: relabel
