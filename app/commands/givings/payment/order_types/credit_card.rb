@@ -12,7 +12,7 @@ module Givings
           @email          = args[:email]
           @tax_id         = args[:tax_id]
           @offer          = args[:offer]
-          @payment_method = args[:payment_method]
+          @payment_method = :credit_card
           @user           = args[:user]
           @operation      = args[:operation]
           @integration_id = args[:integration_id]
