@@ -31,7 +31,7 @@ class Order
     new(params)
   end
 
-  def self.from_pix(payment, operation = nil)
+  def self.from_pix(payment)
     params = {
       id: payment.id,
       gateway: payment&.offer&.gateway&.to_sym,

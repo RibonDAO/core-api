@@ -26,7 +26,7 @@ module Givings
           subscription = create_subscription(customer) if offer.category == 'club'
           payment = create_payment(customer, subscription)
 
-          Order.from_pix(payment, operation)
+          Order.from_pix(payment)
         end
 
         def process_payment(order)
