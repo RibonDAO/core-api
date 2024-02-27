@@ -35,7 +35,7 @@ module Labeling
         ContributionFee.where(contribution: @contributions).delete_all
 
         DonationContribution.where(donation: Donation.where(
-          'created_at >= ? AND donations.non_profit_id not in (3,4,5,6,8,9)', 3.years.ago
+          'created_at >= ? AND donations.non_profit_id not in (3,4,5,6,8,9)', from
         )).delete_all
       end
     end
@@ -86,7 +86,7 @@ module Labeling
             (person_payments.receiver_type = 'Cause' and person_payments.receiver_id != 4) OR
             (person_payments.receiver_type = 'NonProfit' and
               person_payments.receiver_id not in (3,4,5,6,8,9))
-          )", 3.years.ago
+          )", from
                                    )
     end
   end

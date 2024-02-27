@@ -35,7 +35,7 @@ RSpec.describe Labeling::RelabelService, type: :service do
   end
 
   describe '#ordered_records' do
-    let!(:non_profit) { create(:non_profit, id: 3) }
+    let!(:non_profit) { create(:non_profit, id: 2) }
     let!(:donation1) { create(:donation, created_at: 10.days.ago, non_profit:) }
     let!(:donation2) { create(:donation, created_at: 5.days.ago, non_profit:) }
     let!(:donation3) { create(:donation, created_at: 1.day.ago, non_profit:) }
@@ -57,7 +57,7 @@ RSpec.describe Labeling::RelabelService, type: :service do
   end
 
   describe '#relabel' do
-    let!(:non_profit) { create(:non_profit, id: 3) }
+    let!(:non_profit) { create(:non_profit, id: 2) }
     let(:ticket_labeling_service) { instance_double(Service::Contributions::TicketLabelingService) }
     let(:fees_labeling_service) { instance_double(Service::Contributions::FeesLabelingService) }
 
