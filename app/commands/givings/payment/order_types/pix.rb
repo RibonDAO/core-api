@@ -58,13 +58,13 @@ module Givings
         end
 
         def create_subscription(payer)
-          return if existing_subscription
+          return if existing_subscription(payer)
 
           Subscription.create!({ payer:, offer:, payment_method:, status: :inactive, platform:,
                                  integration: })
         end
 
-        def existing_subscription
+        def existing_subscription(payer)
           Subscription.find_by(payer:, offer:, payment_method:)
         end
 
