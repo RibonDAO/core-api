@@ -35,13 +35,19 @@ module Payment
             payment.external_id = data['payment_intent']
             payment.payment_method = subscription.payment_method
             payment.offer = subscription.offer
-            payment.receiver = subscription.receiver
+            payment.receiver = receiver_person_payment
             payment.payer = subscription.payer
             payment.platform = subscription.platform
             payment.integration = subscription.integration
             payment.status = :paid
           end
           # rubocop:enable Metrics/AbcSize
+
+          def receiver_person_payment
+            return Cause.where(status: :active).sample if subscription.category == 'club'
+
+            subscription.receiver
+          end
 
           def upsert_payment
             external_invoice_id = data['id']
