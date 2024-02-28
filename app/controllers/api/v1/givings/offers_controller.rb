@@ -6,7 +6,7 @@ module Api
           @offers = Offer.where(active: true, currency:, subscription:, category:)
                          .order('position_order ASC, price_cents ASC')
 
-          render json: OfferBlueprint.render(@offers, view: :minimal)
+          render json: OfferBlueprint.render(@offers, view: :plan)
         end
 
         def show
