@@ -12,7 +12,6 @@ class OfferBlueprint < Blueprinter::Base
     association :plan, blueprint: PlanBlueprint do |object|
       object.plan
     end
-    excludes :external_id
   end
 
   view :minimal do
