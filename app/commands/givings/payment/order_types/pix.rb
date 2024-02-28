@@ -33,12 +33,7 @@ module Givings
           Service::Givings::Payment::Orchestrator.new(payload: order).call
         end
 
-        def success_callback
-          return unless existing_subscription
-
-          activate_subscription(existing_subscription)
-          schedule_revoke_subscription_after_a_month(existing_subscription)
-        end
+        def success_callback; end
 
         private
 
@@ -66,14 +61,6 @@ module Givings
 
         def existing_subscription(payer)
           Subscription.find_by(payer:, offer:, payment_method:)
-        end
-
-        def activate_subscription(subscription)
-          subscription.update!(status: :active)
-        end
-
-        def schedule_revoke_subscription_after_a_month(subscription)
-          Subscriptions::RevokeSubscriptionJob.set(wait: 1.month).perform_later(subscription)
         end
 
         def amount_cents
