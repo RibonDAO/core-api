@@ -34,12 +34,12 @@ class Order
   def self.from_pix(payment)
     params = {
       id: payment.id,
-      gateway: payment&.offer&.gateway&.to_sym,
+      gateway: 'stripe',
       payer: payment&.payer,
       payment:,
       payment_method: payment&.payment_method,
       offer: payment&.offer,
-      operation: :purchase,
+      operation: :create_intent,
       payment_method_types: ['pix'],
       payment_method_data: { type: 'pix' },
       payment_method_options: { pix: { expires_at: 30.minutes.from_now.to_i } }
