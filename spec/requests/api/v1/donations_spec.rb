@@ -78,7 +78,8 @@ RSpec.describe 'Api::V1::Donations', type: :request do
         request
 
         expect(response_json['donation'].keys)
-          .to match_array %w[id created_at integration_id non_profit_id updated_at user_id value platform]
+          .to match_array %w[id created_at integration_id non_profit_id updated_at user_id value platform source
+                             category]
       end
 
       it 'calls add utm command' do

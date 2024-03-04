@@ -29,11 +29,6 @@ class Donation < ApplicationRecord
     app: 'app'
   }
 
-  enum status: {
-    collected: 0,
-    to_collect: 1
-  }
-
   enum category: {
     daily: 0,
     monthly: 1
