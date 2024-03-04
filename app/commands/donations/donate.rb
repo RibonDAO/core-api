@@ -62,7 +62,7 @@ module Donations
 
     def create_donation
       @donation = Donation.create!(integration:, non_profit:, user:, value: ticket_value, platform:,
-                                   source: :integration, category: :daily, status: :collected)
+                                   source: :integration, category: :daily)
     end
 
     def set_user_last_donation_at
