@@ -24,7 +24,7 @@ module Tickets
       donations_array = []
       quantity.times do |index|
         donations_array << { integration_id: integrations[index], non_profit_id: non_profit.id, user_id: user.id,
-                             platform:, value: ticket_value }
+                             platform:, value: ticket_value, category: :daily, source: :integration }
       end
 
       donations_array
