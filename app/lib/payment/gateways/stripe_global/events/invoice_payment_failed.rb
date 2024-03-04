@@ -25,7 +25,7 @@ module Payment
             # rubocop:disable Metrics/AbcSize
             def set_payment_attributes
               payment.paid_date = Time.zone.at(data['created'])
-              payment.amount_cents = data['amount_paid']
+              payment.amount_cents = subscription.offer.price_cents
               payment.external_id = data['payment_intent']
               payment.payment_method = subscription.payment_method
               payment.offer = subscription.offer
