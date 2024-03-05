@@ -44,7 +44,8 @@ module Tickets
     end
 
     def create_ticket(external_id:)
-      @ticket = Ticket.create!(integration:, user:, platform:, external_id:)
+      @ticket = Ticket.create!(integration:, user:, platform:, external_id:, source: :integration,
+                               status: :collected, category: :daily)
     end
 
     def create_voucher(external_id:)
