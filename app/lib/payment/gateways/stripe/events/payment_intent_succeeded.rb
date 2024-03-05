@@ -66,7 +66,7 @@ module Payment
             end
 
             def schedule_revoke_subscription_after_a_month(subscription)
-              Subscriptions::RevokeSubscriptionJob.set(wait: 1.month).perform_later(subscription)
+              Subscriptions::RevokeSubscriptionJob.set(wait_until: 1.month.from_now).perform_later(subscription)
             end
           end
         end
