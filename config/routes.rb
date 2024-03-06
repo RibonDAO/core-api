@@ -296,6 +296,7 @@ Rails.application.routes.draw do
 
       post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
       get 'subscriptions' => 'subscriptions#index'
+      get 'is_member' => 'subscriptions#member?'
 
       namespace :tickets do 
         get 'available' => 'tickets#available'
