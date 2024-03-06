@@ -6,10 +6,10 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
 
   describe '#perform' do
     subject(:worker) { described_class.new }
-        
+
     let(:integration) { create(:integration) }
     let(:customer) { create(:customer) }
-    let(:user) { customer.user}
+    let(:user) { customer.user }
     let(:platform) { 'app' }
     let(:quantity) { 2 }
     let(:plan) { create(:plan, daily_tickets: 2) }
@@ -18,7 +18,7 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
     before do
       allow(Tickets::GenerateClubDailyTicketsJob).to receive(:perform_later).with(user:, platform:,
                                                                                   quantity:, integration:)
-    
+
       create(:subscription, integration:, status: :active, platform:,
                             offer:, payer: customer)
     end
@@ -27,7 +27,9 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
       worker.perform
 
       expect(Tickets::GenerateClubDailyTicketsJob).to have_received(:perform_later).with(user:,
-                                                                                         platform:, quantity:, integration:)
+                                                                                         platform:,
+                                                                                         quantity:,
+                                                                                         integration:)
     end
   end
 

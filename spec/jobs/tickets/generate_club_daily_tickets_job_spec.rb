@@ -6,20 +6,22 @@ RSpec.describe Tickets::GenerateClubDailyTicketsJob, type: :job do
 
     let(:integration) { create(:integration) }
     let(:user) { create(:user) }
-    let(:platform) { "app"}
+    let(:platform) { 'app' }
     let(:quantity) { 2 }
-    let(:plan) {create(:plan, daily_tickets: 2)}
-    let(:offer) { create(:offer, plans: [plan])}
+    let(:plan) { create(:plan, daily_tickets: 2) }
+    let(:offer) { create(:offer, plans: [plan]) }
     let(:command) { Tickets::GenerateClubTickets }
 
     before do
       allow(command).to receive(:call)
-      create(:subscription, payer: user, integration: integration, status: :active, platform: platform, offer: offer)
+      create(:subscription, payer: user, integration:, status: :active, platform:,
+                            offer:)
       perform_job
     end
 
     it 'calls GenerateClubTickets' do
-      expect(command).to have_received(:call).with(user: user, platform: platform, quantity: quantity, category: :daily, integration: integration)
+      expect(command).to have_received(:call).with(user:, platform:, quantity:,
+                                                   category: :daily, integration:)
     end
   end
 end
