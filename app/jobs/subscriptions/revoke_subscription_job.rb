@@ -1,6 +1,6 @@
 module Subscriptions
   class RevokeSubscriptionJob < ApplicationJob
-    queue_as :default
+    queue_as :subscriptions
 
     def perform(subscription)
       Subscriptions::RevokeSubscription.call(subscription:)
