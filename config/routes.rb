@@ -301,6 +301,7 @@ Rails.application.routes.draw do
         get 'available' => 'tickets#available'
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
+        post 'collect_by_club' => 'collect#collect_by_club'
         post 'donate' => 'donations#donate'
       end
     end
