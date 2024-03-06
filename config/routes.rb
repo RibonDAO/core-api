@@ -303,6 +303,7 @@ Rails.application.routes.draw do
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
         post 'donate' => 'donations#donate'
+        get 'to_collect' => 'tickets#to_collect'
       end
     end
   end
