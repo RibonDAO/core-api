@@ -18,7 +18,7 @@ RSpec.describe 'Users::V1::Tickets::Tickets', type: :request do
     end
   end
 
-    describe 'get /tickets/to_collect' do
+  describe 'get /tickets/to_collect' do
     include_context 'when making a user request' do
       subject(:request) { get '/users/v1/tickets/to_collect', headers: }
     end
@@ -31,7 +31,7 @@ RSpec.describe 'Users::V1::Tickets::Tickets', type: :request do
 
     it 'returns the quantity of tickets to_collect for that user' do
       request
-;
+
       expect(response.body).to eq({ daily_tickets: 10, monthly_tickets: 5 }.to_json)
     end
   end

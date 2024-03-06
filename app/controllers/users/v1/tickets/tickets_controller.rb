@@ -9,7 +9,7 @@ module Users
         def to_collect
           @tickets = current_user.tickets.where(status: :to_collect)
           @daily_tickets = @tickets.where(category: :daily).count
-          
+
           @monthly_tickets = @tickets.where(category: :monthly).count
 
           render json: { daily_tickets: @daily_tickets, monthly_tickets: @monthly_tickets }, status: :ok
