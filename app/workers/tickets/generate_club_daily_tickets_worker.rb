@@ -6,7 +6,7 @@ module Tickets
     def perform(*_args)
       Subscription.where(status: :active).each do |subscriptions|
         Tickets::GenerateClubDailyTicketsJob.perform_later(user: subscriptions.payer.user,
-                                                           platform: subscriptions.platform, 
+                                                           platform: subscriptions.platform,
                                                            quantity: subscriptions.offer.plan.daily_tickets,
                                                            integration: subscriptions.integration)
       end
