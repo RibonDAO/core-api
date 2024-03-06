@@ -34,7 +34,7 @@ module Tickets
       tickets_array = []
       quantity.times do |index|
         tickets_array << { user:,
-                             platform:, category:, status: :pending, integration:  } # falta status ainda
+                             platform:, category:, status: :to_collect, integration:  } # falta status ainda
       end
 
       tickets_array
@@ -43,7 +43,7 @@ module Tickets
     private
 
     def create_tickets(tickets)
-      Ticket.create!(tickets)
+      Tickets.create!(tickets)
     end
 
   end
