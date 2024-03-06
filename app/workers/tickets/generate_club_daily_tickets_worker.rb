@@ -4,8 +4,10 @@ module Tickets
     sidekiq_options queue: :tickets
 
     def perform(*_args)
-      Subscriptions.where(status: :active).each do |subscriptions|
-        Tickets::GenerateClubDailyTicketsJob.perform_later(user: subscriptions.payer, platform: subscriptions.platform, quantity: subscriptions.offer.plan.daily_tickets, integration: subscriptions.integration)
+
+      Subscription.where(status: :active).each do |subscriptions|
+        Tickets::GenerateClubDailyTicketsJob.perform_later(user: subscriptions.payer.user,
+                                                           platform: subscriptions.platform, quantity: subscriptions.offer.plan.daily_tickets, integration: subscriptions.integration)
       end
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })

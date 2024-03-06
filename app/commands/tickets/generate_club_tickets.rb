@@ -4,7 +4,7 @@ module Tickets
   class GenerateClubTickets < ApplicationCommand
     prepend SimpleCommand
 
-    attr_reader  :user, :platform, :quantity, :category, :integration
+    attr_reader :user, :platform, :quantity, :category, :integration
 
     def initialize(user:, platform:, quantity:, category:, integration:)
       @user = user
@@ -20,11 +20,9 @@ module Tickets
       end
     end
 
-        def transact_donation
+    def transact_donation
       ActiveRecord::Base.transaction do
-      
         @tickets = create_tickets(build_tickets)
-      
       end
 
       tickets
@@ -32,9 +30,9 @@ module Tickets
 
     def build_tickets
       tickets_array = []
-      quantity.times do |index|
+      quantity.times do |_index|
         tickets_array << { user:,
-                             platform:, category:, status: :to_collect, integration:  } # falta status ainda
+                           platform:, category:, status: :to_collect, integration: } # falta status ainda
       end
 
       tickets_array
@@ -45,6 +43,5 @@ module Tickets
     def create_tickets(tickets)
       Tickets.create!(tickets)
     end
-
   end
 end
