@@ -20,11 +20,12 @@ module Tickets
 
     private
 
-    def build_donations(integrations)
+    def build_donations(integrations, sources, categories)
       donations_array = []
+
       quantity.times do |index|
         donations_array << { integration_id: integrations[index], non_profit_id: non_profit.id, user_id: user.id,
-                             platform:, value: ticket_value }
+                             platform:, value: ticket_value, category: categories[index], source: sources[index] }
       end
 
       donations_array
@@ -35,8 +36,10 @@ module Tickets
         destroy_result = destroy_tickets
         integrations = destroy_result[:integrations]
         external_ids = destroy_result[:external_ids]
+        sources = destroy_result[:sources]
+        categories = destroy_result[:categories]
 
-        @donations = create_donations(build_donations(integrations))
+        @donations = create_donations(build_donations(integrations, sources, categories))
         associate_integration_vouchers(external_ids)
         update_user_donations_info
         label_donations
@@ -81,8 +84,10 @@ module Tickets
       tickets = Ticket.where(user:).order(created_at: :asc).limit(quantity).destroy_all
       integrations = tickets.pluck(:integration_id)
       external_ids = tickets.pluck(:external_id)
+      sources = tickets.pluck(:source)
+      categories = tickets.pluck(:category)
 
-      { integrations:, external_ids: external_ids.compact }
+      { integrations:, external_ids: external_ids.compact, sources:, categories: }
     end
 
     def update_user_donations_info

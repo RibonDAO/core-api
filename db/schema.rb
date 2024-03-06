@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_15_202849) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_04_140230) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -276,6 +276,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_15_202849) do
     t.bigint "user_id"
     t.decimal "value"
     t.string "platform"
+    t.integer "source", default: 0
+    t.integer "category", default: 0
     t.index ["integration_id"], name: "index_donations_on_integration_id"
     t.index ["non_profit_id"], name: "index_donations_on_non_profit_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
@@ -442,8 +444,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_15_202849) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -626,6 +628,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_15_202849) do
     t.integer "status"
     t.bigint "offer_id"
     t.datetime "next_payment_attempt"
+    t.boolean "lagacy", default: false
+    t.boolean "legacy", default: false
     t.index ["integration_id"], name: "index_subscriptions_on_integration_id"
     t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_subscriptions_on_payer"
@@ -650,6 +654,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_15_202849) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "platform"
+    t.integer "source", default: 0
+    t.integer "status", default: 0
+    t.integer "category", default: 0
     t.index ["integration_id"], name: "index_tickets_on_integration_id"
     t.index ["user_id"], name: "index_tickets_on_user_id"
   end

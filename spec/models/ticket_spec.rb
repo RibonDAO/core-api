@@ -3,7 +3,10 @@
 # Table name: tickets
 #
 #  id             :bigint           not null, primary key
+#  category       :integer          default("daily")
 #  platform       :string
+#  source         :integer          default("integration")
+#  status         :integer          default("collected")
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  external_id    :string
@@ -17,6 +20,5 @@ RSpec.describe Ticket, type: :model do
     subject { build(:ticket) }
 
     it { is_expected.to belong_to(:user) }
-    it { is_expected.to belong_to(:integration) }
   end
 end
