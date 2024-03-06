@@ -50,4 +50,41 @@ RSpec.describe 'Users::V1::Subscriptions', type: :request do
       end
     end
   end
+
+  describe 'GET /users/v1/is_member' do
+    context 'when user is member' do
+      include_context 'when making a user request' do
+        subject(:request) { get '/users/v1/is_member', headers: }
+      end
+      let(:user) { account.user }
+      let(:customer) { create(:customer, user:) }
+      let(:offer) { create(:offer, category: :club) }
+      let!(:subscription) { create(:subscription, payer: customer, offer:) }
+      let(:person_payment) { create(:person_payment, payer: customer, subscription:) }
+
+      it 'get true as response' do
+        request
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to eq({ message: true }.to_json)
+      end
+    end
+
+    context 'when user is not member' do
+      include_context 'when making a user request' do
+        subject(:request) { get '/users/v1/is_member', headers: }
+      end
+      let(:user) { account.user }
+      let(:customer) { create(:customer, user:) }
+      let!(:subscription) { create(:subscription, payer: customer) }
+      let(:person_payment) { create(:person_payment, payer: customer, subscription:) }
+
+      it 'get true as response' do
+        request
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to eq({ message: false }.to_json)
+      end
+    end
+  end
 end
