@@ -12,7 +12,7 @@ module Tickets
     end
 
     def call
-      tickets = Ticket.where(source: :club, category:, status: :to_collect, user:)
+      tickets = user.tickets.where(source: :club, category:, status: :to_collect)
       with_exception_handle do
         ActiveRecord::Base.transaction do
           tickets.each do |ticket|
