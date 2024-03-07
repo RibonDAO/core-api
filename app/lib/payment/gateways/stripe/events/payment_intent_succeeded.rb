@@ -12,6 +12,8 @@ module Payment
               update_payment_status(payment)
               handle_contribution_creation(payment)
               handle_giving_to_blockchain(payment)
+
+              handle_pix_subscription(payment)
             end
 
             private
@@ -44,6 +46,27 @@ module Payment
               Givings::Payment::AddGivingNonProfitToBlockchainJob
                 .perform_later(non_profit: payment.receiver,
                                amount: payment.crypto_amount, payment:)
+            end
+
+            def handle_pix_subscription(payment)
+              subscription = existing_subscription(payment)
+              return unless subscription
+
+              activate_subscription(subscription)
+              schedule_revoke_subscription_after_a_month(subscription)
+            end
+
+            def existing_subscription(payment)
+              Subscription.find_by(payer: payment.payer, offer: payment.offer,
+                                   payment_method: payment.payment_method)
+            end
+
+            def activate_subscription(subscription)
+              subscription.update!(status: :active)
+            end
+
+            def schedule_revoke_subscription_after_a_month(subscription)
+              Subscriptions::RevokeSubscriptionJob.set(wait_until: 1.month.from_now).perform_later(subscription)
             end
           end
         end

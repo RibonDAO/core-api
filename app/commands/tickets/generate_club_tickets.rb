@@ -16,11 +16,11 @@ module Tickets
 
     def call
       with_exception_handle do
-        transact_donation
+        transact_tickets
       end
     end
 
-    def transact_donation
+    def transact_tickets
       ActiveRecord::Base.transaction do
         @tickets = create_tickets(build_tickets)
       end
@@ -32,7 +32,7 @@ module Tickets
       tickets_array = []
       quantity.times do |_index|
         tickets_array << { user:,
-                           platform:, category:, status: :to_collect, integration: } # falta status ainda
+                           platform:, category:, status: :to_collect, integration: }
       end
 
       tickets_array
@@ -41,7 +41,7 @@ module Tickets
     private
 
     def create_tickets(tickets)
-      Tickets.create!(tickets)
+      Ticket.create!(tickets)
     end
   end
 end
