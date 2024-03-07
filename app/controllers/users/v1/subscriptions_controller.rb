@@ -22,10 +22,10 @@ module Users
         ids = current_user.customers.pluck(:id)
         if Subscription.joins(:offer).where(payer_id: ids, status: :active,
                                             offer: { category: :club }).count.positive?
-          return render json: { message: true }, status: :ok
+          return render json: { is_member: true }, status: :ok
         end
 
-        render json: { message: false }, status: :ok
+        render json: { is_member: false }, status: :ok
       end
 
       private

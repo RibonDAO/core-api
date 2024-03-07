@@ -66,7 +66,7 @@ RSpec.describe 'Users::V1::Subscriptions', type: :request do
         request
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ message: true }.to_json)
+        expect(response.body).to eq({ is_member: true }.to_json)
       end
     end
 
@@ -83,7 +83,7 @@ RSpec.describe 'Users::V1::Subscriptions', type: :request do
         request
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ message: false }.to_json)
+        expect(response.body).to eq({ is_member: false }.to_json)
       end
     end
   end
