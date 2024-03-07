@@ -23,7 +23,6 @@ module Tickets
     def transact_tickets
       ActiveRecord::Base.transaction do
         @tickets = create_tickets(build_tickets)
-        
       end
 
       tickets
@@ -33,7 +32,7 @@ module Tickets
       tickets_array = []
       quantity.times do |_index|
         tickets_array << { user:,
-                           platform:, category:, status: :to_collect, integration: } 
+                           platform:, category:, status: :to_collect, integration: }
       end
 
       tickets_array

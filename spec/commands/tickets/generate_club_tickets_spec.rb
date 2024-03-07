@@ -10,7 +10,7 @@ describe Tickets::GenerateClubTickets do
       let(:integration) { create(:integration) }
       let(:user) { create(:user) }
       let(:quantity) { 3 }
-      let(:category) {:daily}
+      let(:category) { :daily }
 
       it 'creates a ticket in database' do
         expect { command }.to change(Ticket, :count).by(3)
@@ -21,5 +21,5 @@ describe Tickets::GenerateClubTickets do
         expect(user.tickets.count).to eq(3)
       end
     end
-end
+  end
 end
