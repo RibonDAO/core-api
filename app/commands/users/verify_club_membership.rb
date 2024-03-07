@@ -21,9 +21,10 @@ module Users
     private
 
     def club_member?
-      user.customers.any? do |customer|
-        customer.subscriptions.active.any? { _1.offer.category == 'club' }
-      end
+      ids = user.customers.pluck(:id)
+      Subscription.joins(:offer)
+                  .where(payer_id: ids, status: :active, offer: { category: :club })
+                  .count.positive?
     end
   end
 end
