@@ -12,7 +12,7 @@ module Users
 
     def call
       with_exception_handle do
-        return unless user
+        return false unless user
 
         club_member?
       end
