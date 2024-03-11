@@ -32,7 +32,7 @@ module Tickets
       tickets_array = []
       quantity.times do |_index|
         tickets_array << { user:,
-                           platform:, category:, status: :to_collect, integration: }
+                           platform:, category:, status: :to_collect, source: }
       end
 
       tickets_array
