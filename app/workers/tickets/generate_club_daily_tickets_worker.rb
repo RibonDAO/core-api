@@ -8,7 +8,7 @@ module Tickets
         Tickets::GenerateClubDailyTicketsJob.perform_later(user: subscriptions.payer.user,
                                                            platform: subscriptions.platform,
                                                            quantity: subscriptions.offer.plan.daily_tickets,
-                                                           integration: subscriptions.integration)
+                                                           source: :club)
       end
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })

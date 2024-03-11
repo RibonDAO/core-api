@@ -4,14 +4,14 @@ module Tickets
   class GenerateClubTickets < ApplicationCommand
     prepend SimpleCommand
 
-    attr_reader :user, :platform, :quantity, :category, :integration
+    attr_reader :user, :platform, :quantity, :category, :source
 
-    def initialize(user:, platform:, quantity:, category:, integration:)
+    def initialize(user:, platform:, quantity:, category:, source:)
       @user = user
       @platform = platform
       @quantity = quantity
       @category = category
-      @integration = integration
+      @source = source
     end
 
     def call
