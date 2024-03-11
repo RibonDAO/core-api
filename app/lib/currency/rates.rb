@@ -11,13 +11,15 @@ module Currency
       Money.add_rate(from, to, rate)
     end
 
+    # rubocop:disable Metrics/AbcSize
     def rate
       response = Request::ApiRequest.get(request_url, expires_in: 2.hours)
       response["#{from.upcase}#{to.upcase}"]['ask']
     rescue StandardError
-      response = Request::ApiRequest.get(backup_request_url, expires_in: 2.hours)
-      response['rates'][to.upcase]
+      response = Request::ApiRequest.get(request_url, headers:, expires_in: 2.hours)
+      response['data'][to.upcase.to_s]['value']
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -25,8 +27,12 @@ module Currency
       "#{RibonCoreApi.config[:currency_api][:url]}#{from}-#{to}"
     end
 
+    def headers
+      { apikey: RibonCoreApi.config[:currency_api][:api_key] }
+    end
+
     def backup_request_url
-      "#{RibonCoreApi.config[:currency_api][:backup_url]}?base=#{from}"
+      "#{RibonCoreApi.config[:currency_api][:url]}?base_currency=#{from.upcase}&currencies=#{to.upcase}"
     end
   end
 end
