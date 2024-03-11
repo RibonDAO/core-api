@@ -4,10 +4,11 @@ require 'rails_helper'
 
 describe Tickets::GenerateClubTickets do
   describe '.call' do
-    subject(:command) { described_class.call(integration:, user:, platform: 'app', quantity:, category:) }
+    subject(:command) { described_class.call(source:, user:, platform: 'app', quantity:, category:) }
 
     context 'when no error occurs' do
       let(:integration) { create(:integration) }
+      let(:source) { :club }
       let(:user) { create(:user) }
       let(:quantity) { 3 }
       let(:category) { :daily }
