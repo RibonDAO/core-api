@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Tickets::GenerateClubDailyTicketsJob, type: :job do
   describe '#perform' do
-    subject(:perform_job) { described_class.perform_now(user, platform, quantity, integration) }
+    subject(:perform_job) { described_class.perform_now(user, platform, quantity, source) }
 
     let(:integration) { create(:integration) }
+    let(:source) { :club }
     let(:user) { create(:user) }
     let(:platform) { 'app' }
     let(:quantity) { 2 }
@@ -21,7 +22,7 @@ RSpec.describe Tickets::GenerateClubDailyTicketsJob, type: :job do
 
     it 'calls GenerateClubTickets' do
       expect(command).to have_received(:call).with(user:, platform:, quantity:,
-                                                   category: :daily, integration:)
+                                                   category: :daily, source:)
     end
   end
 end
