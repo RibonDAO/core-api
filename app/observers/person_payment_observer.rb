@@ -9,6 +9,17 @@ class PersonPaymentObserver < ActiveRecord::Observer
     nil
   end
 
+  def after_create(person_payment)
+    if person_payment.paid? && person_payment.subscription?
+      Events::Subscription::SendSuccededPaymentEventJob.perform_later(person_payment:)
+    end
+    if person_payment.failed? && person_payment.subscription?
+      Events::Subscription::SendFailedPaymentEventJob.perform_later(person_payment:)
+    end
+  rescue StandardError
+    nil
+  end
+
   def processing_to_paid?(person_payment)
     person_payment.previous_changes[:status] == %w[processing paid] &&
       person_payment.paid? &&
