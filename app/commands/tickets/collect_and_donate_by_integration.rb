@@ -47,7 +47,7 @@ module Tickets
     def collect_ticket
       command = CollectByIntegration.call(integration:, user:, platform:)
 
-      if command.success?
+      if command.success? || user.tickets.any?
         donate_ticket
       else
         errors.add(:message, I18n.t('donations.blocked_message'))
