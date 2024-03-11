@@ -38,7 +38,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
       user:,
       platform: person_payment.subscription.platform,
       quantity: person_payment.subscription.offer.plan.monthly_tickets,
-      integration: person_payment.integration
+      source: :club
     )
   end
 end

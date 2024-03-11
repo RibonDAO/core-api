@@ -3,7 +3,7 @@ require 'rails_helper'
 
 describe Users::VerifyClubMembership do
   describe '.call' do
-    subject(:command) { described_class.call(user: user) }
+    subject(:command) { described_class.call(user:) }
 
     let(:user) { create(:user) }
 

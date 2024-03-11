@@ -8,16 +8,17 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
     subject(:worker) { described_class.new }
 
     let(:integration) { create(:integration) }
+    let(:source) { :club }
     let(:customer) { create(:customer) }
     let(:user) { customer.user }
     let(:platform) { 'app' }
     let(:quantity) { 2 }
     let(:plan) { create(:plan, daily_tickets: 2) }
-    let(:offer) { create(:offer, plans: [plan]) }
+    let(:offer) { create(:offer, plans: [plan], category: :club) }
 
     before do
       allow(Tickets::GenerateClubDailyTicketsJob).to receive(:perform_later).with(user:, platform:,
-                                                                                  quantity:, integration:)
+                                                                                  quantity:, source:)
 
       create(:subscription, integration:, status: :active, platform:,
                             offer:, payer: customer)
@@ -29,7 +30,7 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
       expect(Tickets::GenerateClubDailyTicketsJob).to have_received(:perform_later).with(user:,
                                                                                          platform:,
                                                                                          quantity:,
-                                                                                         integration:)
+                                                                                         source:)
     end
   end
 
