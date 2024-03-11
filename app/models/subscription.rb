@@ -34,6 +34,11 @@ class Subscription < ApplicationRecord
     canceled: 2
   }
 
+  scope :active_from_club, lambda {
+    joins(:offer).where(status: :active,
+                        offer: { category: :club })
+  }
+
   def formatted_amount
     person_payments&.last&.formatted_amount
   end

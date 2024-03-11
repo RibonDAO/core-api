@@ -13,7 +13,7 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
     let(:platform) { 'app' }
     let(:quantity) { 2 }
     let(:plan) { create(:plan, daily_tickets: 2) }
-    let(:offer) { create(:offer, plans: [plan]) }
+    let(:offer) { create(:offer, plans: [plan], category: :club) }
 
     before do
       allow(Tickets::GenerateClubDailyTicketsJob).to receive(:perform_later).with(user:, platform:,
