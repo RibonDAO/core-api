@@ -19,7 +19,7 @@ RSpec.describe Service::Givings::Fees::Crypto::PolygonFeeCalculator, type: :serv
     it 'gets the gas fee from polygon and returns in the currency' do
       result = service.calculate_fee
       expect(result.currency.to_s).to eq 'BRL'
-      expect(result.to_f).to eq 2.12
+      expect(result.to_f).to eq 2.13
     end
   end
 end

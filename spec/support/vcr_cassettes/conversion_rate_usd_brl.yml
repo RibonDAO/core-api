@@ -2,44 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: http://economia.awesomeapi.com.br/json/last/usd-brl
+    uri: https://api.currencyapi.com/v3/latest?base_currency=USD&currencies=BRL
     body:
       encoding: US-ASCII
       string: ''
     headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 308
-      message: Permanent Redirect
-    headers:
-      Date:
-      - Fri, 27 May 2022 13:36:17 GMT
-      Content-Type:
-      - text/html
-      Content-Length:
-      - '164'
-      Connection:
-      - keep-alive
-      Location:
-      - https://economia.awesomeapi.com.br/json/last/usd-brl
-    body:
-      encoding: UTF-8
-      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
-        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
-  recorded_at: Fri, 27 May 2022 13:36:17 GMT
-- request:
-    method: get
-    uri: https://economia.awesomeapi.com.br/json/last/usd-brl
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
+      Apikey:
+      - CURRENCY_API_KEY
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -52,45 +21,51 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 27 May 2022 13:36:18 GMT
+      - Mon, 11 Mar 2024 14:51:46 GMT
       Content-Type:
-      - application/json; charset=utf-8
-      Content-Length:
-      - '243'
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
       Connection:
       - keep-alive
-      Vary:
-      - Accept-Encoding
+      Charset:
+      - utf-8
+      X-Execution-Time:
+      - '15.89'
+      X-Cost:
+      - '1'
+      Cache-Control:
+      - no-cache, private
+      X-Ratelimit-Limit-Quota-Month:
+      - '300'
+      X-Ratelimit-Remaining-Quota-Month:
+      - '293'
+      X-Forwarded-Proto:
+      - https
+      X-Forwarded-Port:
+      - '443'
+      X-Request-Id:
+      - 859ce7ae-b370-42f3-b363-75fe4629ce4b
       Access-Control-Allow-Origin:
       - "*"
-      Access-Control-Allow-Methods:
-      - HEAD,OPTIONS,GET,POST
-      Access-Control-Allow-Headers:
-      - Authorization,Content-Type,X-Worker-Token
-      X-Dns-Prefetch-Control:
-      - 'off'
-      X-Frame-Options:
-      - SAMEORIGIN
-      Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
-      X-Download-Options:
-      - noopen
-      X-Content-Type-Options:
-      - nosniff
-      X-Xss-Protection:
-      - 1; mode=block
-      Cache-Control:
-      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
-      Pragma:
-      - cache
-      Etag:
-      - W/"f3-ip9i0+8UnvwA85EU4obiiTOuhbE"
-      X-Cache-Status:
-      - HIT
+      X-Ratelimit-Limit-Quota-Minute:
+      - '10'
+      X-Ratelimit-Remaining-Quota-Minute:
+      - '9'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=j0v6jz%2BAXreAoFMn9ZZ5V30w3QFssi4LhtrKPZBlJ1V8Hf97kWs7uZm4btvQ%2B7HT7fLecKJYAPwLBeCkkhYgS6fcJadNUOo2UshGTnzBfmjcmTeJ2EfEHItNhgjD2019FWNPnAmK"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 862c5d4b0d6c7a7a-GIG
+      Alt-Svc:
+      - h3=":443"; ma=86400
     body:
       encoding: UTF-8
-      string: '{"USDBRL":{"code":"USD","codein":"BRL","name":"Dólar Americano/Real
-        Brasileiro","high":"4.8434","low":"4.7603","varBid":"-0.0644","pctChange":"-1.34","bid":"4.7624","ask":"4.7637","timestamp":"1653589680","create_date":"2022-05-26
-        15:28:00"}}'
-  recorded_at: Fri, 27 May 2022 13:36:18 GMT
+      string: '{"meta":{"last_updated_at":"2024-03-10T23:59:59Z"},"data":{"BRL":{"code":"BRL","value":4.7637}}}'
+  recorded_at: Mon, 11 Mar 2024 14:51:46 GMT
 recorded_with: VCR 6.1.0

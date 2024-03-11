@@ -4,8 +4,6 @@ RSpec.describe Service::Donations::PoolBalances, type: :service do
   include ActiveStorage::Blob::Analyzable
   subject(:service) { described_class.new(pool:) }
 
-  include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
-
   describe '#pool_balances' do
     let(:chain) { create(:chain) }
     let(:token) { create(:token, chain:, decimals: 6) }

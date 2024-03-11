@@ -1,115 +1,6 @@
 ---
 http_interactions:
 - request:
-    method: get
-    uri: http://economia.awesomeapi.com.br/json/last/brl-brl
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 308
-      message: Permanent Redirect
-    headers:
-      Date:
-      - Wed, 13 Jul 2022 13:37:54 GMT
-      Content-Type:
-      - text/html
-      Content-Length:
-      - '164'
-      Connection:
-      - keep-alive
-      Location:
-      - https://economia.awesomeapi.com.br/json/last/brl-brl
-    body:
-      encoding: UTF-8
-      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
-        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
-  recorded_at: Wed, 13 Jul 2022 13:37:54 GMT
-- request:
-    method: get
-    uri: https://economia.awesomeapi.com.br/json/last/brl-brl
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 404
-      message: Not Found
-    headers:
-      Date:
-      - Wed, 13 Jul 2022 13:37:55 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Content-Length:
-      - '78'
-      Connection:
-      - keep-alive
-      Vary:
-      - Accept-Encoding
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Allow-Methods:
-      - HEAD,OPTIONS,GET,POST
-      Access-Control-Allow-Headers:
-      - Authorization,Content-Type,X-Worker-Token
-      Content-Security-Policy:
-      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
-        https: data:;form-action ''self'';frame-ancestors ''self'';img-src ''self''
-        data:;object-src ''none'';script-src ''self'';script-src-attr ''none'';style-src
-        ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
-      Cross-Origin-Embedder-Policy:
-      - require-corp
-      Cross-Origin-Opener-Policy:
-      - same-origin
-      Cross-Origin-Resource-Policy:
-      - same-origin
-      X-Dns-Prefetch-Control:
-      - 'off'
-      Expect-Ct:
-      - max-age=0
-      X-Frame-Options:
-      - SAMEORIGIN
-      Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
-      X-Download-Options:
-      - noopen
-      X-Content-Type-Options:
-      - nosniff
-      Origin-Agent-Cluster:
-      - "?1"
-      X-Permitted-Cross-Domain-Policies:
-      - none
-      Referrer-Policy:
-      - no-referrer
-      X-Xss-Protection:
-      - '0'
-      Cache-Control:
-      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
-      Pragma:
-      - cache
-      Etag:
-      - W/"4e-2kj4yeKff5LI9ROnOfH2rHUIxJU"
-    body:
-      encoding: UTF-8
-      string: '{"status":404,"code":"CoinNotExists","message":"moeda nao encontrada
-        BRL-BRL"}'
-  recorded_at: Wed, 13 Jul 2022 13:37:55 GMT
-- request:
     method: post
     uri: https://api.stripe.com/v1/payment_methods
     body:
@@ -815,44 +706,13 @@ http_interactions:
   recorded_at: Wed, 13 Jul 2022 13:38:04 GMT
 - request:
     method: get
-    uri: http://economia.awesomeapi.com.br/json/last/brl-usd
+    uri: https://api.currencyapi.com/v3/latest?base_currency=BRL&currencies=USD
     body:
       encoding: US-ASCII
       string: ''
     headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 308
-      message: Permanent Redirect
-    headers:
-      Date:
-      - Wed, 13 Jul 2022 13:38:05 GMT
-      Content-Type:
-      - text/html
-      Content-Length:
-      - '164'
-      Connection:
-      - keep-alive
-      Location:
-      - https://economia.awesomeapi.com.br/json/last/brl-usd
-    body:
-      encoding: UTF-8
-      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
-        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n"
-  recorded_at: Wed, 13 Jul 2022 13:38:05 GMT
-- request:
-    method: get
-    uri: https://economia.awesomeapi.com.br/json/last/brl-usd
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
+      Apikey:
+      - CURRENCY_API_KEY
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -865,66 +725,53 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 13 Jul 2022 13:38:06 GMT
+      - Mon, 11 Mar 2024 14:56:50 GMT
       Content-Type:
-      - application/json; charset=utf-8
-      Content-Length:
-      - '240'
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
       Connection:
       - keep-alive
-      Vary:
-      - Accept-Encoding
+      Charset:
+      - utf-8
+      X-Execution-Time:
+      - '15.14'
+      X-Cost:
+      - '1'
+      Cache-Control:
+      - no-cache, private
+      X-Ratelimit-Limit-Quota-Month:
+      - '300'
+      X-Ratelimit-Remaining-Quota-Month:
+      - '292'
+      X-Forwarded-Proto:
+      - https
+      X-Forwarded-Port:
+      - '443'
+      X-Request-Id:
+      - 0e8fb0e4-6cfe-4c53-ac8d-870048a1f47e
       Access-Control-Allow-Origin:
       - "*"
-      Access-Control-Allow-Methods:
-      - HEAD,OPTIONS,GET,POST
-      Access-Control-Allow-Headers:
-      - Authorization,Content-Type,X-Worker-Token
-      Content-Security-Policy:
-      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
-        https: data:;form-action ''self'';frame-ancestors ''self'';img-src ''self''
-        data:;object-src ''none'';script-src ''self'';script-src-attr ''none'';style-src
-        ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
-      Cross-Origin-Embedder-Policy:
-      - require-corp
-      Cross-Origin-Opener-Policy:
-      - same-origin
-      Cross-Origin-Resource-Policy:
-      - same-origin
-      X-Dns-Prefetch-Control:
-      - 'off'
-      Expect-Ct:
-      - max-age=0
-      X-Frame-Options:
-      - SAMEORIGIN
-      Strict-Transport-Security:
-      - max-age=15724800; includeSubDomains
-      X-Download-Options:
-      - noopen
-      X-Content-Type-Options:
-      - nosniff
-      Origin-Agent-Cluster:
-      - "?1"
-      X-Permitted-Cross-Domain-Policies:
-      - none
-      Referrer-Policy:
-      - no-referrer
-      X-Xss-Protection:
-      - '0'
-      Cache-Control:
-      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
-      Pragma:
-      - cache
-      Etag:
-      - W/"f0-JBz4WUFJT3rpcrl0jlfzDf9hIjE"
-      X-Cache-Status:
-      - MISS
+      X-Ratelimit-Limit-Quota-Minute:
+      - '10'
+      X-Ratelimit-Remaining-Quota-Minute:
+      - '9'
+      Cf-Cache-Status:
+      - DYNAMIC
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=BKO8uXTKKiNCiXs%2FImuKeDfqO25zGjplQANGi4ge4KyV5okqUKcnXAy9sA5DwiFD3l9X2r9I%2BgkQAuOL0%2B7pxF0DZwK9FW2OZPYq8qi2GmfCSIPAS4CT%2BlvYio4miXzXw0ajAvbU"}],"group":"cf-nel","max_age":604800}'
+      Nel:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 862c64bb583e7a2c-GIG
+      Alt-Svc:
+      - h3=":443"; ma=86400
     body:
       encoding: UTF-8
-      string: '{"BRLUSD":{"code":"BRL","codein":"USD","name":"Real Brasileiro/Dólar
-        Americano","high":"0.1849","low":"0.183","varBid":"0.0009","pctChange":"0.51","bid":"0.1848","ask":"0.1848","timestamp":"1657719480","create_date":"2022-07-13
-        10:38:00"}}'
-  recorded_at: Wed, 13 Jul 2022 13:38:06 GMT
+      string: '{"meta":{"last_updated_at":"2024-03-10T23:59:59Z"},"data":{"USD":{"code":"USD","value":0.1843}}}'
+  recorded_at: Mon, 11 Mar 2024 14:56:50 GMT
 - request:
     method: post
     uri: https://polygon-mumbai.g.alchemy.com/v2/iwJOj0NGGqgpYpyCJxt3dZzu9wOMACg_

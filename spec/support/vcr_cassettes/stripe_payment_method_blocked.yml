@@ -99,62 +99,13 @@ http_interactions:
   recorded_at: Fri, 29 Sep 2023 12:58:43 GMT
 - request:
     method: get
-    uri: http://economia.awesomeapi.com.br/json/last/brl-usd
+    uri: https://api.currencyapi.com/v3/latest?base_currency=BRL&currencies=USD
     body:
       encoding: US-ASCII
       string: ''
     headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 308
-      message: Permanent Redirect
-    headers:
-      Date:
-      - Fri, 29 Sep 2023 12:58:43 GMT
-      Content-Type:
-      - text/html
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Location:
-      - https://economia.awesomeapi.com.br/json/last/brl-usd
-      Cf-Cache-Status:
-      - BYPASS
-      Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=mPK68L54WLG%2FCpZesx0nr00c1gikVyDtDafu%2FBGIZLsMX4P1RFlMDUSLyW9hjdUNkZ8cjSfePJrjCrUkNjx3b%2FRus1k69KdTr7C4djHDIOHYcCKrOVCA8f4M8IGnHVuBsRcHrhf1%2BAtDFdXO"}],"group":"cf-nel","max_age":604800}'
-      Nel:
-      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
-      Vary:
-      - Accept-Encoding
-      Server:
-      - cloudflare
-      Cf-Ray:
-      - 80e46634afaa1d42-GIG
-      Alt-Svc:
-      - h3=":443"; ma=86400
-    body:
-      encoding: UTF-8
-      string: "<html>\r\n<head><title>308 Permanent Redirect</title></head>\r\n<body>\r\n<center><h1>308
-        Permanent Redirect</h1></center>\r\n<hr><center>nginx</center>\r\n<script
-        defer src=\"https://static.cloudflareinsights.com/beacon.min.js/v8b253dfea2ab4077af8c6f58422dfbfd1689876627854\"
-        integrity=\"sha512-bjgnUKX4azu3dLTVtie9u6TKqgx29RBwfj3QXYt5EKfWM/9hPSAI/4qcV5NACjwAo8UtTeWefx6Zq5PHcMm7Tg==\"
-        data-cf-beacon='{\"rayId\":\"80e46634afaa1d42\",\"version\":\"2023.8.0\",\"b\":1,\"token\":\"41f4f61ebd054909bdc60095decd9fc8\",\"si\":100}'
-        crossorigin=\"anonymous\"></script>\n</body>\r\n</html>\r\n"
-  recorded_at: Fri, 29 Sep 2023 12:58:43 GMT
-- request:
-    method: get
-    uri: https://economia.awesomeapi.com.br/json/last/brl-usd
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
+      Apikey:
+      - CURRENCY_API_KEY
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -167,78 +118,53 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 29 Sep 2023 12:58:43 GMT
+      - Mon, 11 Mar 2024 14:56:50 GMT
       Content-Type:
-      - application/json; charset=utf-8
+      - application/json; charset=UTF-8
       Transfer-Encoding:
       - chunked
       Connection:
       - keep-alive
+      Charset:
+      - utf-8
+      X-Execution-Time:
+      - '15.14'
+      X-Cost:
+      - '1'
+      Cache-Control:
+      - no-cache, private
+      X-Ratelimit-Limit-Quota-Month:
+      - '300'
+      X-Ratelimit-Remaining-Quota-Month:
+      - '292'
+      X-Forwarded-Proto:
+      - https
+      X-Forwarded-Port:
+      - '443'
+      X-Request-Id:
+      - 0e8fb0e4-6cfe-4c53-ac8d-870048a1f47e
       Access-Control-Allow-Origin:
       - "*"
-      Access-Control-Allow-Methods:
-      - HEAD,OPTIONS,GET,POST
-      Access-Control-Allow-Headers:
-      - Authorization,Content-Type,X-Worker-Token
-      Content-Security-Policy:
-      - 'img-src ''self'' *.awesomeapi.com.br;default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src
-        ''self'' https: data:;form-action ''self'';frame-ancestors ''self'';object-src
-        ''none'';script-src ''self'';script-src-attr ''none'';style-src ''self'' https:
-        ''unsafe-inline'';upgrade-insecure-requests'
-      Cross-Origin-Opener-Policy:
-      - unsafe-none
-      Cross-Origin-Resource-Policy:
-      - cross-origin
-      X-Dns-Prefetch-Control:
-      - 'off'
-      Expect-Ct:
-      - max-age=0
-      X-Frame-Options:
-      - SAMEORIGIN
-      Strict-Transport-Security:
-      - max-age=63072000; includeSubDomains
-      X-Download-Options:
-      - noopen
-      X-Content-Type-Options:
-      - nosniff
-      Origin-Agent-Cluster:
-      - "?1"
-      X-Permitted-Cross-Domain-Policies:
-      - none
-      Referrer-Policy:
-      - no-referrer
-      X-Xss-Protection:
-      - '0'
-      Cache-Control:
-      - max-age=30, public, stale-while-revalidate=259200, stale-if-error=259200
-      Pragma:
-      - cache
-      Etag:
-      - W/"ed-3LlvZ9KXg+yDZ2uzxo6Tp3J6K8A"
-      X-Cache-Status:
-      - STALE
+      X-Ratelimit-Limit-Quota-Minute:
+      - '10'
+      X-Ratelimit-Remaining-Quota-Minute:
+      - '9'
       Cf-Cache-Status:
-      - HIT
-      Age:
-      - '1'
+      - DYNAMIC
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=OeOccn3%2Bi7j9rMaEd4tTKOyg7xmw%2FOEIpItoxlHgixuBwp5it7u4TDkk%2FaCTxh1Tart0kyP6sUybgOoZn4p2OILjCCpflg44f1U2vBhzs9blyRa32EswFhZLAqob2HFENvl1Qyw5vhcHLwEJ"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=BKO8uXTKKiNCiXs%2FImuKeDfqO25zGjplQANGi4ge4KyV5okqUKcnXAy9sA5DwiFD3l9X2r9I%2BgkQAuOL0%2B7pxF0DZwK9FW2OZPYq8qi2GmfCSIPAS4CT%2BlvYio4miXzXw0ajAvbU"}],"group":"cf-nel","max_age":604800}'
       Nel:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
-      Vary:
-      - Accept-Encoding
       Server:
       - cloudflare
       Cf-Ray:
-      - 80e466355db5256a-GIG
+      - 862c64bb583e7a2c-GIG
       Alt-Svc:
       - h3=":443"; ma=86400
     body:
       encoding: UTF-8
-      string: '{"BRLUSD":{"code":"BRL","codein":"USD","name":"Real Brasileiro/Dólar
-        Americano","high":"0.2002","low":"0.1984","varBid":"0.0014","pctChange":"0.7","bid":"0.2","ask":"0.2001","timestamp":"1695991665","create_date":"2023-09-29
-        09:47:45"}}'
-  recorded_at: Fri, 29 Sep 2023 12:58:43 GMT
+      string: '{"meta":{"last_updated_at":"2024-03-10T23:59:59Z"},"data":{"USD":{"code":"USD","value":0.1843}}}'
+  recorded_at: Mon, 11 Mar 2024 14:56:50 GMT
 - request:
     method: post
     uri: https://api.stripe.com/v1/payment_methods
