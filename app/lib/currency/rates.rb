@@ -16,7 +16,7 @@ module Currency
       response = Request::ApiRequest.get(request_url, expires_in: 2.hours)
       response["#{from.upcase}#{to.upcase}"]['ask']
     rescue StandardError
-      response = Request::ApiRequest.get(request_url, headers:, expires_in: 2.hours)
+      response = Request::ApiRequest.get(backup_request_url, headers:, expires_in: 2.hours)
       response['data'][to.upcase.to_s]['value']
     end
     # rubocop:enable Metrics/AbcSize
