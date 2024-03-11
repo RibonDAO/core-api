@@ -18,6 +18,16 @@ module Users
         end
       end
 
+      def member?
+        ids = current_user.customers.pluck(:id)
+        if Subscription.joins(:offer).where(payer_id: ids, status: :active,
+                                            offer: { category: :club }).count.positive?
+          return render json: { is_member: true }, status: :ok
+        end
+
+        render json: { is_member: false }, status: :ok
+      end
+
       private
 
       def subscription

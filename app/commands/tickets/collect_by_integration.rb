@@ -43,7 +43,8 @@ module Tickets
     end
 
     def create_ticket
-      @ticket = Ticket.create!(integration:, user:, platform:)
+      @ticket = Ticket.create!(integration:, user:, platform:, source: :integration, status: :collected,
+                               category: :daily)
     end
 
     def create_user_integration_collected_ticket

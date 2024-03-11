@@ -3,7 +3,9 @@
 # Table name: donations
 #
 #  id             :bigint           not null, primary key
+#  category       :integer          default("daily")
 #  platform       :string
+#  source         :integer          default("integration")
 #  value          :decimal(, )
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -18,7 +20,6 @@ RSpec.describe Donation, type: :model do
     subject { build(:donation) }
 
     it { is_expected.to belong_to(:non_profit) }
-    it { is_expected.to belong_to(:integration) }
     it { is_expected.to belong_to(:user) }
     it { is_expected.to have_one(:donation_contribution) }
   end

@@ -3,7 +3,9 @@
 # Table name: donations
 #
 #  id             :bigint           not null, primary key
+#  category       :integer          default("daily")
 #  platform       :string
+#  source         :integer          default("integration")
 #  value          :decimal(, )
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null

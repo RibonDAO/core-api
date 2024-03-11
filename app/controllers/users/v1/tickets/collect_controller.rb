@@ -24,6 +24,16 @@ module Users
           end
         end
 
+        def collect_by_club
+          command = ::Tickets::CollectByClub.call(user:, platform:, category: ticket_params[:category])
+
+          if command.success?
+            render json: { tickets: command.result }, status: :ok
+          else
+            render_errors(command.errors)
+          end
+        end
+
         private
 
         def integration
@@ -39,7 +49,7 @@ module Users
         end
 
         def ticket_params
-          params.permit(:integration_id, :platform, external_ids: [])
+          params.permit(:integration_id, :platform, :category, external_ids: [])
         end
 
         def utm_params
