@@ -4,7 +4,7 @@ module Tickets
     sidekiq_options queue: :tickets
 
     def perform(*_args)
-      Subscription.where(status: :active).each do |subscriptions|
+      Subscription.active_from_club.each do |subscriptions|
         Tickets::GenerateClubDailyTicketsJob.perform_later(user: subscriptions.payer.user,
                                                            platform: subscriptions.platform,
                                                            quantity: subscriptions.offer.plan.daily_tickets,
