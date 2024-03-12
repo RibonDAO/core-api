@@ -54,7 +54,7 @@ Rails.application.routes.draw do
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
       post 'users/can_donate' => 'users#can_donate'
-        get 'users/donated_today' => 'users#donated_today'
+      get 'users/donated_today' => 'users#donated_today'
       get 'users/first_access_to_integration' => 'users#first_access_to_integration'
       get 'users/completed_tasks' => 'users#completed_tasks'
       post 'users/complete_task' => 'users#complete_task'
@@ -69,6 +69,7 @@ Rails.application.routes.draw do
       post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
       get 'users/subscriptions' => 'users/subscriptions#index'
       get 'users/configs' => 'users/configs#show'
+      get 'users/is_member' => 'users/subscriptions#member?'
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -296,7 +297,6 @@ Rails.application.routes.draw do
 
       post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
       get 'subscriptions' => 'subscriptions#index'
-      get 'is_member' => 'subscriptions#member?'
 
       namespace :tickets do 
         get 'available' => 'tickets#available'
