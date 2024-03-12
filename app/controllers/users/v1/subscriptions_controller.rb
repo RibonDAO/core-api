@@ -18,12 +18,6 @@ module Users
         end
       end
 
-      def member?
-        is_member = Users::VerifyClubMembership.call(user: current_user).result
-
-        render json: { is_member: }, status: :ok
-      end
-
       private
 
       def subscription
