@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Users::V1::Tickets::Tickets', type: :request do
-
   describe 'get /tickets/to_collect' do
     include_context 'when making a user request' do
       subject(:request) { get '/users/v1/tickets/to_collect', headers:, params: { source: 'club' } }
