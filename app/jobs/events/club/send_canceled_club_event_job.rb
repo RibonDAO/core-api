@@ -19,8 +19,9 @@ module Events
 
       def build_event(subscription)
         OpenStruct.new({
-                         name: 'canceled_club',
+                         name: 'club',
                          data: {
+                           type: 'cancellation_confirmation',
                            subscription_id: subscription.id,
                            integration_id: person_payment.integration_id,
                            currency: person_payment.currency,

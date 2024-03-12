@@ -13,8 +13,9 @@ RSpec.describe Events::Club::SendFailedPaymentEventJob, type: :job do
 
     let(:event) do
       OpenStruct.new({
-                       name: 'failed_payment_club',
+                       name: 'club',
                        data: {
+                         type: 'failed_monthly_payment',
                          subscription_id: person_payment.subscription.id,
                          integration_id: person_payment.integration_id,
                          currency: person_payment.currency,

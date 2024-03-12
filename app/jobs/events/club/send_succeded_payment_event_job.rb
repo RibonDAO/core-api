@@ -18,15 +18,17 @@ module Events
 
       def build_event(person_payment)
         OpenStruct.new({
-                         name: 'succeded_payment_club',
+                         name: 'club',
                          data: {
+                           type: 'successful_monthly_payment',
                            subscription_id: person_payment.subscription.id,
                            integration_id: person_payment.integration_id,
                            currency: person_payment.currency,
                            platform: person_payment.platform,
                            amount: person_payment.formatted_amount,
                            status: person_payment.status,
-                           offer_id: person_payment.offer_id
+                           offer_id: person_payment.offer_id,
+                           paid_date: person_payment.created_at.strftime('%d/%m/%Y')
                          }
                        })
       end
