@@ -31,11 +31,8 @@ class PersonPaymentObserver < ActiveRecord::Observer
   end
 
   def give_monthly_tickets(person_payment)
-    user = person_payment.payer.user
-    return unless User::VerifyClubMembership(user).result
-
     Tickets::GenerateClubMonthlyTicketsJob.perform_later(
-      user:,
+      user: person_payment.payer.user,
       platform: person_payment.subscription.platform,
       quantity: person_payment.subscription.offer.plan.monthly_tickets,
       source: :club
