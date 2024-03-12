@@ -1,11 +1,7 @@
 class SubscriptionObserver < ActiveRecord::Observer
   def after_update(subscription)
-    if inactive_to_active?(person_payment)
-      Events::Subscription::SendActivatedSubscriptionEventJob.perform_later(subscription:)
-    end
-    if active_to_canceled?(person_payment)
-      Events::Subscription::SendCanceledSubscriptionEventJob.perform_later(subscription:)
-    end
+    Events::Club::SendActivatedClubEventJob.perform_later(subscription:) if inactive_to_active?(person_payment)
+    Events::Club::SendCanceledClubEventJob.perform_later(subscription:) if active_to_canceled?(person_payment)
   rescue StandardError
     nil
   end

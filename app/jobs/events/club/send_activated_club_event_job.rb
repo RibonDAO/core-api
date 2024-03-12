@@ -4,13 +4,12 @@ module Events
       queue_as :default
       sidekiq_options retry: 3
 
-      attr_reader :user, :offer
+      attr_reader :user, :offer, :person_payment
 
       def perform(subscription:)
         @person_payment = subscription.person_payments.last
         @offer = person_payment.offer
         @user = person_payment.payer&.user
-
         EventServices::SendEvent.new(user: person_payment.payer.user,
                                      event: build_event(subscription)).call
       end
@@ -19,7 +18,7 @@ module Events
 
       def build_event(subscription)
         OpenStruct.new({
-                         name: 'failed_payment_club',
+                         name: 'activated_club',
                          data: {
                            subscription_id: subscription.id,
                            integration_id: person_payment.integration_id,

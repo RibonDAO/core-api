@@ -11,10 +11,10 @@ class PersonPaymentObserver < ActiveRecord::Observer
 
   def after_create(person_payment)
     if person_payment.paid? && person_payment.subscription?
-      Events::Subscription::SendSuccededPaymentEventJob.perform_later(person_payment:)
+      Events::Club::SendSuccededPaymentEventJob.perform_later(person_payment:)
     end
     if person_payment.failed? && person_payment.subscription?
-      Events::Subscription::SendFailedPaymentEventJob.perform_later(person_payment:)
+      Events::Club::SendFailedPaymentEventJob.perform_later(person_payment:)
     end
   rescue StandardError
     nil

@@ -4,7 +4,7 @@ module Events
       queue_as :default
       sidekiq_options retry: 3
 
-      attr_reader :user, :offer
+      attr_reader :user, :offer, :person_payment
 
       def perform(subscription:)
         @person_payment = subscription.person_payments.last
@@ -19,7 +19,7 @@ module Events
 
       def build_event(subscription)
         OpenStruct.new({
-                         name: 'activated_club',
+                         name: 'canceled_club',
                          data: {
                            subscription_id: subscription.id,
                            integration_id: person_payment.integration_id,
