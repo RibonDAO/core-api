@@ -21,6 +21,17 @@ module Api
           end
         end
 
+        def member?
+          command = ::Users::VerifyClubMembership.new(user: current_user).call
+
+          if command.success?
+            is_member = command.result
+            render json: { is_member: }, status: :ok
+          else
+            render_errors(command.errors)
+          end
+        end
+
         private
 
         def subscription
