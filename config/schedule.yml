@@ -63,6 +63,11 @@ clear_all_collected_by_integration:
   class: "Tickets::ClearAllCollectedByIntegrationWorker"
   queue: tickets
 
+generate_club_daily_tickets:
+  cron: "0 1 * * *" # At 01:00 everyday.
+  class: "Tickets::GenerateClubDailyTicketsWorker"
+  queue: tickets
+
 label_donations_and_contributions:
   cron: "0 8 * 3 1"
   class: "Contributions::LabelWorker"
