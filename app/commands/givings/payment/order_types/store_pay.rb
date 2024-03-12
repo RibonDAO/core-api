@@ -56,7 +56,7 @@ module Givings
 
         def create_subscription(payer)
           Subscription.create!({ payer:, offer:, payment_method:, receiver: receiver_subscription,
-                                 status: :active, integration:, platform: })
+                                 status: :inactive, integration:, platform: })
         end
 
         def create_payment(payer, subscription)
