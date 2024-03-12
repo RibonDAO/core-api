@@ -24,7 +24,7 @@ module Api
         end
 
         def database_tickets
-          Ticket.where(user:).count
+          Ticket.where(user:, status: :collected).count
         end
       end
     end
