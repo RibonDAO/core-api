@@ -7,7 +7,7 @@ module Users
         end
 
         def to_collect
-          @tickets = current_user.tickets.where(status: :to_collect)
+          @tickets = current_user.tickets.where(status: :to_collect, source: ticket_params[:source])
           @daily_tickets = @tickets.where(category: :daily).count
 
           @monthly_tickets = @tickets.where(category: :monthly).count
@@ -19,6 +19,10 @@ module Users
 
         def cached_tickets
           RedisStore::HStore.get(key: "tickets-#{current_user.id}") || 0
+        end
+
+        def ticket_params
+          params.permit(:source)
         end
       end
     end

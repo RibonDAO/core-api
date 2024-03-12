@@ -20,13 +20,13 @@ RSpec.describe 'Users::V1::Tickets::Tickets', type: :request do
 
   describe 'get /tickets/to_collect' do
     include_context 'when making a user request' do
-      subject(:request) { get '/users/v1/tickets/to_collect', headers: }
+      subject(:request) { get '/users/v1/tickets/to_collect', headers:, params: { source: 'club' } }
     end
 
     before do
       allow(RibonCoreApi).to receive(:redis).and_return(MockRedis.new)
-      create_list(:ticket, 10, user: account.user, status: :to_collect, category: :daily)
-      create_list(:ticket, 5, user: account.user, status: :to_collect, category: :monthly)
+      create_list(:ticket, 10, user: account.user, status: :to_collect, category: :daily, source: :club)
+      create_list(:ticket, 5, user: account.user, status: :to_collect, category: :monthly, source: :club)
     end
 
     it 'returns the quantity of tickets to_collect for that user' do
