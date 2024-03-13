@@ -1,8 +1,19 @@
 class PersonPaymentObserver < ActiveRecord::Observer
   def after_update(person_payment)
     send_person_payment_email(person_payment) if processing_to_paid?(person_payment)
-    give_monthly_tickets(person_payment) if processing_to_paid?(person_payment)
     send_failed_payment_event(person_payment) if processing_to_failed?(person_payment)
+  rescue StandardError
+    nil
+  end
+
+  def after_create(person_payment)
+    if person_payment.paid? && person_payment.subscription?
+      Events::Club::SendSuccededPaymentEventJob.perform_later(person_payment:)
+      give_monthly_tickets(person_payment)
+    end
+    if person_payment.failed? && person_payment.subscription?
+      Events::Club::SendFailedPaymentEventJob.perform_later(person_payment:)
+    end
   rescue StandardError
     nil
   end
