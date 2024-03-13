@@ -10,8 +10,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
   def after_create(person_payment)
     if person_payment.paid? && person_payment.subscription?
       give_monthly_tickets(person_payment)
-    end
-    if person_payment.failed? && person_payment.subscription?
+    elsif person_payment.failed? && person_payment.subscription?
       Events::Club::SendFailedPaymentEventJob.perform_later(person_payment:)
     end
   rescue StandardError
