@@ -16,7 +16,7 @@ module Api
 
           monthly_tickets = tickets.where(category: :monthly).count
 
-          render json: { daily_tickets: daily_tickets, monthly_tickets: monthly_tickets }, status: :ok
+          render json: { daily_tickets:, monthly_tickets: }, status: :ok
         end
 
         private
