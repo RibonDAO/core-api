@@ -1,7 +1,7 @@
 class PersonPaymentObserver < ActiveRecord::Observer
   def after_update(person_payment)
-    send_person_payment_email(person_payment) if processing_to_paid?(person_payment)
-    give_monthly_tickets(person_payment) if processing_to_paid?(person_payment)
+    send_person_payment_email(person_payment) if processing_to_paid_non_subscription?(person_payment)
+    give_monthly_tickets(person_payment) if processing_to_paid_subscription?(person_payment)
     send_failed_payment_event(person_payment) if processing_to_failed?(person_payment)
   rescue StandardError
     nil
@@ -20,8 +20,15 @@ class PersonPaymentObserver < ActiveRecord::Observer
   def processing_to_paid?(person_payment)
     person_payment.previous_changes[:status] == %w[processing paid] &&
       person_payment.paid? &&
-      !person_payment.crypto? &&
-      person_payment.subscription.nil?
+      !person_payment.crypto?
+  end
+
+  def processing_to_paid_non_subscription?(person_payment)
+    processing_to_paid?(person_payment) && person_payment.subscription.nil?
+  end
+
+  def processing_to_paid_subscription?(person_payment)
+    processing_to_paid?(person_payment) && person_payment.subscription.present?
   end
 
   def processing_to_failed?(person_payment)
