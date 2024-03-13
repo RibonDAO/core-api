@@ -8,6 +8,17 @@ module Api
           render json: { tickets: cached_tickets }, status: :ok
         end
 
+        def to_collect
+          return unless user
+         
+          @tickets = user.tickets.where(status: :to_collect, source: tickets_params[:source])
+          @daily_tickets = @tickets.where(category: :daily).count
+
+          @monthly_tickets = @tickets.where(category: :monthly).count
+
+          render json: { daily_tickets: @daily_tickets, monthly_tickets: @monthly_tickets }, status: :ok
+        end
+
         private
 
         def user
@@ -25,6 +36,10 @@ module Api
 
         def database_tickets
           Ticket.where(user:, status: :collected).count
+        end
+
+        def tickets_params
+          params.permit(:source)
         end
       end
     end
