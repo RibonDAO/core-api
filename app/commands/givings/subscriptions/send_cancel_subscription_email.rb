@@ -44,7 +44,7 @@ module Givings
         OpenStruct.new({
                          name: 'club',
                          data: {
-                           type: 'cancelation_request',
+                           type: 'cancellation_request',
                            subscription_id: subscription.id,
                            user: subscription.payer.user,
                            amount: subscription.formatted_amount,
