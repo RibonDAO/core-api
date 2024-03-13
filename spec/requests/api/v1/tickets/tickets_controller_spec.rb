@@ -47,7 +47,9 @@ RSpec.describe 'Api::V1::Tickets::Tickets', type: :request do
 
   describe 'get /tickets/to_collect' do
     include_context 'when making a user request' do
-      subject(:request) { get '/api/v1/tickets/to_collect', headers: { Email: user.email } , params: { source: 'club' } }
+      subject(:request) do
+        get '/api/v1/tickets/to_collect', headers: { Email: user.email }, params: { source: 'club' }
+      end
     end
 
     let(:user) { create(:user) }

@@ -10,7 +10,7 @@ module Api
 
         def to_collect
           return unless user
-         
+
           @tickets = user.tickets.where(status: :to_collect, source: tickets_params[:source])
           @daily_tickets = @tickets.where(category: :daily).count
 
