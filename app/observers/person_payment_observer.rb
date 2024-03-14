@@ -3,7 +3,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
     Mailers::SendPersonPaymentEmailJob.perform_later(person_payment:) if processing_to_paid?(person_payment)
 
     if processing_to_paid_subscription?(person_payment)
-      Events::PersonPayments::SendSuccededPaymentEventJob.perform_later(person_payment:)
+      Events::Club::SendSuccededPaymentEventJob.perform_later(person_payment:)
     end
 
     if processing_to_failed?(person_payment)
