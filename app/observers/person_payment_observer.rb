@@ -15,7 +15,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
 
   def after_create(person_payment)
     if person_payment.paid? && person_payment.subscription?
-      Events::Club::SendSuccededPaymen tEventJob.perform_later(person_payment:)
+      Events::Club::SendSuccededPaymentEventJob.perform_later(person_payment:)
     end
     if person_payment.failed? && person_payment.subscription?
       Events::Club::SendFailedPaymentEventJob.perform_later(person_payment:)
