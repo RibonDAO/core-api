@@ -4,14 +4,14 @@ module Tickets
   class GenerateClubTickets < ApplicationCommand
     prepend SimpleCommand
 
-    attr_reader :user, :platform, :quantity, :category, :integration
+    attr_reader :user, :platform, :quantity, :category, :source
 
-    def initialize(user:, platform:, quantity:, category:, integration:)
+    def initialize(user:, platform:, quantity:, category:, source:)
       @user = user
       @platform = platform
       @quantity = quantity
       @category = category
-      @integration = integration
+      @source = source
     end
 
     def call
@@ -32,7 +32,7 @@ module Tickets
       tickets_array = []
       quantity.times do |_index|
         tickets_array << { user:,
-                           platform:, category:, status: :to_collect, integration: }
+                           platform:, category:, status: :to_collect, source: }
       end
 
       tickets_array
