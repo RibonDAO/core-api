@@ -32,6 +32,14 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
                                                                                          quantity:,
                                                                                          source:)
     end
+
+    it 'does not call the GenerateClubDailyTicketsJob if user has tickets created today from club' do
+      create(:ticket, user:, source:, created_at: Time.zone.now, category: :daily)
+
+      worker.perform
+
+      expect(Tickets::GenerateClubDailyTicketsJob).not_to have_received(:perform_later)
+    end
   end
 
   describe '.perform_async' do
