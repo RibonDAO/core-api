@@ -63,7 +63,8 @@ module RibonCoreApi
       :user_observer, 
       :contribution_balance_observer, 
       :contribution_observer,
-      :ticket_observer
+      :ticket_observer,
+      :subscription_observer,
     ]
     config.api_only = true
   end
