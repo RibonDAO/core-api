@@ -9,7 +9,7 @@
 #  value          :decimal(, )
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  integration_id :bigint           not null
+#  integration_id :bigint
 #  non_profit_id  :bigint           not null
 #  user_id        :bigint
 #
