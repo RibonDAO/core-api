@@ -1,8 +1,7 @@
 class PersonPaymentObserver < ActiveRecord::Observer
   def after_update(person_payment)
     Mailers::SendPersonPaymentEmailJob.perform_later(person_payment:) if processing_to_paid?(person_payment)
-
-    if processing_to_paid_subscription?(person_payment)
+    if processing_to_paid_club_subscription?(person_payment)
       Events::Club::SendSuccededPaymentEventJob.perform_later(person_payment:)
     end
 
@@ -24,7 +23,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
     nil
   end
 
-  def processing_to_paid__club_subscription?(person_payment)
+  def processing_to_paid_club_subscription?(person_payment)
     person_payment.previous_changes[:status] == %w[processing paid] &&
       person_payment.paid? &&
       person_payment.subscription.category == 'club'
