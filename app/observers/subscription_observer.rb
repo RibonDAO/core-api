@@ -10,7 +10,7 @@ class SubscriptionObserver < ActiveRecord::Observer
     subscription.previous_changes[:status] == %w[inactive active]
   end
 
-  def actove_to_canceled?(subscription)
+  def active_to_canceled?(subscription)
     subscription.previous_changes[:status] == %w[active canceled]
   end
 end
