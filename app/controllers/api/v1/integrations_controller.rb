@@ -1,7 +1,7 @@
 module Api
   module V1
     class IntegrationsController < ApplicationController
-      before_action :verify_authenticity_token, only: %i[create]
+      before_action :verify_authenticity_token, only: %i[create update]
 
       def index
         @integrations = Integration.order(created_at: :desc)
@@ -42,7 +42,9 @@ module Api
       def verify_authenticity_token
         metadata_hash = JSON.parse(integration_params[:metadata])
 
-        Signatures::Sha256.verify(metadata_hash['data'], metadata_hash['signature'])
+        unless Signatures::Sha256.verify(metadata_hash['data'], metadata_hash['signature'])
+          render json: { error: 'Invalid signature' }, status: :unauthorized
+        end
       end
 
       def integration_params
