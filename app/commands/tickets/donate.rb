@@ -38,12 +38,11 @@ module Tickets
         external_ids = destroy_result[:external_ids]
         sources = destroy_result[:sources]
         categories = destroy_result[:categories]
-
         @donations = create_donations(build_donations(integrations, sources, categories))
         associate_integration_vouchers(external_ids)
-        update_user_donations_info
-        label_donations
       end
+      update_user_donations_info
+      label_donations
 
       donations
     end
