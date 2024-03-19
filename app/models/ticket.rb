@@ -33,4 +33,8 @@ class Ticket < ApplicationRecord
     integration: 0,
     club: 1
   }
+
+  scope :collected, lambda {
+    where(status: :collected)
+  }
 end

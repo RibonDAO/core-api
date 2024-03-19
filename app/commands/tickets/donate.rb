@@ -73,7 +73,7 @@ module Tickets
     end
 
     def allowed?
-      return true if user.tickets.count >= quantity && pool_balance?
+      return true if user.tickets.collected.count >= quantity && pool_balance?
 
       errors.add(:message, I18n.t('donations.blocked_message'))
 

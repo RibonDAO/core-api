@@ -5,7 +5,7 @@ module Api
         def available
           return unless user
 
-          render json: { tickets: cached_tickets }, status: :ok
+          render json: { tickets: database_tickets }, status: :ok
         end
 
         def to_collect
@@ -25,17 +25,8 @@ module Api
           @user ||= current_user
         end
 
-        def cached_tickets
-          tickets = RedisStore::HStore.get(key: "tickets-#{user.id}") || database_tickets
-          if tickets.negative?
-            RedisStore::HStore.set(key: "tickets-#{user.id}", value: database_tickets)
-            return database_tickets
-          end
-          tickets
-        end
-
         def database_tickets
-          Ticket.where(user:, status: :collected).count
+          user.tickets.collected.count
         end
 
         def tickets_params
