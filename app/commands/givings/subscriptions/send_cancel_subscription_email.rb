@@ -41,6 +41,7 @@ module Givings
       end
 
       def build_club_event(subscription)
+        last_day = (subscription.person_payments.last.created_at + 1.month).strftime('%d/%m/%Y')
         OpenStruct.new({
                          name: 'club',
                          data: {
@@ -50,7 +51,7 @@ module Givings
                            amount: subscription.formatted_amount,
                            url:,
                            status: subscription.status,
-                           last_club_day: subscription.person_payments.last.created_at + 1.month
+                           last_club_day: last_day
                          }
                        })
       end
