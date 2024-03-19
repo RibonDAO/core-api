@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Tickets::GenerateClubDailyTicketsJob, type: :job do
   describe '#perform' do
-    subject(:perform_job) { described_class.perform_now(user, platform, quantity, source) }
+    subject(:perform_job) { described_class.perform_now(user:, platform:, quantity:, source:) }
 
     let(:integration) { create(:integration) }
     let(:source) { :club }
