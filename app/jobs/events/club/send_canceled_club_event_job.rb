@@ -17,7 +17,9 @@ module Events
 
       private
 
+      # rubocop:disable Metrics/AbcSize
       def build_event(subscription)
+        last_day = (person_payment.created_at + 1.month).strftime('%d/%m/%Y')
         OpenStruct.new({
                          name: 'club',
                          data: {
@@ -29,10 +31,11 @@ module Events
                            amount: person_payment.formatted_amount,
                            status: subscription.status,
                            offer_id: person_payment.offer_id,
-                           last_club_day: person_payment.created_at + 1.month
+                           last_club_day: last_day
                          }
                        })
       end
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end

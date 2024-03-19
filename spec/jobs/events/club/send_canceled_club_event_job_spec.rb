@@ -26,7 +26,7 @@ RSpec.describe Events::Club::SendCanceledClubEventJob, type: :job do
                          amount: person_payment.formatted_amount,
                          status: subscription.status,
                          offer_id: person_payment.offer_id,
-                         last_club_day: person_payment.created_at + 1.month
+                         last_club_day: (person_payment.created_at + 1.month).strftime('%d/%m/%Y')
                        }
                      })
     end
