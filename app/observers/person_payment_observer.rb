@@ -63,4 +63,13 @@ class PersonPaymentObserver < ActiveRecord::Observer
       source: :club
     )
   end
+
+  def give_daily_tickets(person_payment)
+    Tickets::GenerateClubDailyTicketsJob.perform_later(
+      user: person_payment.payer.user,
+      platform: person_payment.subscription.platform,
+      quantity: person_payment.subscription.offer.plan.daily_tickets,
+      source: :club
+    )
+  end
 end

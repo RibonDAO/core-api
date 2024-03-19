@@ -25,7 +25,7 @@ module Tickets
         @tickets = create_tickets(build_tickets)
       end
 
-      tickets
+      @tickets
     end
 
     def build_tickets
