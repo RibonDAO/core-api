@@ -83,6 +83,8 @@ Rails.application.routes.draw do
       put 'big_donors/:id' => 'big_donors#update'
 
       get 'chains' => 'chains#index'
+
+      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
