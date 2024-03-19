@@ -37,4 +37,8 @@ class Ticket < ApplicationRecord
   scope :receive_daily_tickets_from_club_today, lambda {
     where(created_at: Time.zone.now.all_day, source: :club, category: :daily)
   }
+
+  scope :collected, lambda {
+    where(status: :collected)
+  }
 end

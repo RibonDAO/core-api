@@ -68,6 +68,11 @@ generate_club_daily_tickets:
   class: "Tickets::GenerateClubDailyTicketsWorker"
   queue: tickets
 
+clear_redis_tickets:
+  cron: "0 1 10 1 *" # At 01:00 on day-of-month 10 in January.
+  class: "Tickets::ClearRedisTicketsWorker"
+  queue: tickets
+
 label_donations_and_contributions:
   cron: "0 8 * 3 1"
   class: "Contributions::LabelWorker"
