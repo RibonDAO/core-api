@@ -1,6 +1,8 @@
 module Api
   module V1
     class IntegrationsController < ApplicationController
+      before_action :verify_authenticity_token, only: %i[create]
+
       def index
         @integrations = Integration.order(created_at: :desc)
 
@@ -36,6 +38,12 @@ module Api
       end
 
       private
+
+      def verify_authenticity_token
+        metadata_hash = JSON.parse(integration_params[:metadata])
+
+        Signatures::Sha256.verify(metadata_hash['data'], metadata_hash['signature'])
+      end
 
       def integration_params
         params.permit(:name, :status, :id, :ticket_availability_in_minutes, :logo, :webhook_url, :metadata,
