@@ -17,6 +17,7 @@ FactoryBot.define do
     unique_address { 'f7be8d80-2406-4cb0-82eb-849346d327c9' }
     ticket_availability_in_minutes { nil }
     integration_wallet { build(:integration_wallet) }
+    metadata { { 'type' => 'personal' } }
 
     before(:create) do |integration|
       image_path = Rails.root.join('spec', 'factories', 'images', 'pitagoras.jpg')
