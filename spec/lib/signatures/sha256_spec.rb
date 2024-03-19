@@ -2,15 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Signatures::Sha256 do
   let(:data) { 'test' }
-  let(:signature) { '98483c6eb40b6c31a448c22a66ded3b5e5e8d5119cac8327b655c8b5c4836489' }
-
-  before do
-    allow(RibonCoreApi).to receive(:config).and_return(
-      sha256: {
-        signature_key: 'key'
-      }
-    )
-  end
+  let(:signature) { 'bcbd89709cc787326915ec6b335b11942cc5b8dfb636def12ea1276f35254a47' }
 
   describe '.sign' do
     it 'returns a sha256 signature' do
