@@ -5,6 +5,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
     if processing_to_paid_club_subscription?(person_payment)
       send_succeded_club_payment_event(person_payment)
       give_monthly_tickets(person_payment)
+      give_daily_tickets(person_payment)
     end
   rescue StandardError
     nil
@@ -60,6 +61,15 @@ class PersonPaymentObserver < ActiveRecord::Observer
       user: person_payment.payer.user,
       platform: person_payment.subscription.platform,
       quantity: person_payment.subscription.offer.plan.monthly_tickets,
+      source: :club
+    )
+  end
+
+  def give_daily_tickets(person_payment)
+    Tickets::GenerateClubDailyTicketsJob.perform_later(
+      user: person_payment.payer.user,
+      platform: person_payment.subscription.platform,
+      quantity: person_payment.subscription.offer.plan.daily_tickets,
       source: :club
     )
   end
