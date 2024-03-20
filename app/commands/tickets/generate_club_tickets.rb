@@ -21,12 +21,7 @@ module Tickets
     end
 
     def transact_tickets
-      tickets = nil
-      ActiveRecord::Base.transaction do
-        tickets = create_tickets(build_tickets)
-      end
-
-      tickets
+      create_tickets(build_tickets)
     end
 
     def build_tickets
