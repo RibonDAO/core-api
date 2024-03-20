@@ -83,8 +83,6 @@ Rails.application.routes.draw do
       put 'big_donors/:id' => 'big_donors#update'
 
       get 'chains' => 'chains#index'
-
-      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
@@ -267,6 +265,13 @@ Rails.application.routes.draw do
       get 'profile' => 'profile#show'
       post 'account/send_validated_email' => 'account#send_validated_email'
       post 'account/validate_extra_ticket' => 'account#validate_extra_ticket'
+
+      post 'integration' => 'integrations#create'
+      get 'integration' => 'integrations#show'
+      put 'integration' => 'integrations#update'
+
+      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
+
       namespace :vouchers do
         post 'donations' => 'donations#create'
       end

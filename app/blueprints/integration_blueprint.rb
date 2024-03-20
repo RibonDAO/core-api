@@ -15,8 +15,4 @@ class IntegrationBlueprint < Blueprinter::Base
   view :manager do
     field :integration_deeplink_address
   end
-
-  field :metadata do |object|
-    object.metadata.to_h
-  end
 end
