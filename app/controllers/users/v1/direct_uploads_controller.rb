@@ -1,7 +1,7 @@
 module Users
   module V1
-    class DirectUploadsController < ActiveStorage::DirectUploadsController
-      protect_from_forgery with: :null_session
+    class DirectUploadsController < AuthorizationController
+      include ActiveStorage::SetCurrent
 
       def create
         blob = ActiveStorage::Blob.create_before_direct_upload!(filename: blob_args[:filename],
