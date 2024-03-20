@@ -26,10 +26,17 @@ class Subscription < ApplicationRecord
 
   has_many :person_payments
 
+  delegate :category, to: :offer
+
   enum status: {
     active: 0,
     inactive: 1,
     canceled: 2
+  }
+
+  scope :active_from_club, lambda {
+    joins(:offer).where(status: :active,
+                        offer: { category: :club })
   }
 
   def formatted_amount

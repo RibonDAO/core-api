@@ -17,23 +17,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
   enable_extension "uuid-ossp"
 
   create_table "accounts", force: :cascade do |t|
-    t.boolean "allow_password_change"
-    t.datetime "confirmation_sent_at"
-    t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.string "encrypted_password"
-    t.string "image"
-    t.string "name"
-    t.string "nickname"
     t.string "provider"
     t.datetime "remember_created_at"
-    t.datetime "reset_password_sent_at"
-    t.string "reset_password_token"
     t.json "tokens"
     t.string "uid"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.string "platform"
     t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
@@ -105,7 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "link"
-    t.integer "language", default: 0
+    t.string "language"
     t.index ["author_id"], name: "index_articles_on_author_id"
   end
 
@@ -278,12 +271,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
 
   create_table "donations", force: :cascade do |t|
     t.bigint "non_profit_id", null: false
-    t.bigint "integration_id", null: false
+    t.bigint "integration_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.decimal "value"
     t.string "platform"
+    t.integer "source", default: 0
+    t.integer "category", default: 0
     t.index ["integration_id"], name: "index_donations_on_integration_id"
     t.index ["non_profit_id"], name: "index_donations_on_non_profit_id"
     t.index ["user_id"], name: "index_donations_on_user_id"
@@ -316,6 +311,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.string "cta_url", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: false
+    t.string "client"
   end
 
   create_table "integration_tasks", force: :cascade do |t|
@@ -401,6 +398,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.integer "donations_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "user_email"
+    t.integer "user_legacy_id"
+    t.datetime "user_created_at"
     t.bigint "legacy_user_id"
     t.index ["legacy_non_profit_id"], name: "index_legacy_user_impacts_on_legacy_non_profit_id"
     t.index ["legacy_user_id"], name: "index_legacy_user_impacts_on_legacy_user_id"
@@ -448,8 +448,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -494,6 +494,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "category", default: 0
   end
 
   create_table "person_blockchain_transactions", force: :cascade do |t|
@@ -537,11 +538,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.string "platform"
     t.bigint "subscription_id"
     t.string "external_invoice_id"
+    t.integer "ribon_club_fee_cents"
     t.index ["integration_id"], name: "index_person_payments_on_integration_id"
     t.index ["offer_id"], name: "index_person_payments_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_person_payments_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_person_payments_on_receiver"
     t.index ["subscription_id"], name: "index_person_payments_on_subscription_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.integer "daily_tickets"
+    t.integer "monthly_tickets"
+    t.integer "status"
+    t.bigint "offer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["offer_id"], name: "index_plans_on_offer_id"
   end
 
   create_table "pool_balances", force: :cascade do |t|
@@ -580,6 +592,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.integer "default_chain_id"
     t.decimal "contribution_fee_percentage"
     t.integer "minimum_contribution_chargeable_fee_cents"
+    t.boolean "disable_labeling", default: false
+    t.decimal "ribon_club_fee_percentage"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -624,6 +638,31 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
   end
 
+  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "title", null: false
+    t.string "actions", null: false
+    t.string "kind", default: "daily"
+    t.string "navigation_callback"
+    t.string "visibility", default: "visible"
+    t.string "client", default: "web"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "external_id"
+    t.bigint "integration_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "platform"
+    t.integer "source", default: 0
+    t.integer "status", default: 0
+    t.integer "category", default: 0
+    t.index ["integration_id"], name: "index_tickets_on_integration_id"
+    t.index ["user_id"], name: "index_tickets_on_user_id"
+  end
+
   create_table "tokens", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -661,6 +700,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.index ["user_id"], name: "index_user_donation_stats_on_user_id"
   end
 
+  create_table "user_integration_collected_tickets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "integration_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["integration_id"], name: "index_user_integration_collected_tickets_on_integration_id"
+    t.index ["user_id"], name: "index_user_integration_collected_tickets_on_user_id"
+  end
+
   create_table "user_managers", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -686,6 +734,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.index ["uid", "provider"], name: "index_user_managers_on_uid_and_provider", unique: true
   end
 
+  create_table "user_profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_profiles_on_user_id"
+  end
+
   create_table "user_tasks_statistics", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "first_completed_all_tasks_at"
@@ -699,7 +755,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "language", default: 0
+    t.integer "language"
     t.integer "legacy_id"
     t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -778,15 +834,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_182818) do
   add_foreign_key "person_payment_fees", "person_payments"
   add_foreign_key "person_payments", "integrations"
   add_foreign_key "person_payments", "offers"
+  add_foreign_key "plans", "offers"
   add_foreign_key "pool_balances", "pools"
   add_foreign_key "pools", "causes"
   add_foreign_key "pools", "tokens"
   add_foreign_key "stories", "non_profits"
   add_foreign_key "subscriptions", "integrations"
   add_foreign_key "subscriptions", "offers"
+  add_foreign_key "tickets", "integrations"
+  add_foreign_key "tickets", "users"
   add_foreign_key "user_completed_tasks", "users"
   add_foreign_key "user_configs", "users"
   add_foreign_key "user_donation_stats", "users"
+  add_foreign_key "user_integration_collected_tickets", "integrations"
+  add_foreign_key "user_integration_collected_tickets", "users"
+  add_foreign_key "user_profiles", "users"
   add_foreign_key "user_tasks_statistics", "users"
   add_foreign_key "vouchers", "donations"
   add_foreign_key "vouchers", "integrations"

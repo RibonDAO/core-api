@@ -1,0 +1,18 @@
+{
+  "data": {
+    "action_id": 73,
+    "broadcast_id": 52,
+    "customer_id": "0200102",
+    "identifiers": {
+        "id": "0200102"
+    },
+    "delivery_id": "RObuBAXE4xnjV0vtJso_6xdRAas135",
+    "recipient": "test@example.com",
+    "subject": "Book now!"
+  },
+  "event_id": "31ASDG7SU6HSJ78DAND9GDC",
+  "trigger_event_id": "21E4C3CT6YDC7Y4N7FE1GWWABC",
+  "object_type": "email",
+  "metric": "spammed",
+  "timestamp": 1234567890
+}

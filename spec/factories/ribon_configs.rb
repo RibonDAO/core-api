@@ -5,7 +5,9 @@
 #  id                                        :bigint           not null, primary key
 #  contribution_fee_percentage               :decimal(, )
 #  default_ticket_value                      :decimal(, )
+#  disable_labeling                          :boolean          default(FALSE)
 #  minimum_contribution_chargeable_fee_cents :integer
+#  ribon_club_fee_percentage                 :decimal(, )
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
 #  default_chain_id                          :integer
@@ -16,5 +18,6 @@ FactoryBot.define do
     default_chain_id { 0x13881 }
     contribution_fee_percentage { 20.0 }
     minimum_contribution_chargeable_fee_cents { 10 }
+    ribon_club_fee_percentage { 15.0 }
   end
 end

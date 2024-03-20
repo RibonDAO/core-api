@@ -23,7 +23,9 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
           headline: 'New impression card headline',
           description: 'New impression card description',
           cta_text: 'New impression card cta text',
-          cta_url: 'New impression card cta url'
+          cta_url: 'New impression card cta url',
+          client: 'web',
+          active: true
         }
       end
 
@@ -34,7 +36,8 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
       it 'returns a single impression card' do
         request
 
-        expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video])
+        expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video
+                                        client active])
       end
     end
 
@@ -56,7 +59,8 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
     it 'returns a single impression card' do
       request
 
-      expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video])
+      expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video
+                                      client active])
     end
   end
 
@@ -72,7 +76,9 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
           headline: 'New impression card headline',
           description: 'New impression card description',
           cta_text: 'New impression card cta text',
-          cta_url: 'New impression card cta url'
+          cta_url: 'New impression card cta url',
+          client: 'web',
+          active: true
         }
       end
 
@@ -89,7 +95,8 @@ RSpec.describe 'Managers::V1::ImpressionCardsController', type: :request do
       it 'returns a single impression card' do
         request
 
-        expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video])
+        expect_response_to_have_keys(%w[id title headline description cta_text cta_url video_url image with_video
+                                        client active])
       end
     end
   end

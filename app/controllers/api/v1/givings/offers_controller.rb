@@ -3,40 +3,16 @@ module Api
     module Givings
       class OffersController < ApplicationController
         def index
-          @offers = Offer.where(active: true, currency:, subscription:)
+          @offers = Offer.where(active: true, currency:, subscription:, category:)
                          .order('position_order ASC, price_cents ASC')
 
-          render json: OfferBlueprint.render(@offers, view: :minimal)
-        end
-
-        def index_manager
-          @offers = Offer.order('position_order ASC, price_cents ASC')
-
-          render json: OfferBlueprint.render(@offers)
+          render json: OfferBlueprint.render(@offers, view: :plan)
         end
 
         def show
           @offer = Offer.find offer_params[:id]
 
           render json: OfferBlueprint.render(@offer)
-        end
-
-        def create
-          command = ::Offers::UpsertOffer.call(offer_params)
-          if command.success?
-            render json: OfferBlueprint.render(command.result), status: :created
-          else
-            render_errors(command.errors)
-          end
-        end
-
-        def update
-          command = ::Offers::UpsertOffer.call(offer_params)
-          if command.success?
-            render json: OfferBlueprint.render(command.result), status: :created
-          else
-            render_errors(command.errors)
-          end
         end
 
         private
@@ -49,8 +25,12 @@ module Api
           params[:subscription] || false
         end
 
+        def category
+          params[:category] || 'direct_contribution'
+        end
+
         def offer_params
-          params.permit(:id, :price_cents, :currency, :active, :subscription,
+          params.permit(:id, :price_cents, :currency, :active, :subscription, :category,
                         offer_gateway_attributes: %i[id gateway external_id])
         end
       end

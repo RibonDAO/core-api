@@ -5,7 +5,7 @@
 #  id         :bigint           not null, primary key
 #  deleted_at :datetime
 #  email      :string
-#  language   :integer          default("en")
+#  language   :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  legacy_id  :integer
@@ -23,6 +23,8 @@ class User < ApplicationRecord
   after_create :set_user_tasks_statistic
 
   has_many :donations
+  has_many :tickets
+  has_many :user_integration_collected_ticket
   has_many :customers
   has_many :user_completed_tasks
   has_many :devices
@@ -36,7 +38,8 @@ class User < ApplicationRecord
   has_one :legacy_user
   has_one :customer
   has_one :user_config
-  has_one :account
+  has_many :accounts
+  has_one :user_profile
 
   has_many :legacy_user_impacts, through: :legacy_user
   has_many :legacy_contributions, through: :legacy_user

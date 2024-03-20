@@ -47,6 +47,7 @@ class PersonBlockchainTransaction < ApplicationRecord
   end
 
   def charge_contribution_fees
+
     # return unless success?
     # return if person_payment&.contribution&.generated_fee_cents&.zero?
 

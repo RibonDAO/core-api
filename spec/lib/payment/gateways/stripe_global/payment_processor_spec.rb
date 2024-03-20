@@ -65,7 +65,7 @@ RSpec.describe Payment::Gateways::StripeGlobal::PaymentProcessor do
     let(:operation) { :refund }
     let(:gateway) { :stripe }
 
-    let(:payload) { Refund.from(payment.external_id, gateway, operation) }
+    let(:payload) { PaymentIntent.from(payment.external_id, gateway, operation) }
     let(:payment) { build(:person_payment, payment_method: :credit_card, offer:) }
     let(:offer) { create(:offer, price_cents: 100, subscription: false) }
 

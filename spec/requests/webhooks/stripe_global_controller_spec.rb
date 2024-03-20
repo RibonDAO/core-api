@@ -44,22 +44,6 @@ RSpec.describe 'Webhooks::StripeGlobal', type: :request do
         end
       end
 
-      context 'when it is a charge refund update type request' do
-        let(:event_params) do
-          file = Rails.root.join('spec/support/webhooks/stripe/refund_update.json').read
-          JSON.parse file
-        end
-
-        it 'updates the status of person payment' do
-          request
-          expect(person_payment.reload.status).to eq('refund_failed')
-        end
-
-        it 'do not update the refund_date of person payment' do
-          expect { request }.not_to change(person_payment, :refund_date)
-        end
-      end
-
       context 'when it is a payment_intent.succeeded' do
         let(:event_params) do
           file = Rails.root.join('spec/support/webhooks/stripe/payment_intent_succeeded.json').read

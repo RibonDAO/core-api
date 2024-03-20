@@ -110,4 +110,38 @@ RSpec.describe 'Api::V1::Payments::Pix', type: :request do
       end
     end
   end
+
+  describe 'POST /pix/generate' do
+    subject(:request) { post '/api/v1/payments/pix/generate', params: }
+
+    context 'when the command is successful' do
+      let(:create_order_command_double) do
+        command_double(klass: ::Givings::Payment::GeneratePix, success: true, result: { payment: nil })
+      end
+
+      it 'returns http status ok' do
+        request
+
+        expect(response).to have_http_status :ok
+      end
+    end
+  end
+
+  describe 'GET /pix' do
+    subject(:request) { get "/api/v1/payments/pix/#{pix_id}" }
+
+    let(:pix_id) { 'pi_123' }
+
+    context 'when the command is successful' do
+      let(:create_order_command_double) do
+        command_double(klass: ::Givings::Payment::FindPaymentIntent, success: true, result: { payment: nil })
+      end
+
+      it 'returns http status ok' do
+        request
+
+        expect(response).to have_http_status :ok
+      end
+    end
+  end
 end

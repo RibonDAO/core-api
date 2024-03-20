@@ -6,7 +6,10 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
   let(:cause) { create(:cause) }
   let(:person_payment) { create(:person_payment, usd_value_cents: 1_000) }
   let(:contribution) { create(:contribution, receiver: cause, person_payment:) }
-  let(:donation) { create(:donation) }
+  let(:user) { create(:user) }
+  let(:donation1) { create(:donation, user:) }
+  let(:donation2) { create(:donation, user:) }
+  let(:donation3) { create(:donation, user:) }
 
   include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_usd_brl' } }
 
@@ -14,8 +17,10 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
     create(:ribon_config, contribution_fee_percentage: 20, minimum_contribution_chargeable_fee_cents: 10)
     create(:contribution_balance, contribution:, contribution_increased_amount_cents: 100,
                                   fees_balance_cents: 300, tickets_balance_cents: 300)
-    create_list(:donation_contribution, 3, contribution:, donation:)
-    create(:donation_contribution, contribution:)
+    create(:donation_contribution, contribution:, donation: donation1)
+    create(:donation_contribution, contribution:, donation: donation2)
+    create(:donation_contribution, contribution:, donation: donation3)
+
     create_list(:contribution_fee, 3, payer_contribution: contribution, fee_cents: 100)
   end
 
@@ -24,7 +29,7 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
       expect(service.formatted_statistics.keys)
         .to match_array(%i[initial_amount used_amount usage_percentage
                            remaining_amount total_tickets avg_donations_per_person
-                           boost_amount total_increase_percentage total_amount_to_cause ribon_fee
+                           boost_amount current_increase_percentage total_amount_to_cause ribon_fee
                            boost_new_contributors boost_new_patrons total_donors total_contributors])
     end
   end
@@ -55,19 +60,19 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
 
   describe '#total_tickets' do
     it 'returns the total tickets' do
-      expect(service.total_tickets).to eq(4)
+      expect(service.total_tickets).to eq(3)
     end
   end
 
   describe '#total_donors' do
     it 'returns the total donors' do
-      expect(service.total_donors).to eq(2)
+      expect(service.total_donors).to eq(1)
     end
   end
 
   describe '#avg_donations_per_person' do
     it 'returns the avg donations per person' do
-      expect(service.avg_donations_per_person).to eq(2)
+      expect(service.avg_donations_per_person).to eq(3)
     end
   end
 
@@ -77,9 +82,9 @@ RSpec.describe Service::Contributions::StatisticsService, type: :service do
     end
   end
 
-  describe '#total_increase_percentage' do
-    it 'returns the total increase percentage' do
-      expect(service.total_increase_percentage).to eq(10)
+  describe '#current_increase_percentage' do
+    it 'returns the current increase percentage' do
+      expect(service.current_increase_percentage).to eq(25)
     end
   end
 

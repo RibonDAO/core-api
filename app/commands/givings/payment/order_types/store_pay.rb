@@ -55,13 +55,14 @@ module Givings
         end
 
         def create_subscription(payer)
-          Subscription.create!({ payer:, offer:, payment_method:, receiver:, status: :active, integration:,
-                                 platform: })
+          Subscription.create!({ payer:, offer:, payment_method:, receiver: receiver_subscription,
+                                 status: :inactive, integration:, platform: })
         end
 
         def create_payment(payer, subscription)
-          PersonPayment.create!({ payer:, offer:, paid_date:, integration:, payment_method:, platform:,
-                                  amount_cents:, status: :processing, receiver:, subscription: })
+          PersonPayment.create!({ payer:, offer:, paid_date:, integration:,
+                                  payment_method:, platform:, amount_cents:,
+                                  status: :processing, receiver: receiver_person_payment, subscription: })
         end
 
         def call_add_cause_giving_blockchain_job(order)
@@ -88,7 +89,15 @@ module Givings
           Integration.find_by_id_or_unique_address(integration_id)
         end
 
-        def receiver
+        def receiver_person_payment
+          return Cause.where(status: :active).sample if offer.category == 'club'
+
+          non_profit || cause
+        end
+
+        def receiver_subscription
+          return nil if offer.category == 'club'
+
           non_profit || cause
         end
       end

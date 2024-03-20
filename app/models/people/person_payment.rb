@@ -1,34 +1,37 @@
+# rubocop:disable Metrics/ClassLength
 # == Schema Information
 #
 # Table name: person_payments
 #
-#  id                  :bigint           not null, primary key
-#  amount_cents        :integer
-#  currency            :integer
-#  error_code          :string
-#  liquid_value_cents  :integer
-#  paid_date           :datetime
-#  payer_type          :string
-#  payment_method      :integer
-#  platform            :string
-#  receiver_type       :string
-#  refund_date         :datetime
-#  status              :integer          default("processing")
-#  usd_value_cents     :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  external_id         :string
-#  external_invoice_id :string
-#  integration_id      :bigint
-#  offer_id            :bigint
-#  payer_id            :uuid
-#  receiver_id         :bigint
-#  subscription_id     :bigint
+#  id                   :bigint           not null, primary key
+#  amount_cents         :integer
+#  currency             :integer
+#  error_code           :string
+#  liquid_value_cents   :integer
+#  paid_date            :datetime
+#  payer_type           :string
+#  payment_method       :integer
+#  platform             :string
+#  receiver_type        :string
+#  refund_date          :datetime
+#  ribon_club_fee_cents :integer
+#  status               :integer          default("processing")
+#  usd_value_cents      :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  external_id          :string
+#  external_invoice_id  :string
+#  integration_id       :bigint
+#  offer_id             :bigint
+#  payer_id             :uuid
+#  receiver_id          :bigint
+#  subscription_id      :bigint
 #
 class PersonPayment < ApplicationRecord
   include UuidHelper
 
   before_create :set_currency
+  before_create :set_ribon_club_fee_cents
   after_create :set_fees
   after_create :set_liquid_value_cents
   after_create :set_usd_value_cents
@@ -71,13 +74,6 @@ class PersonPayment < ApplicationRecord
 
   def from_customer? = payer_type == 'Customer'
 
-  def crypto_amount
-    amount_without_fees = amount - service_fees
-    return amount_without_fees if currency&.to_sym == :usd
-
-    Currency::Converters.convert_to_usd(value: amount_without_fees, from: currency&.to_sym).round.to_f
-  end
-
   def amount
     return amount_value if amount_cents
 
@@ -92,6 +88,10 @@ class PersonPayment < ApplicationRecord
     Money.from_cents(amount_cents, currency).format
   end
 
+  def crypto_amount
+    (usd_value_cents.to_i / 100.0).round(2).to_f
+  end
+
   def set_fees
     return create_person_payment_fee!(card_fee_cents: 0, crypto_fee_cents: 0) if crypto?
 
@@ -103,14 +103,19 @@ class PersonPayment < ApplicationRecord
   end
 
   def set_liquid_value_cents
-    self.liquid_value_cents = amount_cents - person_payment_fee&.service_fee_cents
+    self.liquid_value_cents = amount_cents - person_payment_fee&.service_fee_cents.to_i - ribon_club_fee_cents.to_i
     save!
   rescue StandardError => e
     Reporter.log(error: e)
   end
 
   def set_usd_value_cents
-    self.usd_value_cents = crypto_amount * 100
+    if currency&.to_sym == :usd
+      self.usd_value_cents = liquid_value_cents
+    else
+      self.usd_value_cents = Currency::Converters.convert_to_usd(value: liquid_value_cents,
+                                                                 from: currency&.to_sym).round.to_f
+    end
     save!
   rescue StandardError => e
     Reporter.log(error: e)
@@ -141,7 +146,17 @@ class PersonPayment < ApplicationRecord
     payer&.identification
   end
 
+  def set_ribon_club_fee_cents
+    return self.ribon_club_fee_cents = 0 unless club?
+
+    self.ribon_club_fee_cents = (amount_cents.to_i * (RibonConfig.ribon_club_fee_percentage.to_i / 100.0)).round
+  end
+
   private
+
+  def club?
+    subscription&.active? && offer&.category == 'club'
+  end
 
   def set_currency
     self.currency = offer&.currency || :usd
@@ -151,3 +166,5 @@ class PersonPayment < ApplicationRecord
     @gateway ||= offer&.gateway&.downcase&.to_sym || :stripe
   end
 end
+
+# rubocop:enable Metrics/ClassLength

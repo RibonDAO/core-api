@@ -47,10 +47,14 @@ Rails.application.routes.draw do
       get 'person_payments/:receiver_type' => 'person_payments#payments_for_receiver_by_person'
       
       post 'donations' => 'donations#create'
+
+      get 'impression_cards/:id' => 'impression_cards#show'
+      get 'tasks' => 'tasks#index'
       
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
       post 'users/can_donate' => 'users#can_donate'
+      get 'users/donated_today' => 'users#donated_today'
       get 'users/first_access_to_integration' => 'users#first_access_to_integration'
       get 'users/completed_tasks' => 'users#completed_tasks'
       post 'users/complete_task' => 'users#complete_task'
@@ -64,6 +68,8 @@ Rails.application.routes.draw do
       delete 'users' => 'users#destroy'
       post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
       get 'users/subscriptions' => 'users/subscriptions#index'
+      get 'users/configs' => 'users/configs#show'
+      get 'users/is_member' => 'users/subscriptions#member?'
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -77,6 +83,8 @@ Rails.application.routes.draw do
       put 'big_donors/:id' => 'big_donors#update'
 
       get 'chains' => 'chains#index'
+
+      post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
@@ -111,6 +119,7 @@ Rails.application.routes.draw do
         get 'contributions/:id' => 'users/contributions#show'
         post 'devices' => 'users/devices#create'
         post 'configs' => 'users/configs#update'
+
       end
       resources :integrations, only: [] do
         get 'impacts' => 'integrations/impacts#index'
@@ -120,9 +129,6 @@ Rails.application.routes.draw do
         get 'offers' => 'offers#index'
         get 'offers/:id' => 'offers#show'
 
-        get 'offers_manager', to: 'offers#index_manager'
-        post 'offers' => 'offers#create'
-        put 'offers/:id' => 'offers#update'
         get 'user_givings' => 'user_givings#index'
         post 'impact_by_non_profit' => 'impacts#impact_by_non_profit'
       end
@@ -132,7 +138,9 @@ Rails.application.routes.draw do
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
-        post 'pix'   => 'pix#create'        
+        post 'pix'   => 'pix#create'      
+         post 'pix/generate'   => 'pix#generate'   
+         get 'pix/:id'   => 'pix#find'
       end
       namespace :vouchers do
         post 'donations' => 'donations#create'
@@ -160,6 +168,17 @@ Rails.application.routes.draw do
         get 'subscription/:id' => 'subscriptions#show'
         put 'cancel_subscription' => 'subscriptions#unsubscribe'
       end
+
+      namespace :tickets do 
+        get 'available' => 'tickets#available'
+        get 'to_collect' => 'tickets#to_collect'
+        post 'can_collect_by_integration' => 'collect#can_collect_by_integration'
+        post 'collect_by_integration' => 'collect#collect_by_integration'
+        post 'collect_and_donate_by_integration' => 'collect_and_donate#collect_and_donate_by_integration'
+        post 'can_collect_by_external_ids' => 'collect#can_collect_by_external_ids'
+        post 'collect_and_donate_by_external_ids' => 'collect_and_donate#collect_and_donate_by_external_ids'
+        post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
+      end
     end
   end
 
@@ -177,6 +196,7 @@ Rails.application.routes.draw do
     post 'stripe' => 'stripe#events'
     post 'stripe_global' => 'stripe_global#events'
     post 'alchemy' => 'alchemy#events'
+    post 'customerio' => 'customerio#events'
   end
 
   namespace :managers do
@@ -207,6 +227,7 @@ Rails.application.routes.draw do
       resources :pools, only: [:index]
       resources :stories, only: %i[index show create update destroy]
       resources :impression_cards, only: %i[index show create update destroy]
+      resources :tasks, only: %i[index show create update destroy]
 
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
@@ -238,7 +259,54 @@ Rails.application.routes.draw do
   namespace :users do
     namespace :v1 do
       post 'auth/refresh_token', to: 'authentication#refresh_token'
-      get 'causes' => 'causes#index'
+      post 'auth/authenticate', to: 'authentication#authenticate'
+      post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
+      post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
+      post 'can_donate' => 'donations#can_donate'
+      post 'donations' => 'donations#create'
+      get 'profile' => 'profile#show'
+      post 'account/send_validated_email' => 'account#send_validated_email'
+      post 'account/validate_extra_ticket' => 'account#validate_extra_ticket'
+      namespace :vouchers do
+        post 'donations' => 'donations#create'
+      end
+
+      namespace :impacts do
+        get 'impacts' => 'impacts#index'
+        get 'donations_count' => 'impacts#donations_count'
+        get 'app/donations_count' => 'impacts#app_donations_count'
+        get 'legacy_impacts' => 'legacy_impacts#index'
+        get 'legacy_contributions' => 'legacy_impacts#contributions'
+      end
+
+      get 'contributions' => 'contributions#index'
+      get 'labelable_contributions' => 'contributions#labelable'
+      get 'contributions/:id' => 'contributions#show'
+
+      post 'configs' => 'configs#update'
+      get 'configs' => 'configs#show'
+
+      get 'statistics' => 'statistics#index'
+
+      namespace :tasks do
+        get 'statistics' => 'statistics#index'
+        get 'statistics/streak' => 'statistics#streak'
+        get 'statistics/completed_tasks' => 'statistics#completed_tasks'
+
+        post 'upsert/completed_all_tasks' => 'upsert#first_completed_all_tasks_at'
+        post 'upsert/complete_task' => 'upsert#complete_task'
+        post 'upsert/reset_streak' => 'upsert#reset_streak'
+      end
+
+      post 'send_cancel_subscription_email' => 'subscriptions#send_cancel_subscription_email'
+      get 'subscriptions' => 'subscriptions#index'
+
+      namespace :tickets do 
+        post 'collect_by_integration' => 'collect#collect_by_integration'
+        post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
+        post 'collect_by_club' => 'collect#collect_by_club'
+        post 'donate' => 'donations#donate'
+      end
     end
   end
 end

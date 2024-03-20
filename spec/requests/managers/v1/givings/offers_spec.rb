@@ -21,7 +21,7 @@ RSpec.describe 'Managers::V1::Offers', type: :request do
       expect(response_json.first.keys)
         .to match_array %w[active created_at currency id position_order
                            price price_cents price_value subscription title
-                           updated_at external_id gateway]
+                           updated_at external_id gateway category]
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe 'Managers::V1::Offers', type: :request do
       request
 
       expect_response_to_have_keys(%w[created_at id updated_at currency subscription price price_cents price_value
-                                      active title position_order external_id gateway])
+                                      active title position_order gateway category plan])
     end
   end
 
@@ -63,7 +63,7 @@ RSpec.describe 'Managers::V1::Offers', type: :request do
         request
 
         expect_response_to_have_keys(%w[created_at id updated_at currency subscription price price_cents
-                                        price_value active title position_order external_id gateway])
+                                        price_value active title position_order gateway category plan])
       end
     end
   end
@@ -74,11 +74,15 @@ RSpec.describe 'Managers::V1::Offers', type: :request do
 
       let(:offer) { create(:offer) }
       let(:params) do
-        { id: offer.id.to_s, currency: 'brl', price_cents: '1', offer_gateway_attributes: {
-          id: offer.id.to_s,
-          external_id: 'id_1234',
-          gateway: 'stripe'
-        } }
+        { id: offer.id.to_s,
+          currency: 'brl',
+          price_cents: '1',
+          category: 'club',
+          offer_gateway_attributes: {
+            id: offer.id.to_s,
+            external_id: 'id_1234',
+            gateway: 'stripe'
+          } }
       end
 
       it 'calls the upsert command with right params' do

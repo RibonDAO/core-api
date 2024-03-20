@@ -2234,4 +2234,116 @@ http_interactions:
       string: '{"error":{"status":400,"type":"Bad Request","message":"Missing API
         key"}}'
   recorded_at: Fri, 29 Sep 2023 12:58:39 GMT
+  request:
+    method: post
+    uri: https://api.stripe.com/v1/payment_intents/pi_3JVG0oJuOnwQq9Qx118cDmEr/confirm
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/7.1.0
+      Authorization:
+      - Bearer STRIPE_SECRET_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"7.1.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"arm64-darwin22","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Karinas-MacBook-Pro.local 22.5.0 Darwin Kernel Version 22.5.0: Thu Jun  8
+        22:22:20 PDT 2023; root:xnu-8796.121.3~7/RELEASE_ARM64_T6000 arm64","hostname":"Karinas-MacBook-Pro.local"}'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 15 Aug 2023 21:23:41 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '4054'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Request-Id:
+      - req_IHrqQwl0kwNTkS
+      Stripe-Version:
+      - '2022-11-15'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "pi_3JVG0oJuOnwQq9Qx118cDmEr",
+          "object": "payment_intent",
+          "amount": 1500,
+          "amount_capturable": 0,
+          "amount_details": {
+            "tip": {}
+          },
+          "amount_received": 1500,
+          "application": null,
+          "application_fee_amount": null,
+          "automatic_payment_methods": null,
+          "canceled_at": null,
+          "cancellation_reason": null,
+          "capture_method": "automatic",
+          "client_secret": "pi_3JVG0oJuOnwQq9Qx118cDmEr_secret_ZbgrxEKRgHF2KAAX6XmmYGJRL",
+          "confirmation_method": "automatic",
+          "created": 1636118078,
+          "currency": "usd",
+          "customer": "cus_KXXKUTUbApRh1G",
+          "description": null,
+          "invoice": null,
+          "last_payment_error": null,
+          "latest_charge": "ch_3JsSFeJuOnwQq9Qx1lkIw5gc",
+          "livemode": false,
+          "metadata": {},
+          "next_action": null,
+          "on_behalf_of": null,
+          "payment_method": "pm_1JsSFdJuOnwQq9QxlcKNkGaZ",
+          "payment_method_configuration_details": null,
+          "payment_method_options": {
+            "card": {
+              "installments": null,
+              "mandate_options": null,
+              "network": null,
+              "request_three_d_secure": "automatic"
+            }
+          },
+          "payment_method_types": [
+            "card"
+          ],
+          "processing": null,
+          "receipt_email": null,
+          "review": null,
+          "setup_future_usage": null,
+          "shipping": null,
+          "statement_descriptor": null,
+          "statement_descriptor_suffix": null,
+          "status": "succeeded",
+          "transfer_data": null,
+          "transfer_group": null
+        }
+  recorded_at: Tue, 15 Aug 2023 21:23:41 GMT
 recorded_with: VCR 6.1.0

@@ -2,28 +2,29 @@
 #
 # Table name: person_payments
 #
-#  id                  :bigint           not null, primary key
-#  amount_cents        :integer
-#  currency            :integer
-#  error_code          :string
-#  liquid_value_cents  :integer
-#  paid_date           :datetime
-#  payer_type          :string
-#  payment_method      :integer
-#  platform            :string
-#  receiver_type       :string
-#  refund_date         :datetime
-#  status              :integer          default("processing")
-#  usd_value_cents     :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  external_id         :string
-#  external_invoice_id :string
-#  integration_id      :bigint
-#  offer_id            :bigint
-#  payer_id            :uuid
-#  receiver_id         :bigint
-#  subscription_id     :bigint
+#  id                   :bigint           not null, primary key
+#  amount_cents         :integer
+#  currency             :integer
+#  error_code           :string
+#  liquid_value_cents   :integer
+#  paid_date            :datetime
+#  payer_type           :string
+#  payment_method       :integer
+#  platform             :string
+#  receiver_type        :string
+#  refund_date          :datetime
+#  ribon_club_fee_cents :integer
+#  status               :integer          default("processing")
+#  usd_value_cents      :integer
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  external_id          :string
+#  external_invoice_id  :string
+#  integration_id       :bigint
+#  offer_id             :bigint
+#  payer_id             :uuid
+#  receiver_id          :bigint
+#  subscription_id      :bigint
 #
 require 'rails_helper'
 
@@ -117,28 +118,93 @@ RSpec.describe PersonPayment, type: :model do
     end
   end
 
-  describe '#crypto_amount' do
+  describe '#set_ribon_club_fees' do
+    subject(:person_payment) do
+      create(:person_payment, amount_cents:, offer:, payment_method:, subscription:)
+    end
+
+    let(:payment_method) { :credit_card }
+    let(:offer) { create(:offer, price_cents: 1200, currency: :usd, category: 'club') }
+    let(:subscription) { create(:subscription, offer:) }
+    let(:amount_cents) { 1500 }
+
+    before do
+      create(:ribon_config)
+      command = command_double(klass: Givings::Card::CalculateCardGiving,
+                               result: { card_fee: OpenStruct.new({ cents: 67 }),
+                                         crypto_fee: OpenStruct.new({ cents: 3 }) })
+      allow(Givings::Card::CalculateCardGiving).to receive(:call).and_return(command)
+    end
+
+    it 'creates a person_payment with correct params' do
+      person_payment.set_ribon_club_fee_cents
+      ribon_club_fee = person_payment.reload.ribon_club_fee_cents
+
+      expect(ribon_club_fee).to eq 225
+      expect(person_payment.person_payment_fee.card_fee_cents).to eq 67
+      expect(person_payment.person_payment_fee.crypto_fee_cents).to eq 3
+      expect(person_payment.liquid_value_cents).to eq 1205
+    end
+  end
+
+  describe '#liquid_value_cents' do
     let(:amount_cents) { 1500 }
 
     context 'when the currency is usd' do
+      it 'returns the amount_cents minus the fees' do
+        amount = person_payment.amount
+        fees = person_payment_fee.crypto_fee + person_payment_fee.card_fee
+        expect(person_payment.liquid_value_cents).to eq (amount - fees) * 100
+      end
+    end
+
+    context 'when the currency is brl' do
+      let(:offer) { build(:offer, price_cents: 1500, currency: :brl) }
+
       it 'returns the amount minus the fees' do
         amount = person_payment.amount
         fees = person_payment_fee.crypto_fee + person_payment_fee.card_fee
 
-        expect(person_payment.crypto_amount).to eq amount - fees
+        expect(person_payment.liquid_value_cents).to eq (amount - fees) * 100
+      end
+    end
+  end
+
+  describe '#usd_value_cents' do
+    context 'when the currency is usd' do
+      it 'returns the liquid_value_cents' do
+        expect(person_payment.usd_value_cents).to eq person_payment.liquid_value_cents
       end
     end
 
     context 'when the currency is brl' do
       include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
+      let(:offer) { build(:offer, price_cents: 1500, currency: :brl) }
 
-      it 'returns the amount minus the fees converted to brl' do
-        person_payment.update(currency: :brl)
-        amount = person_payment.amount
-        fees = person_payment_fee.crypto_fee + person_payment_fee.card_fee
+      it 'returns the liquid_value_cents converted to usd' do
         convert_factor_brl_usd = 0.1843 # comes from the conversion_rate_brl_usd request
 
-        expect(person_payment.crypto_amount).to eq ((amount - fees) * convert_factor_brl_usd).round(2)
+        expect(person_payment.usd_value_cents).to eq (
+          person_payment.liquid_value_cents * convert_factor_brl_usd).round(2).to_i
+      end
+    end
+  end
+
+  describe '#crypto_amount' do
+    let(:amount_cents) { 1500 }
+
+    context 'when the currency is usd' do
+      it 'returns the usd_value_cents divided per 100' do
+        expect(person_payment.crypto_amount).to eq person_payment.usd_value_cents / 100.0
+      end
+    end
+
+    context 'when the currency is brl' do
+      include_context('when mocking a request') { let(:cassette_name) { 'conversion_rate_brl_usd' } }
+      let(:offer) { build(:offer, price_cents: 1500, currency: :brl) }
+
+      it 'returns the usd_value_cents per 100 too' do
+        expect(person_payment.crypto_amount).to eq (person_payment.usd_value_cents / 100.0).round(2)
       end
     end
   end

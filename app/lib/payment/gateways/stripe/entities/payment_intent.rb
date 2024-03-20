@@ -6,6 +6,10 @@ module Payment
           def self.find(id:)
             ::Stripe::PaymentIntent.retrieve(id)
           end
+
+          def self.confirm(id:)
+            ::Stripe::PaymentIntent.confirm(id)
+          end
         end
       end
     end

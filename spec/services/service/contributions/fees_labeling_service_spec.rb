@@ -13,7 +13,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     let!(:contribution) { create(:contribution, person_payment:) }
     let!(:contribution_balance1) do
       create(:contribution_balance,
-             contribution: create(:contribution, receiver: contribution.receiver,
+             contribution: create(:contribution, receiver: contribution.cause,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
                                                                         status: :paid)),
@@ -21,7 +21,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     end
     let!(:contribution_balance2) do
       create(:contribution_balance,
-             contribution: create(:contribution, receiver: contribution.receiver,
+             contribution: create(:contribution, receiver: contribution.cause,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
                                                                         status: :paid)),
@@ -29,7 +29,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     end
     let!(:contribution_balance3) do
       create(:contribution_balance,
-             contribution: create(:contribution, receiver: contribution.receiver,
+             contribution: create(:contribution, receiver: contribution.cause,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
                                                                         status: :paid)),
@@ -71,7 +71,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 4.545
     let!(:contribution_balance1) do
       create(:contribution_balance,
-             contribution: create(:contribution, receiver: contribution.receiver,
+             contribution: create(:contribution, receiver: contribution.cause,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
                                                                         status: :paid)),
@@ -80,7 +80,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 13.636
     let!(:contribution_balance2) do
       create(:contribution_balance,
-             contribution: create(:contribution, receiver: contribution.receiver,
+             contribution: create(:contribution, receiver: contribution.cause,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
                                                                         status: :paid)),
@@ -89,7 +89,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 27.272
     let!(:contribution_balance3) do
       create(:contribution_balance,
-             contribution: create(:contribution, receiver: contribution.receiver,
+             contribution: create(:contribution, receiver: contribution.cause,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
                                                                         status: :paid)),
@@ -98,7 +98,7 @@ RSpec.describe Service::Contributions::FeesLabelingService, type: :service do
     # 54.545
     let!(:contribution_balance4) do
       create(:contribution_balance,
-             contribution: create(:contribution, receiver: contribution.receiver,
+             contribution: create(:contribution, receiver: contribution.cause,
                                                  person_payment: create(:person_payment,
                                                                         :with_payment_in_blockchain,
                                                                         status: :paid)),

@@ -61,7 +61,8 @@ module Donations
     end
 
     def create_donation
-      @donation = Donation.create!(integration:, non_profit:, user:, value: ticket_value, platform:)
+      @donation = Donation.create!(integration:, non_profit:, user:, value: ticket_value, platform:,
+                                   source: :integration, category: :daily)
     end
 
     def set_user_last_donation_at
@@ -73,6 +74,8 @@ module Donations
     end
 
     def label_donation
+      return if RibonConfig.disable_labeling
+
       Service::Contributions::TicketLabelingService.new(donation:).label_donation
     end
 

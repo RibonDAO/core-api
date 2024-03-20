@@ -4,22 +4,28 @@ module Payment
       module Events
         class ChargeRefunded
           class << self
+            attr_reader :person_payment
+
             def handle(event)
               external_id = event.data.object['payment_intent']
               created = event.data.object['created']
 
-              update_status(external_id, 'refunded') if external_id
-              update_date(external_id, Time.zone.at(created)) if external_id
+              @person_payment = PersonPayment.where(external_id:).last
+              return unless person_payment&.status != 'refunded'
+
+              update_person_payment(Time.zone.at(created))
             end
 
             private
 
-            def update_status(external_id, status)
-              PersonPayment.where(external_id:).last&.update(status:)
-            end
+            def update_person_payment(refund_date)
+              person_payment&.update(status: :refunded, refund_date:)
+              return unless person_payment&.subscription
 
-            def update_date(external_id, refund_date)
-              PersonPayment.where(external_id:).last&.update(refund_date:)
+              command = ::Givings::Subscriptions::CancelSubscription.call(
+                subscription_id: person_payment.subscription.id
+              )
+              person_payment.subscription.update(status: :canceled, cancel_date: Time.zone.now) if command.success?
             end
           end
         end

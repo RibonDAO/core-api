@@ -23,10 +23,20 @@ module Labeling
 
     def setup_records
       ActiveRecord::Base.transaction do
-        ContributionBalance.where('created_at >= ?', from).delete_all
-        Contribution.where('created_at >= ?', from).each(&:set_contribution_balance)
-        ContributionFee.where('created_at >= ?', from).delete_all
-        DonationContribution.where('created_at >= ?', from).delete_all
+        @contributions = Contribution.where(
+          "created_at >= ? and
+          (
+            (receiver_type = 'Cause' and receiver_id != 4) or
+            (receiver_type = 'NonProfit' and receiver_id not in (3,4,5,6,8,9))
+          )", 3.years.ago
+        )
+        ContributionBalance.where(contribution: @contributions).delete_all
+        @contributions.each(&:set_contribution_balance)
+        ContributionFee.where(contribution: @contributions).delete_all
+
+        DonationContribution.where(donation: Donation.where(
+          'created_at >= ? AND donations.non_profit_id not in (3,4,5,6,8,9)', from
+        )).delete_all
       end
     end
 
@@ -59,16 +69,25 @@ module Labeling
 
     def donations
       @donations ||= Donation.select("donations.id, donations.created_at AS order_date, 'Donation' AS record_type")
-                             .where('donations.created_at >= ?', from)
+                             .where('donations.created_at >= ? AND
+                              donations.non_profit_id not in (3,4,5,6,8,9)', from)
     end
 
     def person_blockchain_transactions
-      @person_blockchain_transactions ||= PersonBlockchainTransaction
-                                          .select("person_blockchain_transactions.id,
-       COALESCE(person_blockchain_transactions.succeeded_at,
-           person_blockchain_transactions.created_at) AS order_date,
-    'PersonBlockchainTransaction' AS record_type")
-                                          .where('person_blockchain_transactions.succeeded_at >= ?', from)
+      @person_blockchain_transactions ||=
+        PersonBlockchainTransaction.joins(:person_payment).select("person_blockchain_transactions.id,
+        COALESCE(person_blockchain_transactions.succeeded_at,
+            person_blockchain_transactions.created_at) AS order_date,
+      'PersonBlockchainTransaction' AS record_type")
+                                   .where(
+                                     "person_blockchain_transactions.succeeded_at >= ?
+                                                                       AND
+          (
+            (person_payments.receiver_type = 'Cause' and person_payments.receiver_id != 4) OR
+            (person_payments.receiver_type = 'NonProfit' and
+              person_payments.receiver_id not in (3,4,5,6,8,9))
+          )", from
+                                   )
     end
   end
 end

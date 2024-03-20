@@ -9,13 +9,20 @@ module Givings
         @subscription = args[:subscription]
       end
 
+      # rubocop:disable Metrics/AbcSize
       def call
-        EventServices::SendEvent.new(user: subscription.payer.user,
-                                     event: build_event(subscription)).call
+        if subscription.category == 'club'
+          EventServices::SendEvent.new(user: subscription.payer.user,
+                                       event: build_club_event(subscription)).call
+        else
+          EventServices::SendEvent.new(user: subscription.payer.user,
+                                       event: build_event(subscription)).call
+        end
       rescue StandardError => e
         errors.add(:message, e.message)
         Reporter.log(error: e, extra: { message: e.message })
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
 
@@ -29,6 +36,22 @@ module Givings
                            amount: subscription.formatted_amount,
                            url:,
                            status: subscription.status
+                         }
+                       })
+      end
+
+      def build_club_event(subscription)
+        last_day = (subscription.person_payments.last.created_at + 1.month).strftime('%d/%m/%Y')
+        OpenStruct.new({
+                         name: 'club',
+                         data: {
+                           type: 'cancellation_request',
+                           subscription_id: subscription.id,
+                           user: subscription.payer.user,
+                           amount: subscription.formatted_amount,
+                           url:,
+                           status: subscription.status,
+                           last_club_day: last_day
                          }
                        })
       end

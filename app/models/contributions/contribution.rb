@@ -96,4 +96,10 @@ class Contribution < ApplicationRecord
 
     receiver&.non_profits
   end
+
+  def cause
+    return receiver if receiver_type == 'Cause'
+
+    receiver.cause
+  end
 end

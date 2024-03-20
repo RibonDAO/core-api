@@ -27,7 +27,7 @@ retry_person_transactions:
   cron: "*/30 * * * *" # Every 30 minutes.
   class: "PersonPayments::RetryBlockchainTransactionsWorker"
   queue: person_payments
-  
+
 send_bimonthly_email_report_worker:
   cron: "0 18 1 * *" # At 18:00 on day-of-month 1.
   class: "Mailers::SendBimonthlyEmailReportWorker"
@@ -58,7 +58,28 @@ create_contribution_for_missed_payments:
   class: "Contributions::CreateContributionForMissedPaymentsWorker"
   queue: contributions
 
-run_relabel_script:
-  cron: "0 8 * 3 1" # At 08:00 on Monday in March. TODO: Remove this after run
+clear_all_collected_by_integration:
+  cron: "1 0 * * *" # At 00:01.
+  class: "Tickets::ClearAllCollectedByIntegrationWorker"
+  queue: tickets
+
+generate_club_daily_tickets:
+  cron: "0 1 * * *" # At 01:00 everyday.
+  class: "Tickets::GenerateClubDailyTicketsWorker"
+  queue: tickets
+
+clear_redis_tickets:
+  cron: "0 1 10 1 *" # At 01:00 on day-of-month 10 in January.
+  class: "Tickets::ClearRedisTicketsWorker"
+  queue: tickets
+
+label_donations_and_contributions:
+  cron: "0 8 * 3 1"
+  class: "Contributions::LabelWorker"
+  queue: relabel
+
+relabel_donations_and_contributions:
+  cron: "0 8 * 3 1"
   class: "Contributions::RelabelWorker"
   queue: relabel
+

@@ -257,6 +257,8 @@ GEM
       digest
       net-protocol
       timeout
+    newrelic_rpm (9.6.0)
+      base64
     nio4r (2.5.8)
     nokogiri (1.13.9-aarch64-linux)
       racc (~> 1.4)
@@ -532,6 +534,7 @@ DEPENDENCIES
   mobility (~> 1.2.6)
   mock_redis
   money
+  newrelic_rpm
   nio4r
   omniauth-google-oauth2
   pg (~> 1.1)

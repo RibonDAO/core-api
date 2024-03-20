@@ -3,17 +3,19 @@
 # Table name: donations
 #
 #  id             :bigint           not null, primary key
+#  category       :integer          default("daily")
 #  platform       :string
+#  source         :integer          default("integration")
 #  value          :decimal(, )
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  integration_id :bigint           not null
+#  integration_id :bigint
 #  non_profit_id  :bigint           not null
 #  user_id        :bigint
 #
 class Donation < ApplicationRecord
   belongs_to :non_profit
-  belongs_to :integration
+  belongs_to :integration, optional: true
   belongs_to :user
 
   has_one :donation_batch
@@ -25,6 +27,16 @@ class Donation < ApplicationRecord
   enum platform: {
     web: 'web',
     app: 'app'
+  }
+
+  enum category: {
+    daily: 0,
+    monthly: 1
+  }
+
+  enum source: {
+    integration: 0,
+    club: 1
   }
 
   scope :created_between, lambda { |start_date, end_date|

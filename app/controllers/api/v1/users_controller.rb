@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       def search
-        @user = User.find_by(email: params[:email])
+        @user = User.find_by(email: current_user&.email || params[:email])
 
         if @user
           render json: UserBlueprint.render(@user, view: :extended)
@@ -33,6 +33,14 @@ module Api
                          donate_app: current_user.donate_app }
         else
           render json: { can_donate: true }
+        end
+      end
+
+      def donated_today
+        if current_user
+          render json: { donated_today: current_user.last_donation_at&.today? }
+        else
+          render json: { donated_today: false }
         end
       end
 

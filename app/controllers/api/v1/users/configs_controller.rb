@@ -12,10 +12,14 @@ module Api
           end
         end
 
+        def show
+          render json: { allowed_email_marketing: current_user&.user_config&.allowed_email_marketing || false }
+        end
+
         private
 
         def user
-          @user ||= User.find params[:user_id]
+          @user ||= current_user || User.find(params[:user_id])
         end
 
         def user_config_params

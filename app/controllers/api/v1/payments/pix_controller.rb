@@ -15,11 +15,31 @@ module Api
           end
         end
 
+        def generate
+          command = ::Givings::Payment::GeneratePix.call(external_id: params[:id])
+
+          if command.success?
+            render json: command.result
+          else
+            render_errors(command.errors)
+          end
+        end
+
+        def find
+          command = ::Givings::Payment::FindPaymentIntent.call(external_id: params[:id])
+
+          if command.success?
+            render json: command.result
+          else
+            render_errors(command.errors)
+          end
+        end
+
         private
 
         def order_params
           {
-            email: payment_params[:email],
+            email:,
             name: payment_params[:name],
             offer:,
             operation:,
@@ -48,6 +68,10 @@ module Api
 
         def non_profit
           @non_profit ||= NonProfit.find payment_params[:non_profit_id].to_i if payment_params[:non_profit_id]
+        end
+
+        def email
+          current_user&.email || payment_params[:email]
         end
 
         def operation

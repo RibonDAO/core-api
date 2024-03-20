@@ -101,6 +101,9 @@ gem 'jwt'
 # CRM
 gem 'customerio'
 
+# APM
+gem 'newrelic_rpm'
+
 group :development, :test do
   gem 'aws-sdk-secretsmanager'
   gem 'base64'

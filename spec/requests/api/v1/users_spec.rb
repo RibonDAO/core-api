@@ -113,6 +113,20 @@ RSpec.describe 'Api::V1::Users', type: :request do
     end
   end
 
+  describe 'GET /users/donated_today' do
+    subject(:request) do
+      get '/api/v1/users/donated_today', headers: { Email: user.email }
+    end
+
+    let(:user) { create(:user) }
+
+    it 'returns the donated_today attribute' do
+      request
+
+      expect_response_to_have_keys %w[donated_today]
+    end
+  end
+
   describe 'GET /users/completed_tasks' do
     subject(:request) { get '/api/v1/users/completed_tasks', headers: { Email: user.email } }
 

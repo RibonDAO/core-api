@@ -48,6 +48,14 @@ module Payment
           Billing::Refund.create(external_id: payment.external_id)
         end
 
+        def generate_pix(payment)
+          Entities::PaymentIntent.confirm(id: payment.external_id)
+        end
+
+        def find_payment_intent(payment)
+          Entities::PaymentIntent.find(id: payment.external_id)
+        end
+
         private
 
         def setup_customer(order)

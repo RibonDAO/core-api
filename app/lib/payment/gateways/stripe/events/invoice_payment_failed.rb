@@ -25,17 +25,23 @@ module Payment
             # rubocop:disable Metrics/AbcSize
             def set_payment_attributes
               payment.paid_date = Time.zone.at(data['created'])
-              payment.amount_cents = data['amount_paid']
+              payment.amount_cents = subscription.offer.price_cents
               payment.external_id = data['payment_intent']
               payment.payment_method = subscription.payment_method
               payment.offer = subscription.offer
-              payment.receiver = subscription.receiver
+              payment.receiver = receiver_person_payment
               payment.payer = subscription.payer
               payment.platform = subscription.platform
               payment.integration = subscription.integration
               payment.status = :failed
             end
             # rubocop:enable Metrics/AbcSize
+
+            def receiver_person_payment
+              return Cause.where(status: :active).sample if subscription.category == 'club'
+
+              subscription.receiver
+            end
           end
         end
       end
