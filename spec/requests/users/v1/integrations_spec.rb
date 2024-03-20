@@ -12,7 +12,7 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
       {
         name: 'Ribon',
         status: :inactive,
-        metadata: { user_id: }.to_json,
+        metadata: { user_id: }.to_json
       }
     end
 
@@ -22,7 +22,6 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
       mock_command(klass: Integrations::CreateIntegration, result:)
       request
     end
-
 
     it 'expect metadata to have an user_id' do
       expect(result.metadata['user_id']).to eq(user_id)
@@ -38,7 +37,7 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
 
   describe 'GET /show' do
     include_context 'when making a user request' do
-      let(:request) { get "/users/v1/integration", headers: }
+      let(:request) { get '/users/v1/integration', headers: }
     end
 
     before do
