@@ -29,7 +29,7 @@ module Givings
       end
 
       def gateway
-        person_payment.offer.gateway
+        'stripe'
       end
     end
   end
