@@ -5,7 +5,6 @@ module Tickets
 
     def perform(*_args)
       ClearOldIntegrationTicketsJob.perform_later
-
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })
     end
