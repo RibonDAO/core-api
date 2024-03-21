@@ -1,5 +1,5 @@
 module Tickets
-  class ClearOldTickets < ApplicationCommand
+  class ClearOldIntegrationTickets < ApplicationCommand
     prepend SimpleCommand
 
     attr_reader :time
@@ -10,7 +10,7 @@ module Tickets
 
     def call
       with_exception_handle do
-        Ticket.where('created_at < ?', time).delete_all
+        UserIntegrationCollectedTicket.where('created_at < ?', time).delete_all
       end
     end
   end
