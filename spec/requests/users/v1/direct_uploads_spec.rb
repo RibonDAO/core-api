@@ -2,9 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Users::V1::DirectUploads', type: :request do
   describe 'POST /create' do
-    include_context 'when making a user request' do
-      let(:request) { post '/users/v1/rails/active_storage/direct_uploads', headers:, params: }
-    end
+    let(:request) { post '/users/v1/rails/active_storage/direct_uploads', params: }
 
     let(:params) do
       { blob: {
