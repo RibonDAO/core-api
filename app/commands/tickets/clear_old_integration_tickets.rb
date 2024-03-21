@@ -10,7 +10,7 @@ module Tickets
 
     def call
       with_exception_handle do
-        UserIntegrationCollectedTicket.where('created_at < ?', time).delete_all
+        Ticket.where(source: :integration).where('created_at < ?', time).delete_all
       end
     end
   end
