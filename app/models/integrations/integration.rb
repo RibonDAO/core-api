@@ -3,6 +3,7 @@
 # Table name: integrations
 #
 #  id                             :bigint           not null, primary key
+#  metadata                       :jsonb
 #  name                           :string
 #  status                         :integer          default("inactive")
 #  ticket_availability_in_minutes :integer
