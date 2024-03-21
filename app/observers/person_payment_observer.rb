@@ -1,8 +1,9 @@
 class PersonPaymentObserver < ActiveRecord::Observer
   def after_update(person_payment)
-    send_person_payment_email(person_payment) if processing_to_paid_non_subscription?(person_payment)
+    send_person_payment_email(person_payment) if paid_non_subscription?(person_payment)
     send_failed_payment_event(person_payment) if processing_to_failed?(person_payment)
-    if processing_to_paid_club_subscription?(person_payment)
+
+    if paid_club_subscription?(person_payment)
       send_succeded_club_payment_event(person_payment)
       give_monthly_tickets(person_payment)
     end
@@ -27,12 +28,20 @@ class PersonPaymentObserver < ActiveRecord::Observer
       !person_payment.crypto?
   end
 
-  def processing_to_paid_non_subscription?(person_payment)
-    processing_to_paid?(person_payment) && person_payment.subscription.nil?
+  def requires_confirmation_to_paid?(person_payment)
+    person_payment.previous_changes[:status] == %w[requires_confirmation paid] &&
+      person_payment.paid? &&
+      !person_payment.crypto?
   end
 
-  def processing_to_paid_club_subscription?(person_payment)
-    processing_to_paid?(person_payment) && person_payment.subscription.category == 'club'
+  def paid_non_subscription?(person_payment)
+    (processing_to_paid?(person_payment) || requires_confirmation_to_paid?(person_payment)) &&
+      person_payment.subscription.nil?
+  end
+
+  def paid_club_subscription?(person_payment)
+    (processing_to_paid?(person_payment) || requires_confirmation_to_paid?(person_payment)) &&
+      person_payment.subscription.category == 'club'
   end
 
   def processing_to_failed?(person_payment)
