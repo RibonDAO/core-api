@@ -10,7 +10,7 @@ module Users
           render json: { error: 'File is too big or wrong format' }, status: :unprocessable_entity
           return
         end
-  
+
         blob = ActiveStorage::Blob.create_before_direct_upload!(filename: blob_args[:filename],
                                                                 byte_size: blob_args[:byte_size],
                                                                 checksum: blob_args[:checksum],
