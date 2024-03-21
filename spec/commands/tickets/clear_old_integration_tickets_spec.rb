@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Tickets::ClearOldTickets do
+RSpec.describe Tickets::ClearOldIntegrationTickets do
   subject(:command) { described_class.call(time:) }
 
   let(:time) { 1.month.ago }
