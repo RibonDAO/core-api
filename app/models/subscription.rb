@@ -35,9 +35,13 @@ class Subscription < ApplicationRecord
   }
 
   scope :active_from_club, lambda {
-    joins(:offer).where(status: :active,
-                        offer: { category: :club })
+    where('subscriptions.cancel_date IS NULL OR subscriptions.cancel_date < ?', 1.month.from_now)
+      .joins(:offer).where(offers: { category: :club })
   }
+
+  def last_club_day
+    cancel_date + 1.month if cancel_date.present?
+  end
 
   def formatted_amount
     person_payments&.last&.formatted_amount
