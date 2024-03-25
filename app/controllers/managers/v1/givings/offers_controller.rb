@@ -11,13 +11,13 @@ module Managers
         def show
           @offer = Offer.find offer_params[:id]
 
-          render json: OfferBlueprint.render(@offer, view: :plan)
+          render json: OfferBlueprint.render(@offer, view: :manager)
         end
 
         def create
           command = ::Offers::UpsertOffer.call(offer_params)
           if command.success?
-            render json: OfferBlueprint.render(command.result, view: :plan), status: :created
+            render json: OfferBlueprint.render(command.result, view: :manager), status: :created
           else
             render_errors(command.errors)
           end
@@ -26,7 +26,7 @@ module Managers
         def update
           command = ::Offers::UpsertOffer.call(offer_params)
           if command.success?
-            render json: OfferBlueprint.render(command.result, view: :plan), status: :created
+            render json: OfferBlueprint.render(command.result, view: :manager), status: :created
           else
             render_errors(command.errors)
           end
