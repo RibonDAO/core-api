@@ -51,8 +51,8 @@ module Givings
       end
 
       def update_success(order:, status:, result:)
-        order.payment.update(status:)
         order.payment&.subscription&.update(status: :active)
+        order.payment.update(status:)
         update_external_ids(order:, result:)
       end
 

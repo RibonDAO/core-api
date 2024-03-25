@@ -1,4 +1,4 @@
-module Managers
+module Users
   module V1
     class DirectUploadsController < ActiveStorage::DirectUploadsController
       protect_from_forgery with: :null_session
