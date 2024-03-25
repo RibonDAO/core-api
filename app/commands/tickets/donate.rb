@@ -80,7 +80,7 @@ module Tickets
     end
 
     def destroy_tickets
-      tickets = Ticket.where(user:).order(created_at: :asc).limit(quantity).destroy_all
+      tickets = Ticket.where(user:).collected.order(created_at: :asc).limit(quantity).destroy_all
       integrations = tickets.pluck(:integration_id)
       external_ids = tickets.pluck(:external_id)
       sources = tickets.pluck(:source)
