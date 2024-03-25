@@ -35,12 +35,19 @@ class Subscription < ApplicationRecord
   }
 
   scope :active_from_club, lambda {
-    where('subscriptions.cancel_date IS NULL OR subscriptions.cancel_date < ?', 1.month.from_now)
-      .joins(:offer).where(offers: { category: :club })
+    joins(:offer).where(offers: { category: :club })
+                 .joins(:person_payments)
+                 .where('person_payments.created_at =
+                        (SELECT MAX(person_payments.created_at)
+                        FROM person_payments
+                        WHERE person_payments.subscription_id = subscriptions.id)')
+                 .group('subscriptions.id')
+                 .where.not(person_payments: { status: :refunded })
+                 .where('person_payments.paid_date > ?', 1.month.ago)
   }
 
   def last_club_day
-    cancel_date + 1.month if cancel_date.present?
+    person_payments.last.paid_date + 1.month if cancel_date.present?
   end
 
   def formatted_amount
