@@ -15,13 +15,15 @@ RSpec.describe Tickets::GenerateClubDailyTicketsWorker, type: :worker do
     let(:quantity) { 2 }
     let(:plan) { create(:plan, daily_tickets: 2) }
     let(:offer) { create(:offer, plans: [plan], category: :club) }
+    let(:person_payment) { create(:person_payment, plans: [plan], category: :club) }
 
     before do
       allow(Tickets::GenerateClubDailyTicketsJob).to receive(:perform_later).with(user:, platform:,
                                                                                   quantity:, source:)
 
-      create(:subscription, integration:, status: :active, platform:,
-                            offer:, payer: customer)
+      subs = create(:subscription, integration:, status: :active, platform:,
+                                   offer:, payer: customer)
+      create(:person_payment, subscription: subs, paid_date: Time.zone.now)
     end
 
     it 'calls the GenerateClubDailyTicketsJob' do
