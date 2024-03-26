@@ -155,7 +155,7 @@ class PersonPayment < ApplicationRecord
   private
 
   def club?
-    subscription&.active? && offer&.category == 'club'
+    offer&.category == 'club'
   end
 
   def set_currency
