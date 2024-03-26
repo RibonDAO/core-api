@@ -11,7 +11,10 @@ RSpec.describe 'Api::V1::Users::Contributions', type: :request do
     let!(:person_payment) { create(:person_payment, payer: customer) }
     let(:receiver) { create(:non_profit, :with_impact) }
 
-    before { create(:contribution, person_payment:, receiver:) }
+    before do
+      create(:contribution, person_payment:, receiver:)
+      create(:ribon_config)
+    end
 
     it 'returns all user contributions' do
       request
@@ -45,6 +48,10 @@ RSpec.describe 'Api::V1::Users::Contributions', type: :request do
     subject(:request) { get "/api/v1/users/#{user.id}/contributions/#{contribution.id}" }
 
     include_context('when mocking a request') { let(:cassette_name) { 'conversion_multiple_rates' } }
+
+    before do
+      create(:ribon_config)
+    end
 
     let(:user) { create(:user) }
     let(:customer) { create(:customer, user:) }
