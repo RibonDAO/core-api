@@ -14,6 +14,7 @@ RSpec.describe 'Patrons::V1::Contributions::Impacts', type: :request do
 
     before do
       create(:donation_contribution, contribution:, donation: create(:donation, non_profit: receiver))
+      create(:ribon_config)
     end
 
     it 'returns the contribution direct impact' do

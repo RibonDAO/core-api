@@ -11,6 +11,7 @@ RSpec.describe 'Patrons::V1::Contributions', type: :request do
     before do
       person_payment = create(:person_payment, payer: patron, offer:)
       create(:contribution, person_payment:)
+      create(:ribon_config)
     end
 
     it 'returns a list of contributions for the patron' do
