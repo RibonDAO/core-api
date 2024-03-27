@@ -33,6 +33,8 @@ class Cause < ApplicationRecord
     test: 2
   }
 
+  scope :active, -> { where(status: :active) }
+
   def default_pool
     pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
   end
