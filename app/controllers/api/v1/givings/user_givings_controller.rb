@@ -10,8 +10,13 @@ module Api
         private
 
         def givings
-          @givings ||= PersonPayment.where(status: %i[paid refunded refund_failed],
-                                           payer: @customer).where.not(receiver: nil)
+          @givings ||= PersonPayment.joins(:offer)
+                                    .where(offers: { category: :direct_contribution })
+                                    .where(person_payments: {
+                                             status: %i[paid refunded refund_failed],
+                                             payer: @customer
+                                           })
+                                    .where.not(person_payments: { receiver: nil })
         end
       end
     end
