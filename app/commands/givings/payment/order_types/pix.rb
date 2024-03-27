@@ -76,7 +76,7 @@ module Givings
         end
 
         def random_cause
-          Cause.order('RANDOM()').first
+          Cause.active.order('RANDOM()').first
         end
 
         def receiver
