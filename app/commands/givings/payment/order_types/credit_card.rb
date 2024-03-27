@@ -93,7 +93,7 @@ module Givings
         end
 
         def receiver_person_payment
-          return Cause.where(status: :active).sample if offer.category == 'club'
+          return Cause.active.sample if offer.category == 'club'
 
           non_profit || cause
         end
