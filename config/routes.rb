@@ -2,6 +2,7 @@ require 'sidekiq/web'
 require "sidekiq/cron/web"
 
 Rails.application.routes.draw do
+  resources :reports
   root to: 'rails_admin/main#dashboard'
   get '/health', to: 'main#health'
   
@@ -11,6 +12,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   
   Rails.application.routes.draw do
+  resources :reports
     post '/graphql', to: 'graphql#execute'
   end
 
