@@ -23,7 +23,9 @@ module Users
       private
 
       def integration_params
-        params.permit(:name, :status, :id, :ticket_availability_in_minutes, :logo, :webhook_url, metadata: {},
+        params.permit(:name, :status, :id, :ticket_availability_in_minutes, :logo,
+                      :webhook_url,
+                      metadata: {},
                       integration_task_attributes: %i[id description link link_address])
       end
     end
