@@ -226,6 +226,7 @@ Rails.application.routes.draw do
       resources :stories, only: %i[index show create update destroy]
       resources :impression_cards, only: %i[index show create update destroy]
       resources :tasks, only: %i[index show create update destroy]
+      resources :reports, only: %i[index show create update destroy]
 
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
