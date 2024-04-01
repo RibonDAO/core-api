@@ -17,7 +17,7 @@
 class NonProfit < ApplicationRecord
   extend Mobility
 
-  translates :impact_description, :logo_description,
+  translates :impact_description, :logo_description, :name,
              :main_image_description, :background_image_description,
              :confirmation_image_description, type: :string
 
