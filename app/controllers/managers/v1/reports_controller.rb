@@ -41,10 +41,10 @@ module Managers
       end
 
       private
+
       def report_params
         params.permit(:id, :name, :link, :active)
       end
-
     end
   end
 end

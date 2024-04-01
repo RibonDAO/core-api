@@ -77,7 +77,7 @@ RSpec.describe 'Mangers::V1::ReportsController', :report, type: :request do
 
         expect(report.reload.name).to eq('New report')
         expect(report.reload.link).to eq('http://report.report.com')
-        expect(report.reload.active).to eq(true)
+        expect(report.reload.active).to be(true)
       end
 
       it 'returns a single report' do
