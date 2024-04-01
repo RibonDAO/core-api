@@ -12,7 +12,7 @@ module Managers
         if @report.save
           render json: ReportBlueprint.render(@report), status: :created
         else
-          head :uprocessable_entity
+          head :unprocessable_entity
         end
       end
 

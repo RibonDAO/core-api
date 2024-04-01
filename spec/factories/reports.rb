@@ -3,12 +3,16 @@
 # Table name: reports
 #
 #  id         :bigint           not null, primary key
-#  active     :boolean
-#  link       :string
 #  name       :string
+#  link       :string
+#  active     :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-class Report < ApplicationRecord
-  validates :name, :link, :active, presence: true
+FactoryBot.define do
+  factory :report do
+    name { 'March' }
+    link { 'http://marchreport.com' }
+    active { true }
+  end
 end
