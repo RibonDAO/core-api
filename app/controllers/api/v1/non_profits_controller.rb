@@ -64,7 +64,9 @@ module Api
       end
 
       def active_non_profits
-        NonProfit.joins(:cause).where(causes: { status: :active }).where(status: :active)
+        Rails.cache.fetch('active_non_profits', expires_in: 2.hours) do
+          NonProfit.joins(:cause).where(causes: { status: :active }).where(status: :active)
+        end
       end
 
       def active_and_test_non_profits

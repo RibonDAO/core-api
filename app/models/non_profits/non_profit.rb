@@ -44,6 +44,8 @@ class NonProfit < ApplicationRecord
 
   before_save :save_wallet
 
+  after_save :invalidate_cache
+
   enum status: {
     inactive: 0,
     active: 1,
@@ -82,5 +84,9 @@ class NonProfit < ApplicationRecord
 
   def blueprint
     NonProfitBlueprint
+  end
+
+  def invalidate_cache
+    Rails.cache.delete('active_non_profits')
   end
 end
