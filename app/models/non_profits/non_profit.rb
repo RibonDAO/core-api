@@ -87,6 +87,6 @@ class NonProfit < ApplicationRecord
   end
 
   def invalidate_cache
-    Rails.cache.delete('active_non_profits')
+    Rails.cache.delete_matched('active_non_profits_*')
   end
 end
