@@ -11,18 +11,22 @@ module Users
       end
 
       def show
-        @integration = Integration.find_by("metadata -> 'user_id' = ?", current_user.id.to_s)
+        @integration = Integration.find_by("metadata ->> 'user_id' = ?", current_user.id.to_s)
 
-        render json: IntegrationBlueprint.render(@integration)
+        if @integration
+          render json: IntegrationBlueprint.render(@integration)
+        else
+          render json: { message: 'Integration not found' }, status: :not_found
+        end
       end
 
       private
 
       def integration_params
-        metadata = params[:metadata].present? ? JSON.parse(params[:metadata]) : {}
-
-        params.permit(:name, :status, :id, :ticket_availability_in_minutes, :logo, :webhook_url,
-                      integration_task_attributes: %i[id description link link_address]).merge(metadata:)
+        params.permit(:name, :status, :id, :ticket_availability_in_minutes, :logo,
+                      :webhook_url,
+                      metadata: {},
+                      integration_task_attributes: %i[id description link link_address])
       end
     end
   end
