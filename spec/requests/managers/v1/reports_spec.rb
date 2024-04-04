@@ -32,7 +32,7 @@ RSpec.describe 'Mangers::V1::ReportsController', :report, type: :request do
       it 'returns a single report' do
         request
 
-        expect_response_to_have_keys(%w[id name link active])
+        expect_response_to_have_keys(%w[id name link active created_at updated_at])
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe 'Mangers::V1::ReportsController', :report, type: :request do
     it 'returns a single report' do
       request
 
-      expect_response_to_have_keys(%w[id name link active])
+      expect_response_to_have_keys(%w[id name link active created_at updated_at])
     end
   end
 
@@ -83,7 +83,7 @@ RSpec.describe 'Mangers::V1::ReportsController', :report, type: :request do
       it 'returns a single report' do
         request
 
-        expect_response_to_have_keys(%w[id name link active])
+        expect_response_to_have_keys(%w[id name link active created_at updated_at])
       end
     end
   end
