@@ -10,5 +10,9 @@
 #  updated_at :datetime         not null
 #
 class Report < ApplicationRecord
+  extend Mobility
+
+  translates :name, type: :string
+
   validates :name, :link, presence: true
 end
