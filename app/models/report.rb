@@ -10,5 +10,5 @@
 #  updated_at :datetime         not null
 #
 class Report < ApplicationRecord
-  validates :name, :link, :active, presence: true
+  validates :name, :link, presence: true
 end
