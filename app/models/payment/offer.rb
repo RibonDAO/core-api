@@ -46,6 +46,6 @@ class Offer < ApplicationRecord
   end
 
   def invalidate_cache
-    Rails.cache.delete('active_offers')
+    Rails.cache.delete_matched('active_offers_*')
   end
 end

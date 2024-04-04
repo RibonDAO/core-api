@@ -21,6 +21,6 @@ class Plan < ApplicationRecord
   }
 
   def invalidate_cache
-    Rails.cache.delete('active_non_profits')
+    Rails.cache.delete_matched('active_offers_*')
   end
 end
