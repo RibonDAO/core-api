@@ -57,7 +57,8 @@ module Payment
           end
 
           def handle_giving_to_blockchain
-            return if payment.person_blockchain_transaction&.success?
+            return if payment.person_blockchain_transaction&.success? ||
+                      payment.person_blockchain_transaction&.processing?
 
             return call_add_cause_giving_blockchain_job if payment.receiver_type == 'Cause'
 

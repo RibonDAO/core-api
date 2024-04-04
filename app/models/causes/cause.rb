@@ -34,6 +34,8 @@ class Cause < ApplicationRecord
     test: 2
   }
 
+  scope :active, -> { where(status: :active) }
+
   def default_pool
     pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
   end
@@ -55,6 +57,6 @@ class Cause < ApplicationRecord
   end
 
   def invalidate_cache
-    Rails.cache.delete('active_non_profits')
+    Rails.cache.delete_matched('active_non_profits_*')
   end
 end
