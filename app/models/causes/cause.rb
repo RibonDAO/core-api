@@ -26,6 +26,7 @@ class Cause < ApplicationRecord
   validates :name, presence: true
 
   before_save :deactivate_non_profits, if: :will_save_change_to_status?
+  after_save :invalidate_cache
 
   enum status: {
     inactive: 0,
@@ -53,5 +54,9 @@ class Cause < ApplicationRecord
 
   def active
     status == 'active'
+  end
+
+  def invalidate_cache
+    Rails.cache.delete_matched('active_non_profits_*')
   end
 end
