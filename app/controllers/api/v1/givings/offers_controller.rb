@@ -3,7 +3,8 @@ module Api
     module Givings
       class OffersController < ApplicationController
         def index
-          @offers_blueprint = Rails.cache.fetch("active_offers_#{I18n.locale}", expires_in: 2.days) do
+          @offers_blueprint = Rails.cache.fetch("active_offers_#{currency}_#{subscription}_#{category}",
+                                                expires_in: 2.days) do
             @offers = Offer.where(active: true, currency:, subscription:, category:)
                            .order('position_order ASC, price_cents ASC')
             OfferBlueprint.render(@offers, view: :plan)
