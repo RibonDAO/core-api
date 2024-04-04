@@ -2,14 +2,12 @@ module Api
   module V1
     class NonProfitsController < ApplicationController
       def index
-        @non_profits = if current_user&.email&.include?('@ribon.io')
-                         active_and_test_non_profits
-                       else
-                         active_non_profits
-                       end
-        @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
-
-        render json: NonProfitBlueprint.render(@random_non_profits)
+        @non_profits_blueprints = Rails.cache.fetch("active_non_profits_#{I18n.locale}", expires_in: 30.minutes) do
+          @non_profits = active_non_profits
+          @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
+          NonProfitBlueprint.render(@random_non_profits)
+        end
+        render json: @non_profits_blueprints
       end
 
       def stories
