@@ -167,6 +167,8 @@ Rails.application.routes.draw do
         put 'cancel_subscription' => 'subscriptions#unsubscribe'
       end
 
+      resources :reports, only: %i[index show]
+
       namespace :tickets do 
         get 'available' => 'tickets#available'
         get 'to_collect' => 'tickets#to_collect'
