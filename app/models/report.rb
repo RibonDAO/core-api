@@ -12,7 +12,7 @@
 class Report < ApplicationRecord
   extend Mobility
 
-  translates :name, type: :string
+  translates :name, :link, type: :string
 
   validates :name, :link, presence: true
 end
