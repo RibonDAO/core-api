@@ -25,6 +25,8 @@ class Offer < ApplicationRecord
 
   accepts_nested_attributes_for :plans
 
+  after_save :invalidate_cache
+
   enum currency: {
     brl: 0,
     usd: 1
@@ -41,5 +43,9 @@ class Offer < ApplicationRecord
 
   def plan
     plans.where(status: :active).last
+  end
+
+  def invalidate_cache
+    Rails.cache.delete_matched('active_offers_*')
   end
 end
