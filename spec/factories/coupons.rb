@@ -10,12 +10,11 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
-class Coupon < ApplicationRecord
-  extend Mobility
-
-  translates :reward_text,  type: :string
-
-  validates :number_of_tickets, :reward_text, :expiration_date, presence: true
-
-  has_many :coupons
+FactoryBot.define do
+  factory :coupon do
+    available_quantity { 1 }
+    expiration_date { 2.months.from_now }
+    number_of_tickets { 1 }
+    reward_text { 'congratulations' }
+  end
 end
