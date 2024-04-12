@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_11_202528) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_12_142253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -727,6 +727,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_11_202528) do
     t.index ["user_id"], name: "index_user_donation_stats_on_user_id"
   end
 
+  create_table "user_expired_coupons", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.uuid "coupon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_id"], name: "index_user_expired_coupons_on_coupon_id"
+    t.index ["user_id"], name: "index_user_expired_coupons_on_user_id"
+  end
+
   create_table "user_integration_collected_tickets", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "integration_id", null: false
@@ -875,6 +884,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_11_202528) do
   add_foreign_key "user_coupons", "coupons"
   add_foreign_key "user_coupons", "users"
   add_foreign_key "user_donation_stats", "users"
+  add_foreign_key "user_expired_coupons", "coupons"
+  add_foreign_key "user_expired_coupons", "users"
   add_foreign_key "user_integration_collected_tickets", "integrations"
   add_foreign_key "user_integration_collected_tickets", "users"
   add_foreign_key "user_profiles", "users"
