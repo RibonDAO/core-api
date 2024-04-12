@@ -41,6 +41,9 @@ class User < ApplicationRecord
   has_many :accounts
   has_one :user_profile
 
+  has_many :user_coupons
+  has_many :user_expired_coupons
+
   has_many :legacy_user_impacts, through: :legacy_user
   has_many :legacy_contributions, through: :legacy_user
 
