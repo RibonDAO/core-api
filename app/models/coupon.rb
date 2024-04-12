@@ -17,5 +17,6 @@ class Coupon < ApplicationRecord
 
   validates :number_of_tickets, :reward_text, :expiration_date, presence: true
 
-  has_many :coupons
+  has_many :user_coupons
+  has_many :user_expired_coupons
 end
