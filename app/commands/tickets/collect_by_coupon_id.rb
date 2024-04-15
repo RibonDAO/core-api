@@ -25,11 +25,10 @@ module Tickets
     private
 
     def check_coupon
-      @coupon = Coupon.find(coupon_id)
-      return true if coupon
+      @coupon = Coupon.where(id: coupon_id).first
+      return if coupon
 
-      errors.add(:message, I18n.t('tickets.coupon_invalid'))
-      false
+      raise I18n.t('tickets.coupon_invalid')
     end
 
     def transact_ticket
