@@ -21,6 +21,8 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_one(:user_config) }
     it { is_expected.to have_one(:user_profile) }
     it { is_expected.to have_many(:accounts) }
+    it { is_expected.to have_many(:user_coupons) }
+    it { is_expected.to have_many(:user_expired_coupons) }
   end
 
   describe '.create' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_12_142253) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
   create_table "accounts", force: :cascade do |t|
     t.datetime "confirmed_at"
     t.string "provider"
+    t.datetime "remember_created_at"
     t.json "tokens"
     t.string "uid"
     t.bigint "user_id", null: false
@@ -97,7 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "link"
-    t.integer "language", default: 0
+    t.string "language"
     t.index ["author_id"], name: "index_articles_on_author_id"
   end
 
@@ -211,6 +212,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.integer "generated_fee_cents"
     t.index ["person_payment_id"], name: "index_contributions_on_person_payment_id"
     t.index ["receiver_type", "receiver_id"], name: "index_contributions_on_receiver"
+  end
+
+  create_table "coupons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "number_of_tickets"
+    t.datetime "expiration_date"
+    t.integer "available_quantity"
+    t.string "reward_text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "crypto_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -398,6 +408,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.integer "donations_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "user_email"
+    t.integer "user_legacy_id"
+    t.datetime "user_created_at"
     t.bigint "legacy_user_id"
     t.index ["legacy_non_profit_id"], name: "index_legacy_user_impacts_on_legacy_non_profit_id"
     t.index ["legacy_user_id"], name: "index_legacy_user_impacts_on_legacy_user_id"
@@ -445,8 +458,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -582,6 +595,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.index ["crypted_token"], name: "index_refresh_tokens_on_crypted_token", unique: true
   end
 
+  create_table "reports", force: :cascade do |t|
+    t.string "name"
+    t.string "link"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "ribon_configs", force: :cascade do |t|
     t.decimal "default_ticket_value"
     t.datetime "created_at", null: false
@@ -688,6 +709,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.index ["user_id"], name: "index_user_configs_on_user_id"
   end
 
+  create_table "user_coupons", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.uuid "coupon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_id"], name: "index_user_coupons_on_coupon_id"
+    t.index ["user_id"], name: "index_user_coupons_on_user_id"
+  end
+
   create_table "user_donation_stats", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "last_donation_at"
@@ -695,6 +725,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.datetime "updated_at", null: false
     t.bigint "last_donated_cause"
     t.index ["user_id"], name: "index_user_donation_stats_on_user_id"
+  end
+
+  create_table "user_expired_coupons", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.uuid "coupon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_id"], name: "index_user_expired_coupons_on_coupon_id"
+    t.index ["user_id"], name: "index_user_expired_coupons_on_user_id"
   end
 
   create_table "user_integration_collected_tickets", force: :cascade do |t|
@@ -752,7 +791,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "language", default: 0
+    t.integer "language"
     t.integer "legacy_id"
     t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -842,7 +881,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_193515) do
   add_foreign_key "tickets", "users"
   add_foreign_key "user_completed_tasks", "users"
   add_foreign_key "user_configs", "users"
+  add_foreign_key "user_coupons", "coupons"
+  add_foreign_key "user_coupons", "users"
   add_foreign_key "user_donation_stats", "users"
+  add_foreign_key "user_expired_coupons", "coupons"
+  add_foreign_key "user_expired_coupons", "users"
   add_foreign_key "user_integration_collected_tickets", "integrations"
   add_foreign_key "user_integration_collected_tickets", "users"
   add_foreign_key "user_profiles", "users"
