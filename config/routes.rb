@@ -83,6 +83,7 @@ Rails.application.routes.draw do
       put 'big_donors/:id' => 'big_donors#update'
 
       get 'chains' => 'chains#index'
+      get 'ribon_config' => 'ribon_config#index'
       
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
