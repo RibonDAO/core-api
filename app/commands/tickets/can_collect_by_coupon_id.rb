@@ -3,11 +3,12 @@
 module Tickets
   class CanCollectByCouponId < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :coupon_id, :user_id
+    attr_reader :coupon_id, :user_id, :coupon
 
     def initialize(coupon_id:, user_id:)
       @coupon_id = coupon_id
       @user_id = user_id
+      @coupon = Coupon.find(coupon_id)
     end
 
     def call
@@ -19,17 +20,22 @@ module Tickets
     private
 
     def valid_coupon_id?
-      return false if coupon_id.blank?
-
-      if Coupon.find(coupon_id).expired?
-        errors.add(:message, I18n.t('tickets.coupon_expired'))
-        return false
-      end
-      if UserCoupon.exists?(coupon_id:, user_id:)
-        errors.add(:message, I18n.t('tickets.coupon_already_collected'))
-        return false
-      end
+      check_coupon_expiration
+      check_user_coupon
+      check_coupon_availability
       true
+    end
+
+    def check_coupon_expiration
+      raise I18n.t('tickets.coupon_expired') if coupon.expired?
+    end
+
+    def check_user_coupon
+      raise I18n.t('tickets.coupon_already_collected') if UserCoupon.exists?(coupon_id:, user_id:)
+    end
+
+    def check_coupon_availability
+      raise I18n.t('tickets.coupon_unavailable') if UserCoupon.where(coupon_id:).count >= coupon.available_quantity
     end
   end
 end

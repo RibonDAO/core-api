@@ -41,5 +41,18 @@ describe Tickets::CanCollectByCouponId do
         expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_expired'))
       end
     end
+
+    context 'when coupon is unavailable' do
+      before do
+        create(:user_coupon, coupon:)
+        coupon.update(available_quantity: 1)
+      end
+
+      it 'returns false' do
+        result = command.result
+        expect(result).to be_falsey
+        expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_unavailable'))
+      end
+    end
   end
 end

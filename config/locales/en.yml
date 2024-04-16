@@ -24,6 +24,7 @@ en:
     user_not_found: "User not found. Please logout and try again."
     integration_not_found: "Integration not found. Please reload the page and try again."
     coupon_expired: "Expired coupon."
+    coupon_unavailable: "Unavailable coupon."
     coupon_already_collected: "Coupon already collected."
     coupon_invalid: "Invalid coupon."
   sources:

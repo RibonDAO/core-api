@@ -22,7 +22,29 @@ describe Tickets::CollectByCouponId do
 
       it 'returns the ticket created and the reward text' do
         result = command.result
-        expect(result[:ticket]).to eq(user.tickets.last)
+        expect(result[:tickets]).to eq(user.tickets)
+        expect(result[:reward_text]).to eq(coupon.reward_text)
+      end
+    end
+
+    context 'when number of tickets is greater than 1' do
+      let(:coupon_id) { coupon.id }
+
+      before do
+        coupon.update(number_of_tickets: 2)
+      end
+
+      it 'creates a ticket in database' do
+        expect { command }.to change(Ticket, :count).by(2)
+      end
+
+      it 'creates a UserCoupon in database' do
+        expect { command }.to change(UserCoupon, :count).by(1)
+      end
+
+      it 'returns the ticket created and the reward text' do
+        result = command.result
+        expect(result[:tickets]).to eq(user.tickets)
         expect(result[:reward_text]).to eq(coupon.reward_text)
       end
     end
@@ -81,6 +103,25 @@ describe Tickets::CollectByCouponId do
         result = command.result
         expect(result).to be_falsey
         expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_expired'))
+      end
+    end
+
+    context 'when coupon is unavailable' do
+      let(:coupon_id) { coupon.id }
+
+      before do
+        create(:user_coupon, coupon:)
+        coupon.update(available_quantity: 1)
+      end
+
+      it 'does not create the ticket on the database' do
+        expect { command }.not_to change(Ticket, :count)
+      end
+
+      it 'returns false' do
+        result = command.result
+        expect(result).to be_falsey
+        expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_unavailable'))
       end
     end
   end

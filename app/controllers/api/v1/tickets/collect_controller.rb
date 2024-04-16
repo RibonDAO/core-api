@@ -25,6 +25,18 @@ module Api
           end
         end
 
+        def collect_by_coupon_id
+          command = ::Tickets::CollectByExternalIds.call(integration:, user:, platform:,
+                                                         external_ids: ticket_params[:external_ids])
+
+          if command.success?
+            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            render json: { ticket: command.result }, status: :ok
+          else
+            render_errors(command.errors)
+          end
+        end
+
         def can_collect_by_integration
           unless user
             render json: { can_collect: true }, status: :ok
