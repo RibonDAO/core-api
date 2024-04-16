@@ -20,14 +20,10 @@ describe Tickets::CollectByCouponId do
         expect { command }.to change(UserCoupon, :count).by(1)
       end
 
-      it 'returns the ticket created' do
-        ticket = command.result[:ticket]
-        expect(ticket).to eq(user.tickets.last)
-      end
-
-      it 'returns the reward text' do
-        reward_text = command.result[:reward_text]
-        expect(reward_text).to eq(coupon.reward_text)
+      it 'returns the ticket created and the reward text' do
+        result = command.result
+        expect(result[:ticket]).to eq(user.tickets.last)
+        expect(result[:reward_text]).to eq(coupon.reward_text)
       end
     end
 
@@ -38,6 +34,17 @@ describe Tickets::CollectByCouponId do
         result = command.result
         expect(result).to be_falsey
         expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_invalid'))
+      end
+    end
+
+    context 'when user does not exist' do
+      let(:coupon_id) { coupon.id }
+      let(:user) { nil }
+
+      it 'returns false' do
+        result = command.result
+        expect(result).to be_falsey
+        expect(JSON.parse(command.errors.to_json)['message']).to eq('Validation failed: User must exist')
       end
     end
 

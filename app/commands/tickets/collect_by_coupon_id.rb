@@ -14,7 +14,7 @@ module Tickets
     def call
       with_exception_handle do
         check_coupon
-        ticket = transact_ticket if can_collect?
+        transact_ticket if can_collect?
 
         return false unless ticket
 
@@ -40,7 +40,7 @@ module Tickets
     end
 
     def can_collect?
-      command = CanCollectByCouponId.call(coupon_id:, user_id: user.id)
+      command = CanCollectByCouponId.call(coupon_id:, user_id: user&.id)
       if command.success?
         command.result
       else
