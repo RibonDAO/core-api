@@ -711,6 +711,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_15_185235) do
     t.uuid "coupon_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "platform"
     t.index ["coupon_id"], name: "index_user_coupons_on_coupon_id"
     t.index ["user_id"], name: "index_user_coupons_on_user_id"
   end

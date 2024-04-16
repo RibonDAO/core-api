@@ -3,6 +3,7 @@
 # Table name: user_coupons
 #
 #  id         :bigint           not null, primary key
+#  platform   :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  coupon_id  :uuid             not null
