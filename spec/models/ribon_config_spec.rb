@@ -7,6 +7,7 @@
 #  default_ticket_value                      :decimal(, )
 #  disable_labeling                          :boolean          default(FALSE)
 #  minimum_contribution_chargeable_fee_cents :integer
+#  minimum_version_required                  :string           default("0.0.0")
 #  ribon_club_fee_percentage                 :decimal(, )
 #  created_at                                :datetime         not null
 #  updated_at                                :datetime         not null
