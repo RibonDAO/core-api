@@ -19,4 +19,8 @@ class Coupon < ApplicationRecord
 
   has_many :user_coupons
   has_many :user_expired_coupons
+
+  def expired?
+    Time.zone.now >= expiration_date
+  end
 end
