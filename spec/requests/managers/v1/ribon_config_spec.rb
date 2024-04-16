@@ -8,7 +8,7 @@ RSpec.describe 'Managers::V1::Configs::RibonConfig', type: :request do
       create(:ribon_config)
     end
 
-    it 'returns a list of integrations' do
+    it 'returns the ribon config' do
       request
 
       expect_response_collection_to_have_keys(%w[id updated_at default_ticket_value ribon_club_fee_percentage
