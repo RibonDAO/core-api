@@ -66,7 +66,7 @@ RSpec.describe 'Users::V1::Donations', type: :request do
         allow(Donations::Donate).to receive(:call)
           .and_return(command_double(klass: Donations::Donate,
                                      success: true, result: donation))
-        allow(Tracking::AddUtm).to receive(:call)
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'returns http status ok' do
@@ -85,7 +85,7 @@ RSpec.describe 'Users::V1::Donations', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
     end
   end

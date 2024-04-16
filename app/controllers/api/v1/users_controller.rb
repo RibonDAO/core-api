@@ -15,7 +15,7 @@ module Api
         @user = User.new(user_params)
 
         if @user.save
-          Tracking::AddUtm.call(utm_params:, trackable: @user)
+          Tracking::AddUtmJob.perform_later(utm_params:, trackable: @user)
           render json: UserBlueprint.render(@user), status: :created
         else
           head :unprocessable_entity
