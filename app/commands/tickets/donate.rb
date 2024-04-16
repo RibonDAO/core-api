@@ -115,7 +115,7 @@ module Tickets
     end
 
     def call_webhook(voucher)
-      Vouchers::WebhookJob.perform_later(voucher) if voucher.integration.webhook_url
+      Vouchers::WebhookJob.perform_later(voucher, 'donated') if voucher.integration.webhook_url
     end
 
     def ticket_value
