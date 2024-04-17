@@ -60,8 +60,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
           .and_return(command_double(klass: Tickets::CanCollectByIntegration))
         allow(Tickets::CollectByIntegration).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByIntegration))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'calls the CollectByIntegration command with right params' do
@@ -76,7 +75,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
 
       it 'returns success' do
@@ -168,8 +167,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
           .and_return(command_double(klass: Tickets::CanCollectByExternalId))
         allow(Tickets::CollectByExternalIds).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByExternalIds))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'calls the CollectByExternalIds command with right params' do
@@ -185,7 +183,7 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
 
       it 'returns success' do
@@ -215,6 +213,44 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
         request
 
         expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+  end
+
+  describe 'POST /can_collect_by_coupon_id' do
+    subject(:request) { post '/api/v1/tickets/can_collect_by_coupon_id', headers: { Email: user.email }, params: }
+
+    let(:coupon) { create(:coupon) }
+    let(:user) { create(:user) }
+    let(:coupon_id) { coupon.id }
+    let(:params) do
+      {
+        coupon_id:
+      }
+    end
+
+    context 'with right params' do
+      it 'returns true' do
+        request
+        expect(JSON.parse(response.body)['can_collect']).to be(true)
+      end
+    end
+
+    context 'with coupon already used' do
+      before do
+        create(:user_coupon, coupon:, user:)
+      end
+
+      it 'returns false' do
+        request
+
+        expect(JSON.parse(response.body)['can_collect']).to be(false)
+      end
+
+      it 'returns errror message' do
+        request
+
+        expect(JSON.parse(response.body)['errors']['message']).to eq(I18n.t('tickets.coupon_already_collected'))
       end
     end
   end

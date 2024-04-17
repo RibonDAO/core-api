@@ -25,8 +25,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
           .and_return(command_double(klass: Tickets::CanCollectByIntegration))
         allow(Tickets::CollectByIntegration).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByIntegration))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'calls the CollectByIntegration command with right params' do
@@ -41,7 +40,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
 
       it 'returns success' do
@@ -99,8 +98,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
           .and_return(command_double(klass: Tickets::CanCollectByExternalId))
         allow(Tickets::CollectByExternalIds).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByExternalIds))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'calls the CollectByExternalId command with right params' do
@@ -116,7 +114,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
 
       it 'returns success' do
@@ -202,6 +200,61 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
         request
 
         expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+  end
+
+  describe 'POST /collect_by_coupon_id' do
+    include_context 'when making a user request' do
+      subject(:request) { post '/users/v1/tickets/collect_by_coupon_id', headers:, params: }
+    end
+
+    context 'with right params' do
+      let(:user) { account.user }
+      let(:platform) { 'web' }
+      let(:coupon) { create(:coupon) }
+      let(:coupon_id) { coupon.id }
+      let(:params) do
+        {
+          platform:,
+          coupon_id:,
+          utm_source: 'utm source',
+          utm_medium: 'utm medium',
+          utm_campaign: 'utm campaign'
+        }
+      end
+
+      before do
+        allow(Tickets::CollectByCouponId).to receive(:call)
+          .and_return(OpenStruct.new({ success?: true, result: { tickets: [create(:ticket)] } }))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
+      end
+
+      it 'calls the CollectByCouponId command with right params' do
+        request
+
+        expect(Tickets::CollectByCouponId).to have_received(:call).with(
+          user:,
+          platform:,
+          coupon_id:
+        )
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
+      end
+
+      it 'returns success' do
+        request
+
+        expect(response).to have_http_status :ok
+      end
+
+      it 'returns the ticket' do
+        request
+
+        expect_response_to_have_keys(%w[tickets])
       end
     end
   end

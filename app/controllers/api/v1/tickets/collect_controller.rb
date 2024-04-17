@@ -6,7 +6,7 @@ module Api
           command = ::Tickets::CollectByIntegration.call(integration:, user:, platform:)
 
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok
           else
             render_errors(command.errors)
@@ -18,19 +18,7 @@ module Api
                                                          external_ids: ticket_params[:external_ids])
 
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
-            render json: { ticket: command.result }, status: :ok
-          else
-            render_errors(command.errors)
-          end
-        end
-
-        def collect_by_coupon_id
-          command = ::Tickets::CollectByExternalIds.call(integration:, user:, platform:,
-                                                         external_ids: ticket_params[:external_ids])
-
-          if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok
           else
             render_errors(command.errors)
@@ -61,6 +49,17 @@ module Api
           end
         end
 
+        def can_collect_by_coupon_id
+          command = ::Tickets::CanCollectByCouponId.call(coupon_id: ticket_params[:coupon_id],
+                                                         user_id: user&.id)
+
+          if command.success?
+            render json: { can_collect: command.result }, status: :ok
+          else
+            render json: { can_collect: false, errors: command.errors }, status: :ok
+          end
+        end
+
         private
 
         def integration
@@ -76,7 +75,7 @@ module Api
         end
 
         def ticket_params
-          params.permit(:integration_id, :email, :platform, external_ids: [])
+          params.permit(:integration_id, :email, :platform, :coupon_id, external_ids: [])
         end
 
         def utm_params

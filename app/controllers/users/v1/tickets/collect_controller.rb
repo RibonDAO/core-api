@@ -6,7 +6,7 @@ module Users
           command = ::Tickets::CollectByIntegration.call(integration:, user:, platform:)
 
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok
           else
             render_errors(command.errors)
@@ -17,7 +17,7 @@ module Users
           command = ::Tickets::CollectByExternalIds.call(integration:, user:, platform:,
                                                          external_ids: ticket_params[:external_ids])
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok
           else
             render_errors(command.errors)
@@ -29,6 +29,21 @@ module Users
 
           if command.success?
             render json: { tickets: command.result }, status: :ok
+          else
+            render_errors(command.errors)
+          end
+        end
+
+        def collect_by_coupon_id
+          command = ::Tickets::CollectByCouponId.call(user:, platform:,
+                                                      coupon_id: ticket_params[:coupon_id])
+
+          if command.success?
+            tickets = command.result[:tickets]
+            tickets.each do |ticket|
+              ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: ticket)
+            end
+            render json: command.result, status: :ok
           else
             render_errors(command.errors)
           end
@@ -49,7 +64,7 @@ module Users
         end
 
         def ticket_params
-          params.permit(:integration_id, :platform, :category, external_ids: [])
+          params.permit(:integration_id, :platform, :category, :coupon_id, external_ids: [])
         end
 
         def utm_params
