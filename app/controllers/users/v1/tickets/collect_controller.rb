@@ -34,20 +34,23 @@ module Users
           end
         end
 
+        # rubocop:disable Metrics/AbcSize
         def collect_by_coupon_id
           command = ::Tickets::CollectByCouponId.call(user:, platform:,
                                                       coupon_id: ticket_params[:coupon_id])
 
           if command.success?
             tickets = command.result[:tickets]
+            coupon = command.result[:coupon]
             tickets.each do |ticket|
               ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: ticket)
             end
-            render json: command.result, status: :ok
+            render json: { tickets:, reward_text: coupon.reward_text }, status: :ok
           else
             render_errors(command.errors)
           end
         end
+        # rubocop:enable Metrics/AbcSize
 
         private
 

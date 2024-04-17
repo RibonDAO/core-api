@@ -6,7 +6,7 @@ describe Tickets::CollectByCouponId do
   describe '.call' do
     subject(:command) { described_class.call(user:, platform: 'web', coupon_id:) }
 
-    let!(:coupon) { create(:coupon) }
+    let!(:coupon) { create(:coupon, reward_text: 'congratulations') }
     let!(:user) { create(:user) }
 
     context 'when no error occurs' do
@@ -23,7 +23,7 @@ describe Tickets::CollectByCouponId do
       it 'returns the ticket created and the reward text' do
         result = command.result
         expect(result[:tickets]).to eq(user.tickets)
-        expect(result[:reward_text]).to eq(coupon.reward_text)
+        expect(result[:coupon]).to eq(coupon)
       end
     end
 
@@ -45,7 +45,7 @@ describe Tickets::CollectByCouponId do
       it 'returns the ticket created and the reward text' do
         result = command.result
         expect(result[:tickets]).to eq(user.tickets)
-        expect(result[:reward_text]).to eq(coupon.reward_text)
+        expect(result[:coupon]).to eq(coupon)
       end
     end
 

@@ -226,7 +226,8 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
 
       before do
         allow(Tickets::CollectByCouponId).to receive(:call)
-          .and_return(OpenStruct.new({ success?: true, result: { tickets: [create(:ticket)] } }))
+          .and_return(OpenStruct.new({ success?: true, result: { tickets: [create(:ticket)],
+                                                                 coupon: } }))
         allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
@@ -254,7 +255,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
       it 'returns the ticket' do
         request
 
-        expect_response_to_have_keys(%w[tickets])
+        expect_response_to_have_keys(%w[tickets reward_text])
       end
     end
   end

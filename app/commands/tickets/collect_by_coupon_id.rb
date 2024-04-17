@@ -18,7 +18,7 @@ module Tickets
 
         return false unless tickets
 
-        { tickets:, reward_text: coupon.reward_text }
+        { tickets:, coupon: }
       end
     end
 
