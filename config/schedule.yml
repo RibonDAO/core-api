@@ -63,6 +63,11 @@ clear_all_collected_by_integration:
   class: "Tickets::ClearAllCollectedByIntegrationWorker"
   queue: tickets
 
+clear_expired_coupons:
+  cron: "0 4 * * 1" # At 04:00 on monday.
+  class: "Coupons::ClearExpiredCouponsWorker"
+  queue: coupons
+
 generate_club_daily_tickets:
   cron: "0 1 * * *" # At 01:00 everyday.
   class: "Tickets::GenerateClubDailyTicketsWorker"
@@ -84,6 +89,6 @@ relabel_donations_and_contributions:
   queue: relabel
 
 clear_old_integration_tickets:
-  cron:  "0 1 20 1 *" # At 01:00 January 20th
+  cron: "0 1 20 1 *" # At 01:00 January 20th
   class: "Tickets::ClearOldIntegrationTicketsWorker"
   queue: tickets
