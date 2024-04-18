@@ -92,9 +92,9 @@ describe Tickets::Donate do
       it 'calls the WebhookJob 2 times' do
         command
         expect(Vouchers::WebhookJob)
-          .to have_received(:perform_later).with(voucher1, 'donated')
+          .to have_received(:perform_later).with(voucher1)
         expect(Vouchers::WebhookJob)
-          .to have_received(:perform_later).with(voucher2, 'donated')
+          .to have_received(:perform_later).with(voucher2)
       end
     end
 

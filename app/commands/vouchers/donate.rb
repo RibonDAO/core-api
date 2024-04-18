@@ -39,7 +39,7 @@ module Vouchers
     end
 
     def call_webhook
-      WebhookJob.perform_later(voucher, 'donated') if integration.webhook_url
+      WebhookJob.perform_later(voucher) if integration.webhook_url
     end
   end
 end

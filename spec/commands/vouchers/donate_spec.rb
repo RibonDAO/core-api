@@ -43,7 +43,7 @@ describe Vouchers::Donate do
       it 'calls the voucher webhook with the voucher generated' do
         voucher = command.result
 
-        expect(Vouchers::WebhookJob).to have_received(:perform_later).with(voucher, 'donated')
+        expect(Vouchers::WebhookJob).to have_received(:perform_later).with(voucher)
       end
     end
 
