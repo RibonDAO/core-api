@@ -3,17 +3,16 @@
 module Tickets
   class CollectByCouponId < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :user, :platform, :coupon_id, :tickets, :coupon
+    attr_reader :user, :platform, :coupon, :tickets
 
-    def initialize(user:, platform:, coupon_id:)
+    def initialize(user:, platform:, coupon:)
       @user = user
       @platform = platform
-      @coupon_id = coupon_id
+      @coupon = coupon
     end
 
     def call
       with_exception_handle do
-        check_coupon
         transact_ticket if can_collect?
 
         return false unless tickets
@@ -24,13 +23,6 @@ module Tickets
 
     private
 
-    def check_coupon
-      @coupon = Coupon.where(id: coupon_id).first
-      return if coupon
-
-      raise I18n.t('tickets.coupon_invalid')
-    end
-
     def transact_ticket
       ActiveRecord::Base.transaction do
         create_user_coupon
@@ -39,7 +31,7 @@ module Tickets
     end
 
     def can_collect?
-      command = CanCollectByCouponId.call(coupon_id:, user_id: user&.id)
+      command = CanCollectByCouponId.call(coupon:, user:)
       if command.success?
         command.result
       else
@@ -52,7 +44,7 @@ module Tickets
       tickets_array = []
 
       coupon.number_of_tickets.times do |_index|
-        tickets_array << { user:, platform:, external_id: coupon_id, source: :coupon,
+        tickets_array << { user:, platform:, external_id: coupon.id, source: :coupon,
                            status: :collected, category: :extra }
       end
 

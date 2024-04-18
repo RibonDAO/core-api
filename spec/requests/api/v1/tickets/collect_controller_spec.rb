@@ -254,4 +254,58 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
       end
     end
   end
+
+  describe 'POST /collect_by_coupon_id' do
+    subject(:request) { post '/api/v1/tickets/collect_by_coupon_id', headers: { Email: user.email }, params: }
+
+    context 'with right params' do
+      let(:user) { create(:user) }
+      let(:platform) { 'web' }
+      let(:coupon) { create(:coupon) }
+      let(:coupon_id) { coupon.id }
+      let(:params) do
+        {
+          platform:,
+          coupon_id:,
+          utm_source: 'utm source',
+          utm_medium: 'utm medium',
+          utm_campaign: 'utm campaign'
+        }
+      end
+
+      before do
+        allow(Tickets::CollectByCouponId).to receive(:call)
+          .and_return(OpenStruct.new({ success?: true, result: { tickets: [create(:ticket)],
+                                                                 coupon: } }))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
+      end
+
+      it 'calls the CollectByCouponId command with right params' do
+        request
+
+        expect(Tickets::CollectByCouponId).to have_received(:call).with(
+          user:,
+          platform:,
+          coupon:
+        )
+      end
+
+      it 'calls add utm command' do
+        request
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
+      end
+
+      it 'returns success' do
+        request
+
+        expect(response).to have_http_status :ok
+      end
+
+      it 'returns the ticket' do
+        request
+
+        expect_response_to_have_keys(%w[tickets reward_text])
+      end
+    end
+  end
 end

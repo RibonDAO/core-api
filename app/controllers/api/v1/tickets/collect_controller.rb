@@ -50,13 +50,27 @@ module Api
         end
 
         def can_collect_by_coupon_id
-          command = ::Tickets::CanCollectByCouponId.call(coupon_id: ticket_params[:coupon_id],
-                                                         user_id: user&.id)
+          command = ::Tickets::CanCollectByCouponId.call(coupon:, user:)
 
           if command.success?
-            render json: { can_collect: command.result }, status: :ok
+            render json: { can_collect: command.result, coupon: }, status: :ok
           else
             render json: { can_collect: false, errors: command.errors }, status: :ok
+          end
+        end
+
+        def collect_by_coupon_id
+          command = ::Tickets::CollectByCouponId.call(user:, platform:, coupon:)
+
+          if command.success?
+            tickets = command.result[:tickets]
+            coupon = command.result[:coupon]
+            tickets.each do |ticket|
+              ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: ticket)
+            end
+            render json: { tickets:, reward_text: coupon.reward_text }, status: :ok
+          else
+            render_errors(command.errors)
           end
         end
 
@@ -68,6 +82,10 @@ module Api
 
         def user
           @user ||= current_user || User.find_by(email: ticket_params[:email])
+        end
+
+        def coupon
+          @coupon ||= Coupon.find ticket_params[:coupon_id]
         end
 
         def platform

@@ -179,6 +179,7 @@ Rails.application.routes.draw do
         post 'collect_and_donate_by_external_ids' => 'collect_and_donate#collect_and_donate_by_external_ids'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
         post 'can_collect_by_coupon_id' => 'collect#can_collect_by_coupon_id'
+        post 'collect_by_coupon_id' => 'collect#collect_by_coupon_id'
       end
     end
   end
@@ -314,7 +315,6 @@ Rails.application.routes.draw do
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
         post 'collect_by_club' => 'collect#collect_by_club'
-        post 'collect_by_coupon_id' => 'collect#collect_by_coupon_id'
         post 'donate' => 'donations#donate'
       end
     end

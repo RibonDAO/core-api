@@ -4,14 +4,12 @@ require 'rails_helper'
 
 describe Tickets::CollectByCouponId do
   describe '.call' do
-    subject(:command) { described_class.call(user:, platform: 'web', coupon_id:) }
+    subject(:command) { described_class.call(user:, platform: 'web', coupon:) }
 
     let!(:coupon) { create(:coupon, reward_text: 'congratulations') }
     let!(:user) { create(:user) }
 
     context 'when no error occurs' do
-      let(:coupon_id) { coupon.id }
-
       it 'creates a ticket in database' do
         expect { command }.to change(Ticket, :count).by(1)
       end
@@ -28,8 +26,6 @@ describe Tickets::CollectByCouponId do
     end
 
     context 'when number of tickets is greater than 1' do
-      let(:coupon_id) { coupon.id }
-
       before do
         coupon.update(number_of_tickets: 2)
       end
@@ -49,30 +45,7 @@ describe Tickets::CollectByCouponId do
       end
     end
 
-    context 'when coupon does not exist' do
-      let(:coupon_id) { 1 }
-
-      it 'returns false' do
-        result = command.result
-        expect(result).to be_falsey
-        expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_invalid'))
-      end
-    end
-
-    context 'when user does not exist' do
-      let(:coupon_id) { coupon.id }
-      let(:user) { nil }
-
-      it 'returns false' do
-        result = command.result
-        expect(result).to be_falsey
-        expect(JSON.parse(command.errors.to_json)['message']).to eq('Validation failed: User must exist')
-      end
-    end
-
     context 'when user had already collected' do
-      let(:coupon_id) { coupon.id }
-
       before do
         create(:user_coupon, user:, coupon:)
       end
@@ -89,8 +62,6 @@ describe Tickets::CollectByCouponId do
     end
 
     context 'when coupon is expired' do
-      let(:coupon_id) { coupon.id }
-
       before do
         coupon.update(expiration_date: 2.days.ago)
       end
@@ -107,8 +78,6 @@ describe Tickets::CollectByCouponId do
     end
 
     context 'when coupon is unavailable' do
-      let(:coupon_id) { coupon.id }
-
       before do
         create(:user_coupon, coupon:)
         coupon.update(available_quantity: 1)
