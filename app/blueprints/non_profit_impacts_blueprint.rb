@@ -6,7 +6,7 @@ class NonProfitImpactsBlueprint < Blueprinter::Base
   end
 
   field(:minimum_number_of_tickets) do |object|
-    value = Integer(object.usd_cents_to_one_impact_unit / RibonConfig.default_ticket_value)
+    value = Integer((object.usd_cents_to_one_impact_unit / RibonConfig.default_ticket_value).round)
     if value.zero?
       1
     else
