@@ -5,7 +5,7 @@ module Api
         def collect_and_donate_by_integration
           command = ::Tickets::CollectAndDonateByIntegration.call(integration:, user:, platform:, non_profit:)
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { donation: command.result }, status: :ok
           else
             render_errors(command.errors)
@@ -16,7 +16,7 @@ module Api
           command = ::Tickets::CollectAndDonateByExternalIds.call(integration:, non_profit:, user:, platform:,
                                                                   external_ids:)
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { donation: command.result }, status: :ok
           else
             render_errors(command.errors)

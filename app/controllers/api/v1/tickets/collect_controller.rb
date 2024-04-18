@@ -6,7 +6,7 @@ module Api
           command = ::Tickets::CollectByIntegration.call(integration:, user:, platform:)
 
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok
           else
             render_errors(command.errors)
@@ -18,7 +18,7 @@ module Api
                                                          external_ids: ticket_params[:external_ids])
 
           if command.success?
-            ::Tracking::AddUtm.call(utm_params:, trackable: command.result)
+            ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result)
             render json: { ticket: command.result }, status: :ok
           else
             render_errors(command.errors)

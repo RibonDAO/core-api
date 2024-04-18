@@ -7,7 +7,7 @@ module Users
           if command.success?
             donations = command.result
             donations.each do |donation|
-              ::Tracking::AddUtm.call(utm_params:, trackable: donation)
+              ::Tracking::AddUtmJob.perform_later(utm_params:, trackable: donation)
             end
 
             render json: { donations: command.result }, status: :ok
