@@ -59,12 +59,12 @@ create_contribution_for_missed_payments:
   queue: contributions
 
 clear_all_collected_by_integration:
-  cron: "0 4 * * 1" # At 02:00 on monday.
+  cron: "1 0 * * *" # At 00:01.
   class: "Tickets::ClearAllCollectedByIntegrationWorker"
   queue: tickets
 
 clear_expired_coupons:
-  cron: "1 0 * * *" # At 00:01.
+  cron: "0 4 * * 1" # At 04:00 on monday.
   class: "Coupons::ClearExpiredCouponsWorker"
   queue: coupons
 
