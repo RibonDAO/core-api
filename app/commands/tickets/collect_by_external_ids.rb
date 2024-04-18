@@ -35,7 +35,6 @@ module Tickets
         create_voucher(external_id:)
         create_ticket(external_id:)
       end
-      call_webhook
       ticket
     end
 
@@ -51,10 +50,6 @@ module Tickets
 
     def create_voucher(external_id:)
       @voucher = Voucher.create!(external_id:, integration:)
-    end
-
-    def call_webhook
-      Vouchers::WebhookJob.perform_later(voucher, 'collected') if voucher.integration.webhook_url
     end
   end
 end
