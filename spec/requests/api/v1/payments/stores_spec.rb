@@ -39,7 +39,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
       end
 
       before do
-        allow(Tracking::AddUtm).to receive(:call)
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'returns http status created' do
@@ -50,7 +50,7 @@ RSpec.describe 'Api::V1::Payments::StoresController', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
     end
 
