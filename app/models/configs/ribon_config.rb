@@ -21,6 +21,7 @@ class RibonConfig < ApplicationRecord
   validates :ribon_club_fee_percentage, presence: true
 
   before_destroy :stop_destroy
+  after_save :invalidate_cache
 
   def self.default_ticket_value
     first.default_ticket_value
@@ -57,5 +58,9 @@ class RibonConfig < ApplicationRecord
   def stop_destroy
     errors.add(:base, :undestroyable)
     throw :abort
+  end
+
+  def invalidate_cache
+    Rails.cache.delete_matched('active_non_profits_*')
   end
 end
