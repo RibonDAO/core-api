@@ -242,6 +242,7 @@ pt-BR:
     user_not_found: "Usuário não encontrado. Realize o logout e tente novamente."
     integration_not_found: "A Integração de origem não foi encontrada. Recarregue a página e tente novamente."
     coupon_expired: "Cupom expirado."
+    coupon_unavailable: "Cupom indisponível."
     coupon_already_collected: "Cupom já coletado antes."
     coupon_invalid: "Cupom inválido."
   articles:

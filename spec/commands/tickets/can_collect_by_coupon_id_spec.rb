@@ -4,12 +4,10 @@ require 'rails_helper'
 
 describe Tickets::CanCollectByCouponId do
   describe '.call' do
-    subject(:command) { described_class.call(coupon_id:, user_id:) }
+    subject(:command) { described_class.call(coupon:, user:) }
 
     let!(:coupon) { create(:coupon) }
-    let(:coupon_id) { coupon.id }
     let!(:user) { create(:user) }
-    let(:user_id) { user.id }
 
     context 'when no error occurs' do
       it 'returns true' do
@@ -20,7 +18,7 @@ describe Tickets::CanCollectByCouponId do
 
     context 'when user had already collected' do
       before do
-        create(:user_coupon, user_id:, coupon_id:)
+        create(:user_coupon, user:, coupon:)
       end
 
       it 'returns false' do
@@ -39,6 +37,19 @@ describe Tickets::CanCollectByCouponId do
         result = command.result
         expect(result).to be_falsey
         expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_expired'))
+      end
+    end
+
+    context 'when coupon is unavailable' do
+      before do
+        create(:user_coupon, coupon:)
+        coupon.update(available_quantity: 1)
+      end
+
+      it 'returns false' do
+        result = command.result
+        expect(result).to be_falsey
+        expect(JSON.parse(command.errors.to_json)['message']).to eq(I18n.t('tickets.coupon_unavailable'))
       end
     end
   end

@@ -26,7 +26,6 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
         allow(Tickets::CollectByIntegration).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByIntegration))
         allow(Tracking::AddUtmJob).to receive(:perform_later)
-          .and_return(command_double(klass: Tracking::AddUtm))
       end
 
       it 'calls the CollectByIntegration command with right params' do
@@ -100,7 +99,6 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
         allow(Tickets::CollectByExternalIds).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByExternalIds))
         allow(Tracking::AddUtmJob).to receive(:perform_later)
-          .and_return(command_double(klass: Tracking::AddUtm))
       end
 
       it 'calls the CollectByExternalId command with right params' do

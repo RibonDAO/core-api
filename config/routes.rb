@@ -177,6 +177,8 @@ Rails.application.routes.draw do
         post 'can_collect_by_external_ids' => 'collect#can_collect_by_external_ids'
         post 'collect_and_donate_by_external_ids' => 'collect_and_donate#collect_and_donate_by_external_ids'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
+        post 'can_collect_by_coupon_id' => 'collect#can_collect_by_coupon_id'
+        post 'collect_by_coupon_id' => 'collect#collect_by_coupon_id'
       end
     end
   end
