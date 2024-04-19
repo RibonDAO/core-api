@@ -21,6 +21,7 @@ class NonProfitImpact < ApplicationRecord
   belongs_to :non_profit
 
   validates :usd_cents_to_one_impact_unit, :start_date, :donor_recipient, presence: true
+  after_save :invalidate_cache
 
   enum measurement_unit: {
     days_months_and_years: 'days_months_and_years',
@@ -31,5 +32,9 @@ class NonProfitImpact < ApplicationRecord
     (RibonConfig.default_ticket_value / usd_cents_to_one_impact_unit).to_i
   rescue StandardError
     0
+  end
+
+  def invalidate_cache
+    Rails.cache.delete_matched('active_non_profits_*')
   end
 end
