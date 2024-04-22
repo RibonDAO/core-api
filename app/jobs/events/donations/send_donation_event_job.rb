@@ -21,7 +21,7 @@ module Events
                            value: donation.value,
                            created_at: donation.created_at,
                            total_number_of_donations: donation.user.donations.count,
-                           donation_impact: impact_normalizer(donation.non_profit)
+                           donation_impact: normalized_impact(donation.non_profit)
                          }
                        })
       end
@@ -29,8 +29,12 @@ module Events
       def impact_normalizer(non_profit)
         Impact::Normalizer.new(
           non_profit,
-          non_profit.impact_by_ticket || 1
+          non_profit.impact_by_ticket
         ).normalize.join(' ')
+      end
+
+      def normalized_impact(non_profit)
+        non_profit.impact_by_ticket < 1 ? 0 : impact_normalizer(non_profit)
       end
     end
   end
