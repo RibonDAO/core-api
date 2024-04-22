@@ -34,7 +34,7 @@ module Events
       end
 
       def normalized_impact(non_profit)
-        non_profit.impact_by_ticket < 1 ? 0 : impact_normalizer(non_profit)
+        non_profit.impact_by_ticket > 1 ? impact_normalizer(non_profit) : 'Non profit has small impact by ticket.'
       end
     end
   end
