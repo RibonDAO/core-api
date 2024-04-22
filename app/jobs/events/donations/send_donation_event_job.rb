@@ -29,7 +29,7 @@ module Events
       def impact_normalizer(non_profit)
         Impact::Normalizer.new(
           non_profit,
-          non_profit.impact_by_ticket
+          non_profit.impact_by_ticket || 1
         ).normalize.join(' ')
       end
     end
