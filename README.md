@@ -6,6 +6,7 @@ Obs: You need rails installed to run those commands. You can check how to
 install it [here](https://www.howtoforge.com/tutorial/ubuntu-ruby-on-rails/).
 
 - clone this repository: `git clone git@github.com:RibonDAO/core-api.git`
+- install gem dependencies: `sudo apt install libpq-dev build-essential automake pkg-config libtool libffi-dev libssl-dev libgmp-dev python3-dev`
 - run the bundle install command: `bundle install`
 - copy the .env.example to a .env file `cp .env.example .env` (notice that there are some variables that you have to grab on your own. Right below you can see how to get them)
 - run the database setup command: `rails db:setup`
