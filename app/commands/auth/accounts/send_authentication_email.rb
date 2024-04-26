@@ -61,10 +61,7 @@ module Auth
       end
 
       def url(account)
-        url = Auth::EmailLinkService.new(authenticatable: account).find_or_create_auth_link
-        return "#{url}&extra_ticket=true" if first_access_to_integration?
-
-        url
+        Auth::EmailLinkService.new(authenticatable: account).find_or_create_auth_link
       end
 
       def build_event(account)
@@ -72,7 +69,6 @@ module Auth
                          name: 'authorize_email',
                          data: {
                            email: account.email,
-                           new_user: first_access_to_integration?,
                            url: url(account)
                          }
                        })

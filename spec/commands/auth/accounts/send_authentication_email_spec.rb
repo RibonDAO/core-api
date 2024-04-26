@@ -21,14 +21,13 @@ describe Auth::Accounts::SendAuthenticationEmail do
     allow(event_service_double).to receive(:call)
   end
 
-  describe 'when user have not received an extra ticket and it is the first access' do
-    let(:url) { 'https://auth.ribon.io/link&extra_ticket=true' }
+  describe 'when the user receives an email' do
+    let(:url) { 'https://auth.ribon.io/link' }
     let(:event) do
       OpenStruct.new({
                        name: 'authorize_email',
                        data: {
                          email: authenticatable.email,
-                         new_user: true,
                          url:
                        }
                      })
@@ -71,35 +70,6 @@ describe Auth::Accounts::SendAuthenticationEmail do
       it 'returns a error message' do
         expect(command.errors[:message]).to eq(['Email does not match'])
       end
-    end
-  end
-
-  describe 'when user already received an extra ticket and it is not the first access' do
-    let(:url) { 'https://auth.ribon.io/link' }
-    let(:event) do
-      OpenStruct.new({
-                       name: 'authorize_email',
-                       data: {
-                         email: authenticatable.email,
-                         new_user: false,
-                         url:
-                       }
-                     })
-    end
-
-    before do
-      create(:donation, user: authenticatable.user, integration:)
-    end
-
-    it 'calls EventServices::SendEvent with correct arguments' do
-      command
-      expect(EventServices::SendEvent).to have_received(:new).with({ user: authenticatable.user,
-                                                                     event: })
-    end
-
-    it 'calls EventServices::SendEvent call' do
-      command
-      expect(event_service_double).to have_received(:call)
     end
   end
 end
