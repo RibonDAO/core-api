@@ -2,15 +2,14 @@
 #
 # Table name: coupons
 #
-#  id                             :uuid             not null, primary key
-#  available_quantity             :integer
-#  expiration_date                :datetime
-#  number_of_tickets              :integer
-#  reward_text                    :string
-#  status                         :integer          default("inactive")
-#  ticket_availability_in_minutes :integer
-#  created_at                     :datetime         not null
-#  updated_at                     :datetime         not null
+#  id                 :uuid             not null, primary key
+#  available_quantity :integer
+#  expiration_date    :datetime
+#  number_of_tickets  :integer
+#  reward_text        :string
+#  status             :integer          default("inactive")
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
 FactoryBot.define do
   factory :coupon do

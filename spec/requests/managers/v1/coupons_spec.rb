@@ -12,7 +12,7 @@ RSpec.describe 'Managers::V1::Coupons', type: :request do
       request
       expect_response_collection_to_have_keys(%w[id status available_quantity
                                                  expiration_date number_of_tickets reward_text
-                                                 ticket_availability_in_minutes link])
+                                                 link])
     end
   end
 
@@ -26,7 +26,7 @@ RSpec.describe 'Managers::V1::Coupons', type: :request do
 
       expect_response_to_have_keys(%w[id status available_quantity
                                       expiration_date number_of_tickets reward_text
-                                      ticket_availability_in_minutes link])
+                                      link])
     end
   end
 end
