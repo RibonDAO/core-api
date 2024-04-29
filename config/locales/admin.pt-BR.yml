@@ -186,8 +186,10 @@ pt-BR:
         col_sep_help: Deixe em branco para utilizar o padrão ('%{value}') # value is default_col_sep
   activerecord:
     models:
+      admin: Usuários do admin
       associated_account: Contas Associadas
       author: Autores
+      account: Contas
       badge: Badges
       brand: Marcas
       brand_ngo: Marcas <-> Ongs
@@ -209,6 +211,7 @@ pt-BR:
       non_profit: Ongs
       non_profit_impact: Impacto das Ongs
       user: Usuários
+      user_manager: Usuários do manager
       notification: Notificações
       offer: Ofertas
       offer_gateway: Ofertas <-> Gateways
