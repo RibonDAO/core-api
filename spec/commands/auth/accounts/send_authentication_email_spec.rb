@@ -4,12 +4,6 @@ require 'rails_helper'
 
 describe Auth::Accounts::SendAuthenticationEmail do
   let(:integration) { create(:integration) }
-  let(:command) do
-    described_class.call(email: authenticatable.email,
-                         id: nil,
-                         current_email: authenticatable.email,
-                         integration_id: integration.id)
-  end
   let(:event_service_double) { instance_double(EventServices::SendEvent) }
   let(:authenticatable) { create(:account) }
   let(:email_link_service) { instance_double(Auth::EmailLinkService, find_or_create_auth_link: auth_link) }
@@ -21,14 +15,23 @@ describe Auth::Accounts::SendAuthenticationEmail do
     allow(event_service_double).to receive(:call)
   end
 
-  describe 'when the user receives an email' do
+  describe 'when request from web and is new user' do
+    let(:command) do
+      described_class.call(email: authenticatable.email,
+                           id: nil,
+                           current_email: authenticatable.email,
+                           integration_id: integration.id,
+                           platform: 'web')
+    end
     let(:url) { 'https://auth.ribon.io/link' }
+    let(:platform) { 'web' }
     let(:event) do
       OpenStruct.new({
                        name: 'authorize_email',
                        data: {
                          email: authenticatable.email,
-                         url:
+                         url:,
+                         new_user: true
                        }
                      })
     end
@@ -49,7 +52,9 @@ describe Auth::Accounts::SendAuthenticationEmail do
     end
 
     context 'when email and id is not present' do
-      let(:command) { described_class.call(email: nil, id: nil, current_email: nil, integration_id: nil) }
+      let(:command) do
+        described_class.call(email: nil, id: nil, current_email: nil, integration_id: nil, platform:)
+      end
 
       it 'does not call EventServices::SendEvent call' do
         command
@@ -64,11 +69,67 @@ describe Auth::Accounts::SendAuthenticationEmail do
     context 'when email and current email dont match' do
       let(:command) do
         described_class.call(email: authenticatable.email, id: nil, current_email: 'test1@email.com',
-                             integration_id: nil)
+                             integration_id: nil, platform:)
       end
 
       it 'returns a error message' do
         expect(command.errors[:message]).to eq(['Email does not match'])
+      end
+    end
+  end
+
+  describe 'when request send from app' do
+    let(:command) do
+      described_class.call(email: authenticatable.email,
+                           id: nil,
+                           current_email: authenticatable.email,
+                           integration_id: integration.id,
+                           platform: 'app')
+    end
+    let(:url) { 'https://auth.ribon.io/link&extra_ticket=true' }
+    let(:event) do
+      OpenStruct.new({
+                       name: 'authorize_email',
+                       data: {
+                         email: authenticatable.email,
+                         url:,
+                         new_user: true
+                       }
+                     })
+    end
+
+    it 'calls EventServices::SendEvent with correct arguments' do
+      command
+      expect(EventServices::SendEvent).to have_received(:new).with({ user: authenticatable.user,
+                                                                     event: })
+    end
+
+    it 'calls EventServices::SendEvent call' do
+      command
+      expect(event_service_double).to have_received(:call)
+    end
+
+    context 'without extra ticket email' do
+      let(:url) { 'https://auth.ribon.io/link' }
+      let(:event) do
+        OpenStruct.new({
+                         name: 'authorize_email',
+                         data: {
+                           email: authenticatable.email,
+                           url:,
+                           new_user: false
+                         }
+                       })
+      end
+
+      before do
+        create(:donation, user: authenticatable.user, integration:)
+      end
+
+      it 'calls EventServices::SendEvent with correct arguments' do
+        command
+        expect(EventServices::SendEvent).to have_received(:new).with({ user: authenticatable.user,
+                                                                       event: })
       end
     end
   end

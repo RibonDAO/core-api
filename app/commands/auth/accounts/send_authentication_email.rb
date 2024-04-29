@@ -5,13 +5,14 @@ module Auth
     class SendAuthenticationEmail < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :email, :current_email, :id, :integration_id
+      attr_reader :email, :current_email, :id, :integration_id, :platform
 
-      def initialize(email:, current_email:, id:, integration_id:)
+      def initialize(email:, current_email:, id:, integration_id:, platform:)
         @email = email
         @current_email = current_email
         @id = id
         @integration_id = integration_id
+        @platform = platform
       end
 
       def call
@@ -61,7 +62,11 @@ module Auth
       end
 
       def url(account)
-        Auth::EmailLinkService.new(authenticatable: account).find_or_create_auth_link
+        url = Auth::EmailLinkService.new(authenticatable: account).find_or_create_auth_link
+
+        return "#{url}&extra_ticket=true" if @platform == 'app' && first_access_to_integration?
+
+        url
       end
 
       def build_event(account)
@@ -69,6 +74,7 @@ module Auth
                          name: 'authorize_email',
                          data: {
                            email: account.email,
+                           new_user: first_access_to_integration?,
                            url: url(account)
                          }
                        })

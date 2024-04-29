@@ -7,6 +7,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
     let(:user) { create(:user) }
     let(:params) { { email: user.email } }
     let(:command) { command_double(klass: Auth::Accounts::SendAuthenticationEmail, success: true, result:) }
+    let(:platform) { 'web' }
 
     let(:result) do
       { access_token: 'access_token',
@@ -21,7 +22,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
 
     it 'calls the send authentication link command with right params' do
       expect(Auth::Accounts::SendAuthenticationEmail).to have_received(:call).with(
-        email: user.email, id: nil, current_email: nil, integration_id: nil
+        email: user.email, id: nil, current_email: nil, integration_id: nil, platform: nil
       )
     end
 
