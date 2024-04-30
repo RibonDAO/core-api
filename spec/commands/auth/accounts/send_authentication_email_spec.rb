@@ -15,23 +15,21 @@ describe Auth::Accounts::SendAuthenticationEmail do
     allow(event_service_double).to receive(:call)
   end
 
-  describe 'when request from web and is new user' do
+  describe 'when request send without integration_id dont send extra ticket email' do
     let(:command) do
       described_class.call(email: authenticatable.email,
                            id: nil,
                            current_email: authenticatable.email,
-                           integration_id: integration.id,
-                           platform: 'web')
+                           integration_id: nil)
     end
     let(:url) { 'https://auth.ribon.io/link' }
-    let(:platform) { 'web' }
     let(:event) do
       OpenStruct.new({
                        name: 'authorize_email',
                        data: {
                          email: authenticatable.email,
                          url:,
-                         new_user: true
+                         new_user: nil
                        }
                      })
     end
@@ -53,7 +51,7 @@ describe Auth::Accounts::SendAuthenticationEmail do
 
     context 'when email and id is not present' do
       let(:command) do
-        described_class.call(email: nil, id: nil, current_email: nil, integration_id: nil, platform:)
+        described_class.call(email: nil, id: nil, current_email: nil, integration_id: nil)
       end
 
       it 'does not call EventServices::SendEvent call' do
@@ -69,7 +67,7 @@ describe Auth::Accounts::SendAuthenticationEmail do
     context 'when email and current email dont match' do
       let(:command) do
         described_class.call(email: authenticatable.email, id: nil, current_email: 'test1@email.com',
-                             integration_id: nil, platform:)
+                             integration_id: nil)
       end
 
       it 'returns a error message' do
@@ -78,13 +76,12 @@ describe Auth::Accounts::SendAuthenticationEmail do
     end
   end
 
-  describe 'when request send from app' do
+  describe 'when request send with integration_id' do
     let(:command) do
       described_class.call(email: authenticatable.email,
                            id: nil,
                            current_email: authenticatable.email,
-                           integration_id: integration.id,
-                           platform: 'app')
+                           integration_id: integration.id)
     end
     let(:url) { 'https://auth.ribon.io/link&extra_ticket=true' }
     let(:event) do
@@ -109,7 +106,7 @@ describe Auth::Accounts::SendAuthenticationEmail do
       expect(event_service_double).to have_received(:call)
     end
 
-    context 'without extra ticket email' do
+    context 'when it is not first authentication' do
       let(:url) { 'https://auth.ribon.io/link' }
       let(:event) do
         OpenStruct.new({

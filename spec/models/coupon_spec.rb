@@ -7,6 +7,7 @@
 #  expiration_date    :datetime
 #  number_of_tickets  :integer
 #  reward_text        :string
+#  status             :integer          default("inactive")
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
