@@ -25,7 +25,6 @@ module Managers
         @coupon = Coupon.find(params[:id])
 
         if @coupon.update(coupon_params)
-
           render json: CouponBlueprint.render(@coupon), status: :ok
         else
           head :unprocessable_entity
@@ -33,7 +32,8 @@ module Managers
       end
 
       def coupon_params
-        params.permit(:id, :available_quantity, :expiration_date, :number_of_tickets, :reward_text, :status)
+        params.permit(:id, :available_quantity, :expiration_date, :number_of_tickets, :status,
+                      coupon_message_attributes: %i[id reward_text coupon_id])
       end
     end
   end
