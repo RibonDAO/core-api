@@ -2,7 +2,7 @@ module Managers
   module V1
     class ReportsController < ManagersController
       def index
-        @reports = Report.all
+        @reports = Report.all.order(created_at: :DESC)
         render json: ReportBlueprint.render(@reports)
       end
 
