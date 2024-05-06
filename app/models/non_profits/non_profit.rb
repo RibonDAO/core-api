@@ -5,7 +5,9 @@
 #  id                             :bigint           not null, primary key
 #  background_image_description   :string
 #  confirmation_image_description :string
+#  cover_image_description        :text
 #  impact_description             :text
+#  impact_title                   :string(50)
 #  logo_description               :string
 #  main_image_description         :string
 #  name                           :string
@@ -19,11 +21,12 @@ class NonProfit < ApplicationRecord
 
   translates :impact_description, :logo_description, :name,
              :main_image_description, :background_image_description,
-             :confirmation_image_description, type: :string
+             :confirmation_image_description, :impact_title, :cover_image_description, type: :string
 
   has_one_attached :logo
   has_one_attached :main_image
   has_one_attached :background_image
+  has_one_attached :cover_image
   has_one_attached :confirmation_image
 
   has_many :non_profit_impacts
