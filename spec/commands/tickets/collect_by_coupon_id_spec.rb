@@ -6,7 +6,7 @@ describe Tickets::CollectByCouponId do
   describe '.call' do
     subject(:command) { described_class.call(user:, platform: 'web', coupon:) }
 
-    let!(:coupon) { create(:coupon, reward_text: 'congratulations') }
+    let!(:coupon) { create(:coupon) }
     let!(:user) { create(:user) }
 
     context 'when no error occurs' do
