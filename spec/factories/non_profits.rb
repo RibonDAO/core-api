@@ -22,8 +22,8 @@ FactoryBot.define do
     status { :active }
     wallet_address { '0x6E060041D62fDd76cF27c582f62983b864878E8F' }
     impact_description { '1 day of water' }
-    impact_title {'malaria protection'}
-    cover_image_description {'a person affected by malaria'}
+    impact_title { 'malaria protection' }
+    cover_image_description { 'a person affected by malaria' }
     cause { build(:cause) }
     trait(:with_impact) do
       after(:create) do |non_profit|
