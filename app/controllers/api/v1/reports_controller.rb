@@ -2,7 +2,7 @@ module Api
   module V1
     class ReportsController < ApplicationController
       def index
-        @reports = Report.where(active: true).order(created_at: :ASC)
+        @reports = Report.where(active: true).order(created_at: :DESC)
         render json: ReportBlueprint.render(@reports)
       end
 
