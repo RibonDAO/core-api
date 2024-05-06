@@ -16,7 +16,7 @@ class Coupon < ApplicationRecord
 
   translates :reward_text,  type: :string
 
-  validates :number_of_tickets, :reward_text, :expiration_date, presence: true
+  validates :number_of_tickets, :expiration_date, presence: true
 
   has_many :user_coupons
   has_many :user_expired_coupons
