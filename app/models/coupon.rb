@@ -6,20 +6,18 @@
 #  available_quantity :integer
 #  expiration_date    :datetime
 #  number_of_tickets  :integer
-#  reward_text        :string
 #  status             :integer          default("inactive")
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #
 class Coupon < ApplicationRecord
-  extend Mobility
-
-  translates :reward_text,  type: :string
-
-  validates :number_of_tickets, :expiration_date, presence: true
+  validates :number_of_tickets, presence: true
 
   has_many :user_coupons
   has_many :user_expired_coupons
+  has_one :coupon_message
+
+  accepts_nested_attributes_for :coupon_message
 
   enum status: {
     inactive: 0,
@@ -27,11 +25,17 @@ class Coupon < ApplicationRecord
   }
 
   def expired?
+    return false if expiration_date.blank?
+
     Time.zone.now >= expiration_date
   end
 
   def link
     "#{base_url}#{id}"
+  end
+
+  def reward_text
+    coupon_message&.reward_text
   end
 
   private
