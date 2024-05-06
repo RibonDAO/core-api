@@ -10,6 +10,8 @@ RSpec.describe NonProfitBlueprint, type: :blueprint do
     expect(non_profit_blueprint).to include(:wallet_address.to_s)
     expect(non_profit_blueprint).to include(:impact_description.to_s)
     expect(non_profit_blueprint).to include(:status.to_s)
+    expect(non_profit_blueprint).to include(:impact_title.to_s)
+    expect(non_profit_blueprint).to include(:cover_image_description.to_s)
   end
 
   it 'renders the no cause view correctly' do

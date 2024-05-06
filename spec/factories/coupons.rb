@@ -16,6 +16,5 @@ FactoryBot.define do
     available_quantity { 1 }
     expiration_date { 2.months.from_now }
     number_of_tickets { 1 }
-    reward_text { 'congratulations' }
   end
 end

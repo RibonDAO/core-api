@@ -3,7 +3,7 @@ class NonProfitBlueprint < Blueprinter::Base
 
   fields :updated_at, :created_at, :name, :wallet_address, :status,
          :logo_description, :main_image_description, :background_image_description,
-         :confirmation_image_description
+         :confirmation_image_description, :impact_title, :cover_image_description
 
   association :cause, blueprint: CauseBlueprint, view: :data_and_images
 
@@ -14,6 +14,11 @@ class NonProfitBlueprint < Blueprinter::Base
   field(:logo) do |object|
     ImagesHelper.image_url_for(object.logo, variant: { resize_to_fit: [150, 150],
                                                        saver: { quality: 95 }, format: :jpg })
+  end
+
+  field(:cover_image) do |object|
+    ImagesHelper.image_url_for(object.cover_image, variant: { resize_to_fit: [296, 432],
+                                                              saver: { quality: 95 }, format: :jpg })
   end
 
   field(:impact_description) do |object|
