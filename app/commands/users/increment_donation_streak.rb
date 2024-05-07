@@ -12,7 +12,6 @@ module Users
     end
 
     def call
-      byebug
       with_exception_handle do
         return unless user
 
