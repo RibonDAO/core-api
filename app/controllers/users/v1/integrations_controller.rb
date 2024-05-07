@@ -12,7 +12,7 @@ module Users
 
       def show
         query = "metadata ->> 'user_id' = ? AND metadata ->> 'branch' = ? AND status = '1'"
-      
+
         @integration = Integration.find_by(query, current_user.id.to_s, filter_params[:branch])
 
         if @integration
