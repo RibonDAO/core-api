@@ -11,7 +11,9 @@ module Users
       end
 
       def show
-        @integration = Integration.find_by("metadata ->> 'user_id' = ?", current_user.id.to_s)
+        query = "metadata ->> 'user_id' = ? AND metadata ->> 'branch' = ? AND status = '1'"
+      
+        @integration = Integration.find_by(query, current_user.id.to_s, filter_params[:branch])
 
         if @integration
           render json: IntegrationBlueprint.render(@integration)
@@ -21,6 +23,10 @@ module Users
       end
 
       private
+
+      def filter_params
+        params.permit(:branch, :status)
+      end
 
       def integration_params
         params.permit(:name, :status, :id, :ticket_availability_in_minutes, :logo,
