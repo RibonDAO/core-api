@@ -20,6 +20,7 @@ class IntegrationBlueprint < Blueprinter::Base
 
   field :metadata do |object|
     metadata = object.metadata
+
     metadata if metadata['branch'] == 'referral'
   end
 end
