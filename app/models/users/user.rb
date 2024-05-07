@@ -84,6 +84,10 @@ class User < ApplicationRecord
     false
   end
 
+  def donation_streak
+    user_donation_stats.streak
+  end
+
   private
 
   def set_user_donation_stats
