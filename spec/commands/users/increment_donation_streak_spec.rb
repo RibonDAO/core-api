@@ -5,7 +5,7 @@ require 'rails_helper'
 describe Users::IncrementDonationStreak do
   describe '.call' do
     let(:user) { create(:user) }
-    let!(:donation_stats) { user.user_donation_stats}
+    let!(:donation_stats) { user.user_donation_stats }
     let(:command) { described_class.call(user:) }
 
     context 'when there is no last donation' do
@@ -14,10 +14,6 @@ describe Users::IncrementDonationStreak do
       end
 
       it 'does not increment streak' do
-        expect { command }.not_to change { donation_stats.reload.streak }
-      end
-
-      it 'does not reset streak' do
         expect { command }.not_to change { donation_stats.reload.streak }
       end
     end
@@ -30,10 +26,6 @@ describe Users::IncrementDonationStreak do
       it 'increments streak' do
         expect { command }.to change { donation_stats.reload.streak }.by(1)
       end
-
-      it 'does not reset streak' do
-        expect { command }.not_to change { donation_stats.reload.streak }
-      end
     end
 
     context 'when last donation is today' do
@@ -44,10 +36,6 @@ describe Users::IncrementDonationStreak do
       it 'does not increments streak' do
         expect { command }.to change { donation_stats.reload.streak }.by(0)
       end
-
-      it 'does not reset streak' do
-        expect { command }.not_to change { donation_stats.reload.streak }
-      end
     end
 
     context 'when last donation is two days ago' do
@@ -55,10 +43,6 @@ describe Users::IncrementDonationStreak do
 
       it 'does not increments streak' do
         expect { command }.to change { donation_stats.reload.streak }.by(0)
-      end
-
-      it 'reset streak' do
-        expect { command }.not_to change { donation_stats.reload.streak }
       end
     end
   end

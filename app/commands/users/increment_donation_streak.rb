@@ -16,36 +16,16 @@ module Users
       with_exception_handle do
         return unless user
 
-        if should_increment_streak?
-          increment_streak
-        elsif should_reset_streak?
-          reset_streak
-        end
+        increment_streak
       end
     end
 
     private
 
-    def should_reset_streak?
-      today = Time.zone.today
-      yesterday = today - 1.day
-      last_donation_at_date = @donation_stats.last_donation_at
-
-      return true if last_donation_at_date.nil?
-      return true if last_donation_at_date.to_date < yesterday
-
-      false
-    end
-
     def should_increment_streak?
-
-       return true if @donation_stats.last_donation_at.to_date == Time.zone.yesterday
+      return true if @donation_stats.last_donation_at.to_date == Time.zone.yesterday
 
       false
-    end
-
-    def reset_streak
-      @donation_stats.update(streak: 0)
     end
 
     def increment_streak
