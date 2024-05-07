@@ -25,7 +25,7 @@ module Users
       private
 
       def filter_params
-        params.permit(:branch, :status)
+        params.permit(:branch)
       end
 
       def integration_params
