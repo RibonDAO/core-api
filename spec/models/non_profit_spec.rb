@@ -6,6 +6,7 @@
 #  background_image_description   :string
 #  confirmation_image_description :string
 #  cover_image_description        :text
+#  icon_description               :string
 #  impact_description             :text
 #  impact_title                   :string(50)
 #  logo_description               :string
