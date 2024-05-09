@@ -23,6 +23,7 @@ module Api
 
         def user
           return unless params[:id] || current_user
+
           @user ||= current_user || User.find(params[:id])
         end
 
