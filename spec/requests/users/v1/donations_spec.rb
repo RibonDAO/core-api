@@ -106,21 +106,4 @@ RSpec.describe 'Users::V1::Donations', type: :request do
       expect_response_to_have_keys %w[can_donate donate_app]
     end
   end
-
-  describe 'GET /streak' do
-    include_context 'when making a user request' do
-      let(:request) do
-        get '/users/v1/streak', headers:
-      end
-    end
-
-    let(:integration) { create(:integration) }
-    let(:user) { account.user }
-
-    it 'returns the can_donate attribute' do
-      request
-
-      expect_response_to_have_keys %w[streak]
-    end
-  end
 end

@@ -44,6 +44,14 @@ module Api
         end
       end
 
+      def donation_streak
+       if current_user
+           render json: { streak: current_user.donation_streak }
+        else
+          render json: { donation_streak: 0 }
+        end
+      end
+
       def first_access_to_integration
         @integration = Integration.find_by_id_or_unique_address params[:integration_id]
 
