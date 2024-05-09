@@ -23,8 +23,6 @@ module Users
         end
       end
 
-
-
       private
 
       def integration
