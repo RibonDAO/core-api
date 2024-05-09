@@ -16,7 +16,7 @@ module Tickets
       tickets = []
       with_exception_handle do
         external_ids.each do |external_id|
-          tickets << transact_ticket(external_id:) if can_collect?(external_id:) && (tickets.length < 5)
+          tickets << transact_ticket(external_id:) if can_collect?(external_id:) && (tickets.length < 10)
         end
         if tickets.length.positive?
           tickets
