@@ -23,10 +23,6 @@ module Users
         end
       end
 
-      def streak
-        render json: { streak: current_user.donation_streak }
-      end
-
       private
 
       def integration

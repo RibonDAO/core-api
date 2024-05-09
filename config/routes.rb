@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       get 'users/subscriptions' => 'users/subscriptions#index'
       get 'users/configs' => 'users/configs#show'
       get 'users/is_member' => 'users/subscriptions#member?'
+      get 'users/donation_streak' => 'users/statistics#donation_streak'
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -266,7 +267,7 @@ Rails.application.routes.draw do
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
       post 'can_donate' => 'donations#can_donate'
-      get 'streak' => 'donations#streak'
+      
       post 'donations' => 'donations#create'
       get 'profile' => 'profile#show'
       post 'account/send_validated_email' => 'account#send_validated_email'

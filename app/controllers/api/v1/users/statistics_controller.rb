@@ -11,10 +11,18 @@ module Api
           end
         end
 
+        def donation_streak
+          if user
+            render json: { streak: user.donation_streak }
+          else
+            render json: { streak: 0 }
+          end
+        end
+
         private
 
         def user
-          return unless params[:id]
+          return unless params[:id] || current_user
 
           @user ||= current_user || User.find(params[:id])
         end
