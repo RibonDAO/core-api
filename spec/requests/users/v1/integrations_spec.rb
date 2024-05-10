@@ -55,13 +55,15 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
 
   describe 'GET /show' do
     include_context 'when making a user request' do
-      let(:request) { get '/users/v1/integration', headers: }
+      let(:request) { get '/users/v1/integration', headers:, params: }
     end
+
+    let(:params) { { branch: 'referral' } }
 
     before do
       create(
         :integration,
-        metadata: { user_id: account.user.id },
+        metadata: { user_id: account.user.id, branch: 'referral' },
         name: 'Ribon',
         status: :active
       )

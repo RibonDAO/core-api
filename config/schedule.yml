@@ -92,3 +92,8 @@ clear_old_integration_tickets:
   cron: "0 1 20 1 *" # At 01:00 January 20th
   class: "Tickets::ClearOldIntegrationTicketsWorker"
   queue: tickets
+
+reset_donation_streak:
+  cron: "0 3 * * 0" # At 03:00 everyday.
+  class: "Users::ResetDonationStreakWorker"
+  queue: users

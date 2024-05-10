@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_02_120349) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -415,6 +415,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_02_120349) do
     t.integer "donations_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "user_email"
+    t.integer "user_legacy_id"
+    t.datetime "user_created_at"
     t.bigint "legacy_user_id"
     t.index ["legacy_non_profit_id"], name: "index_legacy_user_impacts_on_legacy_non_profit_id"
     t.index ["legacy_user_id"], name: "index_legacy_user_impacts_on_legacy_user_id"
@@ -462,8 +465,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_02_120349) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "impact_description"
-    t.string "donor_recipient"
     t.string "measurement_unit"
+    t.string "donor_recipient"
     t.index ["non_profit_id"], name: "index_non_profit_impacts_on_non_profit_id"
   end
 
@@ -663,13 +666,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_02_120349) do
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
   end
 
-  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title", null: false
-    t.string "actions", null: false
-    t.string "kind", default: "daily"
-    t.string "navigation_callback"
-    t.string "visibility", default: "visible"
-    t.string "client", default: "web"
+  create_table "tasks", force: :cascade do |t|
+    t.string "title"
+    t.text "actions"
+    t.text "rules"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -732,6 +732,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_02_120349) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "last_donated_cause"
+    t.integer "streak", default: 0
     t.index ["user_id"], name: "index_user_donation_stats_on_user_id"
   end
 
@@ -799,7 +800,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_02_120349) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "language", default: 0
+    t.integer "language"
     t.integer "legacy_id"
     t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true

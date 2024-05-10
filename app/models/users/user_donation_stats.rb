@@ -5,6 +5,7 @@
 #  id                 :bigint           not null, primary key
 #  last_donated_cause :bigint
 #  last_donation_at   :datetime
+#  streak             :integer          default(0)
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  user_id            :bigint           not null
