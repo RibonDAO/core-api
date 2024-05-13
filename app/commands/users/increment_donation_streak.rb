@@ -22,6 +22,7 @@ module Users
     private
 
     def should_increment_streak?
+      return true if @donation_stats.streak.zero?
       return true if @donation_stats.last_donation_at.to_date == Time.zone.yesterday
 
       false
