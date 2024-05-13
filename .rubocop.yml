@@ -35,7 +35,6 @@ Metrics/BlockLength:
 Metrics/MethodLength:
   Max: 15
   Exclude:
-    - app/mailers/sendgrid_web_mailer.rb
     - app/queries/**/*
 
 Lint/AmbiguousBlockAssociation:
@@ -86,7 +85,6 @@ Lint/MissingSuper:
   Exclude:
     - app/commands/**/*
     - app/lib/**/*
-    - app/mailers/sendgrid_web_mailer.rb
 
 Rails/FilePath:
   Enabled: false

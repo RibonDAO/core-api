@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_29_164824) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_02_120349) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -213,11 +213,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_29_164824) do
     t.index ["receiver_type", "receiver_id"], name: "index_contributions_on_receiver"
   end
 
+  create_table "coupon_messages", force: :cascade do |t|
+    t.string "reward_text"
+    t.uuid "coupon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_id"], name: "index_coupon_messages_on_coupon_id"
+  end
+
   create_table "coupons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "number_of_tickets"
     t.datetime "expiration_date"
     t.integer "available_quantity"
-    t.string "reward_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 0
@@ -843,6 +850,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_29_164824) do
   add_foreign_key "contribution_fees", "contributions"
   add_foreign_key "contribution_fees", "contributions", column: "payer_contribution_id"
   add_foreign_key "contributions", "person_payments"
+  add_foreign_key "coupon_messages", "coupons"
   add_foreign_key "devices", "users"
   add_foreign_key "donation_batches", "batches"
   add_foreign_key "donation_batches", "donations"

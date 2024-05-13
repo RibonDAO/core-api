@@ -9,20 +9,27 @@ describe Auth::SendAuthenticationLink do
     let(:authenticatable) { create(:big_donor) }
     let(:email_link_service) { instance_double(Auth::EmailLinkService, find_or_create_auth_link: auth_link) }
     let(:auth_link) { 'https://auth.ribon.io/link' }
+    let(:event) do
+      OpenStruct.new({
+                       name: 'send_patron_authentication_link',
+                       data: {
+                         email: authenticatable.email,
+                         url: auth_link
+                       }
+                     })
+    end
 
     before do
-      allow(SendgridWebMailer).to receive(:send_email)
+      allow(EventServices::SendEvent).to receive(:new)
       allow(Auth::EmailLinkService).to receive(:new).and_return(email_link_service)
     end
 
     it 'sends an email with the authentication link with correct params' do
       command
 
-      expect(SendgridWebMailer).to have_received(:send_email).with(
-        receiver: authenticatable.email,
-        template_name: 'authentication_email_template_id',
-        language: 'en',
-        dynamic_template_data: { url: auth_link, first_name: authenticatable.name }
+      expect(EventServices::SendEvent).to have_received(:new).with(
+        user: authenticatable,
+        event:
       )
     end
   end

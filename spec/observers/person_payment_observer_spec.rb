@@ -2,8 +2,10 @@ require 'rails_helper'
 
 RSpec.describe PersonPaymentObserver, type: :observer do
   describe 'if a person payment status change from processing to paid' do
+    let(:send_email_job) { Events::PersonPayments::SendSucceedPaymentEventJob }
+
     before do
-      allow(Mailers::SendPersonPaymentEmailJob).to receive(:perform_later).with(person_payment:)
+      allow(Events::PersonPayments::SendSucceedPaymentEventJob).to receive(:perform_later).with(person_payment:)
       allow(Events::PersonPayments::SendFailedPaymentEventJob).to receive(:perform_later).with(person_payment:)
     end
 
@@ -11,7 +13,7 @@ RSpec.describe PersonPaymentObserver, type: :observer do
       let(:person_payment) { create(:person_payment, status: :processing, payment_method:) }
       it "calls the mailer job if payment method is #{payment_method}" do
         person_payment.update(status: :paid)
-        expect(Mailers::SendPersonPaymentEmailJob).to have_received(:perform_later).with(person_payment:)
+        expect(send_email_job).to have_received(:perform_later).with(person_payment:)
       end
     end
 
@@ -25,7 +27,7 @@ RSpec.describe PersonPaymentObserver, type: :observer do
 
       it 'does not call the mailer job' do
         person_payment.update(status: :paid)
-        expect(Mailers::SendPersonPaymentEmailJob).not_to have_received(:perform_later).with(person_payment:)
+        expect(send_email_job).not_to have_received(:perform_later).with(person_payment:)
       end
 
       it 'calls the event job' do
@@ -42,7 +44,7 @@ RSpec.describe PersonPaymentObserver, type: :observer do
 
       it 'do not call the mailer job' do
         person_payment.update(status: :paid)
-        expect(Mailers::SendPersonPaymentEmailJob).not_to have_received(:perform_later).with(person_payment:)
+        expect(send_email_job).not_to have_received(:perform_later).with(person_payment:)
       end
     end
   end

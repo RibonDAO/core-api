@@ -54,7 +54,7 @@ class PersonPaymentObserver < ActiveRecord::Observer
   private
 
   def send_person_payment_email(person_payment)
-    Mailers::SendPersonPaymentEmailJob.perform_later(person_payment:)
+    Events::PersonPayments::SendSucceedPaymentEventJob.perform_later(person_payment:)
   end
 
   def send_failed_payment_event(person_payment)
