@@ -6,6 +6,7 @@ module Donations
     def perform(donation:)
       Events::Donations::SendDonationEventJob.perform_later(donation:)
       Donations::DecreasePoolBalanceJob.perform_later(donation:)
+      Users::IncrementDonationStreak.call(user: donation.user)
     rescue StandardError
       nil
     end
