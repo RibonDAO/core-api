@@ -31,12 +31,14 @@ class Donation < ApplicationRecord
 
   enum category: {
     daily: 0,
-    monthly: 1
+    monthly: 1,
+    extra: 2
   }
 
   enum source: {
     integration: 0,
-    club: 1
+    club: 1,
+    coupon: 2
   }
 
   scope :created_between, lambda { |start_date, end_date|
