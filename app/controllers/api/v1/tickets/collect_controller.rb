@@ -53,7 +53,8 @@ module Api
           command = ::Tickets::CanCollectByCouponId.call(coupon:, user:)
 
           if command.success?
-            render json: { can_collect: command.result, coupon: CouponBlueprint.render(coupon) }, status: :ok
+            render json: { can_collect: command.result, coupon: CouponBlueprint.render_as_json(coupon) },
+                   status: :ok
           else
             render json: { can_collect: false, errors: command.errors }, status: :ok
           end
