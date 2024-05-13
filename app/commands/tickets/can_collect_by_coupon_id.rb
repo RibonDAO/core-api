@@ -34,6 +34,7 @@ module Tickets
     end
 
     def check_coupon_availability
+      return if coupon.available_quantity.blank?
       raise I18n.t('tickets.coupon_unavailable') if UserCoupon.where(coupon:).count >= coupon.available_quantity
     end
   end
