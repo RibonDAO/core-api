@@ -23,4 +23,21 @@ RSpec.describe 'Api::V1::Users::Statistics', type: :request do
                                       last_donated_non_profit])
     end
   end
+
+  describe 'GET /donation_streak' do
+    include_context 'when making a user request' do
+      let(:request) do
+        get '/api/v1/users/donation_streak', headers:
+      end
+    end
+
+    let(:integration) { create(:integration) }
+    let(:user) { account.user }
+
+    it 'returns the can_donate attribute' do
+      request
+
+      expect_response_to_have_keys %w[streak]
+    end
+  end
 end
