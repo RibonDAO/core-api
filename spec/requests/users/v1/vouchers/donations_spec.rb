@@ -6,8 +6,6 @@ RSpec.describe 'Users::V1::Vouchers::Donations', type: :request do
       let(:request) { post '/users/v1/vouchers/donations', headers:, params: }
     end
 
-    include_context('when mocking a request') { let(:cassette_name) { 'sendgrid_email_api' } }
-
     let(:integration) { create(:integration) }
     let(:non_profit) { create(:non_profit, :with_impact) }
     let(:user) { account.user }

@@ -83,7 +83,7 @@ module Api
       def send_delete_account_email
         if current_user
           jwt = ::Jwt::Encoder.encode({ email: current_user.email })
-          Mailers::SendUserDeletionEmailJob.perform_now(user: current_user, jwt:)
+          Events::Users::SendUserDeletionEmailJob.perform_now(user: current_user, jwt:)
 
           render json: { sent: true }, status: :ok
         else
