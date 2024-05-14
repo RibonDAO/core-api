@@ -6,6 +6,7 @@
 #  background_image_description   :string
 #  confirmation_image_description :string
 #  cover_image_description        :text
+#  icon_description               :string
 #  impact_description             :text
 #  impact_title                   :string(50)
 #  logo_description               :string
@@ -21,9 +22,11 @@ class NonProfit < ApplicationRecord
 
   translates :impact_description, :logo_description, :name,
              :main_image_description, :background_image_description,
-             :confirmation_image_description, :impact_title, :cover_image_description, type: :string
+             :confirmation_image_description, :impact_title, :cover_image_description, :icon_description,
+             type: :string
 
   has_one_attached :logo
+  has_one_attached :icon
   has_one_attached :main_image
   has_one_attached :background_image
   has_one_attached :cover_image
