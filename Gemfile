@@ -90,8 +90,6 @@ gem 'sentry-ruby'
 
 gem 'sassc-rails'
 
-gem 'sendgrid-ruby'
-
 # Observers
 gem 'rails-observers'
 

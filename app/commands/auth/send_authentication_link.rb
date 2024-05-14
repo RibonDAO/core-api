@@ -9,23 +9,21 @@ module Auth
     end
 
     def call
-      SendgridWebMailer.send_email(receiver: authenticatable.email, dynamic_template_data:,
-                                   template_name: 'authentication_email_template_id', language:).deliver_later
+      EventServices::SendEvent.new(user: authenticatable, event: build_event).call
     rescue StandardError => e
       errors.add(:message, e.message)
     end
 
     private
 
-    def language
-      'en' # TODO: When patrons have their language, change this
-    end
-
-    def dynamic_template_data
-      {
-        url:,
-        first_name: authenticatable.name
-      }
+    def build_event
+      OpenStruct.new({
+                       name: 'send_patron_authentication_link',
+                       data: {
+                         email: authenticatable.email,
+                         url:
+                       }
+                     })
     end
 
     def url

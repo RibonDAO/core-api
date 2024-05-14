@@ -10,6 +10,7 @@
 #
 class BigDonor < ApplicationRecord
   include AuthenticatableModel
+
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :name, presence: true
 
@@ -29,5 +30,9 @@ class BigDonor < ApplicationRecord
 
   def dashboard_link
     Auth::EmailLinkService.new(authenticatable: self).find_or_create_auth_link
+  end
+
+  def language
+    'en'
   end
 end

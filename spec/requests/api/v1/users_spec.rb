@@ -263,7 +263,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
 
       before do
         user
-        allow(Mailers::SendUserDeletionEmailJob).to receive(:perform_now)
+        allow(Events::Users::SendUserDeletionEmailJob).to receive(:perform_now)
       end
 
       it 'heads http status ok' do
@@ -275,7 +275,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'call the job' do
         request
 
-        expect(Mailers::SendUserDeletionEmailJob).to have_received(:perform_now)
+        expect(Events::Users::SendUserDeletionEmailJob).to have_received(:perform_now)
       end
 
       it 'returns the status' do
