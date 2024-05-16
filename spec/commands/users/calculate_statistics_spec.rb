@@ -33,7 +33,7 @@ describe Users::CalculateStatistics do
         command
         expect(command.result).to eq({ total_causes: 2, total_non_profits: 1, total_tickets: 2,
                                        total_donated: { usd: 21.0, brl: 21.0 },
-                                       last_donated_non_profit: non_profit.id })
+                                       last_donated_non_profit: non_profit.id, days_donating: 0 })
       end
     end
 
@@ -61,7 +61,7 @@ describe Users::CalculateStatistics do
       it 'returns the statistics' do
         command
         expect(command.result).to eq({ total_causes: 1, total_non_profits: 1, total_tickets: 0,
-                                       total_donated: { usd: 22.0, brl: 22.0 } })
+                                       total_donated: { usd: 22.0, brl: 22.0 }, days_donating: 0 })
       end
     end
 

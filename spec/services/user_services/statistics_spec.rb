@@ -44,4 +44,14 @@ RSpec.describe UserServices::Statistics, type: :service do
       expect(service.total_donated).to eq({ brl: 1.0, usd: 21.0 })
     end
   end
+
+  describe '#days_donating' do
+    before do
+      user.user_donation_stats.increment(:days_donating, 2)
+    end
+
+    it 'returns the days donating' do
+      expect(service.user_days_donating).to eq(2)
+    end
+  end
 end

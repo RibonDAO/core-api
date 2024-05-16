@@ -19,12 +19,12 @@ module Users
           return { total_non_profits: total_crypto_user_non_profits,
                    total_donated: total_crypto_user_user_donate,
                    total_causes: total_crypto_user_user_causes,
-                   total_tickets: donations.count }
+                   total_tickets: donations.count,
+                   days_donating: user_days_donating }
 
         elsif wallet_address && !user
 
           return crypto_user_statistics_service.statistics
-
         else
           return user_statistics_service.statistics
         end
@@ -32,6 +32,10 @@ module Users
     end
 
     private
+
+    def user_days_donating
+      user_statistics_service.user_days_donating
+    end
 
     def user_statistics_service
       @user_statistics_service ||= UserServices::Statistics.new(donations:, user:, customer:)
