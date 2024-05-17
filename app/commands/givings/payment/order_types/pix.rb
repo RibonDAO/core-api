@@ -53,7 +53,8 @@ module Givings
         end
 
         def create_subscription(payer)
-          return if existing_subscription(payer)
+          subscription = existing_subscription(payer)
+          return subscription if subscription
 
           Subscription.create!({ payer:, offer:, payment_method:, status: :inactive, platform:,
                                  integration: })
