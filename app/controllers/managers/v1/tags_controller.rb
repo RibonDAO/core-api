@@ -14,7 +14,6 @@ module Managers
         else
           render_errors(command.errors)
         end
-       
       end
 
       def show
@@ -35,7 +34,7 @@ module Managers
       private
 
       def tag_params
-        params.permit(:id, :name, :status, non_profit_tags_attributes: [:non_profit_id, :_destroy])
+        params.permit(:id, :name, :status, non_profit_tags_attributes: %i[non_profit_id _destroy])
       end
     end
   end

@@ -6,7 +6,7 @@ RSpec.describe 'Managers::V1::Tags', type: :request do
 
     let(:user) { create(:user) }
     let(:url) { '/managers/v1/tags' }
-    let!(:active_tags) { create_list(:tag, 2, status: "active") }
+    let!(:active_tags) { create_list(:tag, 2, status: 'active') }
 
     it 'returns all tags' do
       request
@@ -40,9 +40,8 @@ RSpec.describe 'Managers::V1::Tags', type: :request do
 
     context 'with the right params' do
       let(:params) do
-        { name: 'tag 1', status: 'active', non_profit_tags_attributes: [{non_profit_id: create(:non_profit).id.to_s}]
-            
-         }
+        { name: 'tag 1', status: 'active',
+          non_profit_tags_attributes: [{ non_profit_id: create(:non_profit).id.to_s }] }
       end
       let(:result) { create(:tag) }
 
@@ -71,14 +70,13 @@ RSpec.describe 'Managers::V1::Tags', type: :request do
       let(:tag) { create(:tag) }
       let(:non_profit) { create(:non_profit) }
       let(:params) do
-         { id: tag.id.to_s, name: "Tag 2", status: tag.status, non_profit_tags_attributes: [{non_profit_id: non_profit.id.to_s}]
-            
-         }
+        { id: tag.id.to_s, name: 'Tag 2', status: tag.status,
+          non_profit_tags_attributes: [{ non_profit_id: non_profit.id.to_s }] }
       end
 
       it 'calls the upsert command with right params' do
         allow(Tags::UpsertTag).to receive(:call).and_return(command_double(klass: Tags::UpsertTag,
-                                                                               result: tag))
+                                                                           result: tag))
         request
 
         expect(Tags::UpsertTag).to have_received(:call).with(strong_params(params))

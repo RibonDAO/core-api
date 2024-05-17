@@ -9,13 +9,12 @@
 #  updated_at :datetime         not null
 #
 class Tag < ApplicationRecord
-     extend Mobility
- 
-    translates :name, type: :string
+  extend Mobility
+
+  translates :name, type: :string
 
   has_many :non_profit_tags, dependent: :destroy
   has_many :non_profits, through: :non_profit_tags
-
 
   enum status: {
     inactive: 0,
@@ -27,6 +26,4 @@ class Tag < ApplicationRecord
   validates :status, presence: true
 
   accepts_nested_attributes_for :non_profit_tags, allow_destroy: true
-  
-
 end

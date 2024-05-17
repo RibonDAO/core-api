@@ -13,7 +13,7 @@ describe Tags::UpsertTag do
           status: 'active',
           non_profit_tags_attributes: [{
             non_profit_id: create(:non_profit).id
-            }],
+          }]
         }
       end
 
@@ -34,13 +34,13 @@ describe Tags::UpsertTag do
       let(:tag) { create(:tag) }
       let(:tag_params) do
         {
-            id: tag.id,
+          id: tag.id,
           name: 'tag 2',
           status: 'active',
           non_profit_tags_attributes: [{
             non_profit_id: create(:non_profit).id
-            }],
-    
+          }]
+
         }
       end
 
