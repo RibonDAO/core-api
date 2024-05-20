@@ -14,9 +14,9 @@ module Users
 
     private
 
-    # Find users in batches of 1000
-    # Finds only users with donations
-    # Avoids n + 1 queries by including user_donation_stats
+    # Finds users in batches of 1000.
+    # Finds only users with donations.
+    # Avoids n + 1 queries by including user_donation_stats.
     def user_batches(&)
       User.joins(:donations)
           .group('users.id')
