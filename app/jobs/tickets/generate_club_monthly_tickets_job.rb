@@ -4,8 +4,6 @@ module Tickets
     sidekiq_options retry: 3
 
     def perform(user:, platform:, quantity:, source:)
-      return unless Users::VerifyClubMembership.call(user:).result
-
       GenerateClubTickets.call(user:, platform:, quantity:, category: :monthly, source:)
     end
   end
