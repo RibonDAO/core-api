@@ -38,6 +38,14 @@ RSpec.describe 'Managers::V1::StoriesController', type: :request do
         expect(Stories::CreateStory).to have_received(:call).with(strong_params(params))
       end
 
+      context 'with new story with nil title' do
+        let(:params) { { title: nil } }
+
+        it 'returns a single story without title' do
+          expect(Stories::CreateStory).to have_received(:call).with(strong_params(params))
+        end
+      end
+
       it 'returns a single story' do
         request
 
@@ -46,7 +54,7 @@ RSpec.describe 'Managers::V1::StoriesController', type: :request do
     end
 
     context 'with the wrong params' do
-      let(:params) { { title: '' } }
+      let(:params) { { description: '' } }
 
       it 'renders a error message' do
         request
