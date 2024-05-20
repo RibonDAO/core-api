@@ -10,7 +10,8 @@ RSpec.describe Request::ApiRequest do
 
     before do
       allow(RedisStore::Cache).to receive(:find).and_return(cached_response)
-      allow(HTTParty).to receive(:get).and_return(instance_double(HTTParty::Response, code: 200, body: response_json))
+      allow(HTTParty).to receive(:get).and_return(instance_double(HTTParty::Response, code: 200,
+                                                                                      body: response_json))
       allow(RedisStore::Cache).to receive(:find_or_create)
     end
 
