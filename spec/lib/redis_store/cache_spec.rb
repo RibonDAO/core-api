@@ -37,4 +37,22 @@ RSpec.describe RedisStore::Cache do
       end
     end
   end
+
+  describe '.find' do
+    before do
+      described_class.find_or_create(key: :foo, expires_in: 1.day) { 'test' }
+    end
+
+    context 'when the data is cached' do
+      it 'gets the cached data' do
+        expect(described_class.find(:foo)).to eq 'test'
+      end
+    end
+
+    context 'when the data is not cached' do
+      it 'returns nil' do
+        expect(described_class.find(:bar)).to be_nil
+      end
+    end
+  end
 end
