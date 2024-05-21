@@ -15,7 +15,9 @@ RSpec.describe 'Users::V1::Tickets::Donations', type: :request do
           platform:,
           non_profit_id: non_profit.id,
           email: user.email,
-          quantity: 1
+          quantity: 1,
+          integration_only: false
+
         }
       end
 
@@ -34,7 +36,8 @@ RSpec.describe 'Users::V1::Tickets::Donations', type: :request do
           user:,
           platform:,
           non_profit:,
-          quantity: '1'
+          quantity: '1',
+          integration_only: false
         )
       end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_08_021313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -492,6 +492,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
     t.string "confirmation_image_description"
     t.string "impact_title", limit: 50
     t.text "cover_image_description"
+    t.string "icon_description"
     t.index ["cause_id"], name: "index_non_profits_on_cause_id"
   end
 
