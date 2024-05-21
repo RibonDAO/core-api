@@ -9,5 +9,9 @@ module RedisStore
 
       yield
     end
+
+    def find(key)
+      Rails.cache.read(key)
+    end
   end
 end
