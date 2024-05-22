@@ -53,4 +53,8 @@ class Subscription < ApplicationRecord
   def formatted_amount
     person_payments&.last&.formatted_amount
   end
+
+  def next_payment_date
+    next_payment_attempt || (person_payments.last&.paid_date&.+ 1.month)
+  end
 end

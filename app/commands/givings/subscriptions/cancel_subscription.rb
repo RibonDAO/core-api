@@ -24,7 +24,9 @@ module Givings
 
       def success_unsubscribe(subscription, unsubscribe)
         return subscription unless unsubscribe
-        return subscription unless unsubscribe[:status] == 'canceled'
+        unless unsubscribe[:status] == 'canceled' || unsubscribe[:status] == 'incomplete_expired'
+          return subscription
+        end
 
         subscription.update!(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
         send_email(subscription)
