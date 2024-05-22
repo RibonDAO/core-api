@@ -41,6 +41,9 @@ class NonProfit < ApplicationRecord
   has_many :person_payments, as: :receiver
   has_many :subscriptions, as: :receiver
 
+  has_many :non_profit_tags
+  has_many :tags, through: :non_profit_tags
+
   accepts_nested_attributes_for :stories
   accepts_nested_attributes_for :non_profit_impacts
 
