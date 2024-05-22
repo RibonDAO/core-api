@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_15_114011) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -97,7 +97,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "link"
-    t.integer "language", default: 0
+    t.string "language"
     t.index ["author_id"], name: "index_articles_on_author_id"
   end
 
@@ -479,6 +479,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
     t.index ["pool_id"], name: "index_non_profit_pools_on_pool_id"
   end
 
+  create_table "non_profit_tags", force: :cascade do |t|
+    t.bigint "non_profit_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["non_profit_id"], name: "index_non_profit_tags_on_non_profit_id"
+    t.index ["tag_id"], name: "index_non_profit_tags_on_tag_id"
+  end
+
   create_table "non_profits", force: :cascade do |t|
     t.string "name"
     t.text "impact_description"
@@ -492,6 +501,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
     t.string "confirmation_image_description"
     t.string "impact_title", limit: 50
     t.text "cover_image_description"
+    t.string "icon_description"
     t.index ["cause_id"], name: "index_non_profits_on_cause_id"
   end
 
@@ -664,6 +674,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
     t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_subscriptions_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -874,6 +891,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_03_170017) do
   add_foreign_key "non_profit_impacts", "non_profits"
   add_foreign_key "non_profit_pools", "non_profits"
   add_foreign_key "non_profit_pools", "pools"
+  add_foreign_key "non_profit_tags", "non_profits"
+  add_foreign_key "non_profit_tags", "tags"
   add_foreign_key "non_profits", "causes"
   add_foreign_key "offer_gateways", "offers"
   add_foreign_key "person_blockchain_transactions", "person_payments"
