@@ -74,5 +74,11 @@ RSpec.describe Users::UpdateDaysDonatingForAllJob, type: :job do
       expect { perform_job }
         .to change { user2.user_donation_stats.reload.days_donating }
     end
+
+    it 'saver the last user id' do
+      perform_job
+      expect(RedisStore::HStore)
+        .to have_received(:set).with(key: 'last_updated_user_id', value: user2.id)
+    end
   end
 end

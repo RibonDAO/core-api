@@ -12,8 +12,8 @@ module Users
 
         UserDonationStats.update(update_list.keys, update_list.values)
 
-        last_user = update_list.keys.last
-        update_checkpoint(last_user) if last_user.present?
+        last_user_id = update_list.values.last[:user_id]
+        update_checkpoint(last_user_id) if last_user_id.present?
       end
     end
 
@@ -57,9 +57,9 @@ module Users
     def count_uniq_days_donating(user_donation_stats)
       user_id = user_donation_stats.user_id
 
-      unique_days_count = Donation.where(user_id:).select('DISTINCT DATE(created_at)').count
+      days_donating = Donation.where(user_id:).select('DISTINCT DATE(created_at)').count
 
-      { id: user_donation_stats.id, days_donating: unique_days_count }
+      { id: user_donation_stats.id, user_id:, days_donating: }
     end
   end
 end
