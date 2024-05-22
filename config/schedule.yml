@@ -80,5 +80,5 @@ reset_donation_streak:
 
 update_days_donating_for_all_users:
   cron: "0 0 * * *" # At 00:00 every day.
-  class: "Users::UpdateDaysDonatingForAllJob"
+  class: "Users::UpdateDaysDonatingForAllWorker"
   queue: users
