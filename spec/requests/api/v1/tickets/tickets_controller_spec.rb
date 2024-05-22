@@ -6,15 +6,28 @@ RSpec.describe 'Api::V1::Tickets::Tickets', type: :request do
 
     let(:user) { create(:user) }
 
-    context 'when user has tickets' do
+    context 'when user has tickets only from integration' do
       before do
-        create_list(:ticket, 10, user:, status: :collected)
+        create_list(:ticket, 10, user:, status: :collected, source: :integration)
       end
 
       it 'returns the quantity of tickets available for that user' do
         request
 
-        expect(response.body).to eq({ tickets: 10 }.to_json)
+        expect(response.body).to eq({ tickets: 10, integration_tickets: 10 }.to_json)
+      end
+    end
+
+    context 'when user has tickets from integration and from club' do
+      before do
+        create_list(:ticket, 10, user:, status: :collected, source: :integration)
+        create_list(:ticket, 10, user:, status: :collected, source: :club)
+      end
+
+      it 'returns the quantity of tickets available for that user' do
+        request
+
+        expect(response.body).to eq({ tickets: 20, integration_tickets: 10 }.to_json)
       end
     end
 
@@ -22,7 +35,7 @@ RSpec.describe 'Api::V1::Tickets::Tickets', type: :request do
       it 'returns the quantity of tickets available for that user' do
         request
 
-        expect(response.body).to eq({ tickets: 0 }.to_json)
+        expect(response.body).to eq({ tickets: 0, integration_tickets: 0 }.to_json)
       end
     end
   end
