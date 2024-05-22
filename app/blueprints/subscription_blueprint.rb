@@ -1,7 +1,11 @@
 class SubscriptionBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :status, :cancel_date, :created_at, :next_payment_attempt
+  fields :status, :cancel_date, :created_at
+
+  field :next_payment_attempt do |object|
+    object.next_payment_date
+  end
 
   association :offer, blueprint: OfferBlueprint, view: :plan
   association :receiver, blueprint: ->(receiver) { receiver.blueprint }, default: {}
