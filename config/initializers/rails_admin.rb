@@ -30,7 +30,7 @@ RailsAdmin.config do |config|
     show_in_app
   end
 
-  config.included_models = [Admin, Account, Customer, UserManager, User, Tag, Cause, NonProfit]
+  config.included_models = [Admin, Account, Customer, UserManager, User]
 
   config.model RibonConfig do
     field :default_ticket_value do
