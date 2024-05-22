@@ -2,11 +2,11 @@
 #
 # Table name: coupon_messages
 #
-#  id                 :bigint           not null, primary key
-#  reward_text        :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  coupon_id          :uuid             not null
+#  id          :bigint           not null, primary key
+#  reward_text :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  coupon_id   :uuid             not null
 #
 require 'rails_helper'
 

@@ -489,6 +489,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_14_190947) do
     t.string "confirmation_image_description"
     t.string "impact_title", limit: 50
     t.text "cover_image_description"
+    t.string "icon_description"
     t.index ["cause_id"], name: "index_non_profits_on_cause_id"
   end
 
