@@ -6,13 +6,18 @@ module Users
 
     def perform
       user_batches do |user_batch|
-        user_donation_stats = user_batch.map(&:user_donation_stats)
+        update_list = user_batch.map do |user|
+          { id: user.user_donation_stats.id, days_donating: user.unique_days_donating }
+        end
 
-        update_list = update_list(user_donation_stats)
+        ids_to_update = update_list.pluck(:id)
+        values_to_update = update_list.map do |ul|
+          { days_donating: ul[:days_donating] }
+        end
 
-        UserDonationStats.update(update_list.keys, update_list.values)
+        UserDonationStats.update(ids_to_update, values_to_update)
 
-        last_user_id = update_list.values.last[:user_id]
+        last_user_id = user_batch.last.id
         update_checkpoint(last_user_id) if last_user_id.present?
       end
     end
@@ -30,36 +35,18 @@ module Users
     # Finds users in batches of 1000.
     # Finds only users with donations.
     # Avoids n + 1 queries by including user_donation_stats.
+    # Already calculate the days donating
     # If user id cache is present, start from it
     def user_batches(&)
-      if last_user_id.present?
-        User
-          .where('users.id > ?', last_user_id)
-          .joins(:donations)
-          .group('users.id')
-          .includes(:user_donation_stats)
-          .find_in_batches(batch_size: 1000, &)
-      else
-        User
-          .joins(:donations)
-          .group('users.id')
-          .includes(:user_donation_stats)
-          .find_in_batches(batch_size: 1000, &)
-      end
-    end
+      scope = User
+              .joins(:donations)
+              .select('users.*, COUNT(DISTINCT DATE(donations.created_at)) AS unique_days_donating')
+              .group('users.id')
+              .includes(:user_donation_stats)
 
-    def update_list(donation_stats)
-      donation_stats
-        .map { |uds| count_uniq_days_donating(uds) }
-        .index_by { |uds| uds[:id] }
-    end
+      scope = scope.where('users.id > ?', last_user_id) if last_user_id.present?
 
-    def count_uniq_days_donating(user_donation_stats)
-      user_id = user_donation_stats.user_id
-
-      days_donating = Donation.where(user_id:).select('DISTINCT DATE(created_at)').count
-
-      { id: user_donation_stats.id, user_id:, days_donating: }
+      scope.find_in_batches(batch_size: 1000, &)
     end
   end
 end
