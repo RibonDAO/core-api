@@ -10,12 +10,9 @@ module Users
           { id: user.user_donation_stats.id, days_donating: user.unique_days_donating }
         end
 
-        ids_to_update = update_list.pluck(:id)
-        values_to_update = update_list.map do |ul|
-          { days_donating: ul[:days_donating] }
-        end
+        update_list = update_list.index_by { |ul| ul[:id] }
 
-        UserDonationStats.update(ids_to_update, values_to_update)
+        UserDonationStats.update(update_list.keys, update_list.values)
 
         last_user_id = user_batch.last.id
         update_checkpoint(last_user_id) if last_user_id.present?
