@@ -4,7 +4,9 @@ require 'rails_helper'
 
 describe Tickets::Donate do
   describe '.call' do
-    subject(:command) { described_class.call(non_profit:, user:, platform: 'web', quantity: 2) }
+    subject(:command) { described_class.call(non_profit:, user:, platform: 'web', quantity: 2, integration_only:) }
+
+    let(:integration_only) { false }
 
     context 'when no error occurs' do
       let(:integration) { create(:integration) }
@@ -50,7 +52,7 @@ describe Tickets::Donate do
       end
 
       it 'calls the associate_integration_vouchers method' do
-        command_instance = described_class.new(non_profit:, user:, platform: 'app', quantity: 2)
+        command_instance = described_class.new(non_profit:, user:, platform: 'app', quantity: 2, integration_only:)
         allow(command_instance).to receive(:associate_integration_vouchers)
 
         command_instance.call
@@ -174,6 +176,42 @@ describe Tickets::Donate do
         vouchers = Voucher.where(external_id: %w[external_id1 external_id2])
 
         expect(vouchers.pluck(:donation_id)).to match_array([donations.first.id, donations.second.id])
+      end
+    end
+
+    context 'when integration_only param is true' do
+      let(:user) { create(:user) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:donation) { create(:donation) }
+      let(:integration) { create(:integration) }
+      let(:integration_only) { true }
+
+      before do
+        create(:ribon_config, default_ticket_value: 100)
+        create(:ticket, user:, integration:, source: 'integration')
+        create(:ticket, user:, integration:, source: 'club')
+      end
+
+      it 'only donates tickets from integration' do
+        expect { command }.to change(Donation, :count).by(1)
+      end
+    end
+
+    context 'when integration_only param is false' do
+      let(:user) { create(:user) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:donation) { create(:donation) }
+      let(:integration) { create(:integration) }
+      let(:integration_only) { false }
+
+      before do
+        create(:ribon_config, default_ticket_value: 100)
+        create(:ticket, user:, integration:, source: 'integration')
+        create(:ticket, user:, integration:, source: 'club')
+      end
+
+      it 'donates all tickets' do
+        expect { command }.to change(Donation, :count).by(2)
       end
     end
   end
