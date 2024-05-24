@@ -179,7 +179,7 @@ describe Tickets::Donate do
       end
     end
 
-    context 'when integration_only param is true' do
+    context 'when integration_only param is true and you not have enough tickets' do
       let(:user) { create(:user) }
       let(:non_profit) { create(:non_profit, :with_impact) }
       let(:donation) { create(:donation) }
@@ -192,8 +192,8 @@ describe Tickets::Donate do
         create(:ticket, user:, integration:, source: 'club')
       end
 
-      it 'only donates tickets from integration' do
-        expect { command }.to change(Donation, :count).by(1)
+      it 'does not donate any ticket' do
+        expect { command }.to change(Donation, :count).by(0)
       end
     end
 

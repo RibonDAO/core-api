@@ -75,7 +75,7 @@ module Tickets
     end
 
     def allowed?
-      return true if user.tickets.collected.count >= quantity && pool_balance?
+      return true if filtered_tickets.collected.count >= quantity && pool_balance?
 
       errors.add(:message, I18n.t('donations.blocked_message'))
 
@@ -94,7 +94,6 @@ module Tickets
       external_ids = tickets.pluck(:external_id)
       sources = tickets.pluck(:source)
       categories = tickets.pluck(:category)
-      @quantity = tickets.count
 
       { integrations:, external_ids: external_ids.compact, sources:, categories: }
     end
