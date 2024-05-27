@@ -1,15 +1,17 @@
+# rubocop:disable Metrics/ClassLength
 # frozen_string_literal: true
 
 module Tickets
   class Donate < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :non_profit, :user, :platform, :quantity, :donations
+    attr_reader :non_profit, :user, :platform, :quantity, :donations, :integration_only
 
-    def initialize(non_profit:, user:, platform:, quantity:)
+    def initialize(non_profit:, user:, platform:, quantity:, integration_only:)
       @non_profit = non_profit
       @user = user
       @platform = platform
       @quantity = quantity
+      @integration_only = integration_only
     end
 
     def call
@@ -38,6 +40,7 @@ module Tickets
         external_ids = destroy_result[:external_ids]
         sources = destroy_result[:sources]
         categories = destroy_result[:categories]
+
         @donations = create_donations(build_donations(integrations, sources, categories))
         associate_integration_vouchers(external_ids)
       end
@@ -72,15 +75,21 @@ module Tickets
     end
 
     def allowed?
-      return true if user.tickets.collected.count >= quantity && pool_balance?
+      return true if filtered_tickets.collected.count >= quantity && pool_balance?
 
       errors.add(:message, I18n.t('donations.blocked_message'))
 
       false
     end
 
+    def filtered_tickets
+      return Ticket.where(user:, source: :integration) if integration_only
+
+      Ticket.where(user:)
+    end
+
     def destroy_tickets
-      tickets = Ticket.where(user:).collected.order(created_at: :asc).limit(quantity).destroy_all
+      tickets = filtered_tickets.collected.order(created_at: :asc).limit(quantity).destroy_all
       integrations = tickets.pluck(:integration_id)
       external_ids = tickets.pluck(:external_id)
       sources = tickets.pluck(:source)
@@ -133,3 +142,4 @@ module Tickets
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

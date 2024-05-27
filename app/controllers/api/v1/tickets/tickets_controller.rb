@@ -5,7 +5,7 @@ module Api
         def available
           return unless user
 
-          render json: { tickets: database_tickets }, status: :ok
+          render json: { tickets: database_tickets, integration_tickets: }, status: :ok
         end
 
         def to_collect
@@ -25,8 +25,16 @@ module Api
           @user ||= current_user
         end
 
+        def user_tickets_collected
+          @user_tickets_collected ||= user.tickets.collected
+        end
+
         def database_tickets
-          user.tickets.collected.count
+          user_tickets_collected.count
+        end
+
+        def integration_tickets
+          user_tickets_collected.where(source: :integration).count
         end
 
         def tickets_params

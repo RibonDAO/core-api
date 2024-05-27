@@ -55,7 +55,7 @@ module Tickets
     end
 
     def donate_ticket
-      command = Donate.call(non_profit:, user:, platform:, quantity: 1)
+      command = Donate.call(non_profit:, user:, platform:, quantity: 1, integration_only: true)
 
       if command.success?
         command.result.first
