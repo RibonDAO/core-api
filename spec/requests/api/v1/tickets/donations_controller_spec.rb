@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe 'Users::V1::Tickets::Donations', type: :request do
+RSpec.describe 'Api::V1::Tickets::Donations', type: :request do
   describe 'POST /donate' do
     include_context 'when making a user request' do
-      subject(:request) { post '/users/v1/tickets/donate', headers:, params: }
+      subject(:request) { post '/api/v1/tickets/donate', headers:, params: }
     end
 
     context 'with right params' do
@@ -15,9 +15,7 @@ RSpec.describe 'Users::V1::Tickets::Donations', type: :request do
           platform:,
           non_profit_id: non_profit.id,
           email: user.email,
-          quantity: 1,
-          integration_only: false
-
+          quantity: 1
         }
       end
 
@@ -37,7 +35,7 @@ RSpec.describe 'Users::V1::Tickets::Donations', type: :request do
           platform:,
           non_profit:,
           quantity: '1',
-          integration_only: false
+          integration_only: true
         )
       end
 
