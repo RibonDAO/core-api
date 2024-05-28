@@ -17,7 +17,7 @@ module Api
       private
 
       def active_tags
-        byebug
+    
         default_chain_id = Chain.default&.id
 
         Tag.where(status: :active)
