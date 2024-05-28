@@ -22,18 +22,21 @@ module Givings
         def find_or_create_user
           user = User.find_by(email: :email)
           return user if user
+
           User.create(email: :email, language: I18n.locale)
         end
 
         def find_or_create_customer
           customer = Customer.find_by(user_id: user.id)
           return customer if customer
+
           Customer.create!(email:, name:, user:)
         end
 
         def find_or_create_subscription(payer)
           subscription = Subscription.find_by(payer:, offer:, payment_method:)
           return subscription if subscription
+
           Subscription.create!({ payer:, offer:, payment_method:, integration: })
         end
 
@@ -57,4 +60,3 @@ module Givings
     end
   end
 end
-
