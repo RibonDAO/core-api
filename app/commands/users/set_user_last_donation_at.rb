@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-module Donations
-  class SetLastDonatedCause
+module Users
+  class SetUserLastDonationAt
     prepend SimpleCommand
 
-    attr_reader :user, :cause
+    attr_reader :user, :date_to_set
 
-    def initialize(user:, cause:)
+    def initialize(user:, date_to_set:)
       @user = user
-      @cause = cause
+      @date_to_set = date_to_set
     end
 
     def call
       user.create_user_donation_stats! unless user.user_donation_stats
 
-      user.user_donation_stats.last_donated_cause = cause.id
+      user.user_donation_stats.last_donation_at = date_to_set
       user.user_donation_stats.save
     end
   end

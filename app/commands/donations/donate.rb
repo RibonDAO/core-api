@@ -23,8 +23,6 @@ module Donations
 
     def transact_donation
       create_donation
-      set_user_last_donation_at
-      set_last_donated_cause
       label_donation
 
       donation
@@ -63,14 +61,6 @@ module Donations
     def create_donation
       @donation = Donation.create!(integration:, non_profit:, user:, value: ticket_value, platform:,
                                    source: :integration, category: :daily)
-    end
-
-    def set_user_last_donation_at
-      SetUserLastDonationAt.call(user:, date_to_set: donation.created_at)
-    end
-
-    def set_last_donated_cause
-      SetLastDonatedCause.call(user:, cause: non_profit.cause)
     end
 
     def label_donation
