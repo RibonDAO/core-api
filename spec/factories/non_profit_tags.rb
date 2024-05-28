@@ -10,7 +10,7 @@
 #
 FactoryBot.define do
   factory :non_profit_tag do
-    non_profit { nil }
-    tag { nil }
+    non_profit { build(:non_profit) }
+    tag { build(:tag) }
   end
 end
