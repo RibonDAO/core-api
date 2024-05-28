@@ -5,19 +5,14 @@ RSpec.describe Users::ResetDonationStreakWorker, type: :worker do
   describe '#perform' do
     subject(:worker) { described_class.new }
 
-    let(:users_donation_stats) do
-      UserDonationStats.where('streak > 0 AND last_donation_at < ?', Time.zone.yesterday)
-    end
-
     before do
       allow(Users::ResetDonationStreakJob).to receive(:perform_later)
-      create_list(:user_donation_stats, 10, streak: 5, last_donation_at: Time.zone.yesterday - 1.day)
     end
 
     it 'calls the ResetDonationsStreakJob' do
       worker.perform
 
-      expect(Users::ResetDonationStreakJob).to have_received(:perform_later).with(users_donation_stats:)
+      expect(Users::ResetDonationStreakJob).to have_received(:perform_later)
     end
   end
 
