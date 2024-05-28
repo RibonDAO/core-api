@@ -4,9 +4,8 @@ module Users
     sidekiq_options queue: :users
 
     def perform(*_args)
-      UserDonationStats.all.each do |user_donation_stats|
-        ResetDonationStreakJob.perform_later(user_donation_stats:)
-      end
+      users_donation_stats = UserDonationStats.all
+      ResetDonationStreakJob.perform_later(users_donation_stats:)
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })
     end
