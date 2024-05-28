@@ -14,10 +14,6 @@ describe Donations::Donate do
 
       before do
         create(:chain)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
-        allow(Donations::SetLastDonatedCause).to receive(:call)
-          .and_return(command_double(klass: Donations::SetLastDonatedCause))
         allow(Service::Contributions::TicketLabelingService).to receive(:new)
           .and_return(ticket_labeling_instance)
         allow(ticket_labeling_instance).to receive(:label_donation)
@@ -26,20 +22,6 @@ describe Donations::Donate do
 
       it 'creates a donation in database' do
         expect { command }.to change(Donation, :count).by(1)
-      end
-
-      it 'calls the Donations::SetUserLastDonationAt' do
-        command
-
-        expect(Donations::SetUserLastDonationAt)
-          .to have_received(:call).with(user:, date_to_set: user.donations.last.created_at)
-      end
-
-      it 'calls the Donations::SetLastDonatedCause' do
-        command
-
-        expect(Donations::SetLastDonatedCause)
-          .to have_received(:call).with(user:, cause: non_profit.cause)
       end
 
       it 'calls the ticket_labeling_instance label donation function' do
@@ -61,8 +43,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
         allow(user).to receive(:can_donate?).and_return(false)
       end
@@ -92,8 +72,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
       end
 
@@ -122,8 +100,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
         allow(user).to receive(:can_donate?).and_return(false)
       end
@@ -153,8 +129,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
         allow(user).to receive(:can_donate?).and_return(false)
       end
@@ -189,8 +163,6 @@ describe Donations::Donate do
       before do
         create(:chain)
         create(:ribon_config, default_ticket_value: 100)
-        allow(Donations::SetUserLastDonationAt)
-          .to receive(:call).and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(user).to receive(:can_donate?).and_return(false)
       end
 
