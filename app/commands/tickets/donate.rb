@@ -1,4 +1,3 @@
-# rubocop:disable Metrics/ClassLength
 # frozen_string_literal: true
 
 module Tickets
@@ -44,7 +43,6 @@ module Tickets
         @donations = create_donations(build_donations(integrations, sources, categories))
         associate_integration_vouchers(external_ids)
       end
-      update_user_donations_info
       label_donations
 
       donations
@@ -98,21 +96,8 @@ module Tickets
       { integrations:, external_ids: external_ids.compact, sources:, categories: }
     end
 
-    def update_user_donations_info
-      set_user_last_donation_at
-      set_last_donated_cause
-    end
-
     def create_donations(donations)
       Donation.create!(donations)
-    end
-
-    def set_user_last_donation_at
-      Donations::SetUserLastDonationAt.call(user:, date_to_set: donations.last.created_at)
-    end
-
-    def set_last_donated_cause
-      Donations::SetLastDonatedCause.call(user:, cause: non_profit.cause)
     end
 
     def label_donations
@@ -142,4 +127,3 @@ module Tickets
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
