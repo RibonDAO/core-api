@@ -8,14 +8,13 @@ RSpec.describe Users::ResetEveryoneDonationStreakWorker, type: :worker do
     let(:users_donation_stats) { UserDonationStats.all }
 
     before do
-      allow(Users::ResetDonationStreakJob).to receive(:perform_later)
-      create_list(:user_donation_stats, 10, streak: 5)
+      allow(Users::ResetEveryoneDonationStreakJob).to receive(:perform_later)
     end
 
     it 'calls the ResetDonationsStreakJob' do
       worker.perform
 
-      expect(Users::ResetDonationStreakJob).to have_received(:perform_later).with(users_donation_stats:)
+      expect(Users::ResetEveryoneDonationStreakJob).to have_received(:perform_later)
     end
   end
 
