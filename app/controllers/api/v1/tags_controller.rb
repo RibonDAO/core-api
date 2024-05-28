@@ -2,6 +2,7 @@ module Api
   module V1
     class TagsController < ApplicationController
       def index
+      
         @tags_blueprints = Rails.cache.fetch("active_tags_#{I18n.locale}", expires_in: 30.minutes) do
           @tags = if current_user&.email&.include?('@ribon.io')
                     active_and_test_tags
@@ -16,6 +17,7 @@ module Api
       private
 
       def active_tags
+        byebug
         default_chain_id = Chain.default&.id
 
         Tag.where(status: :active)
@@ -29,7 +31,7 @@ module Api
            .shuffle
       end
 
-      def active_tags_test_tags
+      def active_and_test_tags
         default_chain_id = Chain.default&.id
 
         Tag.where(status: %i[active test])
