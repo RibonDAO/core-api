@@ -8,7 +8,6 @@ module Api
                   else
                     active_tags
                   end
-          byebug
           TagBlueprint.render(@tags)
         end
         render json: @tags_blueprints
@@ -24,11 +23,11 @@ module Api
                          .joins(non_profits: { cause: { pools: :pool_balance } })
                          .where(non_profits: { status: :active })
                          .where(causes: { status: :active })
-                         .where(pools: { id: Pool.joins(:token).where(tokens: { chain_id: default_chain_id }).select(:id) })
+                         .where(pools: { id: Pool.joins(:token)
+                         .where(tokens: { chain_id: default_chain_id }).select(:id) })
                          .where('pool_balances.balance > 0'))
            .shuffle
       end
-
 
       def active_tags_test_tags
         default_chain_id = Chain.default&.id
@@ -38,12 +37,11 @@ module Api
                          .joins(non_profits: { cause: { pools: :pool_balance } })
                          .where(non_profits: { status: %i[active test] })
                          .where(causes: { status: :active })
-                         .where(pools: { id: Pool.joins(:token).where(tokens: { chain_id: default_chain_id }).select(:id) })
+                         .where(pools: { id: Pool.joins(:token)
+                         .where(tokens: { chain_id: default_chain_id }).select(:id) })
                          .where('pool_balances.balance > 0'))
            .shuffle
       end
-
-
 
       def tag_params
         params.permit(

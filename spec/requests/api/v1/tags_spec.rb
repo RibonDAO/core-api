@@ -9,15 +9,15 @@ RSpec.describe 'Api::V1::Tags', type: :request do
     let!(:cause) { create(:cause) }
     let!(:pool) { create(:pool, cause:, token:) }
     let!(:pool2) { create(:pool, cause:) }
-    let!(:pool_balance) { create(:pool_balance, balance: 1, pool:) }
-    let!(:pool_balance2) { create(:pool_balance, balance: 1, pool: pool2) }
     let!(:non_profit) { create(:non_profit, cause:) }
     let!(:tag) { create(:tag) }
     let!(:tag2) { create(:tag) }
-    let!(:non_profit_tags) { create(:non_profit_tag, non_profit:, tag:) }
-    let!(:non_profit_tags2) { create(:non_profit_tag, non_profit:, tag: tag2) }
 
     before do
+      create(:pool_balance, balance: 1, pool: pool2)
+      create(:pool_balance, balance: 1, pool:)
+      create(:non_profit_tag, non_profit:, tag: tag2)
+      create(:non_profit_tag, non_profit:, tag:)
       create(:ribon_config, default_chain_id: chain.chain_id)
     end
 
