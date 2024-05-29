@@ -20,7 +20,7 @@ module Users
 
     def donated_today?
       today_date = Time.zone.now.to_date
-      last_donation_date = @user.user_donation_stats.last_donation_at.to_date
+      last_donation_date = @user.user_donation_stats.last_donation_at&.to_date
 
       today_date == last_donation_date
     end
