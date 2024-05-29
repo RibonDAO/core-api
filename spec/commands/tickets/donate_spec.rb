@@ -4,7 +4,9 @@ require 'rails_helper'
 
 describe Tickets::Donate do
   describe '.call' do
-    subject(:command) { described_class.call(non_profit:, user:, platform: 'web', quantity: 2) }
+    subject(:command) { described_class.call(non_profit:, user:, platform: 'web', quantity: 2, integration_only:) }
+
+    let(:integration_only) { false }
 
     context 'when no error occurs' do
       let(:integration) { create(:integration) }
@@ -15,10 +17,6 @@ describe Tickets::Donate do
       before do
         create(:chain)
         create_list(:ticket, 2, user:, integration:)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
-        allow(Donations::SetLastDonatedCause).to receive(:call)
-          .and_return(command_double(klass: Donations::SetLastDonatedCause))
         allow(Service::Contributions::TicketLabelingService).to receive(:new)
           .and_return(ticket_labeling_instance)
         allow(ticket_labeling_instance).to receive(:label_donation)
@@ -29,20 +27,6 @@ describe Tickets::Donate do
         expect { command }.to change(Donation, :count).by(2) && change(Ticket, :count).by(-2)
       end
 
-      it 'calls the Donations::SetUserLastDonationAt' do
-        command
-
-        expect(Donations::SetUserLastDonationAt)
-          .to have_received(:call).with(user:, date_to_set: user.donations.last.created_at)
-      end
-
-      it 'calls the Donations::SetLastDonatedCause' do
-        command
-
-        expect(Donations::SetLastDonatedCause)
-          .to have_received(:call).with(user:, cause: non_profit.cause)
-      end
-
       it 'calls the ticket_labeling_instance label donation function' do
         command
 
@@ -50,7 +34,7 @@ describe Tickets::Donate do
       end
 
       it 'calls the associate_integration_vouchers method' do
-        command_instance = described_class.new(non_profit:, user:, platform: 'app', quantity: 2)
+        command_instance = described_class.new(non_profit:, user:, platform: 'app', quantity: 2, integration_only:)
         allow(command_instance).to receive(:associate_integration_vouchers)
 
         command_instance.call
@@ -131,8 +115,6 @@ describe Tickets::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
       end
 
@@ -174,6 +156,42 @@ describe Tickets::Donate do
         vouchers = Voucher.where(external_id: %w[external_id1 external_id2])
 
         expect(vouchers.pluck(:donation_id)).to match_array([donations.first.id, donations.second.id])
+      end
+    end
+
+    context 'when integration_only param is true and you not have enough tickets' do
+      let(:user) { create(:user) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:donation) { create(:donation) }
+      let(:integration) { create(:integration) }
+      let(:integration_only) { true }
+
+      before do
+        create(:ribon_config, default_ticket_value: 100)
+        create(:ticket, user:, integration:, source: 'integration')
+        create(:ticket, user:, integration:, source: 'club')
+      end
+
+      it 'does not donate any ticket' do
+        expect { command }.to change(Donation, :count).by(0)
+      end
+    end
+
+    context 'when integration_only param is false' do
+      let(:user) { create(:user) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:donation) { create(:donation) }
+      let(:integration) { create(:integration) }
+      let(:integration_only) { false }
+
+      before do
+        create(:ribon_config, default_ticket_value: 100)
+        create(:ticket, user:, integration:, source: 'integration')
+        create(:ticket, user:, integration:, source: 'club')
+      end
+
+      it 'donates all tickets' do
+        expect { command }.to change(Donation, :count).by(2)
       end
     end
   end

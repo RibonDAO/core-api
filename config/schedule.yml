@@ -74,8 +74,13 @@ clear_old_integration_tickets:
   queue: tickets
 
 reset_donation_streak:
-  cron: "0 3 * * 0" # At 03:00 everyday.
+  cron: "0 3 * * *" # At 03:00 everyday.
   class: "Users::ResetDonationStreakWorker"
+  queue: users
+
+reset_everyone_donation_streak:
+  cron: "0 1 * * *" # At 01:00 everyday.
+  class: "Users::ResetEveryoneDonationStreakWorker"
   queue: users
 
 update_days_donating_for_all_users:

@@ -1,10 +1,10 @@
 module Users
-  class ResetDonationStreakWorker
+  class ResetEveryoneDonationStreakWorker
     include Sidekiq::Worker
     sidekiq_options queue: :users
 
     def perform(*_args)
-      ResetDonationStreakJob.perform_later
+      ResetEveryoneDonationStreakJob.perform_later
     rescue StandardError => e
       Reporter.log(error: e, extra: { message: e.message })
     end

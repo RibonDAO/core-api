@@ -3,13 +3,14 @@
 module Tickets
   class Donate < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :non_profit, :user, :platform, :quantity, :donations
+    attr_reader :non_profit, :user, :platform, :quantity, :donations, :integration_only
 
-    def initialize(non_profit:, user:, platform:, quantity:)
+    def initialize(non_profit:, user:, platform:, quantity:, integration_only:)
       @non_profit = non_profit
       @user = user
       @platform = platform
       @quantity = quantity
+      @integration_only = integration_only
     end
 
     def call
@@ -38,10 +39,10 @@ module Tickets
         external_ids = destroy_result[:external_ids]
         sources = destroy_result[:sources]
         categories = destroy_result[:categories]
+
         @donations = create_donations(build_donations(integrations, sources, categories))
         associate_integration_vouchers(external_ids)
       end
-      update_user_donations_info
       label_donations
 
       donations
@@ -72,15 +73,21 @@ module Tickets
     end
 
     def allowed?
-      return true if user.tickets.collected.count >= quantity && pool_balance?
+      return true if filtered_tickets.collected.count >= quantity && pool_balance?
 
       errors.add(:message, I18n.t('donations.blocked_message'))
 
       false
     end
 
+    def filtered_tickets
+      return Ticket.where(user:, source: :integration) if integration_only
+
+      Ticket.where(user:)
+    end
+
     def destroy_tickets
-      tickets = Ticket.where(user:).collected.order(created_at: :asc).limit(quantity).destroy_all
+      tickets = filtered_tickets.collected.order(created_at: :asc).limit(quantity).destroy_all
       integrations = tickets.pluck(:integration_id)
       external_ids = tickets.pluck(:external_id)
       sources = tickets.pluck(:source)
@@ -89,21 +96,8 @@ module Tickets
       { integrations:, external_ids: external_ids.compact, sources:, categories: }
     end
 
-    def update_user_donations_info
-      set_user_last_donation_at
-      set_last_donated_cause
-    end
-
     def create_donations(donations)
       Donation.create!(donations)
-    end
-
-    def set_user_last_donation_at
-      Donations::SetUserLastDonationAt.call(user:, date_to_set: donations.last.created_at)
-    end
-
-    def set_last_donated_cause
-      Donations::SetLastDonatedCause.call(user:, cause: non_profit.cause)
     end
 
     def label_donations

@@ -1,9 +1,9 @@
-module Users
+module Api
   module V1
     module Tickets
-      class DonationsController < AuthorizationController
+      class DonationsController < ApplicationController
         def donate
-          command = ::Tickets::Donate.call(non_profit:, user:, platform:, quantity:, integration_only: false)
+          command = ::Tickets::Donate.call(non_profit:, user:, platform:, quantity:, integration_only: true)
           if command.success?
             donations = command.result
             donations.each do |donation|
@@ -23,7 +23,7 @@ module Users
         end
 
         def user
-          @user ||= current_user
+          @user ||= current_user || User.find_by(email: ticket_params[:email])
         end
 
         def platform

@@ -1,0 +1,44 @@
+module Events
+  module Club
+    class SendInactivatedClubEventJob < ApplicationJob
+      queue_as :default
+      sidekiq_options retry: 3
+
+      attr_reader :user, :offer, :person_payment
+
+      def perform(subscription:)
+        @person_payment = subscription.person_payments.last
+        @offer = person_payment.offer
+        @user = person_payment.payer&.user
+
+        EventServices::SendEvent.new(user: person_payment.payer.user,
+                                     event: build_event(subscription)).call
+      end
+
+      private
+
+      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize
+      def build_event(subscription)
+        last_day = (person_payment.created_at + 1.month).strftime('%d/%m/%Y')
+        OpenStruct.new({
+                         name: 'club',
+                         data: {
+                           type: 'pix_club_inactivated',
+                           subscription_id: subscription.id,
+                           integration_id: person_payment.integration_id,
+                           currency: person_payment.currency,
+                           platform: person_payment.platform,
+                           amount: person_payment.formatted_amount,
+                           status: subscription.status,
+                           offer_id: person_payment.offer_id,
+                           last_club_day: last_day,
+                           payment_day: person_payment.created_at.day
+                         }
+                       })
+      end
+      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/MethodLength
+    end
+  end
+end

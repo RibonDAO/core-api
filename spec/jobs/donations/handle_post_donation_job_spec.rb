@@ -9,8 +9,7 @@ RSpec.describe Donations::HandlePostDonationJob, type: :job do
     before do
       allow(Donations::DecreasePoolBalanceJob).to receive(:perform_later)
       allow(Events::Donations::SendDonationEventJob).to receive(:perform_later)
-      allow(Users::IncrementDaysDonating).to receive(:call)
-
+      allow(Users::UpdateDonationStatsJob).to receive(:perform_later)
       perform_job
     end
 
@@ -22,8 +21,8 @@ RSpec.describe Donations::HandlePostDonationJob, type: :job do
       expect(Events::Donations::SendDonationEventJob).to have_received(:perform_later).with(donation:)
     end
 
-    it 'calls the update days donating job' do
-      expect(Users::IncrementDaysDonating).to have_received(:call).with(user: donation.user)
+    it 'calls the increment donation streak' do
+      expect(Users::UpdateDonationStatsJob).to have_received(:perform_later).with(donation:)
     end
   end
 end

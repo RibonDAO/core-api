@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Donations::SetLastDonatedCause do
+describe Users::SetLastDonatedCause do
   describe '.call' do
     subject(:command) { described_class.call(user:, cause:) }
 

@@ -4,9 +4,9 @@ module Donations
     sidekiq_options retry: 3
 
     def perform(donation:)
+      Users::UpdateDonationStatsJob.perform_later(donation:)
       Events::Donations::SendDonationEventJob.perform_later(donation:)
       Donations::DecreasePoolBalanceJob.perform_later(donation:)
-      Users::IncrementDaysDonating.call(user: donation.user)
     rescue StandardError
       nil
     end
