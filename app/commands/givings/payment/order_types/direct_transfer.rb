@@ -1,11 +1,10 @@
 module Givings
   module Payment
     module OrderTypes
-      class FalsePayment
-        attr_reader :email, :offer, :name, :user, :payment_method, :integration_id
+      class DirectTransfer
+        attr_reader :email, :offer, :user, :payment_method, :integration_id
 
         def initialize(args)
-          @name = args[:name]
           @payment_method = :direct_transfer
           @email = args[:email]
           @offer = args[:offer]
@@ -30,7 +29,8 @@ module Givings
           customer = Customer.find_by(user_id: user.id)
           return customer if customer
 
-          Customer.create!(email:, name:, user:)
+          name = email.split('@').first
+          Customer.create!(email:, name: :name, user:)
         end
 
         def find_or_create_subscription(payer)

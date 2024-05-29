@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Givings::Payment::OrderTypes::FalsePayment do
+describe Givings::Payment::OrderTypes::DirectTransfer do
   describe '.call' do
     subject(:command) { described_class.new(args) }
 
@@ -10,12 +10,17 @@ describe Givings::Payment::OrderTypes::FalsePayment do
       let(:integration) { create(:integration) }
       let(:offer) { create(:offer) }
       let(:args) do
-        { email: 'user@test.com', offer:, name: 'teste', integration_id: integration.id }
+        { email: 'user@test.com', offer:, integration_id: integration.id }
       end
 
-      it 'creates a subscription with receiver nil' do
+      it 'creates a subscription' do
         command.call
-        expect(Subscription.last.receiver).to be_nil
+        expect(Subscription.last.id).not_to be_nil
+      end
+
+      it 'creates a person payment' do
+        command.call
+        expect(PersonPayment.last.id).not_to be_nil
       end
     end
   end
