@@ -15,7 +15,7 @@ module Givings
           @user = find_or_create_user
           customer = find_or_create_customer
           subscription = find_or_create_subscription(customer)
-          payment = create_payment(customer, subscription)
+          create_payment(customer, subscription)
         end
 
         def find_or_create_user
@@ -29,8 +29,7 @@ module Givings
           customer = Customer.find_by(user_id: user.id)
           return customer if customer
 
-          name = email.split('@').first
-          Customer.create!(email:, name: :name, user:)
+          Customer.create!(email:, name: email.split('@').first, user:)
         end
 
         def find_or_create_subscription(payer)
