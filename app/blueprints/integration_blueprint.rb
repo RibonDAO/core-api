@@ -13,7 +13,7 @@ class IntegrationBlueprint < Blueprinter::Base
   end
 
   field(:onboarding_image) do |object|
-    metadata = object.metadata
+    object.metadata
   end
 
   association :integration_wallet, blueprint: IntegrationWalletBlueprint
