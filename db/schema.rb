@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_15_114011) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_29_192344) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -357,6 +357,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_15_114011) do
     t.integer "ticket_availability_in_minutes"
     t.integer "status", default: 0
     t.jsonb "metadata", default: {}
+    t.string "onboarding_title"
+    t.text "onboarding_description"
+    t.string "banner_title"
+    t.text "banner_description"
+    t.string "no_tickets_title"
+    t.string "no_tickets_cta_text"
+    t.string "no_tickets_cta_url"
   end
 
   create_table "legacy_contributions", force: :cascade do |t|
