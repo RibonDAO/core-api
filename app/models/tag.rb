@@ -16,6 +16,8 @@ class Tag < ApplicationRecord
   has_many :non_profit_tags, dependent: :destroy
   has_many :non_profits, through: :non_profit_tags
 
+  after_save :invalidate_cache
+
   enum status: {
     inactive: 0,
     active: 1,
@@ -26,4 +28,8 @@ class Tag < ApplicationRecord
   validates :status, presence: true
 
   accepts_nested_attributes_for :non_profit_tags, allow_destroy: true
+
+  def invalidate_cache
+    Rails.cache.delete_matched('active_tags_*')
+  end
 end
