@@ -39,8 +39,7 @@ class Integration < ApplicationRecord
 
   delegate :legacy_integration_impacts, to: :legacy_integration, allow_nil: true
 
-  translates :onboarding_title, :onboarding_description, :banner_title, :banner_description, :no_tickets_title,
-             :no_tickets_cta_text, :no_tickets_cta_url, type: :string
+  translates :onboarding_title, :onboarding_description, :banner_title, :banner_description, type: :string
 
   enum status: {
     inactive: 0,

@@ -33,7 +33,6 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
                                       integration_task ticket_availability_in_minutes webhook_url
                                       integration_dashboard_address metadata onboarding_title
                                       onboarding_description banner_title banner_description
-                                      no_tickets_title no_tickets_cta_text no_tickets_cta_url
                                       onboarding_image])
     end
 
@@ -80,7 +79,6 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
                                       integration_task ticket_availability_in_minutes webhook_url
                                       integration_dashboard_address metadata onboarding_title
                                       onboarding_description banner_title banner_description
-                                      no_tickets_title no_tickets_cta_text no_tickets_cta_url
                                       onboarding_image])
     end
   end
