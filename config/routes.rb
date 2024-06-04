@@ -85,6 +85,8 @@ Rails.application.routes.draw do
 
       get 'chains' => 'chains#index'
 
+      get 'tags' => 'tags#index'
+
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
         post 'create_legacy_contribution' => 'legacy_user_impact#create_legacy_contribution'
