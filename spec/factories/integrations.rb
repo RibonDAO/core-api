@@ -3,8 +3,12 @@
 # Table name: integrations
 #
 #  id                             :bigint           not null, primary key
+#  banner_description             :text
+#  banner_title                   :string
 #  metadata                       :jsonb
 #  name                           :string
+#  onboarding_description         :text
+#  onboarding_title               :string
 #  status                         :integer          default("inactive")
 #  ticket_availability_in_minutes :integer
 #  unique_address                 :uuid             not null
