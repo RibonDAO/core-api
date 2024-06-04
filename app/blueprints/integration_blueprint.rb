@@ -12,7 +12,7 @@ class IntegrationBlueprint < Blueprinter::Base
   end
 
   field(:onboarding_image) do |object|
-    object.metadata
+    ImagesHelper.image_url_for(object.onboarding_image)
   end
 
   association :integration_wallet, blueprint: IntegrationWalletBlueprint
