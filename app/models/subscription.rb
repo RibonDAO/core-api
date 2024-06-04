@@ -42,7 +42,7 @@ class Subscription < ApplicationRecord
                         FROM person_payments
                         WHERE person_payments.subscription_id = subscriptions.id)')
                  .group('subscriptions.id')
-                 .where.not(person_payments: { status: :refunded })
+                 .where(status: %i[active canceled])
                  .where('person_payments.paid_date > ?', 1.month.ago)
   }
 
