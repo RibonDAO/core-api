@@ -20,7 +20,7 @@ module Users
                    total_donated: total_crypto_user_user_donate,
                    total_causes: total_crypto_user_user_causes,
                    total_tickets: donations.count,
-                   days_donating: user_days_donating }
+                   days_donating: }
 
         elsif wallet_address && !user
 
@@ -33,8 +33,8 @@ module Users
 
     private
 
-    def user_days_donating
-      user_statistics_service.user_days_donating
+    def days_donating
+      user_statistics_service.days_donating
     end
 
     def user_statistics_service
