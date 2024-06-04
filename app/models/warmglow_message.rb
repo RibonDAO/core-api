@@ -8,7 +8,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-class WarmglowMessage < ActiveRecord::Base
+class WarmglowMessage < ApplicationRecord
   extend Mobility
 
   translates :message, type: :string
@@ -18,4 +18,3 @@ class WarmglowMessage < ActiveRecord::Base
     active: 1
   }
 end
-
