@@ -2,7 +2,7 @@ module Users
   class UpdateDaysDonatingForAllJob < ApplicationJob
     queue_as :default
 
-    REDIS_KEY = 'last_updated_user_id'.freeze
+    REDIS_KEY = 'LAST_UPDATE_USER_ID_KEY'.freeze
 
     def perform
       user_batches do |user_batch|

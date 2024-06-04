@@ -51,7 +51,7 @@ RSpec.describe UserServices::Statistics, type: :service do
     end
 
     it 'returns the days donating' do
-      expect(service.user_days_donating).to eq(2)
+      expect(service.days_donating).to eq(2)
     end
   end
 end

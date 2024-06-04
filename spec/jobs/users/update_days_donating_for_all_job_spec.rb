@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Users::UpdateDaysDonatingForAllJob, type: :job do
   subject(:perform_job) { described_class.perform_now }
 
-  let(:redis_key) { 'last_updated_user_id' }
+  let(:redis_key) { 'LAST_UPDATE_USER_ID_KEY' }
 
   describe 'when user has donated on multiple different days' do
     let(:user) { create(:user) }
@@ -78,7 +78,7 @@ RSpec.describe Users::UpdateDaysDonatingForAllJob, type: :job do
     it 'saver the last user id' do
       perform_job
       expect(RedisStore::HStore)
-        .to have_received(:set).with(key: 'last_updated_user_id', value: user2.id)
+        .to have_received(:set).with(key: redis_key, value: user2.id)
     end
   end
 end

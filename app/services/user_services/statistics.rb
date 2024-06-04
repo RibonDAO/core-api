@@ -48,10 +48,10 @@ module UserServices
         total_donated: donated || 0,
         total_causes: (total_causes || []).count,
         last_donated_non_profit:,
-        days_donating: user_days_donating }
+        days_donating: }
     end
 
-    def user_days_donating
+    def days_donating
       return if @user.blank?
 
       @user.user_donation_stats.days_donating
