@@ -7,9 +7,6 @@
 #  banner_title                   :string
 #  metadata                       :jsonb
 #  name                           :string
-#  no_tickets_cta_text            :string
-#  no_tickets_cta_url             :string
-#  no_tickets_title               :string
 #  onboarding_description         :text
 #  onboarding_title               :string
 #  status                         :integer          default("inactive")

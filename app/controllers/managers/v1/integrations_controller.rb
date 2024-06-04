@@ -40,8 +40,7 @@ module Managers
       def integration_params
         params.permit(:name, :status, :id, :ticket_availability_in_minutes, :logo, :webhook_url,
                       :onboarding_title, :onboarding_description, :banner_title, :banner_description,
-                      :no_tickets_title, :no_tickets_cta_text, :no_tickets_cta_url, :onboarding_image,
-                      integration_task_attributes: %i[id description link link_address])
+                      :onboarding_image, integration_task_attributes: %i[id description link link_address])
       end
 
       def fetch_integration_query

@@ -3,8 +3,7 @@ class IntegrationBlueprint < Blueprinter::Base
 
   fields :updated_at, :created_at, :name, :unique_address, :status, :integration_address,
          :ticket_availability_in_minutes, :webhook_url, :integration_dashboard_address,
-         :onboarding_title, :onboarding_description, :banner_title, :banner_description,
-         :no_tickets_title, :no_tickets_cta_text, :no_tickets_cta_url
+         :onboarding_title, :onboarding_description, :banner_title, :banner_description
 
   field(:logo) do |object|
     metadata = object.metadata

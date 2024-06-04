@@ -361,9 +361,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_29_192344) do
     t.text "onboarding_description"
     t.string "banner_title"
     t.text "banner_description"
-    t.string "no_tickets_title"
-    t.string "no_tickets_cta_text"
-    t.string "no_tickets_cta_url"
   end
 
   create_table "legacy_contributions", force: :cascade do |t|
