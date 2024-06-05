@@ -31,7 +31,8 @@ class Subscription < ApplicationRecord
   enum status: {
     active: 0,
     inactive: 1,
-    canceled: 2
+    canceled: 2,
+    payment_failed: 3
   }
 
   scope :active_from_club, lambda {

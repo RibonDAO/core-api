@@ -13,6 +13,7 @@ RSpec.describe Service::Donations::PoolBalances, type: :service do
     let(:pool) { create(:pool, cause:, token:, address: '0xa932851982118bd5fa99e16b144afe4622eb2a49') }
 
     before do
+      allow(Kernel).to receive(:sleep)
       VCR.insert_cassette('polygon_scan', allow_playback_repeats: true)
       create(:ribon_config, default_ticket_value: 100, default_chain_id: chain.chain_id)
     end

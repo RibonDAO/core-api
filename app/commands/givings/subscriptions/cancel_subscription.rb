@@ -3,13 +3,16 @@ module Givings
     class CancelSubscription < ApplicationCommand
       prepend SimpleCommand
 
-      attr_reader :subscription_id
+      attr_reader :subscription_id, :skip_email
 
-      def initialize(subscription_id:)
+      def initialize(subscription_id:, skip_email: false)
         @subscription_id = subscription_id
+        @skip_email = skip_email
       end
 
       def call
+        return cancel_subscription_directly unless subscription&.external_id?
+
         if subscription&.external_id?
           unsubscribe = Service::Givings::Payment::Orchestrator.new(payload: cancel_params).call
         end
@@ -29,12 +32,17 @@ module Givings
         end
 
         subscription.update!(status: :canceled, cancel_date: Time.zone.at(unsubscribe[:canceled_at]))
-        send_email(subscription)
+        send_email(subscription) unless skip_email
         subscription
       end
 
       def failure_callback(err)
         errors.add(:message, err.message)
+      end
+
+      def cancel_subscription_directly
+        subscription&.update!(status: :canceled, cancel_date: Time.zone.now)
+        subscription
       end
 
       def subscription
