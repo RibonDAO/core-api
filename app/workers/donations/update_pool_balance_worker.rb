@@ -4,7 +4,7 @@ module Donations
     sidekiq_options queue: :donations
 
     def perform(*_args)
-      # return unless RibonCoreApi.config[:api_env] == 'production'
+      return unless RibonCoreApi.config[:api_env] == 'production'
 
       Donations::UpdatePoolBalanceJob.perform_later
     rescue StandardError => e
