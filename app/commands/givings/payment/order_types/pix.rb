@@ -33,7 +33,9 @@ module Givings
           Service::Givings::Payment::Orchestrator.new(payload: order).call
         end
 
-        def success_callback; end
+        def success_callback
+          cancel_old_subscriptions(order.payment.payer) if operation == :subscribe
+        end
 
         private
 
@@ -62,6 +64,12 @@ module Givings
 
         def existing_subscription(payer)
           Subscription.find_by(payer:, offer:, payment_method:)
+        end
+
+        def cancel_old_subscriptions(payer)
+          Subscription.where(payer:, status: %i[inactive payment_failed]).each do |subscription|
+            Givings::Subscriptions::CancelSubscription.call(subscription_id: subscription.id, skip_email: true)
+          end
         end
 
         def amount_cents
