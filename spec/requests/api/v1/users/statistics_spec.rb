@@ -20,7 +20,7 @@ RSpec.describe 'Api::V1::Users::Statistics', type: :request do
       request
 
       expect_response_to_have_keys(%w[total_causes total_tickets total_donated total_non_profits
-                                      last_donated_non_profit])
+                                      last_donated_non_profit days_donating])
     end
   end
 

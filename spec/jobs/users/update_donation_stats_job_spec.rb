@@ -14,6 +14,8 @@ RSpec.describe Users::UpdateDonationStatsJob, type: :job do
         .and_return(command_double(klass: Users::SetLastDonatedCause))
       allow(Users::IncrementDonationStreak).to receive(:call)
         .and_return(command_double(klass: Users::IncrementDonationStreak))
+      allow(Users::IncrementDaysDonating).to receive(:call)
+        .and_return(command_double(klass: Users::IncrementDonationStreak))
       perform_job
     end
 
@@ -29,6 +31,11 @@ RSpec.describe Users::UpdateDonationStatsJob, type: :job do
 
     it 'calls the Users::IncrementDonationStreak' do
       expect(Users::IncrementDonationStreak)
+        .to have_received(:call).with(user:)
+    end
+
+    it 'calls the Users::IncrementDaysDonating' do
+      expect(Users::IncrementDaysDonating)
         .to have_received(:call).with(user:)
     end
   end

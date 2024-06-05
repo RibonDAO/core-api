@@ -3,6 +3,7 @@
 # Table name: user_donation_stats
 #
 #  id                 :bigint           not null, primary key
+#  days_donating      :integer          default(0)
 #  last_donated_cause :bigint
 #  last_donation_at   :datetime
 #  streak             :integer          default(0)
