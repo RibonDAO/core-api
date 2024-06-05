@@ -53,7 +53,6 @@ module Service
       end
 
       def wallet_pool_balance
-        SleeperHelper.sleep(1)
         Web3::Networks::Polygon::Scan.new(contract_address:, address:).balance.to_f / (10**pool.token.decimals)
       end
 
