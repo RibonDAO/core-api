@@ -2,13 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Donations::UpdatePoolBalanceJob, type: :job do
   describe '#perform' do
-    subject(:perform_job) { described_class.perform_now(pool:) }
+    subject(:perform_job) { described_class.perform_now }
 
-    let(:pool) { build(:pool) }
+    let!(:pool) { create(:pool) }
     let(:service) { Service::Donations::PoolBalances }
     let(:service_mock) { instance_double(service) }
 
     before do
+      allow(Kernel).to receive(:sleep)
       allow(service).to receive(:new).with(pool:).and_return(service_mock)
       allow(service_mock).to receive(:update_balance)
       perform_job
