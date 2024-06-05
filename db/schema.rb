@@ -754,6 +754,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_29_192344) do
     t.datetime "updated_at", null: false
     t.bigint "last_donated_cause"
     t.integer "streak", default: 0
+    t.integer "days_donating", default: 0
     t.index ["user_id"], name: "index_user_donation_stats_on_user_id"
   end
 

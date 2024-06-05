@@ -124,5 +124,5 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
   gem 'annotate'
-  gem 'ruby-lsp', '~> 0.3.6', require: false
+  # gem 'ruby-lsp', '~> 0.3.6', require: false
 end
