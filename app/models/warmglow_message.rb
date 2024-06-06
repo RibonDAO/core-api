@@ -3,7 +3,7 @@
 # Table name: warmglow_messages
 #
 #  id         :bigint           not null, primary key
-#  message    :string
+#  message    :text
 #  status     :integer          default("inactive")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
