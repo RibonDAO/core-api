@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe Givings::Payment::OrderTypes::DirectTransfer do
+describe Givings::Subscriptions::CreateDirectTransferSubscription do
   describe '.call' do
-    subject(:command) { described_class.new(args) }
+    subject(:command) { described_class.new(args).call }
 
     include_context('when mocking a request') { let(:cassette_name) { 'stripe_payment_method' } }
 
@@ -14,13 +14,7 @@ describe Givings::Payment::OrderTypes::DirectTransfer do
       end
 
       it 'creates a subscription' do
-        command.call
-        expect(Subscription.last.id).not_to be_nil
-      end
-
-      it 'creates a person payment' do
-        command.call
-        expect(PersonPayment.last.id).not_to be_nil
+        expect { command }.to change(Subscription, :count).by(1)
       end
     end
   end

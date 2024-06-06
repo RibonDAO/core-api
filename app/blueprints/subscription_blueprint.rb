@@ -4,7 +4,7 @@ class SubscriptionBlueprint < Blueprinter::Base
   fields :status, :cancel_date, :created_at
 
   field :next_payment_attempt do |object|
-    object.next_payment_date
+    object.last_club_day
   end
 
   association :offer, blueprint: OfferBlueprint, view: :plan

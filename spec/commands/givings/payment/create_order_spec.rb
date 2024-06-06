@@ -21,7 +21,7 @@ describe Givings::Payment::CreateOrder do
       let(:customer) { create(:customer, user:) }
       let(:card) { build(:credit_card) }
       let(:offer) { create(:offer, :subscription) }
-      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
+      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:) }
       let(:args) do
         { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
           payment_method: :credit_card, user: customer.user, gateway: 'stripe', operation: :subscribe }
@@ -100,7 +100,7 @@ describe Givings::Payment::CreateOrder do
       let(:customer) { create(:customer, user:) }
       let(:card) { build(:credit_card) }
       let(:offer) { create(:offer) }
-      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
+      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:) }
       let(:args) do
         { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
           payment_method: :credit_card, user: customer.user, operation: :purchase }

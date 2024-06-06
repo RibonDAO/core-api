@@ -62,8 +62,7 @@ class PersonPayment < ApplicationRecord
     pix: 1,
     crypto: 2,
     google_pay: 3,
-    apple_pay: 4,
-    direct_transfer: 5
+    apple_pay: 4
   }
 
   enum currency: {
