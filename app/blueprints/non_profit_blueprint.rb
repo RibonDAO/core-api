@@ -17,8 +17,7 @@ class NonProfitBlueprint < Blueprinter::Base
   end
 
   field(:icon) do |object|
-    ImagesHelper.image_url_for(object.icon, variant: { resize_to_fit: [150, 150],
-                                                       saver: { quality: 95 }, format: :jpg })
+    ImagesHelper.image_url_for(object.icon)
   end
 
   field(:cover_image) do |object|
