@@ -23,6 +23,10 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
       request
     end
 
+    it 'calls CreateIntegration command' do
+      expect(Integrations::CreateIntegration).to have_received(:call)
+    end
+
     it 'expect metadata to have an user_id' do
       expect(result.metadata['user_id']).to eq(user_id)
     end
@@ -51,6 +55,106 @@ RSpec.describe 'Users::V1::Integrations', type: :request do
 
       it 'expect metadata to have an user_id' do
         expect(result.metadata['profile_photo']).to eq(profile_photo)
+      end
+    end
+
+    context 'when user already has an integration with referral branch' do
+      let(:params) do
+        {
+          name: 'User integration',
+          status: :active,
+          metadata: { user_id:, branch: 'referral' }.to_json
+        }
+      end
+
+      let!(:result) { create(:integration, metadata: { user_id:, branch: 'referral' }) }
+
+      it 'not call CreateIntegration command' do
+        expect(Integrations::CreateIntegration).not_to have_received(:call)
+      end
+
+      it 'returns a single integration' do
+        expect_response_to_have_keys(%w[created_at id updated_at name status unique_address
+                                        integration_address integration_wallet logo
+                                        integration_task ticket_availability_in_minutes webhook_url
+                                        integration_dashboard_address metadata onboarding_title
+                                        onboarding_description banner_title banner_description
+                                        onboarding_image])
+      end
+    end
+
+    context 'when user already has an integration with partners branch' do
+      let(:params) do
+        {
+          name: 'User integration',
+          status: :active,
+          metadata: { user_id:, branch: 'partners' }.to_json
+        }
+      end
+
+      let!(:result) { create(:integration, metadata: { user_id:, branch: 'partners' }) }
+
+      it 'call CreateIntegration command' do
+        expect(Integrations::CreateIntegration).to have_received(:call)
+      end
+
+      it 'returns a single integration' do
+        expect_response_to_have_keys(%w[created_at id updated_at name status unique_address
+                                        integration_address integration_wallet logo
+                                        integration_task ticket_availability_in_minutes webhook_url
+                                        integration_dashboard_address metadata onboarding_title
+                                        onboarding_description banner_title banner_description
+                                        onboarding_image])
+      end
+    end
+
+    context 'when user is creating a referral integration and has a partners integration' do
+      let(:params) do
+        {
+          name: 'User integration',
+          status: :active,
+          metadata: { user_id:, branch: 'referral' }.to_json
+        }
+      end
+
+      let!(:result) { create(:integration, metadata: { user_id:, branch: 'partners' }) }
+
+      it 'call CreateIntegration command' do
+        expect(Integrations::CreateIntegration).to have_received(:call)
+      end
+
+      it 'returns a single integration' do
+        expect_response_to_have_keys(%w[created_at id updated_at name status unique_address
+                                        integration_address integration_wallet logo
+                                        integration_task ticket_availability_in_minutes webhook_url
+                                        integration_dashboard_address metadata onboarding_title
+                                        onboarding_description banner_title banner_description
+                                        onboarding_image])
+      end
+    end
+
+    context 'when user is creating a referral integration and has a referral integration' do
+      let(:params) do
+        {
+          name: 'User integration',
+          status: :active,
+          metadata: { user_id:, branch: 'referral' }.to_json
+        }
+      end
+
+      let!(:result) { create(:integration, metadata: { user_id:, branch: 'partners' }) }
+
+      it 'call CreateIntegration command' do
+        expect(Integrations::CreateIntegration).to have_received(:call)
+      end
+
+      it 'returns a single integration' do
+        expect_response_to_have_keys(%w[created_at id updated_at name status unique_address
+                                        integration_address integration_wallet logo
+                                        integration_task ticket_availability_in_minutes webhook_url
+                                        integration_dashboard_address metadata onboarding_title
+                                        onboarding_description banner_title banner_description
+                                        onboarding_image])
       end
     end
   end
