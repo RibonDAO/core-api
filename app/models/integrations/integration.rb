@@ -3,8 +3,12 @@
 # Table name: integrations
 #
 #  id                             :bigint           not null, primary key
+#  banner_description             :text
+#  banner_title                   :string
 #  metadata                       :jsonb
 #  name                           :string
+#  onboarding_description         :text
+#  onboarding_title               :string
 #  status                         :integer          default("inactive")
 #  ticket_availability_in_minutes :integer
 #  unique_address                 :uuid             not null
@@ -12,11 +16,14 @@
 #  updated_at                     :datetime         not null
 #
 class Integration < ApplicationRecord
+  extend Mobility
+
   has_one :integration_wallet, as: :owner
   has_one :integration_task
   has_one :integration_webhook
 
   has_one_attached :logo
+  has_one_attached :onboarding_image
 
   accepts_nested_attributes_for :integration_task
 
@@ -31,6 +38,8 @@ class Integration < ApplicationRecord
   has_one :legacy_integration
 
   delegate :legacy_integration_impacts, to: :legacy_integration, allow_nil: true
+
+  translates :onboarding_title, :onboarding_description, :banner_title, :banner_description, type: :string
 
   enum status: {
     inactive: 0,

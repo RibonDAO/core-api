@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Donations::SetUserLastDonationAt do
+describe Users::SetUserLastDonationAt do
   describe '.call' do
     subject(:command) { described_class.call(user:, date_to_set:) }
 

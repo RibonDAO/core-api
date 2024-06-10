@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'sidekiq/testing'
 
-RSpec.describe Events::Club::SendActivatedClubEventJob, type: :job do
+RSpec.describe Events::Club::SendInactivatedClubEventJob, type: :job do
   describe '#perform' do
     subject(:perform_job) { described_class }
 
@@ -12,7 +12,7 @@ RSpec.describe Events::Club::SendActivatedClubEventJob, type: :job do
       OpenStruct.new({
                        name: 'club',
                        data: {
-                         type: 'new_subscription',
+                         type: 'pix_club_inactivated',
                          subscription_id: subscription.id,
                          integration_id: subscription.integration_id,
                          currency: subscription.offer.currency,
@@ -20,6 +20,7 @@ RSpec.describe Events::Club::SendActivatedClubEventJob, type: :job do
                          amount: subscription.formatted_amount,
                          status: subscription.status,
                          offer_id: subscription.offer_id,
+                         last_club_day: subscription.last_club_day&.strftime('%d/%m/%Y'),
                          payment_day: subscription.last_club_day&.day
                        }
                      })

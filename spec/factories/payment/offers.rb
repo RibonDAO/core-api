@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :offer do
     currency { 0 }
     subscription { 0 }
-    price_cents { 1 }
+    price_cents { 1000 }
     active { false }
     title { 'Super oferta de fim de ano' }
     position_order { 1 }

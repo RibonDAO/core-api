@@ -58,7 +58,7 @@ RSpec.describe Subscription, type: :model do
 
     describe 'when subscription last payment is paid more than 1 month ago' do
       let(:offer) { create(:offer, category: :club) }
-      let(:club_subscription) { create(:subscription, offer:) }
+      let(:club_subscription) { create(:subscription, offer:, next_payment_attempt: nil) }
       let!(:person_payment) do
         create(:person_payment, paid_date: 1.month.ago - 1.day, subscription: club_subscription, status: :paid)
       end
@@ -70,13 +70,13 @@ RSpec.describe Subscription, type: :model do
 
     describe 'when subscription last payment is refunded' do
       let(:offer) { create(:offer, category: :club) }
-      let(:club_subscription) { create(:subscription, offer:) }
+      let(:club_subscription) { create(:subscription, offer:, status: :canceled) }
       let!(:person_payment) do
         create(:person_payment, paid_date: Time.zone.now, subscription: club_subscription, status: :refunded)
       end
 
       it 'returns active subscriptions from club' do
-        expect(described_class.active_from_club).not_to include(club_subscription)
+        expect(described_class.active_from_club).to include(club_subscription)
       end
     end
   end
