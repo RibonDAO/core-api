@@ -49,7 +49,7 @@ module Givings
         1.month.from_now
       end
 
-      def give_monthly_tickets(_person_payment)
+      def give_monthly_tickets(subscription)
         Tickets::GenerateClubMonthlyTicketsJob.perform_later(
           user: subscription.payer.user,
           platform: subscription.platform,
@@ -58,11 +58,11 @@ module Givings
         )
       end
 
-      def give_daily_tickets(_person_payment)
+      def give_daily_tickets(subscription)
         Tickets::GenerateClubDailyTicketsJob.perform_later(
           user: subscription.payer.user,
           platform: subscription.platform,
-          quantity: 13,
+          quantity: subscription.offer.plan.daily_tickets,
           source: :club
         )
       end
