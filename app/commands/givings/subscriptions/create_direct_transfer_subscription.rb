@@ -15,6 +15,8 @@ module Givings
       def call
         @user = find_or_create_user
         customer = find_or_create_customer
+        return if subscription_already_exists(customer)
+
         subscription = create_subscription(customer)
         give_monthly_tickets(subscription)
         give_daily_tickets(subscription)
@@ -38,7 +40,12 @@ module Givings
       end
 
       def create_subscription(payer)
-        Subscription.create!({ payer:, offer:, payment_method:, integration:, next_payment_attempt: })
+        Subscription.create!({ payer:,
+                               offer:,
+                               payment_method:,
+                               integration:,
+                               next_payment_attempt:,
+                               status: :active })
       end
 
       def integration
@@ -65,6 +72,10 @@ module Givings
           quantity: subscription.offer.plan.daily_tickets,
           source: :club
         )
+      end
+
+      def subscription_already_exists(payer)
+        Subscription.exists?(payer:, offer:, payment_method:, integration:, status: :active)
       end
     end
   end
