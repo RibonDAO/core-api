@@ -1,13 +1,8 @@
 module Managers
   module V1
     class SubscriptionsController < ManagersController
-      def upload_csv_and_create_subscriptions
-        emails = params[:csv_content].split("\r\n")[1..]
-        offer_id = params[:offer_id]
-        integration_id = params[:integration_id]
-        offer = Offer.find(offer_id)
-
-        command_result = create_subscriptions(emails, offer, integration_id)
+      def upload_csv
+        command_result = create_subscriptions
         render_command_result_message(command_result)
       end
 
@@ -17,40 +12,41 @@ module Managers
         params.permit(:csv_content, :offer_id, :integration_id)
       end
 
-      # rubocop:disable Metrics/MethodLength
-      def create_subscriptions(emails, offer, integration_id)
-        success = []
-        failed = []
+      def offer
+        @offer ||= Offer.find(subscription_params[:offer_id])
+      end
 
-        emails.each do |email|
-          args = {
+      def create_subscriptions
+        emails = subscription_params[:csv_content].split("\r\n")[1..]
+        return if emails.empty?
+
+        emails.map do |email|
+          command = ::Givings::Subscriptions::CreateDirectTransferSubscription.new(
             email:,
             offer:,
-            integration_id:
+            integration_id: subscription_params[:integration_id]
+          ).call
+
+          {
+            email:,
+            success: command.success?,
+            error: command.errors.full_messages
           }
-
-          command = ::Givings::Subscriptions::CreateDirectTransferSubscription.new(args).call
-
-          if command.success?
-            success << email
-          else
-            failed << { email:, errors: command.errors.full_messages }
-          end
         end
-
-        { success:, failed: }
       end
-      # rubocop:enable Metrics/MethodLength
 
       def render_command_result_message(result)
-        if result[:failed].empty?
-          render json: { message: 'All subscriptions created successfully' }, status: :created
+        success = result.filter { |subscription| subscription[:success] }
+        failed = result.filter { |subscription| !subscription[:success] }
+        if !offer || !offer.plan
+          render json: { message: 'Offer not found or does not have a plan' }, status: :unprocessable_entity
+        elsif failed.empty?
+          render json: { message: 'All subscriptions created successfully', success: }, status: :created
         else
           render json: {
             message: 'Some subscriptions failed:',
-            success: result[:success],
-            failed: result[:failed],
-            failed_emails: result[:failed].pluck(:email)
+            success:,
+            failed:
           }, status: :unprocessable_entity
         end
       end
