@@ -1,12 +1,11 @@
 module Users
   module V1
     class IntegrationsController < AuthorizationController
-      def create
-        query = "metadata ->> 'user_id' = ? AND metadata ->> 'branch' = ? AND status = '1'"
-        integration = Integration.find_by(query, current_user.id.to_s, filter_params[:branch] || 'referral')
+      before_action :existing_integration, only: %i[create]
 
-        if integration
-          render json: IntegrationBlueprint.render(integration), status: :ok
+      def create
+        if @existing_integration
+          render json: IntegrationBlueprint.render(@existing_integration), status: :ok
           return
         end
 
@@ -31,6 +30,12 @@ module Users
       end
 
       private
+
+      def existing_integration
+        query = "metadata ->> 'user_id' = ? AND metadata ->> 'branch' = ? AND status = '1'"
+        @existing_integration ||= Integration.find_by(query, current_user.id.to_s,
+                                                      integration_params[:metadata][:branch])
+      end
 
       def filter_params
         params.permit(:branch)
