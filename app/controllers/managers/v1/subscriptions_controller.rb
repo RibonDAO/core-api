@@ -1,25 +1,14 @@
 module Managers
   module V1
     class SubscriptionsController < ManagersController
-
       def upload_csv_and_create_subscriptions
         emails = params[:csv_content].split("\r\n")[1..]
         offer_id = params[:offer_id]
         integration_id = params[:integration_id]
         offer = Offer.find(offer_id)
 
-        result = create_subscriptions(emails, offer, integration_id)
-
-        if result[:failed].empty?
-          render json: { message: 'All subscriptions created successfully' }, status: :created
-        else
-          render json: {
-            message: 'Some subscriptions failed:',
-            success: result[:success],
-            failed: result[:failed],
-            failed_emails: result[:failed].pluck(:email)
-          }, status: :unprocessable_entity
-        end
+        command_result = create_subscriptions(emails, offer, integration_id)
+        render_command_result_message(command_result)
       end
 
       private
@@ -52,6 +41,19 @@ module Managers
         { success:, failed: }
       end
       # rubocop:enable Metrics/MethodLength
+
+      def render_command_result_message(result)
+        if result[:failed].empty?
+          render json: { message: 'All subscriptions created successfully' }, status: :created
+        else
+          render json: {
+            message: 'Some subscriptions failed:',
+            success: result[:success],
+            failed: result[:failed],
+            failed_emails: result[:failed].pluck(:email)
+          }, status: :unprocessable_entity
+        end
+      end
     end
   end
 end
