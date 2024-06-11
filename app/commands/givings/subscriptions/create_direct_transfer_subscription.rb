@@ -13,6 +13,8 @@ module Givings
       end
 
       def call
+        return unless offer&.plan
+
         @user = find_or_create_user
         customer = find_or_create_customer
         return if subscription_already_exists(customer)
@@ -75,7 +77,7 @@ module Givings
       end
 
       def subscription_already_exists(payer)
-        Subscription.exists?(payer:, offer:, payment_method:, integration:, status: :active)
+        Subscription.exists?(payer:, status: :active)
       end
     end
   end
