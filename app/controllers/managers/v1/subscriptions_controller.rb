@@ -10,20 +10,29 @@ module Managers
 
         result = create_subscriptions(emails, offer, integration_id)
 
-        if result.success?
-          render json: { message: 'Subscriptions created successfully' }, status: :created
+        if result[:failed].empty?
+          render json: { message: 'All subscriptions created successfully' }, status: :created
         else
-          render json: { message: 'Error creating subscriptions' }, status: :unprocessable_entity
+          render json: {
+            message: 'Some subscriptions failed:',
+            success: result[:success],
+            failed: result[:failed],
+            failed_emails: result[:failed].pluck(:email)
+          }, status: :unprocessable_entity
         end
       end
 
       private
 
       def subscription_params
-        params.permit(:csv_content, :offer_id, :integration_id, :test)
+        params.permit(:csv_content, :offer_id, :integration_id)
       end
 
+      # rubocop:disable Metrics/MethodLength
       def create_subscriptions(emails, offer, integration_id)
+        success = []
+        failed = []
+
         emails.each do |email|
           args = {
             email:,
@@ -31,9 +40,18 @@ module Managers
             integration_id:
           }
 
-          ::Givings::Subscriptions::CreateDirectTransferSubscription.new(args).call
+          command = ::Givings::Subscriptions::CreateDirectTransferSubscription.new(args).call
+
+          if command.success?
+            success << email
+          else
+            failed << { email:, errors: command.errors.full_messages }
+          end
         end
+
+        { success:, failed: }
       end
+      # rubocop:enable Metrics/MethodLength
     end
   end
 end
