@@ -249,7 +249,7 @@ Rails.application.routes.draw do
       get 'stories/:id/stories' => 'stories#stories'
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
-      post 'subscriptions/upload_csv_and_create_subscriptions' => 'subscriptions#upload_csv_and_create_subscriptions'
+      post 'subscriptions/upload_csv' => 'subscriptions#upload_csv'
     end
   end
 
