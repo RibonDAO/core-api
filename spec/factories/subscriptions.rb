@@ -28,5 +28,6 @@ FactoryBot.define do
     receiver { build(:non_profit) }
     external_id { nil }
     association :integration
+    next_payment_attempt { 1.month.from_now }
   end
 end

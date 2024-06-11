@@ -12,8 +12,7 @@ class NonProfitBlueprint < Blueprinter::Base
   association :non_profit_impacts, blueprint: NonProfitImpactsBlueprint
 
   field(:logo) do |object|
-    ImagesHelper.image_url_for(object.logo, variant: { resize_to_fit: [150, 150],
-                                                       saver: { quality: 95 }, format: :jpg })
+    ImagesHelper.image_url_for(object.logo)
   end
 
   field(:icon) do |object|

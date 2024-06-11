@@ -58,7 +58,7 @@ RSpec.describe Subscription, type: :model do
 
     describe 'when subscription last payment is paid more than 1 month ago' do
       let(:offer) { create(:offer, category: :club) }
-      let(:club_subscription) { create(:subscription, offer:) }
+      let(:club_subscription) { create(:subscription, offer:, next_payment_attempt: nil) }
       let!(:person_payment) do
         create(:person_payment, paid_date: 1.month.ago - 1.day, subscription: club_subscription, status: :paid)
       end
