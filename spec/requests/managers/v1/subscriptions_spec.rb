@@ -37,4 +37,3 @@ RSpec.describe 'Managers::V1::SubscriptionsController', type: :request do
     end
   end
 end
-
