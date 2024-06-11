@@ -22,11 +22,7 @@ module Tickets
     private
 
     def transact_donation
-      ActiveRecord::Base.transaction do
-        @donation = collect_ticket
-      end
-
-      donation
+      collect_ticket
     end
 
     def valid_dependencies?

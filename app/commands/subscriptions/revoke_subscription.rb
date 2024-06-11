@@ -8,9 +8,7 @@ module Subscriptions
     end
 
     def call
-      ActiveRecord::Base.transaction do
-        subscription.update!(status: :inactive)
-      end
+      subscription.update!(status: :inactive)
     rescue StandardError => e
       errors.add(:message, e.message)
       Reporter.log(error: e)
