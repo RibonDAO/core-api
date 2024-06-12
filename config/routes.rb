@@ -87,6 +87,8 @@ Rails.application.routes.draw do
 
       get 'tags' => 'tags#index'
 
+      get 'warmglow_messages/random_message' => 'warmglow_messages#random_message'
+
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
         post 'create_legacy_contribution' => 'legacy_user_impact#create_legacy_contribution'
