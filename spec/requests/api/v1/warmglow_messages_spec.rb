@@ -11,7 +11,7 @@ RSpec.describe 'Api::V1::WarmglowMessagesController', type: :request do
         request
 
         expect(response).to have_http_status(:ok)
-       expect_response_to_have_keys(%w[message])
+        expect_response_to_have_keys(%w[message])
       end
     end
 
@@ -20,7 +20,7 @@ RSpec.describe 'Api::V1::WarmglowMessagesController', type: :request do
         request
 
         expect(response).to have_http_status(:ok)
-       expect_response_to_have_keys(%w[message])
+        expect_response_to_have_keys(%w[message])
       end
     end
   end
