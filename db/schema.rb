@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_29_192344) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_04_123115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -860,6 +860,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_29_192344) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["owner_type", "owner_id"], name: "index_wallets_on_owner"
+  end
+
+  create_table "warmglow_messages", force: :cascade do |t|
+    t.text "message"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "accounts", "users"
