@@ -27,11 +27,10 @@ describe WarmglowMessages::UpsertWarmglowMessage do
       let(:warmglow_message_params) do
         {
           id: warmglow_message.id,
-          message:'message 2',
+          message: 'message 2',
           status: 'active'
         }
       end
-
 
       it 'updates the warmglow message with new message' do
         command

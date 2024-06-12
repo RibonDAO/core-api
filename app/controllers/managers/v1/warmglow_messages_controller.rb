@@ -13,7 +13,7 @@ module Managers
         render json: WarmglowMessageBlueprint.render(@warmglow_message)
       end
 
-        def create
+      def create
         command = WarmglowMessages::UpsertWarmglowMessage.call(warmglow_message_params)
         if command.success?
           render json: WarmglowMessageBlueprint.render(command.result), status: :created
@@ -22,7 +22,7 @@ module Managers
         end
       end
 
-        def update
+      def update
         command = WarmglowMessages::UpsertWarmglowMessage.call(warmglow_message_params)
         if command.success?
           render json: WarmglowMessageBlueprint.render(command.result), status: :ok
@@ -30,7 +30,6 @@ module Managers
           render_errors(command.errors)
         end
       end
-
 
       private
 
