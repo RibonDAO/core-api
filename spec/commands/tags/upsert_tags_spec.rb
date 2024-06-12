@@ -23,7 +23,7 @@ describe Tags::UpsertTag do
           expect(Tag.count).to eq(1)
         end
 
-        it 'creates a tag gateway' do
+        it 'creates a non profit tag' do
           command
           expect(NonProfitTag.count).to eq(1)
         end
