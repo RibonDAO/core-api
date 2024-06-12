@@ -10,10 +10,9 @@ module Managers
       def show
         @warmglow_message = WarmglowMessage.find warmglow_message_params[:id]
 
-        render json:  WarmglowMessageBlueprint.render(@warmglow_message)
+        render json: WarmglowMessageBlueprint.render(@warmglow_message)
       end
 
- 
       private
 
       def warmglow_message_params
