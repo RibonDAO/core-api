@@ -76,8 +76,8 @@ RSpec.describe 'Managers::V1::WarmglowMessages', type: :request do
 
       it 'calls the upsert command with right params' do
         allow(WarmglowMessages::UpsertWarmglowMessage).to receive(:call)
-        .and_return(command_double(klass: WarmglowMessages::UpsertWarmglowMessage,
-            result: warmglow_message))
+          .and_return(command_double(klass: WarmglowMessages::UpsertWarmglowMessage,
+                                     result: warmglow_message))
         request
 
         expect(WarmglowMessages::UpsertWarmglowMessage).to have_received(:call).with(strong_params(params))
