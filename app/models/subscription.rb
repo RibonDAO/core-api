@@ -44,18 +44,15 @@ class Subscription < ApplicationRecord
                         WHERE person_payments.subscription_id = subscriptions.id)')
                  .group('subscriptions.id')
                  .where(status: %i[active canceled])
-                 .where('person_payments.paid_date > ?', 1.month.ago)
+                 .where('person_payments.paid_date > ?
+                  OR subscriptions.next_payment_attempt > ?', 1.month.ago, Time.zone.now)
   }
 
   def last_club_day
-    person_payments.last.paid_date + 1.month if cancel_date.present?
+    next_payment_attempt || (person_payments.last&.paid_date&.+ 1.month)
   end
 
   def formatted_amount
-    person_payments&.last&.formatted_amount
-  end
-
-  def next_payment_date
-    next_payment_attempt || (person_payments.last&.paid_date&.+ 1.month)
+    Money.from_cents(offer.price_cents, offer.currency).format || person_payments&.last&.formatted_amount
   end
 end

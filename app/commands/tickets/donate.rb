@@ -49,6 +49,8 @@ module Tickets
     def associate_integration_vouchers(external_ids)
       vouchers_with_external_ids = Voucher.where(external_id: external_ids)
       vouchers_with_external_ids.each_with_index do |voucher, index|
+        next unless donations[index] && voucher
+
         voucher&.update!(donation: donations[index])
         call_webhook(voucher)
       end
