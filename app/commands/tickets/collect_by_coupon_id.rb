@@ -44,7 +44,7 @@ module Tickets
       tickets_array = []
 
       coupon.number_of_tickets.times do |_index|
-        tickets_array << { user:, platform:, external_id: coupon.id, source: :coupon,
+        tickets_array << { user:, platform:, source: :coupon,
                            status: :collected, category: :extra }
       end
 

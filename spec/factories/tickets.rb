@@ -15,8 +15,7 @@
 #
 FactoryBot.define do
   factory :ticket do
-    user { build(:user) }
-    external_id { 'MyString' }
-    integration { build(:integration) }
+    user { create(:user) }
+    integration { create(:integration) }
   end
 end
