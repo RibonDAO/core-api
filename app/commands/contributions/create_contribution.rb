@@ -12,10 +12,8 @@ module Contributions
     end
 
     def call
-      ActiveRecord::Base.transaction do
-        Contribution.create!(person_payment: payment, receiver: payment.receiver,
-                             generated_fee_cents: payment.usd_value_cents * CONTRACT_FEE_PERCENTAGE)
-      end
+      Contribution.create!(person_payment: payment, receiver: payment.receiver,
+                           generated_fee_cents: payment.usd_value_cents * CONTRACT_FEE_PERCENTAGE)
     rescue StandardError => e
       errors.add(:message, e.message)
       Reporter.log(error: e)

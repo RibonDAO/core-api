@@ -17,6 +17,8 @@ class Ticket < ApplicationRecord
   belongs_to :user
   belongs_to :integration, optional: true
 
+  validates :external_id, uniqueness: { scope: :integration_id }, allow_blank: true
+
   has_one :utm, as: :trackable
 
   enum status: {

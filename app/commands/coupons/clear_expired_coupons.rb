@@ -19,11 +19,9 @@ module Coupons
     private
 
     def transact_expired_coupon(coupon)
-      ActiveRecord::Base.transaction do
-        users_coupons = UserCoupon.where(coupon_id: coupon.id)
-        users_coupons.each do |user_coupon|
-          move_to_expired(user_coupon)
-        end
+      users_coupons = UserCoupon.where(coupon_id: coupon.id)
+      users_coupons.each do |user_coupon|
+        move_to_expired(user_coupon)
       end
     end
 
