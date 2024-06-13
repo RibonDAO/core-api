@@ -22,7 +22,13 @@ module Tickets
     private
 
     def transact_donation
-      collect_ticket
+      command = CollectByExternalIds.call(integration:, user:, platform:, external_ids:)
+
+      if command.success? || user.tickets.collected.any?
+        donate_ticket
+      else
+        errors.add(:message, I18n.t('tickets.blocked_message'))
+      end
     end
 
     def valid_dependencies?
@@ -39,16 +45,6 @@ module Tickets
       errors.add(:message, I18n.t('donations.non_profit_not_found')) unless non_profit
 
       non_profit
-    end
-
-    def collect_ticket
-      command = CollectByExternalIds.call(integration:, user:, platform:, external_ids:)
-
-      if command.success? || user.tickets.collected.any?
-        donate_ticket
-      else
-        errors.add(:message, I18n.t('tickets.blocked_message'))
-      end
     end
 
     def donate_ticket
