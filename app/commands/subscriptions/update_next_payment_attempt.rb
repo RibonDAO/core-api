@@ -1,5 +1,6 @@
 module Subscriptions
-  class UpdateLastClubDay
+  class UpdateNextPaymentAttempt
+    prepend SimpleCommand
     attr_reader :subscription
 
     def initialize(subscription:)
@@ -7,7 +8,7 @@ module Subscriptions
     end
 
     def call
-      subscription.update!(last_club_day: 1.month.from_now)
+      subscription.update!(next_payment_attempt: 1.month.from_now)
     end
   end
 end

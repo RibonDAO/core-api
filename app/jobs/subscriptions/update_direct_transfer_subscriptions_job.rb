@@ -1,16 +1,16 @@
 module Subscriptions
-  class UpdateDirectTransferSubscriptionJob < ApplicationJob
+  class UpdateDirectTransferSubscriptionsJob < ApplicationJob
     queue_as :subscriptions
 
     def perform
       subscriptions_direct_transfer.each do |subscription|
-        Subscriptions::UpdateLastClubDay.call(subscription:)
+        Subscriptions::UpdateNextPaymentAttempt.call(subscription:)
       end
     end
 
     def subscriptions_direct_transfer
-      Subscription.where(person_payment: :direct_transfer, status: :active)
-                  .where(next_payment_attempt: Time.zone.now)
+      Subscription.where(payment_method: :direct_transfer, status: :active)
+                  .where('date(next_payment_attempt)= ?', Time.zone.today)
     end
   end
 end
