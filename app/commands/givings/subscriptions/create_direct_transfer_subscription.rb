@@ -13,8 +13,12 @@ module Givings
       end
 
       def call
+        return unless offer&.plan
+
         @user = find_or_create_user
         customer = find_or_create_customer
+        return if subscription_already_exists(customer)
+
         subscription = create_subscription(customer)
         give_monthly_tickets(subscription)
         give_daily_tickets(subscription)
@@ -27,7 +31,7 @@ module Givings
         user = User.find_by(email:)
         return user if user
 
-        User.create(email:, language: I18n.locale)
+        User.create!(email:, language: I18n.locale)
       end
 
       def find_or_create_customer
@@ -38,7 +42,12 @@ module Givings
       end
 
       def create_subscription(payer)
-        Subscription.create!({ payer:, offer:, payment_method:, integration:, next_payment_attempt: })
+        Subscription.create!({ payer:,
+                               offer:,
+                               payment_method:,
+                               integration:,
+                               next_payment_attempt:,
+                               status: :active })
       end
 
       def integration
@@ -49,7 +58,7 @@ module Givings
         1.month.from_now
       end
 
-      def give_monthly_tickets(_person_payment)
+      def give_monthly_tickets(subscription)
         Tickets::GenerateClubMonthlyTicketsJob.perform_later(
           user: subscription.payer.user,
           platform: subscription.platform,
@@ -58,13 +67,17 @@ module Givings
         )
       end
 
-      def give_daily_tickets(_person_payment)
+      def give_daily_tickets(subscription)
         Tickets::GenerateClubDailyTicketsJob.perform_later(
           user: subscription.payer.user,
           platform: subscription.platform,
-          quantity: 13,
+          quantity: subscription.offer.plan.daily_tickets,
           source: :club
         )
+      end
+
+      def subscription_already_exists(payer)
+        Subscription.exists?(payer:, status: :active)
       end
     end
   end

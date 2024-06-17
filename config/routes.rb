@@ -252,6 +252,7 @@ Rails.application.routes.draw do
       get 'stories/:id/stories' => 'stories#stories'
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
+      post 'subscriptions/create_direct_transfer_subscriptions' => 'subscriptions#create_direct_transfer_subscriptions'
     end
   end
 
