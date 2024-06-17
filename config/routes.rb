@@ -87,6 +87,8 @@ Rails.application.routes.draw do
 
       get 'tags' => 'tags#index'
 
+      get 'warmglow_messages/random_message' => 'warmglow_messages#random_message'
+
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
         post 'create_legacy_contribution' => 'legacy_user_impact#create_legacy_contribution'
@@ -236,6 +238,7 @@ Rails.application.routes.draw do
       resources :reports, only: %i[index show create update destroy]
       resources :coupons, only: %i[index show create update]
       resources :tags, only: %i[index show create update]
+      resources :warmglow_messages, only: %i[index show create update]
 
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'

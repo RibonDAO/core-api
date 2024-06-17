@@ -278,3 +278,5 @@ pt-BR:
     not_found: "Usuário não encontrado."
     login_success: "Autenticado com sucesso."
     email_sent: "Email enviado com sucesso."
+  warmglow_messages:
+    default_message: "Sinta a potência do gesto que você acabou de fazer. Ajudar alguém é algo gigante. É a chave para construirmos um mundo melhor."

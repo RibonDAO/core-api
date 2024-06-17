@@ -19,7 +19,7 @@ en:
     user_not_found: "User not found. Please logout and try again."
     integration_not_found: "Integration not found. Please reload the page and try again."
     non_profit_not_found: "NGO not found. Please reload the page and try again."
-  tickets: 
+  tickets:
     blocked_message: "Unable to collect now."
     user_not_found: "User not found. Please logout and try again."
     integration_not_found: "Integration not found. Please reload the page and try again."
@@ -58,3 +58,5 @@ en:
     not_found: "User not found."
     login_success: "Signed in successfully."
     email_sent: "Email sent successfully."
+  warmglow_messages:
+    default_message: "Feel the power of your actions! Helping someone is a huge thing. It is the key to building a better world."
