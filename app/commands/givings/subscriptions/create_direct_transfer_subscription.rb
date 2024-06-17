@@ -31,7 +31,7 @@ module Givings
         user = User.find_by(email:)
         return user if user
 
-        User.create(email:, language: I18n.locale)
+        User.create!(email:, language: I18n.locale)
       end
 
       def find_or_create_customer
