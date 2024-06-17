@@ -54,9 +54,10 @@ generate_club_daily_tickets:
   queue: tickets
 
 clear_redis_tickets:
-  cron: "0 1 10 1 *" # At 01:00 on day-of-month 10 in January.
+  cron: "0 1 20 1 *" # At 01:00 January 20th
   class: "Tickets::ClearRedisTicketsWorker"
   queue: tickets
+  enabled: false
 
 label_donations_and_contributions:
   cron: "0 8 * 3 1"
@@ -72,6 +73,7 @@ clear_old_integration_tickets:
   cron: "0 1 20 1 *" # At 01:00 January 20th
   class: "Tickets::ClearOldIntegrationTicketsWorker"
   queue: tickets
+  enabled: false
 
 reset_donation_streak:
   cron: "0 3 * * *" # At 03:00 everyday.
@@ -79,6 +81,12 @@ reset_donation_streak:
   queue: users
 
 update_days_donating_for_all_users:
-  cron: "0 0 * * *" # At 00:00 every day.
+  cron: "0 1 20 1 *" # At 01:00 January 20th
   class: "Users::UpdateDaysDonatingForAllWorker"
   queue: users
+  enabled: false
+
+update_direct_transfer_subscriptions:
+  cron: "0 4 * * *" # At 04:00 everyday.
+  class: "subscriptions::UpdateDirectTransferSubscriptionsWorker"
+  queue: subscriptions
