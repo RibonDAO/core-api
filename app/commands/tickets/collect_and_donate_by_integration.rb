@@ -21,11 +21,13 @@ module Tickets
     private
 
     def transact_donation
-      ActiveRecord::Base.transaction do
-        @donation = collect_ticket
-      end
+      command = CollectByIntegration.call(integration:, user:, platform:)
 
-      donation
+      if command.success? || user.tickets.collected.any?
+        donate_ticket
+      else
+        errors.add(:message, I18n.t('donations.blocked_message'))
+      end
     end
 
     def valid_dependencies?
@@ -42,16 +44,6 @@ module Tickets
       errors.add(:message, I18n.t('donations.non_profit_not_found')) unless non_profit
 
       non_profit
-    end
-
-    def collect_ticket
-      command = CollectByIntegration.call(integration:, user:, platform:)
-
-      if command.success? || user.tickets.collected.any?
-        donate_ticket
-      else
-        errors.add(:message, I18n.t('donations.blocked_message'))
-      end
     end
 
     def donate_ticket

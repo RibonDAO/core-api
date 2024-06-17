@@ -3,7 +3,7 @@
 module Tickets
   class Donate < ApplicationCommand
     prepend SimpleCommand
-    attr_reader :non_profit, :user, :platform, :quantity, :donations, :integration_only
+    attr_reader :non_profit, :user, :platform, :quantity, :donations, :integration_only, :external_ids
 
     def initialize(non_profit:, user:, platform:, quantity:, integration_only:)
       @non_profit = non_profit
@@ -36,13 +36,13 @@ module Tickets
       ActiveRecord::Base.transaction do
         destroy_result = destroy_tickets
         integrations = destroy_result[:integrations]
-        external_ids = destroy_result[:external_ids]
+        @external_ids = destroy_result[:external_ids]
         sources = destroy_result[:sources]
         categories = destroy_result[:categories]
 
         @donations = create_donations(build_donations(integrations, sources, categories))
-        associate_integration_vouchers(external_ids)
       end
+      associate_integration_vouchers(external_ids)
       label_donations
 
       donations

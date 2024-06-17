@@ -14,10 +14,8 @@ module Tickets
     def call
       tickets = user.tickets.where(source: :club, category:, status: :to_collect)
       with_exception_handle do
-        ActiveRecord::Base.transaction do
-          tickets.each do |ticket|
-            ticket.update!(status: :collected)
-          end
+        tickets.each do |ticket|
+          ticket.update!(status: :collected)
         end
 
         if tickets.length.positive?

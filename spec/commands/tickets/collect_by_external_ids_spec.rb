@@ -59,5 +59,22 @@ describe Tickets::CollectByExternalIds do
         expect { command }.to change(Ticket, :count).by(10)
       end
     end
+
+    context 'when the param external_ids has duplicated values' do
+      let(:integration) { create(:integration) }
+      let(:user) { create(:user) }
+      let(:external_ids) { %w[1 1 2 2 3 3 4 4 5 5] }
+
+      it 'creates only 5 tickets in database' do
+        expect { command }.to change(Ticket, :count).by(5)
+      end
+
+      context 'when the command is called twice' do
+        it 'does not create tickets at second time' do
+          command
+          expect { command }.to change(Ticket, :count).by(0)
+        end
+      end
+    end
   end
 end

@@ -10,14 +10,11 @@ describe Tickets::CollectAndDonateByExternalIds do
       let(:integration) { create(:integration) }
       let(:non_profit) { create(:non_profit, :with_impact) }
       let(:user) { create(:user) }
-      let(:command_stubbed) { class_double(Tickets::ClearCollectedByIntegrationJob) }
       let(:external_ids) { %w[122343 2323232] }
 
       before do
         create(:chain)
         create(:ribon_config, default_ticket_value: 100)
-        allow(Tickets::ClearCollectedByIntegrationJob).to receive(:set).and_return(command_stubbed)
-        allow(command_stubbed).to receive(:perform_later)
       end
 
       it 'calls the Tickets::CollectAndDonateByExternalIds' do
@@ -46,14 +43,11 @@ describe Tickets::CollectAndDonateByExternalIds do
       let(:integration) { create(:integration) }
       let(:non_profit) { create(:non_profit, :with_impact) }
       let(:user) { create(:user) }
-      let(:command_stubbed) { class_double(Tickets::ClearCollectedByIntegrationJob) }
       let(:external_ids) { %w[122343 2323232] }
 
       before do
         create(:chain)
         create(:ribon_config, default_ticket_value: 100)
-        allow(Tickets::ClearCollectedByIntegrationJob).to receive(:set).and_return(command_stubbed)
-        allow(command_stubbed).to receive(:perform_later)
         create(:voucher, external_id: '122343')
       end
 
@@ -93,6 +87,29 @@ describe Tickets::CollectAndDonateByExternalIds do
 
       it 'returns an error' do
         expect(command.errors).to be_present
+      end
+    end
+
+    context 'when the param external_ids has duplicated values' do
+      let(:integration) { create(:integration) }
+      let(:user) { create(:user) }
+      let(:non_profit) { create(:non_profit) }
+      let(:external_ids) { %w[1 1 2 2 3 3 4 4 5 5] }
+
+      before do
+        create(:chain)
+        create(:ribon_config, default_ticket_value: 100)
+      end
+
+      it 'creates 5 tickets in database and destroys one' do
+        expect { command }.to change(Ticket, :count).by(4)
+      end
+
+      context 'when the command is called twice' do
+        it 'does not create tickets at second time' do
+          command
+          expect { command }.to change(Ticket, :count).by(0)
+        end
       end
     end
   end
