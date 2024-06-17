@@ -1,7 +1,7 @@
 module Managers
   module V1
     class SubscriptionsController < ManagersController
-      def upload_csv
+      def create_direct_transfer_subscriptions
         command_result = create_subscriptions
         render_command_result_message(command_result)
       end

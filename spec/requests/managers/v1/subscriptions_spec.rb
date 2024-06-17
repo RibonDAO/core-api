@@ -2,8 +2,8 @@ require 'rails_helper'
 require 'json'
 
 RSpec.describe 'Managers::V1::SubscriptionsController', type: :request do
-  describe 'POST /upload_csv' do
-    subject(:request) { post '/managers/v1/subscriptions/upload_csv', params: }
+  describe 'POST /create_direct_transfer_subscriptions' do
+    subject(:request) { post '/managers/v1/subscriptions/create_direct_transfer_subscriptions', params: }
 
     let(:offer) { create(:offer) }
     let(:integration) { create(:integration) }
