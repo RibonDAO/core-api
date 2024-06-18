@@ -4,8 +4,7 @@ module Api
       def index
         @non_profits_blueprints = Rails.cache.fetch("active_non_profits_#{I18n.locale}", expires_in: 30.minutes) do
           @non_profits = active_non_profits
-          @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
-          NonProfitBlueprint.render(@random_non_profits)
+          NonProfitBlueprint.render(@non_profits)
         end
         render json: @non_profits_blueprints
       end
