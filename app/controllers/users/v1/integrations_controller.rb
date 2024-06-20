@@ -1,7 +1,14 @@
 module Users
   module V1
     class IntegrationsController < AuthorizationController
+      before_action :existing_integration, only: %i[create]
+
       def create
+        if @existing_integration
+          render json: IntegrationBlueprint.render(@existing_integration), status: :ok
+          return
+        end
+
         command = ::Integrations::CreateIntegration.call(integration_params)
         if command.success?
           render json: IntegrationBlueprint.render(command.result), status: :created
@@ -23,6 +30,12 @@ module Users
       end
 
       private
+
+      def existing_integration
+        query = "metadata ->> 'user_id' = ? AND metadata ->> 'branch' = ? AND status = '1'"
+        @existing_integration ||= Integration.find_by(query, current_user.id.to_s,
+                                                      integration_params[:metadata][:branch])
+      end
 
       def filter_params
         params.permit(:branch)
