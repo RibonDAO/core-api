@@ -83,9 +83,9 @@ module Tickets
     end
 
     def filtered_tickets
-      return Ticket.where(user:, source: :integration) if integration_only
+      return Ticket.where(user:, source: :integration).order(:external_id) if integration_only
 
-      Ticket.where(user:)
+      Ticket.where(user:).order(:external_id)
     end
 
     def destroy_tickets

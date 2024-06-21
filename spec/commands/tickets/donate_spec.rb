@@ -194,5 +194,24 @@ describe Tickets::Donate do
         expect { command }.to change(Donation, :count).by(2)
       end
     end
+
+    context 'when the user has tickets with external_id' do
+      let(:user) { create(:user) }
+      let(:non_profit) { create(:non_profit, :with_impact) }
+      let(:integration) { create(:integration) }
+
+      before do
+        create(:ribon_config, default_ticket_value: 100)
+        create(:ticket, user:, integration:, source: 'club')
+        create(:ticket, user:, integration:, source: 'club')
+        create(:ticket, user:, integration:, source: 'club')
+        create(:ticket, user:, integration:, source: 'integration', external_id: 'external_id1')
+      end
+
+      it 'donates tickets with external_id first' do
+        command
+        expect(Ticket.where(external_id: 'external_id1')).to be_empty
+      end
+    end
   end
 end
