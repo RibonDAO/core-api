@@ -43,7 +43,8 @@ module Api
           command = ::Tickets::CanCollectByExternalIds.call(external_ids: ticket_params[:external_ids])
 
           if command.success?
-            render json: { can_collect: command.result }, status: :ok
+            render json: { can_collect: command.result[:can_collect], quantity: command.result[:quantity] },
+                   status: :ok
           else
             render_errors(command.errors)
           end
