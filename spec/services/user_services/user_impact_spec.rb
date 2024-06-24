@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe UserServices::UserImpact, type: :service do
-  ActiveRecord.verbose_query_logs = true
-  ActiveRecord::Base.logger = Logger.new(STDOUT)
-
   describe '#impact' do
     let(:user) { create(:user, email: 'user@test.com') }
     let(:non_profit1) do
