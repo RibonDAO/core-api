@@ -6,9 +6,9 @@ module UserServices
     def initialize(user:)
       @user = user
       @donations_by_non_profit = user
-                                  .donations
-                                  .includes(non_profit: [:non_profit_impacts])
-                                  .group_by(&:non_profit)
+                                 .donations
+                                 .includes(non_profit: [:non_profit_impacts])
+                                 .group_by(&:non_profit)
     end
 
     def impact
@@ -23,7 +23,7 @@ module UserServices
 
     private
 
-    def impact_sum(non_profit, donations) 
+    def impact_sum(non_profit, donations)
       usd_to_impact_factor = non_profit.impact_for&.usd_cents_to_one_impact_unit
       return 0 unless usd_to_impact_factor
 
