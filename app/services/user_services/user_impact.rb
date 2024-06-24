@@ -12,11 +12,11 @@ module UserServices
     end
 
     def impact
-      @donations_by_non_profit.map do |non_profit, donations|
-        
+      donations_by_non_profit.map do |non_profit, donations|
         {
           non_profit:,
-          impact: impact_sum(non_profit, donations) 
+          impact: impact_sum(non_profit, donations),
+          donation_count: donation_count(donations)
         }
       end
     end
