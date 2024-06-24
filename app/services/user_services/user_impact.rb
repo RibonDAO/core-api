@@ -1,7 +1,6 @@
 module UserServices
   class UserImpact
-    attr_reader :user
-    attr_reader :donations_by_non_profit
+    attr_reader :user, :donations_by_non_profit
 
     def initialize(user:)
       @user = user
