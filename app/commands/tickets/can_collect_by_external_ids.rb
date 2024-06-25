@@ -18,10 +18,9 @@ module Tickets
     private
 
     def valid_external_ids?
-      external_ids.each do |external_id|
-        return true unless Voucher.exists?(external_id:)
-      end
-      false
+      existing_vouchers = Voucher.where(external_id: external_ids)
+      { can_collect: (existing_vouchers.size < external_ids.size),
+        quantity: (external_ids.size - existing_vouchers.size) }
     end
   end
 end
