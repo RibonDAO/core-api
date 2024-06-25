@@ -124,6 +124,11 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
         request
         expect(JSON.parse(response.body)['can_collect']).to be(true)
       end
+
+      it 'returns quantity 2' do
+        request
+        expect(JSON.parse(response.body)['quantity']).to eq 2
+      end
     end
 
     context 'with external id already used' do
@@ -138,6 +143,13 @@ RSpec.describe 'Api::V1::Tickets::Collect', type: :request do
         request
 
         expect(JSON.parse(response.body)['can_collect']).to be(false)
+      end
+
+      it 'returns quantity 0' do
+        create(:voucher, external_id: '1')
+        request
+
+        expect(JSON.parse(response.body)['quantity']).to eq 0
       end
     end
   end
