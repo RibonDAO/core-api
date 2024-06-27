@@ -10,9 +10,7 @@ describe Users::VerifyClubMembership do
     let(:offer) { create(:offer, category: :club) }
     let(:subscription) { create(:subscription, payer: customer, offer:, status: :active) }
 
-
     context 'when user is a club member' do
-
       before do
         create(:person_payment, payer: customer, subscription:)
       end
@@ -28,6 +26,7 @@ describe Users::VerifyClubMembership do
       before do
         create(:person_payment, payer: customer, subscription:)
       end
+
       it 'returns false' do
         expect(command.result).to be_falsey
       end
