@@ -20,9 +20,6 @@ gem 'hiredis'
 gem 'redis', '~> 4.0'
 gem 'redis-namespace'
 
-gem 'graphql'
-gem 'graphql-client'
-
 gem 'eth', '~> 0.5.6'
 gem 'keccak', '~> 1.3'
 
