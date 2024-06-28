@@ -24,12 +24,8 @@ module Causes
     private
 
     def create
-      pool_address = create_pool
-      if pool_address
-        cause = Cause.create!(cause_params)
-        Pool.create!(address: pool_address, name: cause_params[:name], token:, cause:)
-        cause
-      end
+      create_pool
+      Cause.create!(cause_params)
     rescue StandardError
       errors.add(:message, I18n.t('causes.create_failed'))
     end
@@ -51,31 +47,7 @@ module Causes
     end
 
     def create_pool
-      transaction_hash = Web3::Contracts::RibonContract.new(chain:).create_pool(token: token.address)
-      result = transaction_status(transaction_hash)
-      if result == :success
-        fetch_pool
-      else
-        errors.add(:message, I18n.t('pools.create_failed'))
-        nil
-      end
-    rescue StandardError
-      errors.add(:message, I18n.t('pools.create_failed'))
-    end
-
-    def transaction_status(transaction_hash)
-      Web3::Utils::TransactionUtils.new(chain:).transaction_status(transaction_hash)
-    end
-
-    def fetch_pool
-      result = Graphql::RibonApi::Client.query(Graphql::Queries::FetchPools::Query)
-      pool_address = result.data.pools.last.id
-      return pool_address unless Pool.where(address: pool_address).first
-
-      errors.add(:message, I18n.t('pools.fetch_failed'))
-      nil
-    rescue StandardError
-      errors.add(:message, I18n.t('pools.fetch_failed'))
+      Web3::Contracts::RibonContract.new(chain:).create_pool(token: token.address)
     end
   end
 end

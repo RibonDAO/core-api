@@ -55,7 +55,6 @@ jobs:
           RIBON_WALLET_PRIVATE_KEY: ${{ secrets.RIBON_WALLET_PRIVATE_KEY }}
           REDIS_URL: ${{ secrets.REDIS_URL }}
           BLOCKCHAIN_SCAN_URL: ${{ secrets.BLOCKCHAIN_SCAN_URL }}
-          THE_GRAPH_URL: ${{ secrets.THE_GRAPH_URL }}
           CURRENCY_API_URL: ${{ secrets.CURRENCY_API_URL }}
           POLYGON_GAS_FEE_URL: ${{ secrets.POLYGON_GAS_FEE_URL }}
           STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
