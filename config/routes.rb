@@ -10,9 +10,6 @@ Rails.application.routes.draw do
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   
-  Rails.application.routes.draw do
-    post '/graphql', to: 'graphql#execute'
-  end
 
   devise_for :admins, only: [:sessions]
 
