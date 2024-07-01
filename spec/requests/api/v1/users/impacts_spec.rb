@@ -18,7 +18,7 @@ RSpec.describe 'Api::V1::Users::Impacts', type: :request do
     it 'returns the user impact by ngo' do
       request
 
-      expect(response_json.first.keys).to match_array %w[impact non_profit]
+      expect(response_json.first.keys).to match_array %w[donation_count impact non_profit]
     end
   end
 

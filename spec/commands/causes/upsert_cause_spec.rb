@@ -28,50 +28,9 @@ describe Causes::UpsertCause do
       end
 
       context 'when create and have success' do
-        before do
-          allow(Web3::Utils::TransactionUtils).to receive(:new).and_return(transaction_utils)
-          allow(transaction_utils).to receive(:transaction_status).and_return(:success)
-          allow(Graphql::RibonApi::Client).to receive(:query).and_return(pools)
-        end
-
         it 'creates a new cause' do
           command
           expect(Cause.count).to eq(1)
-        end
-
-        it 'creates a new pool' do
-          command
-          expect(Pool.count).to eq(1)
-        end
-
-        it 'adds the pool address return from graphql to the pool' do
-          cause = command
-          expect(cause.result.pools.first.address).to eq(pool_address)
-        end
-      end
-
-      context 'when create and could not create the pool' do
-        before do
-          allow(Web3::Utils::TransactionUtils).to receive(:new).and_return(transaction_utils)
-          allow(transaction_utils).to receive(:transaction_status).and_return(:failed)
-        end
-
-        it 'adds an error message' do
-          result = command
-          expect(result.errors[:message]).to eq([I18n.t('pools.create_failed')])
-        end
-      end
-
-      context 'when create and could not fetch the pool' do
-        before do
-          allow(Web3::Utils::TransactionUtils).to receive(:new).and_return(transaction_utils)
-          allow(transaction_utils).to receive(:transaction_status).and_return(:success)
-          allow(Graphql::RibonApi::Client).to receive(:query).and_return(nil)
-        end
-
-        it 'adds an error message' do
-          result = command
-          expect(result.errors[:message]).to eq([I18n.t('pools.fetch_failed')])
         end
       end
     end

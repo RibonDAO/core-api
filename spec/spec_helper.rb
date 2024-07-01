@@ -9,7 +9,6 @@ SimpleCov.start 'rails' do
   add_filter 'lib/generators'
   add_filter 'lib/ext'
   add_filter 'lib/tasks'
-  add_filter 'app/services/graphql/queries'
   add_filter 'app/lib/web3/providers/networks.rb'
   add_filter 'app/mailers/application_mailer.rb'
   add_filter 'app/channels/application_cable'
@@ -23,9 +22,6 @@ VCR.configure do |config|
   config.allow_http_connections_when_no_cassette = false
   config.before_record do |i|
     i.response.body.force_encoding('UTF-8')
-  end
-  config.ignore_request do |request|
-    request.uri.eql?(RibonCoreApi.config[:the_graph][:url])
   end
 end
 
