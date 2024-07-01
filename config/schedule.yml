@@ -88,5 +88,5 @@ update_days_donating_for_all_users:
 
 update_direct_transfer_subscriptions:
   cron: "0 4 * * *" # At 04:00 everyday.
-  class: "subscriptions::UpdateDirectTransferSubscriptionsWorker"
+  class: "Subscriptions::UpdateDirectTransferSubscriptionsWorker"
   queue: subscriptions
