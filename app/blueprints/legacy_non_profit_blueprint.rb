@@ -6,6 +6,6 @@ class LegacyNonProfitBlueprint < Blueprinter::Base
 
   field(:logo_url) do |object|
     ImagesHelper.image_url_for(object.logo, variant: { resize_to_fit: [150, 150],
-                                                       saver: { quality: 95 }, format: :jpg })
+                                                       saver: { quality: 95 }, format: :png })
   end
 end
