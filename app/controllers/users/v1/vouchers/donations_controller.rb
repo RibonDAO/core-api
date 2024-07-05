@@ -6,7 +6,7 @@ module Users
           command = ::Vouchers::Donate.call(donation_command:, integration:, external_id:)
 
           if command.success?
-            Tracking::AddUtm.call(utm_params:, trackable: command.result.donation)
+            Tracking::AddUtmJob.perform_later(utm_params:, trackable: command.result.donation)
             render json: VoucherBlueprint.render(command.result), status: :created
           else
             render_errors(command.errors)

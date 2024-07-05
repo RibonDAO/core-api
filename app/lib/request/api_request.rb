@@ -1,9 +1,18 @@
 module Request
   class ApiRequest
     def self.get(url, expires_in: nil, headers: {})
-      RedisStore::Cache.find_or_create(key: url&.parameterize, expires_in:) do
-        HTTParty.get(url, headers:)
+      cached_response = RedisStore::Cache.find(url&.parameterize)
+      return cached_response if cached_response
+
+      response = HTTParty.get(url, headers:)
+
+      if response.code == 200
+        RedisStore::Cache.find_or_create(key: url&.parameterize, expires_in:) do
+          response
+        end
       end
+
+      response
     end
 
     def self.post(url, body:, headers: {})

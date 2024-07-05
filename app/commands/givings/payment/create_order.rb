@@ -51,14 +51,14 @@ module Givings
       end
 
       def update_success(order:, status:, result:)
+        order.payment&.subscription&.update(status: :active) if status == :paid
         order.payment.update(status:)
-        order.payment&.subscription&.update(status: :active)
         update_external_ids(order:, result:)
       end
 
       def update_failed(order:, err:, status:)
         order.payment.update(status:, error_code: err.code)
-        order.payment&.subscription&.update(status: :inactive)
+        order.payment&.subscription&.update(status: :payment_failed)
         order.payment&.subscription&.update(external_id: err.subscription_id) if err.subscription_id
         order.payment.update(external_id: err.external_id) if err.external_id
       end

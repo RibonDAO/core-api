@@ -14,7 +14,9 @@ RSpec.describe 'Managers::V1::Integrations', type: :request do
       expect_response_collection_to_have_keys(%w[created_at id updated_at name status unique_address
                                                  integration_address integration_wallet logo
                                                  integration_task ticket_availability_in_minutes webhook_url
-                                                 integration_dashboard_address integration_deeplink_address])
+                                                 integration_dashboard_address integration_deeplink_address
+                                                 metadata onboarding_title onboarding_description banner_title
+                                                 banner_description onboarding_image])
     end
   end
 
@@ -39,7 +41,9 @@ RSpec.describe 'Managers::V1::Integrations', type: :request do
       expect_response_to_have_keys(%w[created_at id updated_at name status unique_address
                                       integration_address integration_wallet logo
                                       integration_task ticket_availability_in_minutes webhook_url
-                                      integration_dashboard_address])
+                                      integration_dashboard_address
+                                      metadata onboarding_title onboarding_description banner_title
+                                      banner_description onboarding_image])
     end
   end
 
@@ -55,7 +59,9 @@ RSpec.describe 'Managers::V1::Integrations', type: :request do
         expect_response_to_have_keys(%w[created_at id updated_at name status unique_address
                                         integration_address integration_wallet logo
                                         integration_task ticket_availability_in_minutes webhook_url
-                                        integration_dashboard_address integration_deeplink_address])
+                                        integration_dashboard_address integration_deeplink_address
+                                        metadata onboarding_title onboarding_description banner_title
+                                        banner_description onboarding_image])
       end
 
       context 'when id is uuid' do
@@ -69,7 +75,9 @@ RSpec.describe 'Managers::V1::Integrations', type: :request do
           expect_response_to_have_keys(%w[created_at id updated_at name status unique_address
                                           integration_address integration_wallet logo
                                           integration_task ticket_availability_in_minutes webhook_url
-                                          integration_dashboard_address integration_deeplink_address])
+                                          integration_dashboard_address integration_deeplink_address
+                                          metadata onboarding_title onboarding_description banner_title
+                                          banner_description onboarding_image])
         end
       end
     end

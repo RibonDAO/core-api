@@ -4,38 +4,29 @@ module Events
       queue_as :default
       sidekiq_options retry: 3
 
-      attr_reader :user, :offer, :person_payment
-
       def perform(subscription:)
-        @person_payment = subscription.person_payments.last
-        @offer = person_payment.offer
-        @user = person_payment.payer&.user
-
-        EventServices::SendEvent.new(user: person_payment.payer.user,
+        EventServices::SendEvent.new(user: subscription.payer&.user,
                                      event: build_event(subscription)).call
       end
 
       private
 
-      # rubocop:disable Metrics/AbcSize
       def build_event(subscription)
-        last_day = (person_payment.created_at + 1.month).strftime('%d/%m/%Y')
         OpenStruct.new({
                          name: 'club',
                          data: {
                            type: 'cancellation_confirmation',
                            subscription_id: subscription.id,
-                           integration_id: person_payment.integration_id,
-                           currency: person_payment.currency,
-                           platform: person_payment.platform,
-                           amount: person_payment.formatted_amount,
+                           integration_id: subscription.integration_id,
+                           currency: subscription.offer.currency,
+                           platform: subscription.platform,
+                           amount: subscription.formatted_amount,
                            status: subscription.status,
-                           offer_id: person_payment.offer_id,
-                           last_club_day: last_day
+                           offer_id: subscription.offer_id,
+                           last_club_day: subscription.last_club_day&.strftime('%d/%m/%Y')
                          }
                        })
       end
-      # rubocop:enable Metrics/AbcSize
     end
   end
 end

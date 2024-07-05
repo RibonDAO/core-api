@@ -21,7 +21,7 @@ describe Givings::Payment::CreateOrder do
       let(:customer) { create(:customer, user:) }
       let(:card) { build(:credit_card) }
       let(:offer) { create(:offer, :subscription) }
-      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
+      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:) }
       let(:args) do
         { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
           payment_method: :credit_card, user: customer.user, gateway: 'stripe', operation: :subscribe }
@@ -100,7 +100,7 @@ describe Givings::Payment::CreateOrder do
       let(:customer) { create(:customer, user:) }
       let(:card) { build(:credit_card) }
       let(:offer) { create(:offer) }
-      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:, amount_cents: 1) }
+      let(:person_payment) { create(:person_payment, offer:, payer: customer, integration:) }
       let(:args) do
         { card:, email: 'user@test.com', tax_id: '111.111.111-11', offer:, integration_id: integration.id,
           payment_method: :credit_card, user: customer.user, operation: :purchase }
@@ -339,7 +339,7 @@ describe Givings::Payment::CreateOrder do
 
         expect(person_payment.error_code).to eq('card_declined')
         expect(person_payment.status).to eq('blocked')
-        expect(person_payment.subscription.status).to eq('inactive')
+        expect(person_payment.subscription.status).to eq('payment_failed')
         expect(person_payment.subscription.external_id).not_to be_nil
       end
     end
@@ -375,7 +375,7 @@ describe Givings::Payment::CreateOrder do
         person_payment = PersonPayment.where(offer:).last
         expect(person_payment.external_id).not_to be_nil
         expect(person_payment.status).to eq('requires_action')
-        expect(person_payment.subscription.status).to eq('inactive')
+        expect(person_payment.subscription.status).to eq('payment_failed')
         expect(person_payment.subscription.external_id).not_to be_nil
       end
     end
@@ -411,7 +411,7 @@ describe Givings::Payment::CreateOrder do
         person_payment = PersonPayment.where(offer:).last
         expect(person_payment.external_id).not_to be_nil
         expect(person_payment.status).to eq('failed')
-        expect(person_payment.subscription.status).to eq('inactive')
+        expect(person_payment.subscription.status).to eq('payment_failed')
       end
     end
   end

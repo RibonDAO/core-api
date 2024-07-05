@@ -65,14 +65,6 @@ module Donations
                                    source: :integration, category: :daily)
     end
 
-    def set_user_last_donation_at
-      SetUserLastDonationAt.call(user:, date_to_set: donation.created_at)
-    end
-
-    def set_last_donated_cause
-      SetLastDonatedCause.call(user:, cause: non_profit.cause)
-    end
-
     def label_donation
       return if RibonConfig.disable_labeling
 

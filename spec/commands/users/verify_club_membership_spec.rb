@@ -6,11 +6,13 @@ describe Users::VerifyClubMembership do
     subject(:command) { described_class.call(user:) }
 
     let(:user) { create(:user) }
+    let(:customer) { create(:customer, user:) }
+    let(:offer) { create(:offer, category: :club) }
+    let(:subscription) { create(:subscription, payer: customer, offer:, status: :active) }
 
     context 'when user is a club member' do
       before do
-        create(:customer, user:)
-        create(:subscription, payer: user.customers.first, status: :active, offer: create(:offer, category: :club))
+        create(:person_payment, payer: customer, subscription:)
       end
 
       it 'returns true' do
@@ -19,9 +21,10 @@ describe Users::VerifyClubMembership do
     end
 
     context 'when user is not a club member' do
+      let(:subscription) { create(:subscription, payer: customer, offer:, status: :inactive) }
+
       before do
-        create(:customer, user:)
-        create(:subscription, payer: user.customers.first, status: :active, offer: create(:offer))
+        create(:person_payment, payer: customer, subscription:)
       end
 
       it 'returns false' do

@@ -40,6 +40,8 @@ module Givings
           else
             call_add_cause_giving_blockchain_job(order)
           end
+
+          cancel_old_subscriptions(order.payment.payer) if operation == :subscribe
         end
 
         private
@@ -63,6 +65,12 @@ module Givings
           PersonPayment.create!({ payer:, offer:, paid_date:, integration:,
                                   payment_method:, platform:, amount_cents:,
                                   status: :processing, receiver: receiver_person_payment, subscription: })
+        end
+
+        def cancel_old_subscriptions(payer)
+          Subscription.where(payer:, status: %i[inactive]).each do |subscription|
+            Givings::Subscriptions::CancelSubscription.call(subscription_id: subscription.id, skip_email: true)
+          end
         end
 
         def call_add_cause_giving_blockchain_job(order)
@@ -90,7 +98,7 @@ module Givings
         end
 
         def receiver_person_payment
-          return Cause.where(status: :active).sample if offer.category == 'club'
+          return Cause.active.sample if offer.category == 'club'
 
           non_profit || cause
         end

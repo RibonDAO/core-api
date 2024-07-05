@@ -26,12 +26,15 @@ class Cause < ApplicationRecord
   validates :name, presence: true
 
   before_save :deactivate_non_profits, if: :will_save_change_to_status?
+  after_save :invalidate_cache
 
   enum status: {
     inactive: 0,
     active: 1,
     test: 2
   }
+
+  scope :active, -> { where(status: :active) }
 
   def default_pool
     pools.joins(:token).where(tokens: { chain_id: Chain.default&.id }).first
@@ -51,5 +54,10 @@ class Cause < ApplicationRecord
 
   def active
     status == 'active'
+  end
+
+  def invalidate_cache
+    Rails.cache.delete_matched('active_non_profits_*')
+    Rails.cache.delete_matched('active_tags_*')
   end
 end

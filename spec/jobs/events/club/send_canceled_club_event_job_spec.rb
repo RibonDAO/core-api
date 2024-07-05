@@ -5,13 +5,7 @@ RSpec.describe Events::Club::SendCanceledClubEventJob, type: :job do
   describe '#perform' do
     subject(:perform_job) { described_class }
 
-    let(:user) { create(:user) }
-    let(:customer) { create(:customer, user:) }
     let(:subscription) { create(:subscription) }
-    let(:offer) { create(:offer) }
-    let!(:person_payment) do
-      create(:person_payment, payer: customer, status: :failed, subscription:, offer:)
-    end
     let(:event_service_double) { instance_double(EventServices::SendEvent) }
 
     let(:event) do
@@ -20,13 +14,13 @@ RSpec.describe Events::Club::SendCanceledClubEventJob, type: :job do
                        data: {
                          type: 'cancellation_confirmation',
                          subscription_id: subscription.id,
-                         integration_id: person_payment.integration_id,
-                         currency: person_payment.currency,
-                         platform: person_payment.platform,
-                         amount: person_payment.formatted_amount,
+                         integration_id: subscription.integration_id,
+                         currency: subscription.offer.currency,
+                         platform: subscription.platform,
+                         amount: subscription.formatted_amount,
                          status: subscription.status,
-                         offer_id: person_payment.offer_id,
-                         last_club_day: (person_payment.created_at + 1.month).strftime('%d/%m/%Y')
+                         offer_id: subscription.offer_id,
+                         last_club_day: subscription.last_club_day&.strftime('%d/%m/%Y')
                        }
                      })
     end
@@ -41,7 +35,7 @@ RSpec.describe Events::Club::SendCanceledClubEventJob, type: :job do
       perform_job.perform_now(subscription:)
 
       expect(EventServices::SendEvent).to have_received(:new).with(
-        user: person_payment.payer.user, event:
+        user: subscription.payer.user, event:
       )
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_04_123115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -213,6 +213,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.index ["receiver_type", "receiver_id"], name: "index_contributions_on_receiver"
   end
 
+  create_table "coupon_messages", force: :cascade do |t|
+    t.string "reward_text"
+    t.uuid "coupon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_id"], name: "index_coupon_messages_on_coupon_id"
+  end
+
+  create_table "coupons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "number_of_tickets"
+    t.datetime "expiration_date"
+    t.integer "available_quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 0
+  end
+
   create_table "crypto_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "wallet_address", null: false
     t.datetime "created_at", null: false
@@ -340,6 +357,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.integer "ticket_availability_in_minutes"
     t.integer "status", default: 0
     t.jsonb "metadata", default: {}
+    t.string "onboarding_title"
+    t.text "onboarding_description"
+    t.string "banner_title"
+    t.text "banner_description"
   end
 
   create_table "legacy_contributions", force: :cascade do |t|
@@ -459,6 +480,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.index ["pool_id"], name: "index_non_profit_pools_on_pool_id"
   end
 
+  create_table "non_profit_tags", force: :cascade do |t|
+    t.bigint "non_profit_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["non_profit_id"], name: "index_non_profit_tags_on_non_profit_id"
+    t.index ["tag_id"], name: "index_non_profit_tags_on_tag_id"
+  end
+
   create_table "non_profits", force: :cascade do |t|
     t.string "name"
     t.text "impact_description"
@@ -470,6 +500,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.string "main_image_description"
     t.string "background_image_description"
     t.string "confirmation_image_description"
+    t.string "impact_title", limit: 50
+    t.text "cover_image_description"
+    t.string "icon_description"
     t.index ["cause_id"], name: "index_non_profits_on_cause_id"
   end
 
@@ -582,6 +615,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.index ["crypted_token"], name: "index_refresh_tokens_on_crypted_token", unique: true
   end
 
+  create_table "reports", force: :cascade do |t|
+    t.string "name"
+    t.string "link"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "ribon_configs", force: :cascade do |t|
     t.decimal "default_ticket_value"
     t.datetime "created_at", null: false
@@ -591,6 +632,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.integer "minimum_contribution_chargeable_fee_cents"
     t.boolean "disable_labeling", default: false
     t.decimal "ribon_club_fee_percentage"
+    t.string "minimum_version_required", default: "0.0.0"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -633,6 +675,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.index ["offer_id"], name: "index_subscriptions_on_offer_id"
     t.index ["payer_type", "payer_id"], name: "index_subscriptions_on_payer"
     t.index ["receiver_type", "receiver_id"], name: "index_subscriptions_on_receiver"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -688,13 +737,34 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.index ["user_id"], name: "index_user_configs_on_user_id"
   end
 
+  create_table "user_coupons", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.uuid "coupon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "platform"
+    t.index ["coupon_id"], name: "index_user_coupons_on_coupon_id"
+    t.index ["user_id"], name: "index_user_coupons_on_user_id"
+  end
+
   create_table "user_donation_stats", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "last_donation_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "last_donated_cause"
+    t.integer "streak", default: 0
+    t.integer "days_donating", default: 0
     t.index ["user_id"], name: "index_user_donation_stats_on_user_id"
+  end
+
+  create_table "user_expired_coupons", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.uuid "coupon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_id"], name: "index_user_expired_coupons_on_coupon_id"
+    t.index ["user_id"], name: "index_user_expired_coupons_on_user_id"
   end
 
   create_table "user_integration_collected_tickets", force: :cascade do |t|
@@ -792,6 +862,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
     t.index ["owner_type", "owner_id"], name: "index_wallets_on_owner"
   end
 
+  create_table "warmglow_messages", force: :cascade do |t|
+    t.text "message"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "accounts", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
@@ -803,6 +880,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
   add_foreign_key "contribution_fees", "contributions"
   add_foreign_key "contribution_fees", "contributions", column: "payer_contribution_id"
   add_foreign_key "contributions", "person_payments"
+  add_foreign_key "coupon_messages", "coupons"
   add_foreign_key "devices", "users"
   add_foreign_key "donation_batches", "batches"
   add_foreign_key "donation_batches", "donations"
@@ -825,6 +903,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
   add_foreign_key "non_profit_impacts", "non_profits"
   add_foreign_key "non_profit_pools", "non_profits"
   add_foreign_key "non_profit_pools", "pools"
+  add_foreign_key "non_profit_tags", "non_profits"
+  add_foreign_key "non_profit_tags", "tags"
   add_foreign_key "non_profits", "causes"
   add_foreign_key "offer_gateways", "offers"
   add_foreign_key "person_blockchain_transactions", "person_payments"
@@ -842,7 +922,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_150038) do
   add_foreign_key "tickets", "users"
   add_foreign_key "user_completed_tasks", "users"
   add_foreign_key "user_configs", "users"
+  add_foreign_key "user_coupons", "coupons"
+  add_foreign_key "user_coupons", "users"
   add_foreign_key "user_donation_stats", "users"
+  add_foreign_key "user_expired_coupons", "coupons"
+  add_foreign_key "user_expired_coupons", "users"
   add_foreign_key "user_integration_collected_tickets", "integrations"
   add_foreign_key "user_integration_collected_tickets", "users"
   add_foreign_key "user_profiles", "users"

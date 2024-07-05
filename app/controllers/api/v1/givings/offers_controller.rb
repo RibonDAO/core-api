@@ -3,10 +3,13 @@ module Api
     module Givings
       class OffersController < ApplicationController
         def index
-          @offers = Offer.where(active: true, currency:, subscription:, category:)
-                         .order('position_order ASC, price_cents ASC')
-
-          render json: OfferBlueprint.render(@offers, view: :plan)
+          @offers_blueprint = Rails.cache.fetch("active_offers_#{currency}_#{subscription}_#{category}",
+                                                expires_in: 2.days) do
+            @offers = Offer.where(active: true, currency:, subscription:, category:)
+                           .order('position_order ASC, price_cents ASC')
+            OfferBlueprint.render(@offers, view: :plan)
+          end
+          render json: @offers_blueprint
         end
 
         def show

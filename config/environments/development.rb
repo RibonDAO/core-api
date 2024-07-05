@@ -57,4 +57,7 @@ Rails.application.configure do
   Rails.application.reloader.to_prepare do
     Dir["#{Rails.root}/app/models/rule_groups/*.rb"].each { |file| require_dependency file }
   end
+
+  # Clear hosts to run request tests locally
+  config.hosts.clear
 end

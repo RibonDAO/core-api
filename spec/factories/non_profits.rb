@@ -5,7 +5,10 @@
 #  id                             :bigint           not null, primary key
 #  background_image_description   :string
 #  confirmation_image_description :string
+#  cover_image_description        :text
+#  icon_description               :string
 #  impact_description             :text
+#  impact_title                   :string(50)
 #  logo_description               :string
 #  main_image_description         :string
 #  name                           :string
@@ -20,6 +23,8 @@ FactoryBot.define do
     status { :active }
     wallet_address { '0x6E060041D62fDd76cF27c582f62983b864878E8F' }
     impact_description { '1 day of water' }
+    impact_title { 'malaria protection' }
+    cover_image_description { 'a person affected by malaria' }
     cause { build(:cause) }
     trait(:with_impact) do
       after(:create) do |non_profit|

@@ -6,8 +6,6 @@ describe Donations::Donate do
   describe '.call' do
     subject(:command) { described_class.call(integration:, non_profit:, user:, platform: 'web') }
 
-    include_context('when mocking a request') { let(:cassette_name) { 'sendgrid_email_api' } }
-
     context 'when no error occurs' do
       let(:integration) { create(:integration) }
       let(:non_profit) { create(:non_profit, :with_impact) }
@@ -16,10 +14,6 @@ describe Donations::Donate do
 
       before do
         create(:chain)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
-        allow(Donations::SetLastDonatedCause).to receive(:call)
-          .and_return(command_double(klass: Donations::SetLastDonatedCause))
         allow(Service::Contributions::TicketLabelingService).to receive(:new)
           .and_return(ticket_labeling_instance)
         allow(ticket_labeling_instance).to receive(:label_donation)
@@ -63,8 +57,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
         allow(user).to receive(:can_donate?).and_return(false)
       end
@@ -94,8 +86,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
       end
 
@@ -124,8 +114,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
         allow(user).to receive(:can_donate?).and_return(false)
       end
@@ -155,8 +143,6 @@ describe Donations::Donate do
 
       before do
         allow(Donation).to receive(:create!).and_return(donation)
-        allow(Donations::SetUserLastDonationAt).to receive(:call)
-          .and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(donation).to receive(:save)
         allow(user).to receive(:can_donate?).and_return(false)
       end
@@ -191,8 +177,6 @@ describe Donations::Donate do
       before do
         create(:chain)
         create(:ribon_config, default_ticket_value: 100)
-        allow(Donations::SetUserLastDonationAt)
-          .to receive(:call).and_return(command_double(klass: Donations::SetUserLastDonationAt))
         allow(user).to receive(:can_donate?).and_return(false)
       end
 

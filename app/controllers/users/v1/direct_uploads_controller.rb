@@ -1,9 +1,16 @@
 module Users
   module V1
-    class DirectUploadsController < AuthorizationController
-      include ActiveStorage::SetCurrent
+    class DirectUploadsController < ActiveStorage::DirectUploadsController
+      protect_from_forgery with: :null_session
+
+      MAX_FILE_SIZE = 5.megabytes
 
       def create
+        unless file_valid?
+          render json: { error: 'File is too big or wrong format' }, status: :unprocessable_entity
+          return
+        end
+
         blob = ActiveStorage::Blob.create_before_direct_upload!(filename: blob_args[:filename],
                                                                 byte_size: blob_args[:byte_size],
                                                                 checksum: blob_args[:checksum],
@@ -25,6 +32,10 @@ module Users
                      url: blob.service_url_for_direct_upload,
                      headers: blob.service_headers_for_direct_upload
                    })
+      end
+
+      def file_valid?
+        blob_args[:byte_size].to_i <= MAX_FILE_SIZE && blob_args[:content_type].in?(%w[image/jpeg image/png])
       end
     end
   end

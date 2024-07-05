@@ -22,11 +22,13 @@ module Tickets
     private
 
     def transact_donation
-      ActiveRecord::Base.transaction do
-        @donation = collect_ticket
-      end
+      command = CollectByExternalIds.call(integration:, user:, platform:, external_ids:)
 
-      donation
+      if command.success? || user.tickets.collected.any?
+        donate_ticket
+      else
+        errors.add(:message, I18n.t('tickets.blocked_message'))
+      end
     end
 
     def valid_dependencies?
@@ -45,18 +47,8 @@ module Tickets
       non_profit
     end
 
-    def collect_ticket
-      command = CollectByExternalIds.call(integration:, user:, platform:, external_ids:)
-
-      if command.success? || user.tickets.collected.any?
-        donate_ticket
-      else
-        errors.add(:message, I18n.t('tickets.blocked_message'))
-      end
-    end
-
     def donate_ticket
-      command = Donate.call(non_profit:, user:, platform:, quantity: 1)
+      command = Donate.call(non_profit:, user:, platform:, quantity: 1, integration_only: true)
 
       if command.success?
         command.result.first

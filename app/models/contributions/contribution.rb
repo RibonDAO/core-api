@@ -53,6 +53,12 @@ class Contribution < ApplicationRecord
       .joins(:person_payment)
       .where('contribution_balances.tickets_balance_cents <= 0.1 * person_payments.usd_value_cents')
   }
+  scope :no_club_with_paid_status, lambda {
+    joins(:person_payment)
+      .joins(person_payment: :offer)
+      .where(person_payments: { status: :paid })
+      .where(offers: { category: :direct_contribution })
+  }
   scope :with_paid_status, lambda {
     joins(:person_payment).where(person_payments: { status: :paid })
   }

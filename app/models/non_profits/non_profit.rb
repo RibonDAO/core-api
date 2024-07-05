@@ -5,7 +5,10 @@
 #  id                             :bigint           not null, primary key
 #  background_image_description   :string
 #  confirmation_image_description :string
+#  cover_image_description        :text
+#  icon_description               :string
 #  impact_description             :text
+#  impact_title                   :string(50)
 #  logo_description               :string
 #  main_image_description         :string
 #  name                           :string
@@ -17,13 +20,16 @@
 class NonProfit < ApplicationRecord
   extend Mobility
 
-  translates :impact_description, :logo_description,
+  translates :impact_description, :logo_description, :name,
              :main_image_description, :background_image_description,
-             :confirmation_image_description, type: :string
+             :confirmation_image_description, :impact_title, :cover_image_description, :icon_description,
+             type: :string
 
   has_one_attached :logo
+  has_one_attached :icon
   has_one_attached :main_image
   has_one_attached :background_image
+  has_one_attached :cover_image
   has_one_attached :confirmation_image
 
   has_many :non_profit_impacts
@@ -35,6 +41,9 @@ class NonProfit < ApplicationRecord
   has_many :person_payments, as: :receiver
   has_many :subscriptions, as: :receiver
 
+  has_many :non_profit_tags
+  has_many :tags, through: :non_profit_tags
+
   accepts_nested_attributes_for :stories
   accepts_nested_attributes_for :non_profit_impacts
 
@@ -43,6 +52,8 @@ class NonProfit < ApplicationRecord
   belongs_to :cause
 
   before_save :save_wallet
+
+  after_save :invalidate_cache
 
   enum status: {
     inactive: 0,
@@ -82,5 +93,10 @@ class NonProfit < ApplicationRecord
 
   def blueprint
     NonProfitBlueprint
+  end
+
+  def invalidate_cache
+    Rails.cache.delete_matched('active_non_profits_*')
+    Rails.cache.delete_matched('active_tags_*')
   end
 end

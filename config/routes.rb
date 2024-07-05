@@ -10,9 +10,6 @@ Rails.application.routes.draw do
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   
-  Rails.application.routes.draw do
-    post '/graphql', to: 'graphql#execute'
-  end
 
   devise_for :admins, only: [:sessions]
 
@@ -70,6 +67,7 @@ Rails.application.routes.draw do
       get 'users/subscriptions' => 'users/subscriptions#index'
       get 'users/configs' => 'users/configs#show'
       get 'users/is_member' => 'users/subscriptions#member?'
+      get 'users/donation_streak' => 'users/statistics#donation_streak'
 
       post 'sources' => 'sources#create'
       get 'causes' => 'causes#index'
@@ -83,7 +81,11 @@ Rails.application.routes.draw do
       put 'big_donors/:id' => 'big_donors#update'
 
       get 'chains' => 'chains#index'
-      
+
+      get 'tags' => 'tags#index'
+
+      get 'warmglow_messages/random_message' => 'warmglow_messages#random_message'
+
       namespace :legacy do
         post 'create_legacy_impact' => 'legacy_user_impact#create_legacy_impact'
         post 'create_legacy_contribution' => 'legacy_user_impact#create_legacy_contribution'
@@ -136,7 +138,7 @@ Rails.application.routes.draw do
         put  'cryptocurrency' => 'cryptocurrency#update_treasure_entry_status'
         post 'credit_cards_refund' => 'credit_cards#refund'
         post 'store_pay'   => 'stores#create'
-        post 'pix'   => 'pix#create'      
+        post 'pix'   => 'pix#create'
          post 'pix/generate'   => 'pix#generate'   
          get 'pix/:id'   => 'pix#find'
       end
@@ -145,7 +147,6 @@ Rails.application.routes.draw do
       end
       namespace :configs do
         get 'settings' => 'ribon_config#index'
-        put 'settings/:id' => 'ribon_config#update'
       end
       mount_devise_token_auth_for 'UserManager', at: 'auth', skip: [:omniauth_callbacks]
       namespace :manager do
@@ -167,6 +168,8 @@ Rails.application.routes.draw do
         put 'cancel_subscription' => 'subscriptions#unsubscribe'
       end
 
+      resources :reports, only: %i[index show]
+
       namespace :tickets do 
         get 'available' => 'tickets#available'
         get 'to_collect' => 'tickets#to_collect'
@@ -176,6 +179,9 @@ Rails.application.routes.draw do
         post 'can_collect_by_external_ids' => 'collect#can_collect_by_external_ids'
         post 'collect_and_donate_by_external_ids' => 'collect_and_donate#collect_and_donate_by_external_ids'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
+        post 'can_collect_by_coupon_id' => 'collect#can_collect_by_coupon_id'
+        post 'collect_by_coupon_id' => 'collect#collect_by_coupon_id'
+        post 'donate' => 'donations#donate'
       end
     end
   end
@@ -226,6 +232,10 @@ Rails.application.routes.draw do
       resources :stories, only: %i[index show create update destroy]
       resources :impression_cards, only: %i[index show create update destroy]
       resources :tasks, only: %i[index show create update destroy]
+      resources :reports, only: %i[index show create update destroy]
+      resources :coupons, only: %i[index show create update]
+      resources :tags, only: %i[index show create update]
+      resources :warmglow_messages, only: %i[index show create update]
 
       post 'rails/active_storage/direct_uploads' => 'direct_uploads#create'
       post 'auth/request', to: 'authorization#google_authorization'
@@ -239,6 +249,7 @@ Rails.application.routes.draw do
       get 'stories/:id/stories' => 'stories#stories'
       post 'users' => 'users#create'
       post 'users/search' => 'users#search'
+      post 'subscriptions/create_direct_transfer_subscriptions' => 'subscriptions#create_direct_transfer_subscriptions'
     end
   end
 
@@ -261,6 +272,7 @@ Rails.application.routes.draw do
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
       post 'can_donate' => 'donations#can_donate'
+      
       post 'donations' => 'donations#create'
       get 'profile' => 'profile#show'
       post 'account/send_validated_email' => 'account#send_validated_email'

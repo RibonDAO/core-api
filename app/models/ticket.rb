@@ -17,6 +17,8 @@ class Ticket < ApplicationRecord
   belongs_to :user
   belongs_to :integration, optional: true
 
+  validates :external_id, uniqueness: { scope: :integration_id }, allow_blank: true
+
   has_one :utm, as: :trackable
 
   enum status: {
@@ -26,12 +28,14 @@ class Ticket < ApplicationRecord
 
   enum category: {
     daily: 0,
-    monthly: 1
+    monthly: 1,
+    extra: 2
   }
 
   enum source: {
     integration: 0,
-    club: 1
+    club: 1,
+    coupon: 2
   }
 
   scope :receive_daily_tickets_from_club_today, lambda {

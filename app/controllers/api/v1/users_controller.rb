@@ -15,7 +15,7 @@ module Api
         @user = User.new(user_params)
 
         if @user.save
-          Tracking::AddUtm.call(utm_params:, trackable: @user)
+          Tracking::AddUtmJob.perform_later(utm_params:, trackable: @user)
           render json: UserBlueprint.render(@user), status: :created
         else
           head :unprocessable_entity
@@ -83,7 +83,7 @@ module Api
       def send_delete_account_email
         if current_user
           jwt = ::Jwt::Encoder.encode({ email: current_user.email })
-          Mailers::SendUserDeletionEmailJob.perform_now(user: current_user, jwt:)
+          Events::Users::SendUserDeletionEmailJob.perform_now(user: current_user, jwt:)
 
           render json: { sent: true }, status: :ok
         else

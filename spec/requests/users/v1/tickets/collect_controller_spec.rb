@@ -25,8 +25,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
           .and_return(command_double(klass: Tickets::CanCollectByIntegration))
         allow(Tickets::CollectByIntegration).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByIntegration))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'calls the CollectByIntegration command with right params' do
@@ -41,7 +40,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
 
       it 'returns success' do
@@ -99,8 +98,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
           .and_return(command_double(klass: Tickets::CanCollectByExternalId))
         allow(Tickets::CollectByExternalIds).to receive(:call)
           .and_return(command_double(klass: Tickets::CollectByExternalIds))
-        allow(Tracking::AddUtm).to receive(:call)
-          .and_return(command_double(klass: Tracking::AddUtm))
+        allow(Tracking::AddUtmJob).to receive(:perform_later)
       end
 
       it 'calls the CollectByExternalId command with right params' do
@@ -116,7 +114,7 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
 
       it 'calls add utm command' do
         request
-        expect(Tracking::AddUtm).to have_received(:call)
+        expect(Tracking::AddUtmJob).to have_received(:perform_later)
       end
 
       it 'returns success' do

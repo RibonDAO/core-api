@@ -33,7 +33,9 @@ module Givings
           Service::Givings::Payment::Orchestrator.new(payload: order).call
         end
 
-        def success_callback; end
+        def success_callback
+          cancel_old_subscriptions(order.payment.payer) if operation == :subscribe
+        end
 
         private
 
@@ -53,7 +55,8 @@ module Givings
         end
 
         def create_subscription(payer)
-          return if existing_subscription(payer)
+          subscription = existing_subscription(payer)
+          return subscription if subscription
 
           Subscription.create!({ payer:, offer:, payment_method:, status: :inactive, platform:,
                                  integration: })
@@ -61,6 +64,12 @@ module Givings
 
         def existing_subscription(payer)
           Subscription.find_by(payer:, offer:, payment_method:)
+        end
+
+        def cancel_old_subscriptions(payer)
+          Subscription.where(payer:, status: %i[inactive]).each do |subscription|
+            Givings::Subscriptions::CancelSubscription.call(subscription_id: subscription.id, skip_email: true)
+          end
         end
 
         def amount_cents
@@ -76,7 +85,7 @@ module Givings
         end
 
         def random_cause
-          Cause.order('RANDOM()').first
+          Cause.active.order('RANDOM()').first
         end
 
         def receiver

@@ -20,9 +20,6 @@ gem 'hiredis'
 gem 'redis', '~> 4.0'
 gem 'redis-namespace'
 
-gem 'graphql'
-gem 'graphql-client'
-
 gem 'eth', '~> 0.5.6'
 gem 'keccak', '~> 1.3'
 
@@ -90,8 +87,6 @@ gem 'sentry-ruby'
 
 gem 'sassc-rails'
 
-gem 'sendgrid-ruby'
-
 # Observers
 gem 'rails-observers'
 
@@ -126,5 +121,5 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
   gem 'annotate'
-  gem 'ruby-lsp', '~> 0.3.6', require: false
+  # gem 'ruby-lsp', '~> 0.3.6', require: false
 end

@@ -28,26 +28,6 @@ retry_person_transactions:
   class: "PersonPayments::RetryBlockchainTransactionsWorker"
   queue: person_payments
 
-send_bimonthly_email_report_worker:
-  cron: "0 18 1 * *" # At 18:00 on day-of-month 1.
-  class: "Mailers::SendBimonthlyEmailReportWorker"
-  queue: mailers
-
-inactive_donors_one_week_worker:
-  cron: "0 9 * * 0" # At 09:00 everyday.
-  class: "Mailers::SendOneWeekInactivityEmailWorker"
-  queue: mailers
-
-inactive_donors_months_worker:
-  cron: "0 10 * * 0" # At 10:00 everyday.
-  class: "Mailers::SendMonthsInactivityEmailWorker"
-  queue: mailers
-
-contribution_reactivation_months_worker:
-  cron: "0 11 * * *" # At 11:00 everyday.
-  class: "Mailers::CheckForContributionReactivationWorker"
-  queue: mailers
-
 label_missed_donations:
   cron: "0 3 * * 1" # At 03:00 on monday.
   class: "Contributions::LabelMissedDonationsWorker"
@@ -63,15 +43,21 @@ clear_all_collected_by_integration:
   class: "Tickets::ClearAllCollectedByIntegrationWorker"
   queue: tickets
 
+clear_expired_coupons:
+  cron: "0 4 * * 1" # At 04:00 on monday.
+  class: "Coupons::ClearExpiredCouponsWorker"
+  queue: coupons
+
 generate_club_daily_tickets:
   cron: "0 1 * * *" # At 01:00 everyday.
   class: "Tickets::GenerateClubDailyTicketsWorker"
   queue: tickets
 
 clear_redis_tickets:
-  cron: "0 1 10 1 *" # At 01:00 on day-of-month 10 in January.
+  cron: "0 1 20 1 *" # At 01:00 January 20th
   class: "Tickets::ClearRedisTicketsWorker"
   queue: tickets
+  enabled: false
 
 label_donations_and_contributions:
   cron: "0 8 * 3 1"
@@ -84,6 +70,23 @@ relabel_donations_and_contributions:
   queue: relabel
 
 clear_old_integration_tickets:
-  cron:  "0 1 20 1 *" # At 01:00 January 20th
+  cron: "0 1 20 1 *" # At 01:00 January 20th
   class: "Tickets::ClearOldIntegrationTicketsWorker"
   queue: tickets
+  enabled: false
+
+reset_donation_streak:
+  cron: "0 3 * * *" # At 03:00 everyday.
+  class: "Users::ResetDonationStreakWorker"
+  queue: users
+
+update_days_donating_for_all_users:
+  cron: "0 1 20 1 *" # At 01:00 January 20th
+  class: "Users::UpdateDaysDonatingForAllWorker"
+  queue: users
+  enabled: false
+
+update_direct_transfer_subscriptions:
+  cron: "0 4 * * *" # At 04:00 everyday.
+  class: "Subscriptions::UpdateDirectTransferSubscriptionsWorker"
+  queue: subscriptions

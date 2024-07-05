@@ -41,6 +41,9 @@ class User < ApplicationRecord
   has_many :accounts
   has_one :user_profile
 
+  has_many :user_coupons
+  has_many :user_expired_coupons
+
   has_many :legacy_user_impacts, through: :legacy_user
   has_many :legacy_contributions, through: :legacy_user
 
@@ -79,6 +82,14 @@ class User < ApplicationRecord
     return true if donations.where(platform: 'app').count.positive?
 
     false
+  end
+
+  def donation_streak
+    user_donation_stats.streak
+  end
+
+  def company
+    UserQueries.new(user: self).company
   end
 
   private

@@ -2,14 +2,11 @@ module Api
   module V1
     class NonProfitsController < ApplicationController
       def index
-        @non_profits = if current_user&.email&.include?('@ribon.io')
-                         active_and_test_non_profits
-                       else
-                         active_non_profits
-                       end
-        @random_non_profits = @non_profits.shuffle.sort_by { |non_profit| non_profit.cause.id }
-
-        render json: NonProfitBlueprint.render(@random_non_profits)
+        @non_profits_blueprints = Rails.cache.fetch("active_non_profits_#{I18n.locale}", expires_in: 30.minutes) do
+          @non_profits = active_non_profits
+          NonProfitBlueprint.render(@non_profits)
+        end
+        render json: @non_profits_blueprints
       end
 
       def stories
@@ -50,6 +47,9 @@ module Api
                       :logo, :main_image, :background_image, :confirmation_image, :cause_id,
                       :logo_description, :main_image_description, :background_image_description,
                       :confirmation_image_description,
+                      :impact_title,
+                      :cover_image_description,
+                      :cover_image,
                       stories_attributes: %i[id title description position active image],
                       non_profit_impacts_attributes: %i[id start_date end_date usd_cents_to_one_impact_unit
                                                         donor_recipient impact_description measurement_unit])
