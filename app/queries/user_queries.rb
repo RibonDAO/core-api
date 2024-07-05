@@ -31,4 +31,12 @@ class UserQueries
   def labelable_contributions
     user.contributions.with_cause_receiver.no_club_with_paid_status.order(created_at: :desc)
   end
+
+  def company
+    Subscription.where(
+      payer: user.customer,
+      payment_method: :direct_transfer,
+      status: :active
+    )&.last&.integration || nil
+  end
 end
