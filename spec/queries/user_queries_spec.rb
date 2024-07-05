@@ -74,4 +74,32 @@ RSpec.describe UserQueries, type: :model do
         .to match_array(contributions_to_causes.pluck(:id))
     end
   end
+
+  describe '#company' do
+    describe 'when the user has direct_transfer subscription' do
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let!(:subscription) do
+        create(:subscription, payer: customer, payment_method: :direct_transfer, status: :active)
+      end
+
+      it 'returns the company of the user' do
+        expect(described_class.new(user:).company).to eq(subscription.integration)
+      end
+    end
+
+    describe 'when the user does not have an active direct_transfer subscription' do
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+
+      before do
+        create(:subscription, payer: customer, payment_method: :direct_transfer, status: :inactive)
+        create(:subscription, payer: customer, payment_method: :credit_card, status: :active)
+      end
+
+      it 'returns nil' do
+        expect(described_class.new(user:).company).to be_nil
+      end
+    end
+  end
 end
