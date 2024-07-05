@@ -7,7 +7,7 @@ class UserBlueprint < Blueprinter::Base
     fields :last_donation_at, :last_donated_cause
 
     field(:company) do |object|
-      IntegrationBlueprint.render_as_hash(object.company) if object.company
+      IntegrationBlueprint.render_as_hash(object.company, view: :minimal) if object.company
     end
   end
 end
