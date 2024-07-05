@@ -112,6 +112,15 @@ RSpec.describe 'Api::V1::Users', type: :request do
         expect(response_body.company['name']).to eq 'Direct transfer integration'
       end
     end
+
+    context 'when the user exists and does not have a direct_transfer subscription' do
+      let(:user) { create(:user) }
+
+      it 'returns the company as nil' do
+        request
+        expect(response_body.company).to be_nil
+      end
+    end
   end
 
   describe 'POST /users/can_donate' do
