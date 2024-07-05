@@ -101,7 +101,9 @@ RSpec.describe 'Api::V1::Users', type: :request do
       let(:user) { create(:user) }
       let(:customer) { create(:customer, user:) }
       let(:integration) { create(:integration, name: 'Direct transfer integration') }
-      let(:subscription) { create(:subscription, payer: customer, payment_method: 'direct_transfer', integration:, status: :active) }
+      let(:subscription) do
+        create(:subscription, payer: customer, payment_method: 'direct_transfer', integration:, status: :active)
+      end
 
       before do
         user.customer = customer
