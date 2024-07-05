@@ -98,9 +98,9 @@ RSpec.describe 'Api::V1::Users', type: :request do
     end
 
     context 'when the user exists and has a direct_transfer subscription' do
-      let!(:user) { create(:user) }
-      let!(:customer) { create(:customer, user:) }
-      let!(:integration) { create(:integration, name: 'Direct transfer integration') }
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:integration) { create(:integration, name: 'Direct transfer integration') }
 
       before do
         create(:subscription, payer: customer, payment_method: 'direct_transfer', integration:, status: :active)
