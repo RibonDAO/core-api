@@ -96,6 +96,25 @@ RSpec.describe 'Api::V1::Users', type: :request do
         expect(response_body.error).to eq 'user not found'
       end
     end
+
+    context 'when the user exists and has a direct_transfer subscription' do
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:integration) { create(:integration, name: 'Direct transfer integration') }
+      let(:subscription) { create(:subscription, payer: customer, payment_method: 'direct_transfer', integration:, status: :active) }
+
+      before do
+        user.customer = customer
+        user.save!
+        subscription.save!
+      end
+
+      it 'returns the company' do
+        request
+        expect(response_body.company).to be_present
+        expect(response_body.company['name']).to eq 'Direct transfer integration'
+      end
+    end
   end
 
   describe 'POST /users/can_donate' do
