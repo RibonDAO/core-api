@@ -47,14 +47,14 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
     end
   end
 
-  describe 'GET /users/v1/is_member' do
-    subject(:request) { get '/api/v1/users/is_member', headers: { Email: user.email } }
+  describe 'GET /users/v1/is_club_member' do
+    subject(:request) { get '/api/v1/users/is_club_member', headers: { Email: user.email } }
 
     let!(:user) { create(:user) }
     let!(:customer) { create(:customer, user:) }
     let!(:offer) { create(:offer, category: :club) }
 
-    context 'when user is member' do
+    context 'when user is a club member' do
       before do
         create(:subscription, payer: customer, offer:, status: 0)
       end
@@ -63,11 +63,11 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
         request
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ is_member: true }.to_json)
+        expect(response.body).to eq({ is_club_member: true }.to_json)
       end
     end
 
-    context 'when user is not member' do
+    context 'when user is not a club member' do
       before do
         create(:subscription, payer: customer)
       end
@@ -76,7 +76,7 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
         request
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to eq({ is_member: false }.to_json)
+        expect(response.body).to eq({ is_club_member: false }.to_json)
       end
     end
   end
