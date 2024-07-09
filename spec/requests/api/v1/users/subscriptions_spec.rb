@@ -50,13 +50,14 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
   describe 'GET /users/v1/is_member' do
     subject(:request) { get '/api/v1/users/is_member', headers: { Email: user.email } }
 
-    let!(:user) { create(:user) }
-    let!(:customer) { create(:customer, user:) }
-    let!(:offer) { create(:offer, category: :club) }
+    let(:user) { create(:user) }
+    let(:customer) { create(:customer, user:) }
+    let(:offer) { create(:offer, category: :club) }
+    let(:subscription) { create(:subscription, payer: customer, offer:, status: :active) }
 
     context 'when user is member' do
       before do
-        create(:subscription, payer: customer, offer:, status: 0)
+        create(:person_payment, payer: customer, subscription:)
       end
 
       it 'get true as response' do
@@ -68,8 +69,10 @@ RSpec.describe 'Api::V1::Users::Subscriptions', type: :request do
     end
 
     context 'when user is not member' do
+      let(:subscription) { create(:subscription, payer: customer, offer:, status: :inactive) }
+
       before do
-        create(:subscription, payer: customer)
+        create(:person_payment, payer: customer, subscription:)
       end
 
       it 'get true as response' do
