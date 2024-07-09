@@ -22,9 +22,7 @@ module Users
 
     def club_member?
       ids = user.customers.pluck(:id)
-      Subscription.joins(:offer)
-                  .where(payer_id: ids, status: :active, offer: { category: :club })
-                  .count.positive?
+      Subscription.where(payer_id: ids).active_from_club.to_a.size.positive?
     end
   end
 end
