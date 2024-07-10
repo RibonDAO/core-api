@@ -4,6 +4,8 @@ module Api
       class CreditCardsController < ApplicationController
         include ::Givings::Payment
 
+        before_action :authenticate_user!
+
         def create
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::CreditCard, order_params)
 
@@ -72,6 +74,14 @@ module Api
           return :subscribe if offer.subscription?
 
           :purchase
+        end
+
+        def authenticate_user!
+          token = request.headers['Authorization']&.split('Bearer ')&.last
+
+          return true if current_user && token.present?
+
+          head :unauthorized
         end
 
         def payment_params
