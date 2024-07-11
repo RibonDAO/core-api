@@ -5,8 +5,11 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
   let(:integration) { create(:integration) }
   let(:cause) { nil }
   let(:non_profit) { nil }
+  let(:account) { create(:account, confirmed_at: Time.current) }
+  let(:user_double) { build(:user, email: 'user@test.com', accounts: [account]) }
+  let(:order_type) { ::Givings::Payment::OrderTypes::CreditCard }
   let(:params) do
-    { email: 'user@test.com', tax_id: '111.111.111-11', offer_id: offer.id,
+    { email: 'user1@ribon.io', tax_id: '111.111.111-11', offer_id: offer.id,
       external_id: 'pi_123', country: 'Brazil', city: 'Brasilia', state: 'DF',
       integration_id: integration.id, cause_id: cause&.id, non_profit_id: non_profit&.id,
       platform: 'web',
@@ -16,25 +19,26 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
       utm_medium: 'utm medium',
       utm_campaign: 'utm campaign' }
   end
+
   let(:create_order_command_double) do
     command_double(klass: ::Givings::Payment::CreateOrder, result: { payment: nil })
   end
 
   let(:credit_card_double) do
     CreditCard.new(cvv: params[:card][:cvv], number: params[:card][:number], name: params[:card][:name],
-
                    expiration_month: params[:card][:expiration_month],
                    expiration_year: params[:card][:expiration_year])
   end
-  let(:user_double) { build(:user, email: 'user@test.com') }
-
-  let(:order_type) { ::Givings::Payment::OrderTypes::CreditCard }
 
   before do
     allow(::Givings::Payment::CreateOrder)
       .to receive(:call).and_return(create_order_command_double)
     allow(CreditCard).to receive(:new).and_return(credit_card_double)
     allow(User).to receive(:find_by).and_return(user_double)
+    # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Api::V1::Payments::CreditCardsController)
+      .to receive(:current_user).and_return(user_double)
+    # rubocop:enable RSpec/AnyInstance
   end
 
   describe 'POST /credit_cards_refund' do
@@ -46,8 +50,6 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
     end
 
     it 'returns http status created' do
-      request
-
       expect(response).to have_http_status :created
     end
   end
@@ -66,7 +68,6 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
 
       it 'returns http status created' do
         request
-
         expect(response).to have_http_status :created
       end
 
@@ -81,9 +82,8 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
         command_double(klass: ::Givings::Payment::CreateOrder, success: false, failure: true)
       end
 
-      it 'returns http status created' do
+      it 'returns http status unprocessable entity' do
         request
-
         expect(response).to have_http_status :unprocessable_entity
       end
     end
