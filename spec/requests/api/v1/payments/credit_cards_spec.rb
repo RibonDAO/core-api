@@ -35,10 +35,6 @@ RSpec.describe 'Api::V1::Payments::CreditCards', type: :request do
       .to receive(:call).and_return(create_order_command_double)
     allow(CreditCard).to receive(:new).and_return(credit_card_double)
     allow(User).to receive(:find_by).and_return(user_double)
-    # rubocop:disable RSpec/AnyInstance
-    allow_any_instance_of(Api::V1::Payments::CreditCardsController)
-      .to receive(:current_user).and_return(user_double)
-    # rubocop:enable RSpec/AnyInstance
   end
 
   describe 'POST /credit_cards_refund' do
