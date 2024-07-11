@@ -4,6 +4,8 @@ module Api
       class CreditCardsController < ApplicationController
         include ::Givings::Payment
 
+        before_action :ensure_account_confirmed, only: [:create]
+
         def create
           command = ::Givings::Payment::CreateOrder.call(OrderTypes::CreditCard, order_params)
 
@@ -48,8 +50,11 @@ module Api
         end
 
         def find_or_create_user
-          current_user || User.find_by(email: payment_params[:email]) || User.create(email: payment_params[:email],
-                                                                                     language: I18n.locale)
+          current_user
+        end
+
+        def ensure_account_confirmed
+          head :unauthorized unless current_user.accounts.any? { |account| account.confirmed_at.present? }
         end
 
         def offer
