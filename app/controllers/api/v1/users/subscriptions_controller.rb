@@ -6,7 +6,7 @@ module Api
           return [] unless current_user
 
           ids = current_user.customers.pluck(:id)
-          @subscriptions = Subscription.where(payer_id: ids)
+          @subscriptions = Subscription.where(payer_id: ids).where.not(status: :payment_failed)
 
           render json: SubscriptionBlueprint.render(@subscriptions)
         end
