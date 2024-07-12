@@ -66,7 +66,7 @@ Rails.application.routes.draw do
       post 'users/send_cancel_subscription_email' => 'users/subscriptions#send_cancel_subscription_email'
       get 'users/subscriptions' => 'users/subscriptions#index'
       get 'users/configs' => 'users/configs#show'
-      get 'users/is_member' => 'users/subscriptions#member?'
+      get 'users/is_club_member' => 'users/subscriptions#club_member?'
       get 'users/donation_streak' => 'users/statistics#donation_streak'
 
       post 'sources' => 'sources#create'
