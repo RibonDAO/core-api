@@ -12,15 +12,18 @@ RSpec.describe UserServices::UserImpact, type: :service do
     let(:integration) { create(:integration) }
 
     before do
-      create_list(:donation, 5, user:, value: 10, non_profit: non_profit1, integration:)
-      create_list(:donation, 3, user:, value: 10, non_profit: non_profit2, integration:)
+      create_list(:donation, 5, user:, value: 15, non_profit: non_profit1, integration:)
+      create_list(:donation, 3, user:, value: 15, non_profit: non_profit2, integration:)
     end
 
     it 'returns the sum of impact of each non profit' do
       user_impact = user.impact
 
-      expect(user_impact).to match_array [{ impact: 5, non_profit: non_profit1 },
-                                          { impact: 3, non_profit: non_profit2 }]
+      expect(user_impact)
+        .to match_array [{ impact: 7, non_profit: non_profit1,
+                           donation_count: 5 },
+                         { impact: 4, non_profit: non_profit2,
+                           donation_count: 3 }]
     end
   end
 end
