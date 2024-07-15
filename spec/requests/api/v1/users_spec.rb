@@ -77,7 +77,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'returns the user' do
         request
 
-        expect_response_to_have_keys %w[created_at id email updated_at last_donation_at last_donated_cause company]
+        expect_response_to_have_keys %w[created_at id email updated_at last_donation_at last_donated_cause company
+                                        direct_transfer_subscription]
       end
     end
 
