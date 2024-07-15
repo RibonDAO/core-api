@@ -67,7 +67,7 @@ module Givings
         end
 
         def cancel_old_subscriptions(payer)
-          Subscription.where(payer:, status: %i[inactive]).each do |subscription|
+          Subscription.where(payer:, status: :inactive).each do |subscription|
             Givings::Subscriptions::CancelSubscription.call(subscription_id: subscription.id, skip_email: true)
           end
         end
