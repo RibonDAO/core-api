@@ -112,6 +112,12 @@ RSpec.describe 'Api::V1::Users', type: :request do
         expect(response_body.company).to be_present
         expect(response_body.company['name']).to eq 'Direct transfer integration'
       end
+
+      it 'returns the direct_transfer_subscription' do
+        request
+        expect(response_body.direct_transfer_subscription).to be_present
+        expect(response_body.direct_transfer_subscription['status']).to eq 'active'
+      end
     end
 
     context 'when the user exists and does not have a direct_transfer subscription' do
@@ -120,6 +126,11 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'returns the company as nil' do
         request
         expect(response_body.company).to be_nil
+      end
+
+      it 'returns the direct_transfer_subscription as nil' do
+        request
+        expect(response_body.direct_transfer_subscription).to be_nil
       end
     end
   end
