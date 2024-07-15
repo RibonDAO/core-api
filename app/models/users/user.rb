@@ -88,6 +88,10 @@ class User < ApplicationRecord
     user_donation_stats.streak
   end
 
+  def company
+    UserQueries.new(user: self).company
+  end
+
   private
 
   def set_user_donation_stats
