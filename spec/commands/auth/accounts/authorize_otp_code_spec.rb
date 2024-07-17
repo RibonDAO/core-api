@@ -7,7 +7,7 @@ describe Auth::Accounts::AuthorizeOtpCode do
     subject(:command) { described_class.call(otp_code:, authenticatable:) }
 
     let(:authenticatable) { create(:big_donor) }
-    let(:otp_code) { 'RIB0N' }
+    let(:otp_code) { '012345' }
     let(:otp_code_service) { instance_double(Auth::OtpCodeService, valid_otp_code?: valid_otp) }
 
     before do

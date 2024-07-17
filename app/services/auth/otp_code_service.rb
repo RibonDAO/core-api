@@ -31,7 +31,7 @@ module Auth
 
     def create_otp_code
       RedisStore::HStore.set(key: "auth_otp_code_#{authenticatable.class.name}_#{authenticatable.id}",
-                             value: SecureRandom.hex[0, 5], expires_in: token_expiration(@scope))
+                             value: generated_code, expires_in: token_expiration(@scope))
     end
 
     def destroy_otp_code
@@ -45,6 +45,10 @@ module Auth
       else
         30.minutes
       end
+    end
+
+    def generated_code
+      SecureRandom.random_number(10**6).to_s.rjust(6, '0')
     end
   end
 end

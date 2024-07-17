@@ -7,7 +7,7 @@ describe Auth::Accounts::SendOtpEmail do
   let(:event_service_double) { instance_double(EventServices::SendEvent) }
   let(:authenticatable) { create(:account) }
   let(:otp_code_service) { instance_double(Auth::OtpCodeService, find_or_create_otp_code: otp_code) }
-  let(:otp_code) { 'RIB0N' }
+  let(:otp_code) { '012345' }
 
   before do
     allow(Auth::OtpCodeService).to receive(:new).and_return(otp_code_service)
