@@ -9,8 +9,8 @@ describe Auth::Accounts::AuthorizeOtpCode do
     let(:authenticatable) { create(:big_donor) }
     let(:otp_code) { 'RIB0N' }
     let(:otp_code_service) { instance_double(Auth::OtpCodeService, valid_otp_code?: valid_otp) }
-
-    before do
+  
+    before(:each) do
       allow(Auth::OtpCodeService).to receive(:new).and_return(otp_code_service)
       allow(Jwt::Auth::Issuer).to receive(:call).and_return(%w[access_token refresh_token])
     end
@@ -23,13 +23,12 @@ describe Auth::Accounts::AuthorizeOtpCode do
       end
 
       it 'return an access token and refresh token for the authenticatable' do
-        expect(command.result).to eq({ access_token: 'access_token',
-                                       refresh_token: 'refresh_token' })
+        expect(command.result).to eq(%w[access_token refresh_token])
       end
     end
 
     context 'when the OTP is not valid' do
-      let(:valid_auth_token) { false }
+      let(:valid_otp) { false }
 
       it 'returns failure' do
         expect(command).to be_failure
