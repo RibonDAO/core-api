@@ -14,7 +14,7 @@ RSpec.describe Auth::OtpCodeService, type: :service do
         service.send(:create_otp_code)
       end
 
-      it 'returns the link with that OTP code' do
+      it 'returns the generated OTP code' do
         expect(service.find_or_create_otp_code).to eq(otp_code)
       end
     end
@@ -26,7 +26,7 @@ RSpec.describe Auth::OtpCodeService, type: :service do
         allow(SecureRandom).to receive(:random_number).and_return(new_otp_code)
       end
 
-      it 'returns the link with a new OTP code' do
+      it 'returns the generated OTP code' do
         expect(service.find_or_create_otp_code).to eq(new_otp_code)
       end
     end
