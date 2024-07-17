@@ -107,13 +107,13 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       request
     end
 
-    it 'calls the send authentication link command with right params' do
+    it 'calls the send otp email command with right params' do
       expect(Auth::Accounts::SendOtpEmail).to have_received(:call).with(
         email: user.email, id: nil, current_email: nil
       )
     end
 
-    context 'when the send authentication link command succeeds' do
+    context 'when the send otp email command succeeds' do
       it 'returns status ok' do
         expect(response).to have_http_status(:ok)
       end
@@ -123,7 +123,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       end
     end
 
-    context 'when the send authentication link command fails' do
+    context 'when the send otp email command fails' do
       let(:command) { command_double(klass: Auth::Accounts::SendOtpEmail, success: false) }
 
       it 'returns status unprocessable_entity' do
@@ -153,7 +153,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       request
     end
 
-    it 'calls the send authorize command with right params' do
+    it 'calls the authorize otp code command with right params' do
       expect(Auth::Accounts::AuthorizeOtpCode).to have_received(:call).with(
         authenticatable: account, otp_code:
       )
@@ -163,13 +163,13 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       expect(account.reload.confirmed_at).not_to be_nil
     end
 
-    context 'when the send authentication link command succeeds' do
+    context 'when the send otp code command succeeds' do
       it 'returns status ok' do
         expect(response).to have_http_status(:ok)
       end
     end
 
-    context 'when the send authentication link command fails' do
+    context 'when the send otp code command fails' do
       let(:command) { command_double(klass: Auth::Accounts::AuthorizeAuthToken, success: false) }
 
       it 'returns status unauthorized' do
