@@ -269,8 +269,15 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'auth/refresh_token', to: 'authentication#refresh_token'
       post 'auth/authenticate', to: 'authentication#authenticate'
+
+      # Authorization by Magic Link
       post 'auth/send_authentication_email', to: 'authentication#send_authentication_email'
       post 'auth/authorize_from_auth_token', to: 'authentication#authorize_from_auth_token'
+
+      # Authorization by One Time Password (OTP)
+      post 'auth/send_otp_email', to: 'authentication#send_otp_email'
+      post 'auth/authorize_from_otp_code', to: 'authentication#authorize_from_otp_code'
+
       post 'can_donate' => 'donations#can_donate'
       
       post 'donations' => 'donations#create'
