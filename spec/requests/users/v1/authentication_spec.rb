@@ -137,7 +137,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       subject(:request) { post '/users/v1/auth/authorize_from_otp_code', params: }
     end
 
-    let(:params) { { otp_code: 'RIB0N', id: account.id } }
+    let(:params) { { otp_code: '012345', id: account.id } }
     let(:command) do
       command_double(klass: Auth::Accounts::AuthorizeOtpCode,
                      success: true, result:)
@@ -154,7 +154,7 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
 
     it 'calls the send authorize command with right params' do
       expect(Auth::Accounts::AuthorizeOtpCode).to have_received(:call).with(
-        authenticatable: account, otp_code: 'RIB0N'
+        authenticatable: account, otp_code: '012345'
       )
     end
 
