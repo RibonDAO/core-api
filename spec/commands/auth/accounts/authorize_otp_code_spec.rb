@@ -9,7 +9,7 @@ describe Auth::Accounts::AuthorizeOtpCode do
     let(:authenticatable) { create(:big_donor) }
     let(:otp_code) { 'RIB0N' }
     let(:otp_code_service) { instance_double(Auth::OtpCodeService, valid_otp_code?: valid_otp) }
-  
+
     before do
       allow(Auth::OtpCodeService).to receive(:new).and_return(otp_code_service)
       allow(Jwt::Auth::Issuer).to receive(:call).and_return(%w[access_token refresh_token])
