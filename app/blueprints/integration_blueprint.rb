@@ -28,4 +28,10 @@ class IntegrationBlueprint < Blueprinter::Base
 
     metadata if metadata['branch'] == 'referral'
   end
+
+  view :minimal do
+    excludes :integration_wallet, :integration_task, :metadata,
+             :integration_dashboard_address,
+             :unique_address, :created_at, :updated_at
+  end
 end

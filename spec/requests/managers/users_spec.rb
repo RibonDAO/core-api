@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe 'Api::V1::Users', type: :request do
+RSpec.describe 'Managers::V1::Users', type: :request do
   describe 'POST /create' do
-    subject(:request) { post '/api/v1/users', params: }
+    subject(:request) { post '/managers/v1/users', params: }
 
     context 'with right params' do
       let(:params) do
@@ -49,7 +49,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
   end
 
   describe 'POST /users/search' do
-    subject(:request) { post '/api/v1/users/search', params: { email: user.email } }
+    subject(:request) { post '/managers/v1/users/search', params: { email: user.email } }
 
     context 'when the user exists' do
       let(:user) { create(:user) }
@@ -65,7 +65,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'returns the user' do
         request
 
-        expect_response_to_have_keys %w[created_at id email updated_at last_donation_at last_donated_cause]
+        expect_response_to_have_keys %w[created_at id email updated_at last_donation_at last_donated_cause company
+                                        direct_transfer_subscription]
       end
     end
 

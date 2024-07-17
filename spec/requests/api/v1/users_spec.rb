@@ -77,7 +77,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
       it 'returns the user' do
         request
 
-        expect_response_to_have_keys %w[created_at id email updated_at last_donation_at last_donated_cause]
+        expect_response_to_have_keys %w[created_at id email updated_at last_donation_at last_donated_cause company
+                                        direct_transfer_subscription]
       end
     end
 
@@ -94,6 +95,42 @@ RSpec.describe 'Api::V1::Users', type: :request do
         request
 
         expect(response_body.error).to eq 'user not found'
+      end
+    end
+
+    context 'when the user exists and has a direct_transfer subscription' do
+      let(:user) { create(:user) }
+      let(:customer) { create(:customer, user:) }
+      let(:integration) { create(:integration, name: 'Direct transfer integration') }
+
+      before do
+        create(:subscription, payer: customer, payment_method: 'direct_transfer', integration:, status: :active)
+      end
+
+      it 'returns the company' do
+        request
+        expect(response_body.company).to be_present
+        expect(response_body.company['name']).to eq 'Direct transfer integration'
+      end
+
+      it 'returns the direct_transfer_subscription' do
+        request
+        expect(response_body.direct_transfer_subscription).to be_present
+        expect(response_body.direct_transfer_subscription['status']).to eq 'active'
+      end
+    end
+
+    context 'when the user exists and does not have a direct_transfer subscription' do
+      let(:user) { create(:user) }
+
+      it 'returns the company as nil' do
+        request
+        expect(response_body.company).to be_nil
+      end
+
+      it 'returns the direct_transfer_subscription as nil' do
+        request
+        expect(response_body.direct_transfer_subscription).to be_nil
       end
     end
   end
