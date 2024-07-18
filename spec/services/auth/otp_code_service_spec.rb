@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Auth::OtpCodeService, type: :service do
   subject(:service) { described_class.new(authenticatable:) }
 
-  let(:authenticatable) { create(:big_donor) }
+  let(:authenticatable) { create(:account) }
 
   describe '#create_otp_code' do
     it 'returns a new OTP code' do
