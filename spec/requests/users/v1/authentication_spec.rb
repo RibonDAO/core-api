@@ -93,13 +93,15 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
     subject(:request) { post '/users/v1/auth/send_otp_email', params: }
 
     let(:user) { create(:user) }
+    let(:account) { create(:account, user:) }
     let(:params) { { email: user.email } }
     let(:command) { command_double(klass: Auth::Accounts::SendOtpEmail, success: true, result:) }
 
     let(:result) do
       { access_token: 'access_token',
         refresh_token: OpenStruct.new({ token: 'refresh_token' }),
-        user: }
+        user:,
+        account: }
     end
 
     before do
