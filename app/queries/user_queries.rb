@@ -34,7 +34,7 @@ class UserQueries
 
   def company
     Subscription.where(
-      payer: user.customer,
+      payer_id: user.customers.pluck(:id),
       payment_method: :direct_transfer,
       status: :active
     )&.last&.integration || nil

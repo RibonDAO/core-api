@@ -79,6 +79,15 @@ RSpec.describe Subscription, type: :model do
         expect(described_class.active_from_club).to include(club_subscription)
       end
     end
+
+    describe 'when subscription is direct_transfer' do
+      let(:offer) { create(:offer, category: :club) }
+      let(:club_subscription) { create(:subscription, offer:, status: :active, payment_method: :direct_transfer) }
+
+      it 'returns active subscriptions from club' do
+        expect(described_class.active_from_club).to include(club_subscription)
+      end
+    end
   end
   # rubocop:enable RSpec/LetSetup
 end
