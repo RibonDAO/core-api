@@ -37,11 +37,12 @@ class Subscription < ApplicationRecord
 
   scope :active_from_club, lambda {
     joins(:offer).where(offers: { category: :club })
-                 .joins(:person_payments)
-                 .where('person_payments.created_at =
+                 .joins('LEFT JOIN person_payments on person_payments.subscription_id = subscriptions.id')
+                 .where("person_payments.created_at =
                         (SELECT MAX(person_payments.created_at)
                         FROM person_payments
-                        WHERE person_payments.subscription_id = subscriptions.id)')
+                        WHERE person_payments.subscription_id = subscriptions.id)
+                        OR subscriptions.payment_method = 'direct_transfer'")
                  .group('subscriptions.id')
                  .where(status: %i[active canceled])
                  .where('person_payments.paid_date > ?
