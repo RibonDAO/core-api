@@ -5,30 +5,9 @@ RSpec.describe Auth::OtpCodeService, type: :service do
 
   let(:authenticatable) { create(:big_donor) }
 
-  describe '#find_or_create_otp_code' do
-    context 'when there is already an OTP for that authenticatable' do
-      let(:otp_code) { '012345' }
-
-      before do
-        allow(SecureRandom).to receive(:random_number).and_return(otp_code)
-        service.send(:create_otp_code)
-      end
-
-      it 'returns the current OTP code' do
-        expect(service.find_or_create_otp_code).to eq(otp_code)
-      end
-    end
-
-    context 'when there is no OTP code' do
-      let(:new_otp_code) { '543210' }
-
-      before do
-        allow(SecureRandom).to receive(:random_number).and_return(new_otp_code)
-      end
-
-      it 'returns a new OTP code' do
-        expect(service.find_or_create_otp_code).to eq(new_otp_code)
-      end
+  describe '#create_otp_code' do
+    it 'returns a new OTP code' do
+      expect(service.create_otp_code).to match(/\A\d{6}\z/)
     end
   end
 

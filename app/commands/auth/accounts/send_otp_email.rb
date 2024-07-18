@@ -53,7 +53,7 @@ module Auth
       end
 
       def code(account)
-        OtpCodeService.new(authenticatable: account).find_or_create_otp_code
+        OtpCodeService.new(authenticatable: account).create_otp_code
       end
 
       def build_event(account)
