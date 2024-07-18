@@ -3,10 +3,10 @@ module Users
     class AuthenticationController < Users::AuthorizationController
       skip_before_action :authenticate,
                          only: %i[send_authentication_email authorize_from_auth_token refresh_token
-                                  authenticate]
+                                  authenticate send_otp_email authorize_from_otp_code]
       skip_before_action :require_account,
                          only: %i[send_authentication_email authorize_from_auth_token refresh_token
-                                  authenticate]
+                                  authenticate send_otp_email authorize_from_otp_code]
 
       def authenticate
         command = set_account_tokens
@@ -32,12 +32,38 @@ module Users
           render_errors(command.errors, :unprocessable_entity)
         end
       end
-      # rubocop:enable Metrics/AbcSize
 
-      # rubocop:disable Metrics/AbcSize
       def authorize_from_auth_token
         authenticatable = Account.find(params[:id])
         command = Auth::Accounts::AuthorizeAuthToken.call(auth_token: params[:auth_token], authenticatable:)
+
+        if command.success?
+          authenticatable.update(confirmed_at: Time.zone.now)
+          access_token, refresh_token = command.result
+          create_headers(access_token:, refresh_token:)
+          update_account_platform(authenticatable)
+          render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :ok
+        else
+          render_errors(command.errors, :unauthorized)
+        end
+      end
+
+      def send_otp_email
+        command = Auth::Accounts::SendOtpEmail.call(email: params[:email],
+                                                    current_email: request.headers['Email'],
+                                                    id: params[:account_id])
+
+        if command.success?
+          render json: { message: I18n.t('users.email_sent'), user: command.result[:user] }, status: :ok
+        else
+
+          render_errors(command.errors, :unprocessable_entity)
+        end
+      end
+
+      def authorize_from_otp_code
+        authenticatable = Account.find(params[:id])
+        command = Auth::Accounts::AuthorizeOtpCode.call(otp_code: params[:otp_code], authenticatable:)
 
         if command.success?
           authenticatable.update(confirmed_at: Time.zone.now)
