@@ -54,7 +54,8 @@ module Users
                                                     id: params[:account_id])
 
         if command.success?
-          render json: { message: I18n.t('users.email_sent'), user: command.result[:user], account_id: command.result[:account_id] }, status: :ok
+          render json: { message: I18n.t('users.email_sent'), user: command.result[:user], account_id: command.result[:account_id] },
+                 status: :ok
         else
 
           render_errors(command.errors, :unprocessable_entity)
