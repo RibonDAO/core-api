@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 module Users
   module V1
     class AuthenticationController < Users::AuthorizationController
@@ -54,10 +55,11 @@ module Users
                                                     id: params[:account_id])
 
         if command.success?
-          render json: { message: I18n.t('users.email_sent'), user: command.result[:user], account_id: command.result[:account_id] },
+          render json: { message: I18n.t('users.email_sent'),
+                         account_id: command.result[:account].id,
+                         user: command.result[:user] },
                  status: :ok
         else
-
           render_errors(command.errors, :unprocessable_entity)
         end
       end
@@ -130,3 +132,4 @@ module Users
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

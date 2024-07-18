@@ -22,7 +22,7 @@ module Auth
           access_token, refresh_token = Jwt::Auth::Issuer.call(@account)
           Users::CreateProfile.call(data: {}, user: @account.user)
           send_event
-          { access_token:, refresh_token:, user: @account.user, account_id: @account.id }
+          { access_token:, refresh_token:, account: @account, user: @account.user }
         rescue StandardError => e
           errors.add(:message, e.message)
         end
