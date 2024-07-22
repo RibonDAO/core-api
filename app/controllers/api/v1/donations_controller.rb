@@ -20,7 +20,7 @@ module Api
         else
           render_errors(command.errors)
         end
-      end 
+      end
 
       private
 
