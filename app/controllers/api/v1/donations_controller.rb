@@ -12,6 +12,16 @@ module Api
         end
       end
 
+      def count_today_donations
+        command = Donations::CountTodayDonations.call
+
+        if command.success?
+          render json: { today_donations: command.result }, status: :ok
+        else
+          render_errors(command.errors)
+        end
+      end
+
       private
 
       def integration

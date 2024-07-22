@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       get 'person_payments/:receiver_type' => 'person_payments#payments_for_receiver_by_person'
       
       post 'donations' => 'donations#create'
+      get 'count_today_donations' => 'donations#count_today_donations'
 
       get 'impression_cards/:id' => 'impression_cards#show'
       get 'tasks' => 'tasks#index'
