@@ -34,7 +34,8 @@ class Offer < ApplicationRecord
 
   enum category: {
     direct_contribution: 0,
-    club: 1
+    club: 1,
+    business: 2
   }
 
   def price_value
