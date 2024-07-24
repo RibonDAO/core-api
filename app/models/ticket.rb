@@ -35,7 +35,8 @@ class Ticket < ApplicationRecord
   enum source: {
     integration: 0,
     club: 1,
-    coupon: 2
+    coupon: 2,
+    business: 3
   }
 
   scope :receive_daily_tickets_from_club_today, lambda {
