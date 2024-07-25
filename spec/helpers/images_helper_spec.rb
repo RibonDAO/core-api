@@ -11,15 +11,15 @@ RSpec.describe ImagesHelper do
     let(:image) { build(:story, :with_image).image }
 
     context 'when CDN is enabled' do
+      subject(:helper) { described_class.image_url_for(image) }
+
       before do
         allow(ENV).to receive(:fetch).with('CDN_ENABLED', 'false').and_return('true')
         allow(ENV).to receive(:fetch).with('CDN_URL', nil).and_return('https://cdn.com/')
       end
 
-      let(:subject) { described_class.image_url_for(image) }
-
       it 'calls the url_with_cdn method' do
-        expect(subject).to eq("https://cdn.com/#{image.key}")
+        expect(helper).to eq("https://cdn.com/#{image.key}")
       end
     end
 
@@ -32,21 +32,21 @@ RSpec.describe ImagesHelper do
         let(:variant) do
           { resize_to_fit: [500, 500], format: :jpg }
         end
-  
+
         it 'calls the Rails polymorphic url with correct params' do
           allow(image).to receive(:variant).and_return(image)
           described_class.image_url_for(image, variant:)
-  
+
           expect(image).to have_received(:variant).with(variant)
           expect(Rails.application.routes.url_helpers)
             .to have_received(:polymorphic_url).with(image)
         end
       end
-  
+
       context 'when no variant is passed' do
         it 'calls the Rails polymorphic url with correct params' do
           described_class.image_url_for(image)
-  
+
           expect(Rails.application.routes.url_helpers)
             .to have_received(:polymorphic_url).with(image)
         end

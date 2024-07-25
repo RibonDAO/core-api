@@ -10,8 +10,6 @@ module ImagesHelper
     nil
   end
 
-  private
-
   def self.url_with_cdn(image)
     "#{cdn_url}#{image.key}"
   end
