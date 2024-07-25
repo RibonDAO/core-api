@@ -329,6 +329,7 @@ Rails.application.routes.draw do
         post 'collect_by_integration' => 'collect#collect_by_integration'
         post 'collect_by_external_ids' => 'collect#collect_by_external_ids'
         post 'collect_by_club' => 'collect#collect_by_club'
+        post 'collect_by_business' => 'collect#collect_by_business'
         post 'donate' => 'donations#donate'
       end
     end

@@ -34,6 +34,16 @@ module Users
           end
         end
 
+        def collect_by_business
+          command = ::Tickets::CollectByBusiness.call(user:, platform:, category: ticket_params[:category])
+
+          if command.success?
+            render json: { tickets: command.result }, status: :ok
+          else
+            render_errors(command.errors)
+          end
+        end
+
         private
 
         def integration

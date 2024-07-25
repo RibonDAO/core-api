@@ -63,7 +63,7 @@ module Givings
           user: subscription.payer.user,
           platform: subscription.platform,
           quantity: subscription.offer.plan.monthly_tickets,
-          source: :club
+          source: :business
         )
       end
 
@@ -72,7 +72,7 @@ module Givings
           user: subscription.payer.user,
           platform: subscription.platform,
           quantity: subscription.offer.plan.daily_tickets,
-          source: :club
+          source: :business
         )
       end
 

@@ -203,4 +203,62 @@ RSpec.describe 'Users::V1::Tickets::Collect', type: :request do
       end
     end
   end
+
+  describe 'POST /collect_by_business' do
+    include_context 'when making a user request' do
+      subject(:request) { post '/users/v1/tickets/collect_by_business', headers:, params: }
+    end
+
+    context 'with right params' do
+      let(:user) { account.user }
+      let(:platform) { 'web' }
+      let(:category) { 'daily' }
+      let(:params) do
+        {
+          platform:,
+          category:
+        }
+      end
+
+      before do
+        allow(Tickets::CollectByBusiness).to receive(:call)
+          .and_return(command_double(klass: Tickets::CollectByBusiness))
+      end
+
+      it 'calls the CollectByBusiness command with right params' do
+        request
+        expect(Tickets::CollectByBusiness).to have_received(:call).with(
+          user:,
+          platform:,
+          category:
+        )
+      end
+
+      it 'returns success' do
+        request
+
+        expect(response).to have_http_status :ok
+      end
+
+      it 'returns the tickets' do
+        request
+
+        expect_response_to_have_keys(%w[tickets])
+      end
+    end
+
+    context 'with wrong params' do
+      let(:params) do
+        {
+          category: 'daily'
+        }
+      end
+
+      it 'returns an error' do
+        request
+
+        expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+  end
 end
