@@ -17,7 +17,7 @@ class OfferBlueprint < Blueprinter::Base
 
   view :manager do
     association :plan, blueprint: PlanBlueprint do |object|
-      object.plan
+      object.plan_manager
     end
   end
 
