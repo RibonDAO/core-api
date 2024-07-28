@@ -12,11 +12,11 @@ module Api
         end
       end
 
-      def count_today_donations
-        command = Donations::CountTodayDonations.call
+      def count_total_donations_today
+        command = Donations::CountTotalDonationsToday.call
 
         if command.success?
-          render json: { today_donations: command.result }, status: :ok
+          render json: { total_donations_today_count: command.result }, status: :ok
         else
           render_errors(command.errors)
         end
