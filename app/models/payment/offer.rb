@@ -46,6 +46,10 @@ class Offer < ApplicationRecord
     plans.where(status: :active).last
   end
 
+  def plan_manager
+    plans.last
+  end
+
   def invalidate_cache
     Rails.cache.delete_matched('active_offers_*')
   end
