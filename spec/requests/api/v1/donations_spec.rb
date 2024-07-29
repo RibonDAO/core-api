@@ -90,7 +90,7 @@ RSpec.describe 'Api::V1::Donations', type: :request do
   end
 
   describe 'GET /count_total_donations_today' do
-    subject(:request) { get '/api/v1/count_total_donations_today' }
+    subject(:request) { get '/api/v1/total_donations_today' }
 
     context 'when there is a cached result' do
       before do
@@ -116,7 +116,7 @@ RSpec.describe 'Api::V1::Donations', type: :request do
 
         expect(RedisStore::HStore)
           .to have_received(:set)
-          .with(value: 0, expires_in: 1.hour, key: 'total_donations_today_count_result')
+          .with(value: 0, expires_in: 1.hour, key: 'total_donations_today_result')
       end
     end
   end
