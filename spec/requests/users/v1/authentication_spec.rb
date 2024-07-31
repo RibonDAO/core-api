@@ -88,4 +88,95 @@ RSpec.describe 'Users::V1::Authentication', type: :request do
       end
     end
   end
+
+  describe 'POST /send_otp_email' do
+    subject(:request) { post '/users/v1/auth/send_otp_email', params: }
+
+    let(:user) { create(:user) }
+    let(:account) { create(:account, user:) }
+    let(:params) { { email: user.email } }
+    let(:command) { command_double(klass: Auth::Accounts::SendOtpEmail, success: true, result:) }
+
+    let(:result) do
+      { access_token: 'access_token',
+        refresh_token: OpenStruct.new({ token: 'refresh_token' }),
+        user:,
+        account: }
+    end
+
+    before do
+      allow(Auth::Accounts::SendOtpEmail).to receive(:call).and_return(command)
+      request
+    end
+
+    it 'calls the send otp email command with right params' do
+      expect(Auth::Accounts::SendOtpEmail).to have_received(:call).with(
+        email: user.email, id: nil, current_email: nil
+      )
+    end
+
+    context 'when the send otp email command succeeds' do
+      it 'returns status ok' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns the user' do
+        expect(response_body.user.id).to eq(user.id)
+      end
+    end
+
+    context 'when the send otp email command fails' do
+      let(:command) { command_double(klass: Auth::Accounts::SendOtpEmail, success: false) }
+
+      it 'returns status unprocessable_entity' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe 'POST /authorize_from_otp_code' do
+    include_context 'when making a user request' do
+      subject(:request) { post '/users/v1/auth/authorize_from_otp_code', params: }
+    end
+
+    let(:otp_code) { '012345' }
+    let(:params) { { otp_code:, id: account.id } }
+    let(:command) do
+      command_double(klass: Auth::Accounts::AuthorizeOtpCode,
+                     success: true, result:)
+    end
+    let(:result) do
+      { access_token: 'access_token',
+        refresh_token: OpenStruct.new({ token: 'refresh_token' }) }
+    end
+
+    before do
+      allow(Auth::Accounts::AuthorizeOtpCode).to receive(:call).and_return(command)
+      request
+    end
+
+    it 'calls the authorize otp code command with right params' do
+      expect(Auth::Accounts::AuthorizeOtpCode).to have_received(:call).with(
+        authenticatable: account, otp_code:
+      )
+    end
+
+    it 'updates account confirmed_at' do
+      expect(account.reload.confirmed_at).not_to be_nil
+    end
+
+    context 'when the send otp code command succeeds' do
+      it 'returns status ok' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'when the send otp code command fails' do
+      let(:command) { command_double(klass: Auth::Accounts::AuthorizeAuthToken, success: false) }
+
+      it 'returns status unauthorized' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

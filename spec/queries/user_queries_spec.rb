@@ -79,8 +79,9 @@ RSpec.describe UserQueries, type: :model do
     describe 'when the user has direct_transfer subscription' do
       let(:user) { create(:user) }
       let(:customer) { create(:customer, user:) }
+      let(:offer) { create(:offer, category: :business) }
       let!(:subscription) do
-        create(:subscription, payer: customer, payment_method: :direct_transfer, status: :active)
+        create(:subscription, payer: customer, payment_method: :direct_transfer, status: :active, offer:)
       end
 
       it 'returns the company of the user' do
