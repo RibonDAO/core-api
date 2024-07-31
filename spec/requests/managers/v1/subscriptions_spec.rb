@@ -29,10 +29,10 @@ RSpec.describe 'Managers::V1::SubscriptionsController', type: :request do
     end
 
     context 'when one user already has an active subscription' do
-      it 'does not create a new one for them' do
+      it 'creates a new one for them' do
         create(:plan, offer:)
         create(:subscription, payer: create(:customer, user: create(:user, email: 'clara@ribon.io')))
-        expect { request }.to change(Subscription, :count).by(2)
+        expect { request }.to change(Subscription, :count).by(3)
       end
     end
   end
