@@ -3,7 +3,6 @@ module Givings
     class AddGivingCauseToBlockchainJob < ApplicationJob
       queue_as :person_payments
       sidekiq_options retry: 3
-      
 
       def perform(amount:, payment:, feeable: true, pool: nil)
         transaction_hash = call_add_balance_command(amount, feeable, pool)
