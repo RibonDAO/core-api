@@ -88,4 +88,36 @@ RSpec.describe 'Api::V1::Donations', type: :request do
       end
     end
   end
+
+  describe 'GET /count_total_donations_today' do
+    subject(:request) { get '/api/v1/total_donations_today' }
+
+    context 'when there is a cached result' do
+      before do
+        allow(RedisStore::HStore).to receive(:get).and_return(50)
+      end
+
+      it 'gets the cached result' do
+        request
+
+        expect(RedisStore::HStore)
+          .to have_received(:get)
+      end
+    end
+
+    context 'when there is no cached result' do
+      before do
+        allow(RedisStore::HStore).to receive(:get).and_return(nil)
+        allow(RedisStore::HStore).to receive(:set)
+      end
+
+      it 'sets the new result cache' do
+        request
+
+        expect(RedisStore::HStore)
+          .to have_received(:set)
+          .with(value: 0, expires_in: 1.hour, key: 'total_donations_today_result')
+      end
+    end
+  end
 end

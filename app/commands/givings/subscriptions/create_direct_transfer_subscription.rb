@@ -77,7 +77,7 @@ module Givings
       end
 
       def subscription_already_exists(payer)
-        Subscription.exists?(payer:, status: :active)
+        Subscription.exists?(payer:, status: :active, payment_method: :direct_transfer)
       end
     end
   end
