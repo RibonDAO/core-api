@@ -46,6 +46,7 @@ module Users
 
     def set_current_user
       @current_user = @current_account.user
+      render json: UserBlueprint.render_as_hash(@current_user, view: :extended)
     end
 
     def render_errors(errors, status = :unprocessable_entity)

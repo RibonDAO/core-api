@@ -4,7 +4,7 @@ class UserBlueprint < Blueprinter::Base
   fields :updated_at, :created_at, :email
 
   view :extended do
-    fields :last_donation_at, :last_donated_cause
+    fields :last_donation_at, :last_donated_cause, :language, :legacy_id
 
     field(:company) do |user|
       IntegrationBlueprint.render_as_hash(user.company, view: :minimal) if user.company

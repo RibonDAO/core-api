@@ -43,7 +43,8 @@ module Users
           access_token, refresh_token = command.result
           create_headers(access_token:, refresh_token:)
           update_account_platform(authenticatable)
-          render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :ok
+          render json: { message: I18n.t('users.login_success'), user: UserBlueprint.render_as_hash(authenticatable.user, view: :extended) },
+                 status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end
@@ -73,7 +74,8 @@ module Users
           access_token, refresh_token = command.result
           create_headers(access_token:, refresh_token:)
           update_account_platform(authenticatable)
-          render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :ok
+          render json: { message: I18n.t('users.login_success'), user: UserBlueprint.render_as_hash(authenticatable.user, view: :extended) },
+                 status: :ok
         else
           render_errors(command.errors, :unauthorized)
         end
@@ -110,7 +112,8 @@ module Users
         create_headers(access_token:, refresh_token:)
         update_account_platform(authenticatable)
 
-        render json: { message: I18n.t('users.login_success'), user: authenticatable.user }, status: :created
+        render json: { message: I18n.t('users.login_success'), user: UserBlueprint.render_as_hash(authenticatable.user, view: :extended) },
+               status: :created
       end
 
       def handle_failed_authentication(command)
