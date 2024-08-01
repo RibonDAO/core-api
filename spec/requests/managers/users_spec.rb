@@ -66,7 +66,7 @@ RSpec.describe 'Managers::V1::Users', type: :request do
         request
 
         expect_response_to_have_keys %w[created_at id email updated_at last_donation_at last_donated_cause company
-                                        direct_transfer_subscription]
+                                        direct_transfer_subscription legacy_id language]
       end
     end
 
