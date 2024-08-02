@@ -2,7 +2,7 @@
 
 module ImagesHelper
   def self.image_url_for(image, variant: nil)
-    return url_with_cdn(image) if cdn_enabled?
+    return url_with_cdn(image) if cdn_enabled_for?(image)
 
     img = variant ? image.variant(variant) : image
     Rails.application.routes.url_helpers.polymorphic_url(img)
@@ -14,8 +14,8 @@ module ImagesHelper
     "#{cdn_url}#{image.key}"
   end
 
-  def self.cdn_enabled?
-    ENV.fetch('CDN_ENABLED', 'false') == 'true'
+  def self.cdn_enabled_for?(image)
+    ENV.fetch('CDN_ENABLED', 'false') == 'true' && image.key.present?
   end
 
   def self.cdn_url
