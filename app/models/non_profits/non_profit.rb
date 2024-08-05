@@ -61,6 +61,13 @@ class NonProfit < ApplicationRecord
     test: 2
   }
 
+  enum kind: {
+    free: 0,
+    club: 1,
+    business: 2,
+    business_and_club: 3
+  }
+
   def impact_for(date: Time.zone.now)
     non_profit_impacts.find_by('start_date <= ? AND end_date >= ?', date, date)
   end
