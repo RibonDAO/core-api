@@ -9,13 +9,16 @@
 #  icon_description               :string
 #  impact_description             :text
 #  impact_title                   :string(50)
+#  kind                           :integer          default("free")
 #  logo_description               :string
 #  main_image_description         :string
 #  name                           :string
+#  owner_type                     :string
 #  status                         :integer          default("inactive")
 #  created_at                     :datetime         not null
 #  updated_at                     :datetime         not null
 #  cause_id                       :bigint
+#  owner_id                       :bigint
 #
 require 'rails_helper'
 
