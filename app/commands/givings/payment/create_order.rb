@@ -20,9 +20,12 @@ module Givings
 
         RecursiveOpenStruct.new(payment_process_result.merge({ payment: order.payment }))
       rescue StandardError => e
-        failure_callback(order, e)
-        Reporter.log(error: e, extra: { message: e.message }, level: :fatal)
-        errors.add(:message, e.message)
+        if e.message == I18n.t('subscriptions.already_exists')
+          add_errors(e, e.message)
+        else
+          failure_callback(order, e)
+          add_errors(e, I18n.t('person_payments.failed'))
+        end
       end
 
       private
@@ -38,6 +41,11 @@ module Givings
         klass.success_callback(order, result)
       end
 
+      def add_errors(error, message)
+        Reporter.log(error:, extra: { message: error.message }, level: :fatal)
+        errors.add(:message, message)
+      end
+
       def failure_callback(order, err)
         status = case err.type
                  when 'requires_action'
@@ -51,16 +59,26 @@ module Givings
       end
 
       def update_success(order:, status:, result:)
-        order.payment&.subscription&.update(status: :active) if status == :paid
-        order.payment.update(status:)
+        if status == :paid
+          ::Subscriptions::UpdateSubscriptionAttributeJob.perform_later(order.payment&.subscription,
+                                                                        { status: :active })
+        end
+        ::PersonPayments::UpdatePaymentAttributeJob.perform_later(order.payment, { status: })
         update_external_ids(order:, result:)
       end
 
       def update_failed(order:, err:, status:)
-        order.payment.update(status:, error_code: err.code)
-        order.payment&.subscription&.update(status: :payment_failed)
-        order.payment&.subscription&.update(external_id: err.subscription_id) if err.subscription_id
-        order.payment.update(external_id: err.external_id) if err.external_id
+        ::PersonPayments::UpdatePaymentAttributeJob.perform_later(order.payment, { status:, error_code: err.code })
+        ::Subscriptions::UpdateSubscriptionAttributeJob.perform_later(order.payment&.subscription,
+                                                                      { status: :payment_failed })
+        if err.subscription_id
+          ::Subscriptions::UpdateSubscriptionAttributeJob.perform_later(order.payment&.subscription,
+                                                                        { external_id: err.subscription_id })
+        end
+        return unless err.external_id
+
+        ::PersonPayments::UpdatePaymentAttributeJob.perform_later(order.payment,
+                                                                  { external_id: err.external_id })
       end
 
       def handle_contribution_creation(payment)
@@ -72,9 +90,15 @@ module Givings
         external_subscription_id = result[:external_subscription_id]
         external_invoice_id = result[:external_invoice_id]
 
-        order.payment.update(external_id:) if external_id
-        order.payment.update(external_invoice_id:) if external_invoice_id
-        order.payment&.subscription&.update(external_id: external_subscription_id) if external_subscription_id
+        ::PersonPayments::UpdatePaymentAttributeJob.perform_later(order.payment, { external_id: }) if external_id
+        if external_invoice_id
+          ::PersonPayments::UpdatePaymentAttributeJob.perform_later(order.payment,
+                                                                    { external_invoice_id: })
+        end
+        return unless external_subscription_id
+
+        ::Subscriptions::UpdateSubscriptionAttributeJob.perform_later(order.payment&.subscription,
+                                                                      { external_id: external_subscription_id })
       end
     end
   end

@@ -3,6 +3,11 @@
 require 'rails_helper'
 
 describe Givings::Payment::CreateOrder do
+  before do
+    allow(PersonPayments::UpdatePaymentAttributeJob).to receive(:perform_later)
+    allow(Subscriptions::UpdateSubscriptionAttributeJob).to receive(:perform_later)
+  end
+
   describe '.call' do
     subject(:command) { described_class.call(order_type_class, args) }
 
@@ -74,16 +79,38 @@ describe Givings::Payment::CreateOrder do
             ), pool: nil)
         end
 
-        it 'update the status of payment_person and subscription and external_id' do
+        it 'update the status of payment_person' do
+          command
+          person_payment = PersonPayment.where(offer:).last
+
+          expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+            person_payment, { status: :paid }
+          )
+        end
+
+        it 'update the external_id of payment_person' do
+          command
+          person_payment = PersonPayment.where(offer:).last
+
+          expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+            person_payment, { external_id: 'pi_1Gt08v2eZvKYlo2CVSyYMu9B' }
+          )
+          expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+            person_payment, { external_invoice_id: 'in_1LL5lOJuOnwQq9QxgwtucIBS' }
+          )
+        end
+
+        it 'update the status of subscription and external_id' do
           command
           person_payment = PersonPayment.where(offer:).last
           subscription = person_payment.subscription
 
-          expect(person_payment.status).to eq('paid')
-          expect(subscription.status).to eq('active')
-          expect(subscription.external_id).to eq(command.result[:payment].subscription.external_id)
-          expect(person_payment.external_id).to eq(command.result[:payment].external_id)
-          expect(person_payment.external_invoice_id).to eq(command.result[:payment].external_invoice_id)
+          expect(Subscriptions::UpdateSubscriptionAttributeJob).to have_received(:perform_later).once.with(
+            subscription, { status: :active }
+          )
+          expect(Subscriptions::UpdateSubscriptionAttributeJob).to have_received(:perform_later).once.with(
+            subscription, { external_id: 'sub_1LL5lOJuOnwQq9Qx4R7A11nz' }
+          )
         end
 
         it 'returns all necessary keys' do
@@ -152,11 +179,15 @@ describe Givings::Payment::CreateOrder do
             ), pool: nil)
         end
 
-        it 'update the status and external_id of payment_person' do
+        it 'call Job to update status and external_id of payment_person' do
           order = command
           person_payment = PersonPayment.where(offer:).last
-          expect(person_payment.external_id).to eq(order.result[:external_id])
-          expect(person_payment.status).to eq('paid')
+          expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+            person_payment, { status: :paid }
+          )
+          expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+            person_payment, { external_id: order.result[:external_id] }
+          )
         end
       end
 
@@ -238,7 +269,9 @@ describe Givings::Payment::CreateOrder do
         allow(PersonPayment).to receive(:create!).and_return(person_payment)
         command
 
-        expect(person_payment.error_code).to eq('card_declined')
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { status: :failed, error_code: 'card_declined' }
+        )
       end
     end
   end
@@ -267,8 +300,12 @@ describe Givings::Payment::CreateOrder do
         allow(PersonPayment).to receive(:create!).and_return(person_payment)
         command
 
-        expect(person_payment.error_code).to eq('card_declined')
-        expect(person_payment.status).to eq('blocked')
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { status: :blocked, error_code: 'card_declined' }
+        )
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { external_id: 'pi_3NvgHJJuOnwQq9Qx1NiwLdAk' }
+        )
       end
     end
   end
@@ -300,10 +337,14 @@ describe Givings::Payment::CreateOrder do
       end
 
       it 'update the status and external_id of payment_person' do
-        order = command
+        command
         person_payment = PersonPayment.where(offer:).last
-        expect(person_payment.external_id).to eq(order.result[:external_id])
-        expect(person_payment.status).to eq('requires_action')
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { status: :requires_action }
+        )
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { external_id: 'pi_3NvgHOJuOnwQq9Qx1qaAMaSR' }
+        )
       end
     end
   end
@@ -336,11 +377,15 @@ describe Givings::Payment::CreateOrder do
       it 'calls the failure callback' do
         command
         person_payment = PersonPayment.where(offer:).last
+        subscription = person_payment.subscription
 
-        expect(person_payment.error_code).to eq('card_declined')
-        expect(person_payment.status).to eq('blocked')
-        expect(person_payment.subscription.status).to eq('payment_failed')
-        expect(person_payment.subscription.external_id).not_to be_nil
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { status: :blocked, error_code: 'card_declined' }
+        )
+
+        expect(Subscriptions::UpdateSubscriptionAttributeJob).to have_received(:perform_later).once.with(
+          subscription, { status: :payment_failed }
+        )
       end
     end
   end
@@ -373,10 +418,23 @@ describe Givings::Payment::CreateOrder do
       it 'update the status and external_id of payment_person' do
         command
         person_payment = PersonPayment.where(offer:).last
-        expect(person_payment.external_id).not_to be_nil
-        expect(person_payment.status).to eq('requires_action')
-        expect(person_payment.subscription.status).to eq('payment_failed')
-        expect(person_payment.subscription.external_id).not_to be_nil
+
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { status: :requires_action, error_code: 'requires_action' }
+        )
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { external_id: 'pi_3NvgHSJuOnwQq9Qx0MOWpFIt' }
+        )
+      end
+
+      it 'update the status of subscription' do
+        command
+        person_payment = PersonPayment.where(offer:).last
+        subscription = person_payment.subscription
+
+        expect(Subscriptions::UpdateSubscriptionAttributeJob).to have_received(:perform_later).once.with(
+          subscription, { status: :payment_failed }
+        )
       end
     end
   end
@@ -409,9 +467,15 @@ describe Givings::Payment::CreateOrder do
       it 'update the status and external_id of payment_person' do
         command
         person_payment = PersonPayment.where(offer:).last
-        expect(person_payment.external_id).not_to be_nil
-        expect(person_payment.status).to eq('failed')
-        expect(person_payment.subscription.status).to eq('payment_failed')
+        subscription = person_payment.subscription
+
+        expect(PersonPayments::UpdatePaymentAttributeJob).to have_received(:perform_later).once.with(
+          person_payment, { status: :failed, error_code: 'card_declined' }
+        )
+
+        expect(Subscriptions::UpdateSubscriptionAttributeJob).to have_received(:perform_later).once.with(
+          subscription, { status: :payment_failed }
+        )
       end
     end
   end

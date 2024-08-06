@@ -60,3 +60,7 @@ en:
     email_sent: "Email sent successfully."
   warmglow_messages:
     default_message: "Feel the power of your actions! Helping someone is a huge thing. It is the key to building a better world."
+  person_payments:
+    failed: "Payment failed. Try again."
+  subscriptions:
+    already_exists: "You already have a club subscription"
