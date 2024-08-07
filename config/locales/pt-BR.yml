@@ -280,3 +280,7 @@ pt-BR:
     email_sent: "Email enviado com sucesso."
   warmglow_messages:
     default_message: "Sinta a potência do gesto que você acabou de fazer. Ajudar alguém é algo gigante. É a chave para construirmos um mundo melhor."
+  person_payments:
+    failed: "Falha no pagamento. Tente novamente."
+  subscriptions:
+    already_exists: "Você já tem uma assinatura"

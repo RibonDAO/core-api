@@ -4,6 +4,7 @@ module Givings
   module Payment
     module OrderTypes
       class CreditCard
+        prepend SimpleCommand
         attr_reader :card, :email, :tax_id, :offer, :payment_method,
                     :user, :operation, :integration_id, :cause, :non_profit, :platform
 
@@ -23,6 +24,7 @@ module Givings
 
         def generate_order
           customer = find_or_create_customer
+          check_subscription_exists(customer)
           subscription = create_subscription(customer) if operation == :subscribe
           payment = create_payment(customer, subscription)
 
@@ -44,6 +46,12 @@ module Givings
         end
 
         private
+
+        def check_subscription_exists(customer)
+          return unless customer&.subscriptions&.last&.person_payments&.last&.processing?
+
+          raise StandardError, I18n.t('subscriptions.already_exists')
+        end
 
         def find_or_create_customer
           customer = Customer.find_by(user_id: user.id)
