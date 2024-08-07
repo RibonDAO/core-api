@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_04_123115) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_05_231644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -503,7 +503,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_04_123115) do
     t.string "impact_title", limit: 50
     t.text "cover_image_description"
     t.string "icon_description"
+    t.integer "kind", default: 0
+    t.string "owner_type"
+    t.bigint "owner_id"
     t.index ["cause_id"], name: "index_non_profits_on_cause_id"
+    t.index ["owner_type", "owner_id"], name: "index_non_profits_on_owner"
   end
 
   create_table "offer_gateways", force: :cascade do |t|
