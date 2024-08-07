@@ -36,6 +36,8 @@ module Tickets
         create_ticket(external_id:)
       end
       ticket
+    rescue ActiveRecord::RecordInvalid
+      errors.add(:message, I18n.t('tickets.blocked_message'))
     end
 
     def can_collect?(external_id:)
