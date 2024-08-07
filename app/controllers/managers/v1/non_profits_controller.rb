@@ -49,6 +49,8 @@ module Managers
                       :cover_image_description,
                       :cover_image,
                       :icon,
+                      :kind,
+                      :owner,
                       :icon_description,
                       stories_attributes: %i[id title description position active image],
                       non_profit_impacts_attributes: %i[id start_date end_date usd_cents_to_one_impact_unit

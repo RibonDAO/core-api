@@ -17,7 +17,7 @@ RSpec.describe 'Managers::V1::NonProfits', type: :request do
                                                  main_image name status stories updated_at wallet_address
                                                  non_profit_impacts confirmation_image
                                                  cover_image cover_image_description icon icon_description
-                                                 impact_title])
+                                                 impact_title kind owner])
     end
 
     it 'returns 2 non profits' do
@@ -87,7 +87,8 @@ RSpec.describe 'Managers::V1::NonProfits', type: :request do
                                       background_image_description confirmation_image_description
                                       main_image name status stories updated_at wallet_address
                                       non_profit_impacts confirmation_image
-                                      cover_image cover_image_description icon icon_description impact_title])
+                                      cover_image cover_image_description icon icon_description impact_title
+                                      kind owner])
     end
   end
 
@@ -104,7 +105,8 @@ RSpec.describe 'Managers::V1::NonProfits', type: :request do
                                       background_image_description confirmation_image_description
                                       main_image name status stories updated_at wallet_address
                                       non_profit_impacts confirmation_image
-                                      cover_image cover_image_description icon icon_description impact_title])
+                                      cover_image cover_image_description icon icon_description impact_title
+                                      kind owner])
     end
   end
 
