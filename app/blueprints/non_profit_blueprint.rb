@@ -3,7 +3,7 @@ class NonProfitBlueprint < Blueprinter::Base
 
   fields :updated_at, :created_at, :name, :wallet_address, :status,
          :logo_description, :main_image_description, :background_image_description,
-         :confirmation_image_description, :impact_title, :cover_image_description, :icon_description
+         :confirmation_image_description, :impact_title, :cover_image_description, :icon_description, :kind, :owner
 
   association :cause, blueprint: CauseBlueprint, view: :data_and_images
 
