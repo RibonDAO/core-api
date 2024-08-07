@@ -9,13 +9,16 @@
 #  icon_description               :string
 #  impact_description             :text
 #  impact_title                   :string(50)
+#  kind                           :integer          default("free")
 #  logo_description               :string
 #  main_image_description         :string
 #  name                           :string
+#  owner_type                     :string
 #  status                         :integer          default("inactive")
 #  created_at                     :datetime         not null
 #  updated_at                     :datetime         not null
 #  cause_id                       :bigint
+#  owner_id                       :bigint
 #
 class NonProfit < ApplicationRecord
   extend Mobility
@@ -50,6 +53,7 @@ class NonProfit < ApplicationRecord
   validates :name, :status, :wallet_address, presence: true
 
   belongs_to :cause
+  belongs_to :owner, polymorphic: true, optional: true
 
   before_save :save_wallet
 
@@ -59,6 +63,13 @@ class NonProfit < ApplicationRecord
     inactive: 0,
     active: 1,
     test: 2
+  }
+
+  enum kind: {
+    free: 0,
+    club: 1,
+    business: 2,
+    business_and_club: 3
   }
 
   def impact_for(date: Time.zone.now)
